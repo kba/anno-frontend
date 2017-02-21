@@ -1,0 +1,48 @@
+.dropdown-menu a {
+  cursor: pointer;
+}
+
+.anno_old_version {
+  border: 1px solid #A0A0A0;
+  background-color: #A0A0A0;
+  display: none;
+}
+
+.annoshowrefstatus {
+  display: none;
+}
+
+.annoshowrefstatus.annoshowrefstatus_0 {
+  display: inline;
+}
+
+.annoitem.annostatus-active {
+  border: 1px solid #A00000;
+}
+
+.annoitem.annostatus-active .panel-heading {
+  background-color: #A00000;
+  color: #FFFFFF;
+}
+
+.annocomment.annostatus-active > div:first-child {
+  border: 1px solid #ffcc33;
+  background-color: #ffeeaa;
+}
+
+#annodropdownMenuS {
+  background: url(/img/polygon.png) no-repeat 2px 2px;
+  padding-left: 22px;
+}
+
+#anno_zoneedittoolbar {
+  margin-bottom: 4px;
+  background-color: #D0D0D0;
+  padding: 2px;
+  border: 1px solid #A0A0A0;
+  border-radius: 3px;
+}
+
+#anno_annotations h4 {
+  font-size: 13px;
+}

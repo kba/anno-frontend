@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Annotationen-Test</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script type="text/javascript" src="/js/jquery-1.11.1.min.js"></script> 
+    <script type="text/javascript" src="/js/localizations.js"></script> 
+    <script type="text/javascript" src="/js/vue.js"></script>
+    <script type="text/javascript" src="js/annotations.js"></script>
+    <script type="text/javascript" src="js/js.cookie-2.1.2.min.js"></script>
+    <script type="text/javascript" src="js/tinymce/tinymce.min.js"></script>
+    <link href="/js/bootstrap-3.2.0/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="/js/bootstrap-3.2.0/dist/js/bootstrap.min.js"></script>
+    <link href="/js/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="/css/annotations.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+       $(document).ready(function(){
+         displayAnnotations('test','/annotationen_test/0002',{lang: 'de', purl: 'http://digi.ub.uni-heidelberg.de/diglit/annotationen_test', css: 'anno', highlight: 'test', login: 'http://digi.ub.uni-heidelberg.de/cgi-bin/login?sid=1234', user: 'rt126@uni-heidelberg.de', service: 'diglit'});
+       });
+    </script>
+  </head>
+  <body>
+    <div id="test"></div>
+  </body>
+</html>
