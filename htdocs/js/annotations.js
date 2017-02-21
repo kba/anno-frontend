@@ -1,6 +1,3 @@
-  annoservicehosturl, annoserviceurl: via Optionen? Automatisch auslesen
-  iiif-URL als zusätzliches Target in Annotationen eintragen */
-
 var annoservicehosturl = 'http://anno.ub.uni-heidelberg.de';
 var annoserviceurl = annoservicehosturl+'/cgi-bin/anno.cgi';
 
