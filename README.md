@@ -24,6 +24,14 @@ nur für Editor:
 &lt;script type="text/javascript" src="http://anno.ub.uni-heidelberg.de/js/tinymce/tinymce.min.js"&gt;&lt;/script&gt;
 </pre>
 
+<pre>
+displayAnnotations(htmlid,target,options)
+</pre>
+
+* htmlid: ID des HTML-Elements, in dem die Liste der Annotationen ausgegeben werden soll
+* target: ID des Annotationen-Targets, für das die zugehörigen Annotationen ausgegeben werden soll
+* options:
+
 ## Demo
 
 ### Standalone
