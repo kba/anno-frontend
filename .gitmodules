@@ -1,0 +1,3 @@
+[submodule "htdocs/js/drawing/SemToNotes"]
+	path = htdocs/js/drawing/SemToNotes
+	url = https://github.com/HKIKoeln/SemToNotes
