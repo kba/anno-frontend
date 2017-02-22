@@ -36,18 +36,18 @@ displayAnnotations(htmlid, annotarget, options)
  * sort:
  * lang:
  * no_oai:
-** edit_img_url:
-** edit_img_width:
-** edit_img_thumb:
-** highlight:
-** iiif_url:
-** iiif_img_width:
-** iiif_img_height:
-** gotopurl: 
-** purl:
-** login:
-** readtoken:
-** writetoken:
+ * edit_img_url:
+ * edit_img_width:
+ * edit_img_thumb:
+ * highlight:
+ * iiif_url:
+ * iiif_img_width:
+ * iiif_img_height:
+ * gotopurl: 
+ * purl:
+ * login:
+ * readtoken:
+ * writetoken:
 
 
 ## Demo
