@@ -31,6 +31,500 @@ var fields = {
 var zoneeditdrawing;
 var zoneeditthumb;
 
+function displayAnnotations(targetid,path,options) {
+// Einbinden von localizations.js
+  $.getScript("http://anno.ub.uni-heidelberg.de/js/localizations.js", function () {
+
+    target = '#'+targetid;
+    var annotations = getAnnotations(path,options);
+    if (typeof(options['css']) == 'undefined') {options['css'] = 'anno'}
+    var css = options['css'];
+    if (typeof(options['sort']) == 'undefined') {options['sort'] = 'date'}
+    if (typeof(options['lang']) == 'undefined') {options['lang'] = 'en'}
+    var t = {};
+    $.each(texts, function (k, v) {
+      t[v] = anno_l10n_text(options.lang,v);
+    });
+  
+    var html = '<div id="vueapp">'+annoColTemplate+'</div>';
+    $(target).html(html);
+  
+    Vue.component('annocomments', {
+      props: ['anno','options','css'],
+      template: ` 
+        <ul v-bind:class="css+'annochoicetree'">
+           <li v-for="item in anno.children" v-bind:id="item.id" v-bind:class="'media '+css+'comment'">
+             <div>
+               <div v-if="item.user_name" class="media-left"><button class="btn btn-xs"><span class="glyphicon glyphicon-user"></span> {{item.user_name}} {{item.jcr_modified_display}}</button></div>
+               <div class="media-body">
+                 <h4 v-html="item.title"></h4>
+                 <div v-html="item.text"></div>
+                 <p v-if="item.link"><a v-bind:href="item.link" target="_blank"><span v-if="item.sourcedescription">{{item.sourcedescription}}</span><span v-else>{{item.link}}</a></p>
+                 <div v-if="!options.no_oai" v-bind:class="css+'iiiflink'"><template v-if="item.iiif_url"><button class="btn-link" onclick="anno_toggle_iiif($(this));"><span class="fa fa-caret-right"></span> Bildausschnitt (IIIF-Image)</button><div><a v-bind:href="item.iiif_url" target="_blank">{{item.iiif_url}}</a></div></template></div>
+                 <!-- navigation -->
+                 <div class="btn-toolbar pull-right" role="toolbar" style="margin-top: 10px;">
+                   <div class="btn-group btn-group-xs pull-right" role="group">
+                     <button v-if="item.editable" v-bind:class="'btn btn-default '+css+'editbut'"><i class="fa fa-pencil"></i> &nbsp;{{text.edit}}</button>
+                     <button v-if="item.commentable" v-bind:class="'btn btn-default '+css+'commentbut'"><i class="fa fa-reply"></i> &nbsp;{{text.reply}}</button>
+                     <template v-if="item.versioned"><button class="btn btn-default dropdown-toggle" data-toggle="dropdown">{{text.previous}} <span class="caret"></span></button><ul v-bind:class="'dropdown-menu pull-right '+css+'versions'"></ul></template>
+                   </div>
+                 </div>
+                 <div style="clear: both; margin-bottom: 2px;"></div>
+               </div>
+             </div>
+             <template v-if="item.hasChildren">
+               <div><div v-bind:class="css+'separator'"></div></div>
+               <annocomments v-bind:anno="item" v-bind:options="options" v-bind:css="css"></annocomments>
+             </template>
+           </li>
+        </ul>
+     `, 
+    });
+  
+    var app = new Vue({
+      el: '#vueapp',
+      data: {
+        text: t,
+        annotations: annotations,
+        options: options, 
+//      Zur Schreibvereinfachung css nochmal separat...
+        css: css,
+        annoservicehosturl: annoservicehosturl,
+        zoneedit: (typeof(options.edit_img_url) != 'undefined' && typeof(options.edit_img_width) != 'undefined')?1:0,
+      },
+      computed: {
+        annotations_sorted: function () {
+          var items = annotations;
+          if (typeof(options.sort) != 'undefined' && options.sort.length) {
+            items.sort(function(a,b) {
+              if (options.sort == 'date') {return ((a.jcr_modified < b.jcr_modified) ? -1 : ((a.jcr_modified > b.jcr_modified) ? 1 : 0))}
+              else if (options.sort == 'date.reverse') {return ((a.jcr_modified < b.jcr_modified) ? 1 : ((a.jcr_modified > b.jcr_modified) ? -1 : 0))}
+              else {
+                return ((a.title < b.title) ? -1 : ((a.title > b.title) ? 1 : 0));
+              }
+            });
+          }
+          return items;
+        }
+      },
+    }); 
+  
+//  Annotation, die ueber PURL addressiert wurde, hervorheben
+    if (typeof(options.gotopurl) != 'undefined' && options.gotopurl.length) {
+      $('#'+options.gotopurl).addClass(css+'PURL');
+    }
+  
+//  Zone-Editor
+    if (typeof(options.edit_img_url) != 'undefined' && typeof(options.edit_img_width) != 'undefined') {
+  
+      $('#'+css+'_tab_zones').html(zoneEditTemplate);
+  
+      var zoneapp = new Vue({
+        el: '#'+css+'_tab_zones',
+        data: {
+          text: t,
+          options: options,
+          annoservicehosturl: annoservicehosturl,
+//        Zur Schreibvereinfachung css nochmal separat...
+          css: css,
+        }
+      });
+  
+      $('#'+css+'_zoneeditzoomout').on('click', function(){
+        zoneeditdrawing.getViewbox().zoomOut();
+        navigationThumb(zoneeditthumb,zoneeditdrawing)
+      });
+      $('#'+css+'_zoneeditzoomin').on('click', function(){
+        zoneeditdrawing.getViewbox().zoomIn();
+        navigationThumb(zoneeditthumb,zoneeditdrawing)
+      });
+      $('#'+css+'_zoneeditfittocanvas').on('click', function(){
+        zoneeditdrawing.getViewbox().fit(true);
+        zoneeditdrawing.getViewbox().setPosition(xrx.drawing.Orientation.NW);
+        navigationThumb(zoneeditthumb,zoneeditdrawing)
+      });
+      $('#'+css+'_zoneeditrotleft').on('click', function(){
+        zoneeditdrawing.getViewbox().rotateLeft();
+        zoneeditthumb.getViewbox().rotateLeft();
+        navigationThumb(zoneeditthumb,zoneeditdrawing)
+      });
+      $('#'+css+'_zoneeditrotright').on('click', function(){
+        zoneeditdrawing.getViewbox().rotateRight();
+        zoneeditthumb.getViewbox().rotateRight();
+        navigationThumb(zoneeditthumb,zoneeditdrawing)
+      });
+      $('#'+css+'_zoneeditpolygon').on('click', function(){
+        var styleCreatable = new xrx.shape.Style();
+        styleCreatable.setFillColor('#3B3BFF');
+        styleCreatable.setFillOpacity(.1);
+        styleCreatable.setStrokeWidth(1);
+        styleCreatable.setStrokeColor('#3B3BFF');
+        var np = new xrx.shape.Polygon(zoneeditdrawing);
+        np.setStyle(styleCreatable);
+        np.getCreatable().setStyle(styleCreatable);
+        zoneeditdrawing.setModeCreate(np.getCreatable());
+        zoneeditdrawing.draw();
+        $('#'+css+'_zoneedittoolbar button').removeClass('active');
+        $('#'+css+'_zoneeditpolygon').addClass('active');
+        $('#'+css+'_zoneeditdel').addClass('disabled');
+      });
+      $('#'+css+'_zoneeditrect').on('click', function(){
+        var styleCreatable = new xrx.shape.Style();
+        styleCreatable.setFillColor('#3B3BFF');
+        styleCreatable.setFillOpacity(.1);
+        styleCreatable.setStrokeWidth(1);
+        styleCreatable.setStrokeColor('#3B3BFF');
+        var nr = new xrx.shape.Rect(zoneeditdrawing);
+        nr.setStyle(styleCreatable);
+        nr.getCreatable().setStyle(styleCreatable);
+        zoneeditdrawing.setModeCreate(nr.getCreatable());
+        zoneeditdrawing.draw();
+        $('#'+css+'_zoneedittoolbar button').removeClass('active');
+        $('#'+css+'_zoneeditrect').addClass('active');
+        $('#'+css+'_zoneeditdel').addClass('disabled');
+      });
+      $('#'+css+'_zoneeditview').on('click', function(){
+        zoneeditdrawing.setModeView();
+        $('#'+css+'_zoneedittoolbar button').removeClass('active');
+        $('#'+css+'_zoneeditview').addClass('active');
+        $('#'+css+'_zoneeditdel').addClass('disabled');
+      });
+      $('#'+css+'_zoneeditmove').on('click', function(){
+        zoneeditdrawing.setModeModify();
+        $('#'+css+'_zoneedittoolbar button').removeClass('active');
+        $('#'+css+'_zoneeditmove').addClass('active');
+        $('#'+css+'_zoneeditdel').removeClass('disabled');
+      });
+      $('#'+css+'_zoneeditdel').on('click', function(){
+        if (typeof(zoneeditdrawing.getSelectedShape()) == 'undefined') {
+          alert("Please select a shape");
+          return;
+        }
+        if (window.confirm("Delete selected shape?")) {
+          zoneeditdrawing.removeShape(zoneeditdrawing.getSelectedShape());
+        }
+      });
+  
+      $('#'+css+'_but_zoneedit').on('click', function () {
+        $('a[href="#'+css+'_tab_zones"').tab('show');
+      });
+  
+//    Oeffnen Zone-Editor-Tab
+      $('a[href="#'+css+'_tab_zones"').on('shown.bs.tab', function (e) {
+        $('#'+css+'_zoneeditcanvas canvas').remove();
+        $('#'+css+'_zoneeditthumb canvas').remove();
+        $('#'+css+'_zoneeditcanvas').css('width',$('#'+css+'_zoneedittoolbar').innerWidth());
+        zoneeditdrawing = new xrx.drawing.Drawing(goog.dom.getElement(css+'_zoneeditcanvas'));
+        zoneeditdrawing.eventViewboxChange = function (x, y) {anno_navigationThumb(zoneeditthumb,zoneeditdrawing)}
+        if (zoneeditdrawing.getEngine().isAvailable()) {
+          zoneeditdrawing.setBackgroundImage(options.edit_img_url, function() {
+            zoneeditdrawing.setModeView();
+            zoneeditdrawing.getViewbox().fitToWidth(false);
+            zoneeditdrawing.getViewbox().setZoomFactorMax(4);
+            var z = $('#'+css+'_field_polygon').val();
+            if (z.length > 0) {
+              var p = z.split('<end>');
+              var i;
+              var shapes = new Array();
+              for (i = 0; i < p.length; i++) {
+                if (p[i]) {
+                  var coords = anno_coordRel2Abs(JSON.parse('['+p[i]+']'),options.edit_img_width);
+                  var shape;
+                  if (anno_isRectangle(coords)) {
+                    shape = new xrx.shape.Rect(zoneeditdrawing);
+                  }
+                  else {
+                    shape = new xrx.shape.Polygon(zoneeditdrawing);
+                  }
+                  shape.setCoords(coords);
+                  shape.setStrokeWidth(1);
+                  shape.setStrokeColor('#A00000');
+                  shape.setFillColor('#A00000');
+                  shape.setFillOpacity(0.2);
+                  shape.getSelectable().setFillColor('#000000');
+                  shape.getSelectable().setFillOpacity(0.2);
+                  shape.getSelectable().setStrokeWidth(3);
+                  shapes.push(shape);
+                }
+              }
+              zoneeditdrawing.getLayerShape().addShapes(shapes);
+            }
+            zoneeditdrawing.draw();
+            if (typeof(options.edit_img_thumb) != 'undefined') {
+              $('#'+css+'_zoneeditthumb').show();
+              zoneeditthumb = new xrx.drawing.Drawing(goog.dom.getElement(css+'_zoneeditthumb'));
+              if (zoneeditthumb.getEngine().isAvailable()) {
+                zoneeditthumb.setBackgroundImage(options.edit_img_thumb, function() {
+                  zoneeditthumb.setModeDisabled();
+                  zoneeditthumb.getViewbox().fit(true);
+                  zoneeditthumb.getViewbox().setPosition(xrx.drawing.Orientation.NW); ;
+                  zoneeditthumb.draw();
+                  anno_navigationThumb(zoneeditthumb,zoneeditdrawing)
+                });
+              }
+            }
+          });
+        }
+      });
+    }
+  
+//  Dropdown Bildbezuege setzen
+    if (typeof(Cookies) != 'undefined') {
+      if (Cookies.get('showref')) {
+        $(target+' .'+css+'showrefstatus').hide();
+        $(target+' .'+css+'showrefstatus_'+Cookies.get('showref')).show();
+      }
+    }
+//  Klick-Event Bildbezüge Dropdown
+    $(target+' .'+css+'showrefopt li a').on('click', function() {
+      var opt = $(this).attr('data-anno-showref');
+      Cookies.set('showref',opt);
+      $(target+' span.'+css+'showrefstatus').hide();
+      $(target+' span.'+css+'showrefstatus_'+opt).show();
+    });
+  
+//  Wenn Annotation zugeklappt...
+    $(target+' .collapse').on('hide.bs.collapse', function() {
+      var i = $(this).attr('id').substr(5);
+      $('#'+css+'head_'+i).find('span.glyphicon-chevron-down').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right');
+      var no_open = 0;
+      var no_close = 0;
+      $(target+' .collapse').each(function () {
+        if ($(this).hasClass('in')) {no_open++}
+        else {no_close++}
+      });
+      if (!no_open) {
+        $(target+' .'+css+'closeall').addClass('hidden');
+        $(target+' .'+css+'openall').removeClass('hidden');
+      }
+    });
+    $(target+' .collapse').on('hidden.bs.collapse', function() {
+      var no_open = 0;
+      var no_close = 0;
+      $(target+' .collapse').each(function () {
+        if ($(this).hasClass('in')) {no_open++}
+        else {no_close++}
+      });
+      if (!no_open) {
+        $(target+' .'+css+'closeall').addClass('hidden');
+        $(target+' .'+css+'openall').removeClass('hidden');
+      }
+    });
+  
+//  Wenn Anntation aufgeklappt ...
+    $(target+' .collapse').on('show.bs.collapse', function() {
+      var i = $(this).attr('id').substr(5);
+      $('#'+css+'head_'+i).find('span.glyphicon-chevron-right').removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down');
+      $(this).find('.'+css+'_old_version').css('display','none');
+    });
+    $(target+' .collapse').on('shown.bs.collapse', function() {
+      var no_open = 0;
+      var no_close = 0;
+      $(target+' .collapse').each(function () {
+        if ($(this).hasClass('in')) {no_open++}
+        else {no_close++}
+      });
+      if (no_close == 0) {
+        $(target+' .'+css+'openall').addClass('hidden');
+        $(target+' .'+css+'closeall').removeClass('hidden');
+      }
+    });
+  
+//  Mouseover Annotation ...
+    $(target+' .'+css+'item').hover(
+      function() {
+        setAnnotationStatus($(this).attr('id'),true,css);
+        callHighlight(options['highlight'],annotations,$(this).attr('id'),css);
+      }, 
+      function () {
+        setAnnotationStatus($(this).attr('id'),false,css);
+        callHighlight(options['highlight'],annotations,'',css);
+      }
+    );
+//  Mouseover Kommentar
+    $(target+' .'+css+'comment > div:first-child').hover(
+      function() {
+        setAnnotationStatus($(this).parent().attr('id'),true,css);
+        callHighlight(options['highlight'],annotations,'',css);
+      },
+      function () {
+        setAnnotationStatus($(this).parent().attr('id'),false,css);
+        callHighlight(options['highlight'],annotations,'',css);
+      }
+    );
+  
+//  PURL-Popover
+    $(target+' .'+css+'purlbut').popover({title: popover_title(anno_l10n_text(options.lang,'purl')), html: true, placement: 'left'});
+  
+  
+//  Alle öffnen, Alle Schließen setzen
+    $(target+' .collapse').eq(0).collapse('show');
+    $(target+' .'+css+'closeall').on('click', function() {
+      $(target+' .'+css+'closeall').addClass('hidden');
+      $(target+' .'+css+'openall').removeClass('hidden');
+      $(target+' .collapse').collapse('hide');
+    });
+    $(target+' .'+css+'openall').on('click', function() {
+      $(target+' .'+css+'openall').addClass('hidden');
+      $(target+' .'+css+'closeall').removeClass('hidden');
+      $(target+' .collapse').collapse('show');
+    });
+  
+//  Sortierung
+    $(target+' .'+css+'sortdate').on('click', function() {
+      var optionsnew = options;
+      optionsnew.sort = 'date';
+      displayAnnotations(targetid,path,optionsnew)
+    });
+    $(target+' .'+css+'sortdatereverse').on('click', function() {
+      var optionsnew = options;
+      optionsnew.sort = 'datereverse';
+      displayAnnotations(targetid,path,optionsnew)
+    });
+    $(target+' .'+css+'sorttitle').on('click', function() {
+      var optionsnew = options;
+      optionsnew.sort = 'title';
+      displayAnnotations(targetid,path,optionsnew)
+    });
+  
+//  Speichern im Editor
+    $('#'+css+'_modal_edit .'+css+'savebut').on('click', function() {
+      console.log($('#'+css+'_field_id').val())
+      var ok = 1;
+//    Pflichtfelder ausgefüllt?
+      $.each(fields, function (k, v) {
+        if (typeof($('#'+css+'_field_'+k).attr('required')) != 'undefined' && !$('#'+css+'_field_'+k).val()) {
+          $('#'+css+'_field_'+k).closest('.form-group').addClass('has-error');
+          ok = 0;
+        }
+      });
+      if (ok) {
+        if (typeof(options.edit_img_url) != 'undefined' && typeof(options.edit_img_width) != 'undefined') {
+//        Wenn Zoneneditor aufgerufen wurde...
+          if (typeof zoneeditdrawing != 'undefined') {
+            var shapes = zoneeditdrawing.getLayerShape().getShapes();
+            var new_svg_polygon = '';
+            for (var i = 0; i < shapes.length; i++) {
+              var c = ''
+              var polygonnew = anno_coordAbs2Rel(shapes[i].getCoords(),options.edit_img_width);
+              for (var j = 0; j < polygonnew.length; j++) {
+                if (j > 0) {c += ','}
+                c += JSON.stringify(polygonnew[j]);
+              }
+              if (c) {new_svg_polygon += c + '<end>';}
+            }
+            $('#'+css+'_field_polygon').val(new_svg_polygon);
+          }
+        }
+  
+  
+  
+  
+// TODO
+  
+  
+  
+  
+  
+        $('#'+css+'_modal_edit').modal('hide');
+      }
+    });
+  
+//  Version ausgewählt
+    $(target+' .'+css+'versions a').on('click', function() {
+      var annoid = $(this).closest('.'+css+'item').attr('id');
+      var anno = getAnnotation(annotations,annoid);
+      var searchid = $(this).attr('data-versionid');
+      var ver = getVersion(anno,$(this).attr('data-versionid'));
+      if (typeof(ver) != 'undefined') {
+        ver.content = getVersionContent(path,annoid,ver,options);
+        anno.shown_version = $(this).attr('data-versionid');
+        anno.shown_version_polygons = ver.content.svg_polygon;
+      }
+  
+      $('#old_version_'+annoid).html(versionTemplate);
+  
+      var app = new Vue({
+        el: '#old_version_'+annoid,
+        data: {
+          text: t,
+          item: ver.content,
+//        Zur Schreibvereinfachung css nochmal separat...
+          css: css,
+          created_display: ver.created_display,
+        } 
+      });
+  
+      $('#old_version_'+annoid).css('display','block');
+      callHighlight(options['highlight'],annotations,annoid,css);
+      $(target+' .'+css+'versclosebut').on('click', function() {
+        $(this).closest('.'+css+'_old_version').css('display','none');
+        delete anno['shown_version'];
+        delete anno['shown_version_polygons'];
+        callHighlight(options['highlight'],annotations,'',css);
+      });
+    });
+  
+//  Neue Annotation
+    $(target+' .'+css+'new').on('click', function() {
+//    Felder leeren
+      $.each(fields, function (k, v) {
+        if (k != 'text') {
+          $('#'+css+'_field_'+k).val('');
+        }
+      });
+      $('#'+css+'_field_parent').val(path);
+      initHTMLEditor('#'+css+'_modal_edit form textarea','de','');
+      $('#'+css+'_modal_edit .modal-body .nav-tabs a:first').tab('show');
+      $('#'+css+'_modal_edit').modal('toggle');
+    });
+  
+//  Kommentar
+    $(target+' .'+css+'commentbut').on('click', function() {
+//    Felder leeren
+      $.each(fields, function (k, v) {
+        if (k != 'text') {
+          $('#'+css+'_field_'+k).val('');
+        }
+      });
+      initHTMLEditor('#'+css+'_modal_edit form textarea','de','');
+      var commentonanno = getAnnotation(annotations,$(this).closest('.'+css+'item, .'+css+'comment').attr('id'));
+      $('#'+css+'_field_parent').val(commentonanno.svname);
+      $('#'+css+'_modal_edit .modal-body .nav-tabs a:first').tab('show');
+      $('#'+css+'_modal_edit').modal('toggle');
+    });  
+  
+//   Annotation editieren
+    $(target+' .'+css+'editbut').on('click', function() {
+//    Felder vorausfüllen
+      var editanno = getAnnotation(annotations,$(this).closest('.'+css+'item, .'+css+'comment').attr('id'));
+      $.each(fields, function (k, v) {
+        if (k != 'text') {
+          $('#'+css+'_field_'+k).val(editanno[v]);
+        }
+      });
+      $('#'+css+'_field_id').val(editanno.id);
+      if (typeof(editanno.parent_svname) != 'undefined') {
+        $('#'+css+'_field_parent').val(editanno.parent_svname);
+      }
+      else {
+        $('#'+css+'_field_parent').val(path);
+      }
+      initHTMLEditor('#'+css+'_modal_edit form textarea','de',editanno.text);
+      $('#'+css+'_modal_edit .modal-body .nav-tabs a:first').tab('show');
+      $('#'+css+'_modal_edit').modal('toggle');
+    });
+  
+    callHighlight(options['highlight'],annotations,'',css);
+  
+    $(document).on('focusin', function(e) {
+      if ($(e.target).closest(".mce-window").length) {
+          e.stopImmediatePropagation();
+      }
+    });
+  });
+}
+
 function setAnnotationStatus(id,status,csspraefix) {
   if (status) {
     $('#'+id).addClass(csspraefix+'status-active');
@@ -38,499 +532,6 @@ function setAnnotationStatus(id,status,csspraefix) {
   else {
     $('#'+id).removeClass(csspraefix+'status-active');
   }
-}
-
-function displayAnnotations(targetid,path,options) {
-  $.getScript("http://anno.ub.uni-heidelberg.de/js/localizations.js", function () {
-
-  target = '#'+targetid;
-  var annotations = getAnnotations(path,options);
-  if (typeof(options['css']) == 'undefined') {options['css'] = 'anno'}
-  var css = options['css'];
-  if (typeof(options['sort']) == 'undefined') {options['sort'] = 'date'}
-  if (typeof(options['lang']) == 'undefined') {options['lang'] = 'en'}
-  var t = {};
-  $.each(texts, function (k, v) {
-    t[v] = anno_l10n_text(options.lang,v);
-  });
-
-  var html = '<div id="vueapp">'+annoColTemplate+'</div>';
-  $(target).html(html);
-
-  Vue.component('annocomments', {
-    props: ['anno','options','css'],
-    template: ` 
-      <ul v-bind:class="css+'annochoicetree'">
-         <li v-for="item in anno.children" v-bind:id="item.id" v-bind:class="'media '+css+'comment'">
-           <div>
-             <div v-if="item.user_name" class="media-left"><button class="btn btn-xs"><span class="glyphicon glyphicon-user"></span> {{item.user_name}} {{item.jcr_modified_display}}</button></div>
-             <div class="media-body">
-               <h4 v-html="item.title"></h4>
-               <div v-html="item.text"></div>
-               <p v-if="item.link"><a v-bind:href="item.link" target="_blank"><span v-if="item.sourcedescription">{{item.sourcedescription}}</span><span v-else>{{item.link}}</a></p>
-               <div v-if="!options.no_oai" v-bind:class="css+'iiiflink'"><template v-if="item.iiif_url"><button class="btn-link" onclick="anno_toggle_iiif($(this));"><span class="fa fa-caret-right"></span> Bildausschnitt (IIIF-Image)</button><div><a v-bind:href="item.iiif_url" target="_blank">{{item.iiif_url}}</a></div></template></div>
-               <!-- navigation -->
-               <div class="btn-toolbar pull-right" role="toolbar" style="margin-top: 10px;">
-                 <div class="btn-group btn-group-xs pull-right" role="group">
-                   <button v-if="item.editable" v-bind:class="'btn btn-default '+css+'editbut'"><i class="fa fa-pencil"></i> &nbsp;{{text.edit}}</button>
-                   <button v-if="item.commentable" v-bind:class="'btn btn-default '+css+'commentbut'"><i class="fa fa-reply"></i> &nbsp;{{text.reply}}</button>
-                   <template v-if="item.versioned"><button class="btn btn-default dropdown-toggle" data-toggle="dropdown">{{text.previous}} <span class="caret"></span></button><ul v-bind:class="'dropdown-menu pull-right '+css+'versions'"></ul></template>
-                 </div>
-               </div>
-               <div style="clear: both; margin-bottom: 2px;"></div>
-             </div>
-           </div>
-           <template v-if="item.hasChildren">
-             <div><div v-bind:class="css+'separator'"></div></div>
-             <annocomments v-bind:anno="item" v-bind:options="options" v-bind:css="css"></annocomments>
-           </template>
-         </li>
-      </ul>
-   `, 
-  });
-
-  var app = new Vue({
-    el: '#vueapp',
-    data: {
-      text: t,
-      annotations: annotations,
-      options: options, 
-//    Zur Schreibvereinfachung css nochmal separat...
-      css: css,
-      annoservicehosturl: annoservicehosturl,
-      zoneedit: (typeof(options.edit_img_url) != 'undefined' && typeof(options.edit_img_width) != 'undefined')?1:0,
-    },
-    computed: {
-      annotations_sorted: function () {
-        var items = annotations;
-        if (typeof(options.sort) != 'undefined' && options.sort.length) {
-          items.sort(function(a,b) {
-            if (options.sort == 'date') {return ((a.jcr_modified < b.jcr_modified) ? -1 : ((a.jcr_modified > b.jcr_modified) ? 1 : 0))}
-            else if (options.sort == 'date.reverse') {return ((a.jcr_modified < b.jcr_modified) ? 1 : ((a.jcr_modified > b.jcr_modified) ? -1 : 0))}
-            else {
-              return ((a.title < b.title) ? -1 : ((a.title > b.title) ? 1 : 0));
-            }
-          });
-        }
-        return items;
-      }
-    },
-  }); 
-
-// Annotation, die ueber PURL addressiert wurde, hervorheben
-  if (typeof(options.gotopurl) != 'undefined' && options.gotopurl.length) {
-    $('#'+options.gotopurl).addClass(css+'PURL');
-  }
-
-// Zone-Editor
-  if (typeof(options.edit_img_url) != 'undefined' && typeof(options.edit_img_width) != 'undefined') {
-
-    $('#'+css+'_tab_zones').html(zoneEditTemplate);
-
-    var zoneapp = new Vue({
-      el: '#'+css+'_tab_zones',
-      data: {
-        text: t,
-        options: options,
-        annoservicehosturl: annoservicehosturl,
-//      Zur Schreibvereinfachung css nochmal separat...
-        css: css,
-      }
-    });
-
-    $('#'+css+'_zoneeditzoomout').on('click', function(){
-      zoneeditdrawing.getViewbox().zoomOut();
-      navigationThumb(zoneeditthumb,zoneeditdrawing)
-    });
-    $('#'+css+'_zoneeditzoomin').on('click', function(){
-      zoneeditdrawing.getViewbox().zoomIn();
-      navigationThumb(zoneeditthumb,zoneeditdrawing)
-    });
-    $('#'+css+'_zoneeditfittocanvas').on('click', function(){
-      zoneeditdrawing.getViewbox().fit(true);
-      zoneeditdrawing.getViewbox().setPosition(xrx.drawing.Orientation.NW);
-      navigationThumb(zoneeditthumb,zoneeditdrawing)
-    });
-    $('#'+css+'_zoneeditrotleft').on('click', function(){
-      zoneeditdrawing.getViewbox().rotateLeft();
-      zoneeditthumb.getViewbox().rotateLeft();
-      navigationThumb(zoneeditthumb,zoneeditdrawing)
-    });
-    $('#'+css+'_zoneeditrotright').on('click', function(){
-      zoneeditdrawing.getViewbox().rotateRight();
-      zoneeditthumb.getViewbox().rotateRight();
-      navigationThumb(zoneeditthumb,zoneeditdrawing)
-    });
-    $('#'+css+'_zoneeditpolygon').on('click', function(){
-      var styleCreatable = new xrx.shape.Style();
-      styleCreatable.setFillColor('#3B3BFF');
-      styleCreatable.setFillOpacity(.1);
-      styleCreatable.setStrokeWidth(1);
-      styleCreatable.setStrokeColor('#3B3BFF');
-      var np = new xrx.shape.Polygon(zoneeditdrawing);
-      np.setStyle(styleCreatable);
-      np.getCreatable().setStyle(styleCreatable);
-      zoneeditdrawing.setModeCreate(np.getCreatable());
-      zoneeditdrawing.draw();
-      $('#'+css+'_zoneedittoolbar button').removeClass('active');
-      $('#'+css+'_zoneeditpolygon').addClass('active');
-      $('#'+css+'_zoneeditdel').addClass('disabled');
-    });
-    $('#'+css+'_zoneeditrect').on('click', function(){
-      var styleCreatable = new xrx.shape.Style();
-      styleCreatable.setFillColor('#3B3BFF');
-      styleCreatable.setFillOpacity(.1);
-      styleCreatable.setStrokeWidth(1);
-      styleCreatable.setStrokeColor('#3B3BFF');
-      var nr = new xrx.shape.Rect(zoneeditdrawing);
-      nr.setStyle(styleCreatable);
-      nr.getCreatable().setStyle(styleCreatable);
-      zoneeditdrawing.setModeCreate(nr.getCreatable());
-      zoneeditdrawing.draw();
-      $('#'+css+'_zoneedittoolbar button').removeClass('active');
-      $('#'+css+'_zoneeditrect').addClass('active');
-      $('#'+css+'_zoneeditdel').addClass('disabled');
-    });
-    $('#'+css+'_zoneeditview').on('click', function(){
-      zoneeditdrawing.setModeView();
-      $('#'+css+'_zoneedittoolbar button').removeClass('active');
-      $('#'+css+'_zoneeditview').addClass('active');
-      $('#'+css+'_zoneeditdel').addClass('disabled');
-    });
-    $('#'+css+'_zoneeditmove').on('click', function(){
-      zoneeditdrawing.setModeModify();
-      $('#'+css+'_zoneedittoolbar button').removeClass('active');
-      $('#'+css+'_zoneeditmove').addClass('active');
-      $('#'+css+'_zoneeditdel').removeClass('disabled');
-    });
-    $('#'+css+'_zoneeditdel').on('click', function(){
-      if (typeof(zoneeditdrawing.getSelectedShape()) == 'undefined') {
-        alert("Please select a shape");
-        return;
-      }
-      if (window.confirm("Delete selected shape?")) {
-        zoneeditdrawing.removeShape(zoneeditdrawing.getSelectedShape());
-      }
-    });
-
-    $('#'+css+'_but_zoneedit').on('click', function () {
-      $('a[href="#'+css+'_tab_zones"').tab('show');
-    });
-
-// Oeffnen Zone-Editor-Tab
-    $('a[href="#'+css+'_tab_zones"').on('shown.bs.tab', function (e) {
-      $('#'+css+'_zoneeditcanvas canvas').remove();
-      $('#'+css+'_zoneeditthumb canvas').remove();
-      $('#'+css+'_zoneeditcanvas').css('width',$('#'+css+'_zoneedittoolbar').innerWidth());
-      zoneeditdrawing = new xrx.drawing.Drawing(goog.dom.getElement(css+'_zoneeditcanvas'));
-      zoneeditdrawing.eventViewboxChange = function (x, y) {anno_navigationThumb(zoneeditthumb,zoneeditdrawing)}
-      if (zoneeditdrawing.getEngine().isAvailable()) {
-        zoneeditdrawing.setBackgroundImage(options.edit_img_url, function() {
-          zoneeditdrawing.setModeView();
-          zoneeditdrawing.getViewbox().fitToWidth(false);
-          zoneeditdrawing.getViewbox().setZoomFactorMax(4);
-          var z = $('#'+css+'_field_polygon').val();
-          if (z.length > 0) {
-            var p = z.split('<end>');
-            var i;
-            var shapes = new Array();
-            for (i = 0; i < p.length; i++) {
-              if (p[i]) {
-                var coords = anno_coordRel2Abs(JSON.parse('['+p[i]+']'),options.edit_img_width);
-                var shape;
-                if (anno_isRectangle(coords)) {
-                  shape = new xrx.shape.Rect(zoneeditdrawing);
-                }
-                else {
-                  shape = new xrx.shape.Polygon(zoneeditdrawing);
-                }
-                shape.setCoords(coords);
-                shape.setStrokeWidth(1);
-                shape.setStrokeColor('#A00000');
-                shape.setFillColor('#A00000');
-                shape.setFillOpacity(0.2);
-                shape.getSelectable().setFillColor('#000000');
-                shape.getSelectable().setFillOpacity(0.2);
-                shape.getSelectable().setStrokeWidth(3);
-                shapes.push(shape);
-              }
-            }
-            zoneeditdrawing.getLayerShape().addShapes(shapes);
-          }
-          zoneeditdrawing.draw();
-          if (typeof(options.edit_img_thumb) != 'undefined') {
-            $('#'+css+'_zoneeditthumb').show();
-            zoneeditthumb = new xrx.drawing.Drawing(goog.dom.getElement(css+'_zoneeditthumb'));
-            if (zoneeditthumb.getEngine().isAvailable()) {
-              zoneeditthumb.setBackgroundImage(options.edit_img_thumb, function() {
-                zoneeditthumb.setModeDisabled();
-                zoneeditthumb.getViewbox().fit(true);
-                zoneeditthumb.getViewbox().setPosition(xrx.drawing.Orientation.NW); ;
-                zoneeditthumb.draw();
-                anno_navigationThumb(zoneeditthumb,zoneeditdrawing)
-              });
-            }
-          }
-        });
-      }
-    });
-  }
-
-// Dropdown Bildbezuege setzen
-  if (typeof(Cookies) != 'undefined') {
-    if (Cookies.get('showref')) {
-      $(target+' .'+css+'showrefstatus').hide();
-      $(target+' .'+css+'showrefstatus_'+Cookies.get('showref')).show();
-    }
-  }
-// Klick-Event Bildbezüge Dropdown
-  $(target+' .'+css+'showrefopt li a').on('click', function() {
-    var opt = $(this).attr('data-anno-showref');
-    Cookies.set('showref',opt);
-    $(target+' span.'+css+'showrefstatus').hide();
-    $(target+' span.'+css+'showrefstatus_'+opt).show();
-  });
-
-// Wenn Annotation zugeklappt...
-  $(target+' .collapse').on('hide.bs.collapse', function() {
-    var i = $(this).attr('id').substr(5);
-    $('#'+css+'head_'+i).find('span.glyphicon-chevron-down').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right');
-    var no_open = 0;
-    var no_close = 0;
-    $(target+' .collapse').each(function () {
-      if ($(this).hasClass('in')) {no_open++}
-      else {no_close++}
-    });
-    if (!no_open) {
-      $(target+' .'+css+'closeall').addClass('hidden');
-      $(target+' .'+css+'openall').removeClass('hidden');
-    }
-  });
-  $(target+' .collapse').on('hidden.bs.collapse', function() {
-    var no_open = 0;
-    var no_close = 0;
-    $(target+' .collapse').each(function () {
-      if ($(this).hasClass('in')) {no_open++}
-      else {no_close++}
-    });
-    if (!no_open) {
-      $(target+' .'+css+'closeall').addClass('hidden');
-      $(target+' .'+css+'openall').removeClass('hidden');
-    }
-  });
-
-// Wenn Anntation aufgeklappt ...
-  $(target+' .collapse').on('show.bs.collapse', function() {
-    var i = $(this).attr('id').substr(5);
-    $('#'+css+'head_'+i).find('span.glyphicon-chevron-right').removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down');
-    $(this).find('.'+css+'_old_version').css('display','none');
-  });
-  $(target+' .collapse').on('shown.bs.collapse', function() {
-    var no_open = 0;
-    var no_close = 0;
-    $(target+' .collapse').each(function () {
-      if ($(this).hasClass('in')) {no_open++}
-      else {no_close++}
-    });
-    if (no_close == 0) {
-      $(target+' .'+css+'openall').addClass('hidden');
-      $(target+' .'+css+'closeall').removeClass('hidden');
-    }
-  });
-
-// Mouseover Annotation ...
-  $(target+' .'+css+'item').hover(
-    function() {
-      setAnnotationStatus($(this).attr('id'),true,css);
-      callHighlight(options['highlight'],annotations,$(this).attr('id'),css);
-    }, 
-    function () {
-      setAnnotationStatus($(this).attr('id'),false,css);
-      callHighlight(options['highlight'],annotations,'',css);
-    }
-  );
-// Mouseover Kommentar
-  $(target+' .'+css+'comment > div:first-child').hover(
-    function() {
-      setAnnotationStatus($(this).parent().attr('id'),true,css);
-      callHighlight(options['highlight'],annotations,'',css);
-    },
-    function () {
-      setAnnotationStatus($(this).parent().attr('id'),false,css);
-      callHighlight(options['highlight'],annotations,'',css);
-    }
-  );
-
-// PURL-Popover
-  $(target+' .'+css+'purlbut').popover({title: popover_title(anno_l10n_text(options.lang,'purl')), html: true, placement: 'left'});
-
-
-// Alle öffnen, Alle Schließen setzen
-  $(target+' .collapse').eq(0).collapse('show');
-  $(target+' .'+css+'closeall').on('click', function() {
-    $(target+' .'+css+'closeall').addClass('hidden');
-    $(target+' .'+css+'openall').removeClass('hidden');
-    $(target+' .collapse').collapse('hide');
-  });
-  $(target+' .'+css+'openall').on('click', function() {
-    $(target+' .'+css+'openall').addClass('hidden');
-    $(target+' .'+css+'closeall').removeClass('hidden');
-    $(target+' .collapse').collapse('show');
-  });
-
-// Sortierung
-  $(target+' .'+css+'sortdate').on('click', function() {
-    var optionsnew = options;
-    optionsnew.sort = 'date';
-    displayAnnotations(targetid,path,optionsnew)
-  });
-  $(target+' .'+css+'sortdatereverse').on('click', function() {
-    var optionsnew = options;
-    optionsnew.sort = 'datereverse';
-    displayAnnotations(targetid,path,optionsnew)
-  });
-  $(target+' .'+css+'sorttitle').on('click', function() {
-    var optionsnew = options;
-    optionsnew.sort = 'title';
-    displayAnnotations(targetid,path,optionsnew)
-  });
-
-// Speichern im Editor
-  $('#'+css+'_modal_edit .'+css+'savebut').on('click', function() {
-    console.log($('#'+css+'_field_id').val())
-    var ok = 1;
-//  Pflichtfelder ausgefüllt?
-    $.each(fields, function (k, v) {
-      if (typeof($('#'+css+'_field_'+k).attr('required')) != 'undefined' && !$('#'+css+'_field_'+k).val()) {
-        $('#'+css+'_field_'+k).closest('.form-group').addClass('has-error');
-        ok = 0;
-      }
-    });
-    if (ok) {
-      if (typeof(options.edit_img_url) != 'undefined' && typeof(options.edit_img_width) != 'undefined') {
-//      Wenn Zoneneditor aufgerufen wurde...
-        if (typeof zoneeditdrawing != 'undefined') {
-          var shapes = zoneeditdrawing.getLayerShape().getShapes();
-          var new_svg_polygon = '';
-          for (var i = 0; i < shapes.length; i++) {
-            var c = ''
-            var polygonnew = anno_coordAbs2Rel(shapes[i].getCoords(),options.edit_img_width);
-            for (var j = 0; j < polygonnew.length; j++) {
-              if (j > 0) {c += ','}
-              c += JSON.stringify(polygonnew[j]);
-            }
-            if (c) {new_svg_polygon += c + '<end>';}
-          }
-          $('#'+css+'_field_polygon').val(new_svg_polygon);
-        }
-      }
-
-
-
-
-// TODO
-
-
-
-
-
-      $('#'+css+'_modal_edit').modal('hide');
-    }
-  });
-
-// Version ausgewählt
-  $(target+' .'+css+'versions a').on('click', function() {
-    var annoid = $(this).closest('.'+css+'item').attr('id');
-    var anno = getAnnotation(annotations,annoid);
-    var searchid = $(this).attr('data-versionid');
-    var ver = getVersion(anno,$(this).attr('data-versionid'));
-    if (typeof(ver) != 'undefined') {
-      ver.content = getVersionContent(path,annoid,ver,options);
-      anno.shown_version = $(this).attr('data-versionid');
-      anno.shown_version_polygons = ver.content.svg_polygon;
-    }
-
-    $('#old_version_'+annoid).html(versionTemplate);
-
-    var app = new Vue({
-      el: '#old_version_'+annoid,
-      data: {
-        text: t,
-        item: ver.content,
-//      Zur Schreibvereinfachung css nochmal separat...
-        css: css,
-        created_display: ver.created_display,
-      } 
-    });
-
-    $('#old_version_'+annoid).css('display','block');
-    callHighlight(options['highlight'],annotations,annoid,css);
-    $(target+' .'+css+'versclosebut').on('click', function() {
-      $(this).closest('.'+css+'_old_version').css('display','none');
-      delete anno['shown_version'];
-      delete anno['shown_version_polygons'];
-      callHighlight(options['highlight'],annotations,'',css);
-    });
-  });
-
-// Neue Annotation
-  $(target+' .'+css+'new').on('click', function() {
-//  Felder leeren
-    $.each(fields, function (k, v) {
-      if (k != 'text') {
-        $('#'+css+'_field_'+k).val('');
-      }
-    });
-    $('#'+css+'_field_parent').val(path);
-    initHTMLEditor('#'+css+'_modal_edit form textarea','de','');
-    $('#'+css+'_modal_edit .modal-body .nav-tabs a:first').tab('show');
-    $('#'+css+'_modal_edit').modal('toggle');
-  });
-
-// Kommentar
-  $(target+' .'+css+'commentbut').on('click', function() {
-//  Felder leeren
-    $.each(fields, function (k, v) {
-      if (k != 'text') {
-        $('#'+css+'_field_'+k).val('');
-      }
-    });
-    initHTMLEditor('#'+css+'_modal_edit form textarea','de','');
-    var commentonanno = getAnnotation(annotations,$(this).closest('.'+css+'item, .'+css+'comment').attr('id'));
-    $('#'+css+'_field_parent').val(commentonanno.svname);
-    $('#'+css+'_modal_edit .modal-body .nav-tabs a:first').tab('show');
-    $('#'+css+'_modal_edit').modal('toggle');
-  });  
-
-// Annotation editieren
-  $(target+' .'+css+'editbut').on('click', function() {
-//  Felder vorausfüllen
-    var editanno = getAnnotation(annotations,$(this).closest('.'+css+'item, .'+css+'comment').attr('id'));
-    $.each(fields, function (k, v) {
-      if (k != 'text') {
-        $('#'+css+'_field_'+k).val(editanno[v]);
-      }
-    });
-    $('#'+css+'_field_id').val(editanno.id);
-    if (typeof(editanno.parent_svname) != 'undefined') {
-      $('#'+css+'_field_parent').val(editanno.parent_svname);
-    }
-    else {
-      $('#'+css+'_field_parent').val(path);
-    }
-    initHTMLEditor('#'+css+'_modal_edit form textarea','de',editanno.text);
-    $('#'+css+'_modal_edit .modal-body .nav-tabs a:first').tab('show');
-    $('#'+css+'_modal_edit').modal('toggle');
-  });
-
-  callHighlight(options['highlight'],annotations,'',css);
-
-  $(document).on('focusin', function(e) {
-    if ($(e.target).closest(".mce-window").length) {
-        e.stopImmediatePropagation();
-    }
-  });
- });
 }
 
 function initHTMLEditor (selector,language,content) {
