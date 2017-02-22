@@ -31,12 +31,12 @@ var fields = {
 var zoneeditdrawing;
 var zoneeditthumb;
 
-function displayAnnotations(targetid,path,options) {
+function displayAnnotations(htmlid,annotarget,options) {
 // Einbinden von localizations.js
   $.getScript("http://anno.ub.uni-heidelberg.de/js/localizations.js", function () {
 
-    target = '#'+targetid;
-    var annotations = getAnnotations(path,options);
+    htmltarget = '#'+htmlid;
+    var annotations = getAnnotations(annotarget,options);
     if (typeof(options['css']) == 'undefined') {options['css'] = 'anno'}
     var css = options['css'];
     if (typeof(options['sort']) == 'undefined') {options['sort'] = 'date'}
@@ -47,7 +47,7 @@ function displayAnnotations(targetid,path,options) {
     });
   
     var html = '<div id="vueapp">'+annoColTemplate+'</div>';
-    $(target).html(html);
+    $(htmltarget).html(html);
   
     Vue.component('annocomments', {
       props: ['anno','options','css'],
@@ -271,67 +271,67 @@ function displayAnnotations(targetid,path,options) {
 //  Dropdown Bildbezuege setzen
     if (typeof(Cookies) != 'undefined') {
       if (Cookies.get('showref')) {
-        $(target+' .'+css+'showrefstatus').hide();
-        $(target+' .'+css+'showrefstatus_'+Cookies.get('showref')).show();
+        $(htmltarget+' .'+css+'showrefstatus').hide();
+        $(htmltarget+' .'+css+'showrefstatus_'+Cookies.get('showref')).show();
       }
     }
 //  Klick-Event Bildbezüge Dropdown
-    $(target+' .'+css+'showrefopt li a').on('click', function() {
+    $(htmltarget+' .'+css+'showrefopt li a').on('click', function() {
       var opt = $(this).attr('data-anno-showref');
       Cookies.set('showref',opt);
-      $(target+' span.'+css+'showrefstatus').hide();
-      $(target+' span.'+css+'showrefstatus_'+opt).show();
+      $(htmltarget+' span.'+css+'showrefstatus').hide();
+      $(htmltarget+' span.'+css+'showrefstatus_'+opt).show();
     });
   
 //  Wenn Annotation zugeklappt...
-    $(target+' .collapse').on('hide.bs.collapse', function() {
+    $(htmltarget+' .collapse').on('hide.bs.collapse', function() {
       var i = $(this).attr('id').substr(5);
       $('#'+css+'head_'+i).find('span.glyphicon-chevron-down').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right');
       var no_open = 0;
       var no_close = 0;
-      $(target+' .collapse').each(function () {
+      $(htmltarget+' .collapse').each(function () {
         if ($(this).hasClass('in')) {no_open++}
         else {no_close++}
       });
       if (!no_open) {
-        $(target+' .'+css+'closeall').addClass('hidden');
-        $(target+' .'+css+'openall').removeClass('hidden');
+        $(htmltarget+' .'+css+'closeall').addClass('hidden');
+        $(htmltarget+' .'+css+'openall').removeClass('hidden');
       }
     });
-    $(target+' .collapse').on('hidden.bs.collapse', function() {
+    $(htmltarget+' .collapse').on('hidden.bs.collapse', function() {
       var no_open = 0;
       var no_close = 0;
-      $(target+' .collapse').each(function () {
+      $(htmltarget+' .collapse').each(function () {
         if ($(this).hasClass('in')) {no_open++}
         else {no_close++}
       });
       if (!no_open) {
-        $(target+' .'+css+'closeall').addClass('hidden');
-        $(target+' .'+css+'openall').removeClass('hidden');
+        $(htmltarget+' .'+css+'closeall').addClass('hidden');
+        $(htmltarget+' .'+css+'openall').removeClass('hidden');
       }
     });
   
 //  Wenn Anntation aufgeklappt ...
-    $(target+' .collapse').on('show.bs.collapse', function() {
+    $(htmltarget+' .collapse').on('show.bs.collapse', function() {
       var i = $(this).attr('id').substr(5);
       $('#'+css+'head_'+i).find('span.glyphicon-chevron-right').removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down');
       $(this).find('.'+css+'_old_version').css('display','none');
     });
-    $(target+' .collapse').on('shown.bs.collapse', function() {
+    $(htmltarget+' .collapse').on('shown.bs.collapse', function() {
       var no_open = 0;
       var no_close = 0;
-      $(target+' .collapse').each(function () {
+      $(htmltarget+' .collapse').each(function () {
         if ($(this).hasClass('in')) {no_open++}
         else {no_close++}
       });
       if (no_close == 0) {
-        $(target+' .'+css+'openall').addClass('hidden');
-        $(target+' .'+css+'closeall').removeClass('hidden');
+        $(htmltarget+' .'+css+'openall').addClass('hidden');
+        $(htmltarget+' .'+css+'closeall').removeClass('hidden');
       }
     });
   
 //  Mouseover Annotation ...
-    $(target+' .'+css+'item').hover(
+    $(htmltarget+' .'+css+'item').hover(
       function() {
         setAnnotationStatus($(this).attr('id'),true,css);
         callHighlight(options['highlight'],annotations,$(this).attr('id'),css);
@@ -342,7 +342,7 @@ function displayAnnotations(targetid,path,options) {
       }
     );
 //  Mouseover Kommentar
-    $(target+' .'+css+'comment > div:first-child').hover(
+    $(htmltarget+' .'+css+'comment > div:first-child').hover(
       function() {
         setAnnotationStatus($(this).parent().attr('id'),true,css);
         callHighlight(options['highlight'],annotations,'',css);
@@ -354,37 +354,37 @@ function displayAnnotations(targetid,path,options) {
     );
   
 //  PURL-Popover
-    $(target+' .'+css+'purlbut').popover({title: popover_title(anno_l10n_text(options.lang,'purl')), html: true, placement: 'left'});
+    $(htmltarget+' .'+css+'purlbut').popover({title: popover_title(anno_l10n_text(options.lang,'purl')), html: true, placement: 'left'});
   
   
 //  Alle öffnen, Alle Schließen setzen
-    $(target+' .collapse').eq(0).collapse('show');
-    $(target+' .'+css+'closeall').on('click', function() {
-      $(target+' .'+css+'closeall').addClass('hidden');
-      $(target+' .'+css+'openall').removeClass('hidden');
-      $(target+' .collapse').collapse('hide');
+    $(htmltarget+' .collapse').eq(0).collapse('show');
+    $(htmltarget+' .'+css+'closeall').on('click', function() {
+      $(htmltarget+' .'+css+'closeall').addClass('hidden');
+      $(htmltarget+' .'+css+'openall').removeClass('hidden');
+      $(htmltarget+' .collapse').collapse('hide');
     });
-    $(target+' .'+css+'openall').on('click', function() {
-      $(target+' .'+css+'openall').addClass('hidden');
-      $(target+' .'+css+'closeall').removeClass('hidden');
-      $(target+' .collapse').collapse('show');
+    $(htmltarget+' .'+css+'openall').on('click', function() {
+      $(htmltarget+' .'+css+'openall').addClass('hidden');
+      $(htmltarget+' .'+css+'closeall').removeClass('hidden');
+      $(htmltarget+' .collapse').collapse('show');
     });
   
 //  Sortierung
-    $(target+' .'+css+'sortdate').on('click', function() {
+    $(htmltarget+' .'+css+'sortdate').on('click', function() {
       var optionsnew = options;
       optionsnew.sort = 'date';
-      displayAnnotations(targetid,path,optionsnew)
+      displayAnnotations(htmlid,annotarget,optionsnew)
     });
-    $(target+' .'+css+'sortdatereverse').on('click', function() {
+    $(htmltarget+' .'+css+'sortdatereverse').on('click', function() {
       var optionsnew = options;
       optionsnew.sort = 'datereverse';
-      displayAnnotations(targetid,path,optionsnew)
+      displayAnnotations(htmlid,annotarget,optionsnew)
     });
-    $(target+' .'+css+'sorttitle').on('click', function() {
+    $(htmltarget+' .'+css+'sorttitle').on('click', function() {
       var optionsnew = options;
       optionsnew.sort = 'title';
-      displayAnnotations(targetid,path,optionsnew)
+      displayAnnotations(htmlid,annotarget,optionsnew)
     });
   
 //  Speichern im Editor
@@ -431,13 +431,13 @@ function displayAnnotations(targetid,path,options) {
     });
   
 //  Version ausgewählt
-    $(target+' .'+css+'versions a').on('click', function() {
+    $(htmltarget+' .'+css+'versions a').on('click', function() {
       var annoid = $(this).closest('.'+css+'item').attr('id');
       var anno = getAnnotation(annotations,annoid);
       var searchid = $(this).attr('data-versionid');
       var ver = getVersion(anno,$(this).attr('data-versionid'));
       if (typeof(ver) != 'undefined') {
-        ver.content = getVersionContent(path,annoid,ver,options);
+        ver.content = getVersionContent(annotarget,annoid,ver,options);
         anno.shown_version = $(this).attr('data-versionid');
         anno.shown_version_polygons = ver.content.svg_polygon;
       }
@@ -457,7 +457,7 @@ function displayAnnotations(targetid,path,options) {
   
       $('#old_version_'+annoid).css('display','block');
       callHighlight(options['highlight'],annotations,annoid,css);
-      $(target+' .'+css+'versclosebut').on('click', function() {
+      $(htmltarget+' .'+css+'versclosebut').on('click', function() {
         $(this).closest('.'+css+'_old_version').css('display','none');
         delete anno['shown_version'];
         delete anno['shown_version_polygons'];
@@ -466,21 +466,21 @@ function displayAnnotations(targetid,path,options) {
     });
   
 //  Neue Annotation
-    $(target+' .'+css+'new').on('click', function() {
+    $(htmltarget+' .'+css+'new').on('click', function() {
 //    Felder leeren
       $.each(fields, function (k, v) {
         if (k != 'text') {
           $('#'+css+'_field_'+k).val('');
         }
       });
-      $('#'+css+'_field_parent').val(path);
+      $('#'+css+'_field_parent').val(annotarget);
       initHTMLEditor('#'+css+'_modal_edit form textarea','de','');
       $('#'+css+'_modal_edit .modal-body .nav-tabs a:first').tab('show');
       $('#'+css+'_modal_edit').modal('toggle');
     });
   
 //  Kommentar
-    $(target+' .'+css+'commentbut').on('click', function() {
+    $(htmltarget+' .'+css+'commentbut').on('click', function() {
 //    Felder leeren
       $.each(fields, function (k, v) {
         if (k != 'text') {
@@ -495,7 +495,7 @@ function displayAnnotations(targetid,path,options) {
     });  
   
 //   Annotation editieren
-    $(target+' .'+css+'editbut').on('click', function() {
+    $(htmltarget+' .'+css+'editbut').on('click', function() {
 //    Felder vorausfüllen
       var editanno = getAnnotation(annotations,$(this).closest('.'+css+'item, .'+css+'comment').attr('id'));
       $.each(fields, function (k, v) {
@@ -508,7 +508,7 @@ function displayAnnotations(targetid,path,options) {
         $('#'+css+'_field_parent').val(editanno.parent_svname);
       }
       else {
-        $('#'+css+'_field_parent').val(path);
+        $('#'+css+'_field_parent').val(annotarget);
       }
       initHTMLEditor('#'+css+'_modal_edit form textarea','de',editanno.text);
       $('#'+css+'_modal_edit .modal-body .nav-tabs a:first').tab('show');
@@ -578,16 +578,16 @@ function getVersion(annotation,versionid) {
   return single_version;
 }
 
-function getAnnotations(path,options) {
+function getAnnotations(annotarget,options) {
   var annotations = [];
   var tokens = '';
   if (typeof(options.readtoken) != 'undefined' && options.readtoken.length) {tokens += '&rtok='+options.readtoken}
   if (typeof(options.writetoken) != 'undefined' && options.writetoken.length) {tokens += '&wtok='+options.writetoken}
   $.ajax({
     dataType: 'xml',
-    url: 'http://digi.ub.uni-heidelberg.de/annotations?forward='+path+'/fcr:export?recurse=true&skipBinary=false',
+    url: 'http://digi.ub.uni-heidelberg.de/annotations?forward='+annotarget+'/fcr:export?recurse=true&skipBinary=false',
 // neu:
-//    url: annoserviceurl+'?service='+options.service+'&target='+path+tokens,
+//    url: annoserviceurl+'?service='+options.service+'&target='+annotarget+tokens,
     async: false,
   }).done(function (annoxml) {
 //    var data = xmlToJson($.parseXML(annoxml));
@@ -606,7 +606,7 @@ function getAnnotations(path,options) {
           }
         });
         if (typeof(data1['sv:node']) != 'undefined') {
-          convertTree(annotations, data1['sv:node'], path, path, options);
+          convertTree(annotations, data1['sv:node'], annotarget, annotarget, options);
         }
         else {
           console.log('Error in reading data', data1)
@@ -617,7 +617,7 @@ function getAnnotations(path,options) {
   return annotations;
 }
 
-function getVersionContent(path,annoidentifier,vers,options) {
+function getVersionContent(annotarget,annoidentifier,vers,options) {
   var versionid = vers.idshort;
   var result = {};
   var version = {};
@@ -631,9 +631,9 @@ function getVersionContent(path,annoidentifier,vers,options) {
       }
     },
     dataType: 'jsonld',
-    url: 'http://digi.ub.uni-heidelberg.de/annotations?forward='+path+'/'+annoidentifier+'/fcr:versions/'+versionid+'/',
+    url: 'http://digi.ub.uni-heidelberg.de/annotations?forward='+annotarget+'/'+annoidentifier+'/fcr:versions/'+versionid+'/',
 // neu:
-//      url: annoserviceurl+'?service='+options.service+'&target='+path+'/'+annoidentifier+'/fcr:versions/'+versionid+'/',
+//      url: annoserviceurl+'?service='+options.service+'&target='+annotarget+'/'+annoidentifier+'/fcr:versions/'+versionid+'/',
     async: false,
   }).done(function (data) {
 //  ???
@@ -669,7 +669,7 @@ function getVersionContent(path,annoidentifier,vers,options) {
 }
 
 
-function getVersions(anno,path,options) {
+function getVersions(anno,annotarget,options) {
   if (anno.versioned && !anno.versions_loaded) {
     $.ajax({
       accepts: {
@@ -681,9 +681,9 @@ function getVersions(anno,path,options) {
         }
       },
       dataType: 'jsonld',
-      url: 'http://digi.ub.uni-heidelberg.de/annotations?forward='+path+'/'+anno.id+'/fcr:versions',
+      url: 'http://digi.ub.uni-heidelberg.de/annotations?forward='+annotarget+'/'+anno.id+'/fcr:versions',
 // neu:
-//      url: annoserviceurl+'?service='+options.service+'&target='+path+'/'+anno.id+'/fcr:versions',
+//      url: annoserviceurl+'?service='+options.service+'&target='+annotarget+'/'+anno.id+'/fcr:versions',
       async: false,
     }).done(function (versionjson) {
       if (typeof(versionjson) == 'object') {
@@ -867,18 +867,18 @@ function convertDate(datestring,loc) {
   return dateObj.toLocaleString();
 }
 
-function convertTree(toAdd, data1, parent_string, path, options) {
+function convertTree(toAdd, data1, parent_string, annotarget, options) {
   if ($.isArray(data1) === false) {
     var elem = convertProperties(data1['sv:property'], data1['@attributes'], parent_string, options);
     var element_position = toAdd.push(elem);
     if (toAdd.versioned !== null) {
-      getVersions(toAdd,path,options);
+      getVersions(toAdd,annotarget,options);
     }
     var child = data1['sv:node'];
     var pos = element_position - 1;
     if (child) {
       toAdd[pos].children = [];
-      convertTree(toAdd[pos].children, child, elem.svname, path, options);
+      convertTree(toAdd[pos].children, child, elem.svname, annotarget, options);
       toAdd[pos].hasChildren = true;
       if (toAdd[pos].children[0].type == 'comment') {toAdd[pos].hasComment = true}
       for(var i = 0; i < toAdd[pos].children.length; i++) {
@@ -893,12 +893,12 @@ function convertTree(toAdd, data1, parent_string, path, options) {
         var element_position = toAdd.push(elem);
         var pos = element_position - 1;
         if (toAdd[key].versioned !== null) {
-          getVersions(toAdd[key],path,options);
+          getVersions(toAdd[key],annotarget,options);
         }
         var child = value['sv:node'];
         if (child) {
           toAdd[pos].children = [];
-          convertTree(toAdd[pos].children, child, elem.svname, path, options);
+          convertTree(toAdd[pos].children, child, elem.svname, annotarget, options);
           toAdd[pos].hasChildren = true;
           if (toAdd[pos].children[0].type == 'comment') {toAdd[pos].hasComment = true}
           for(var i = 0; i < toAdd[pos].children.length; i++) {
