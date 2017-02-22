@@ -75,7 +75,7 @@ sub create_or_update { # falls ref($o->{target})==SCALAR -> target ist anno_id
 		eval { $dbh->rollback; };
 		return;
 	}
-	return $id; # ggf. »($id, $rev)«
+	return ($id, $rev);
 }
 
 sub ld_ish {
