@@ -25,7 +25,7 @@ nur für Editor:
 </pre>
 
 <pre>
-displayAnnotations(htmlid,target,options)
+displayAnnotations(htmlid,annotarget,options)
 </pre>
 
 * htmlid: ID des HTML-Elements, in dem die Liste der Annotationen ausgegeben werden soll
