@@ -31,11 +31,11 @@ displayAnnotations(htmlid, annotarget, options)
 * htmlid: ID des HTML-Elements, in dem die Liste der Annotationen ausgegeben werden soll
 * target: ID des Annotationen-Targets, für das die zugehörigen Annotationen ausgegeben werden soll
 * options:
-** service:
-** css:
-** sort:
-** lang:
-** no_oai:
+ * service:
+ * css:
+ * sort:
+ * lang:
+ * no_oai:
 ** edit_img_url:
 ** edit_img_width:
 ** edit_img_thumb:
