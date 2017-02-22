@@ -6,7 +6,9 @@ Basiert auf Web Annotation Data Model (https://www.w3.org/TR/annotation-model/)
 
 nur für Editor:
 
+`
 <script type="text/javascript" src="http://anno.ub.uni-heidelberg.de/js/tinymce/tinymce.min.js"></script>
+`
 
 ## Demo
 
