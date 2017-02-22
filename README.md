@@ -45,7 +45,7 @@ displayAnnotations(htmlid, annotarget, options)
  * iiif_url: URL-Anfang für die IIIF-URL (Zonenausschnitt)
  * iiif_img_width: TODO: raus aus Optionen, muss automatisch ermittelt werden (Zones)
  * iiif_img_height: TODO: raus aus Optionen, muss automatisch ermittelt werden (Zones)
- * gotopurl: 
+ * gotopurl: ID der Annotation, die hervorgehoben werden soll, weil der Dienst über die persistente URL der Annotatione aufgerufen wurde
  * purl: URL-Anfang für die persistenten URLs zu der Annotationen
  * login: URL für Login-Button in Annotationenanzeige
  * readtoken: Read-Token für Annotationenservice
