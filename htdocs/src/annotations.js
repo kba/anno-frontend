@@ -17,9 +17,32 @@ var annoCommentsTemplate = require('../html/comments.vue.html')
 
 var zoneeditdrawing;
 var zoneeditthumb;
+var thumbTimeout;
 
+/**
+ * @param {String} htmlid ID des HTML-Elements, in dem die Liste der Annotationen ausgegeben werden soll
+ * @param {String} target: ID des Annotationen-Targets, für das die zugehörigen Annotationen ausgegeben werden soll
+ * @param {Object} options:
+ * @param {String} options.service: Dienst, für den die Annotationen verwaltet werden (z.B. "diglit", zukünftig mit zu target)
+ * @param {String} options.css: Präfix für verwendete CSS-Klassen und IDs
+ * @param {String} options.sort: Sortierung: date, datereverse, title
+ * @param {String} options.lang: Sprache: de, en
+ * @param {String} options.no_oai: Keine Ausgabe von IIIF-URLs (ggf. umbenennen)
+ * @param {String} options.edit_img_url: Editor: URL zu Image, für das Polygone erstellt werden
+ * @param {String} options.edit_img_width: Editor: Breite des Images, für das Zonen erstellt werden, in Pixel
+ * @param {String} options.edit_img_thumb: Editor: URL zu Thumb-Image (Orientierungsthumb im Editor)
+ * @param {String} options.highlight: Callback Funktion für das Highlighting der Zonen
+ * @param {String} options.iiif_url: URL-Anfang für die IIIF-URL (Zonenausschnitt)
+ * @param {String} options.iiif_img_width: TODO: raus aus Optionen, muss automatisch ermittelt werden (Zones)
+ * @param {String} options.iiif_img_height: TODO: raus aus Optionen, muss automatisch ermittelt werden (Zones)
+ * @param {String} options.gotopurl: ID der Annotation, die hervorgehoben werden soll, weil der Dienst über die persistente URL der Annotatione aufgerufen wurde
+ * @param {String} options.purl: URL-Anfang für die persistenten URLs zu der Annotationen
+ * @param {String} options.login: URL für Login-Button in Annotationenanzeige
+ * @param {String} options.readtoken: Read-Token für Annotationenservice
+ * @param {String} options.writetoken: Write-Token für Annotationenservice
+*/
 function displayAnnotations(htmlid,annotarget,options) {
-    htmltarget = '#'+htmlid;
+    var htmltarget = '#'+htmlid;
     var annotations = getAnnotations(annotarget,options);
     if (typeof(options['css']) == 'undefined') {options['css'] = 'anno'}
     var css = options['css'];
@@ -90,26 +113,26 @@ function displayAnnotations(htmlid,annotarget,options) {
   
       $('#'+css+'_zoneeditzoomout').on('click', function(){
         zoneeditdrawing.getViewbox().zoomOut();
-        navigationThumb(zoneeditthumb,zoneeditdrawing)
+        anno_navigationThumb(zoneeditthumb,zoneeditdrawing)
       });
       $('#'+css+'_zoneeditzoomin').on('click', function(){
         zoneeditdrawing.getViewbox().zoomIn();
-        navigationThumb(zoneeditthumb,zoneeditdrawing)
+        anno_navigationThumb(zoneeditthumb,zoneeditdrawing)
       });
       $('#'+css+'_zoneeditfittocanvas').on('click', function(){
         zoneeditdrawing.getViewbox().fit(true);
         zoneeditdrawing.getViewbox().setPosition(xrx.drawing.Orientation.NW);
-        navigationThumb(zoneeditthumb,zoneeditdrawing)
+        anno_navigationThumb(zoneeditthumb,zoneeditdrawing)
       });
       $('#'+css+'_zoneeditrotleft').on('click', function(){
         zoneeditdrawing.getViewbox().rotateLeft();
         zoneeditthumb.getViewbox().rotateLeft();
-        navigationThumb(zoneeditthumb,zoneeditdrawing)
+        anno_navigationThumb(zoneeditthumb,zoneeditdrawing)
       });
       $('#'+css+'_zoneeditrotright').on('click', function(){
         zoneeditdrawing.getViewbox().rotateRight();
         zoneeditthumb.getViewbox().rotateRight();
-        navigationThumb(zoneeditthumb,zoneeditdrawing)
+        anno_navigationThumb(zoneeditthumb,zoneeditdrawing)
       });
       $('#'+css+'_zoneeditpolygon').on('click', function(){
         var styleCreatable = new xrx.shape.Style();
