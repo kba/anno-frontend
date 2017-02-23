@@ -176,13 +176,17 @@ sub get_revs {
 	for my $anno (@{$dbh->selectall_arrayref("select * from anno where id=? $revsql order by rev",$slice, $aid)}) {
 		push @annos, $anno;
 		$annos[$#annos]->{'@context'}="http://www.w3.org/ns/anno.jsonld";
-		$annos[$#annos]->{body}  =$dbh->selectall_arrayref("select * from body   where id=? and rev=? order by seq",$slice, $aid, $anno->{rev});
-		$annos[$#annos]->{target}=$dbh->selectall_arrayref("select * from target where id=? and rev=? order by seq",$slice, $aid, $anno->{rev});
+	}
+
+	if(scalar(@annos)==1) { # aus Performancegründen: body+target gibts nur bei 1er anno
+	#print "here\n";
+		$annos[$#annos]->{body}  =$dbh->selectall_arrayref("select * from body   where id=? and rev=? order by seq",$slice, $aid, $annos[$#annos]->{rev});
+		$annos[$#annos]->{target}=$dbh->selectall_arrayref("select * from target where id=? and rev=? order by seq",$slice, $aid, $annos[$#annos]->{rev});
 		for my $target (@{ $annos[$#annos]->{target} }) {
 			$target->{selector}=$self->{json}->decode($target->{selector});
 		}
-
 	}
+
 	ld_ish(\@annos);
 	return $self->{json}->encode(\@annos);
 }

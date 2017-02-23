@@ -95,7 +95,7 @@ print $fff scalar(localtime(time))."\n";
 		print "Content-Type: application/json\r\n";
 		print "\r\n";
 		if($q_param{id}) {
-			print $a_db->get_revs($q_param{id});
+			print $a_db->get_revs($q_param{id}, $q_param{rev}); # body+target gibt's nur für einzelne revs
 			next;
 		}
 		print $a_db->get_by_url($target_url);
