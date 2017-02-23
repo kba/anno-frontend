@@ -3,10 +3,10 @@
   "asi": true,
   "sub": true,
   "predef": [
-    "goog",    // TODO
-    "xrx",     // TODO
-    "Cookies", // TODO
-    "alert",   // TODO
+    "goog",     // TODO
+    "xrx",      // TODO
+    "alert",    // TODO
+    "document", // TODO
     "require",
     "console",
     "window",

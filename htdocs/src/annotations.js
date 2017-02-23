@@ -138,7 +138,7 @@ function displayAnnotations(htmlid,annotarget,options) {
       $('#'+css+'_zoneeditpolygon').on('click', function(){
         var styleCreatable = new xrx.shape.Style();
         styleCreatable.setFillColor('#3B3BFF');
-        styleCreatable.setFillOpacity(.1);
+        styleCreatable.setFillOpacity(0.1);
         styleCreatable.setStrokeWidth(1);
         styleCreatable.setStrokeColor('#3B3BFF');
         var np = new xrx.shape.Polygon(zoneeditdrawing);
@@ -153,7 +153,7 @@ function displayAnnotations(htmlid,annotarget,options) {
       $('#'+css+'_zoneeditrect').on('click', function(){
         var styleCreatable = new xrx.shape.Style();
         styleCreatable.setFillColor('#3B3BFF');
-        styleCreatable.setFillOpacity(.1);
+        styleCreatable.setFillOpacity(0.1);
         styleCreatable.setStrokeWidth(1);
         styleCreatable.setStrokeColor('#3B3BFF');
         var nr = new xrx.shape.Rect(zoneeditdrawing);
@@ -306,7 +306,7 @@ function displayAnnotations(htmlid,annotarget,options) {
         if ($(this).hasClass('in')) {no_open++}
         else {no_close++}
       });
-      if (no_close == 0) {
+      if (no_close === 0) {
         $(htmltarget+' .'+css+'openall').addClass('hidden');
         $(htmltarget+' .'+css+'closeall').removeClass('hidden');
       }
@@ -572,7 +572,7 @@ function getAnnotations(annotarget,options) {
     async: false,
   }).done(function (annoxml) {
 //    var data = xmlToJson($.parseXML(annoxml));
-    if (annoxml != null) {
+    if (annoxml !== null) {
       var data = xmlToJson(annoxml);
       if (typeof(data['sv:node']) != 'undefined') {
         var data1 = data['sv:node'];
