@@ -52,7 +52,7 @@ function displayAnnotations(htmlid,annotarget,options) {
     for (let k in config.texts) {
         var v = config.texts[k]
         t[v] = l10n(options.lang, v);
-    };
+    }
   
     var html = '<div id="vueapp">'+annoColTemplate+'</div>';
     $(htmltarget).html(html);
@@ -238,7 +238,7 @@ function displayAnnotations(htmlid,annotarget,options) {
                 zoneeditthumb.setBackgroundImage(options.edit_img_thumb, function() {
                   zoneeditthumb.setModeDisabled();
                   zoneeditthumb.getViewbox().fit(true);
-                  zoneeditthumb.getViewbox().setPosition(xrx.drawing.Orientation.NW); ;
+                  zoneeditthumb.getViewbox().setPosition(xrx.drawing.Orientation.NW);
                   zoneeditthumb.draw();
                   anno_navigationThumb(zoneeditthumb,zoneeditdrawing)
                 });
@@ -632,7 +632,7 @@ function getVersionContent(annotarget,annoidentifier,vers,options) {
     }
     else {version.link = ''}
     if (typeof(result['http://www.w3.org/2000/svg#polygon']) != 'undefined') {
-      for (nr in result['http://www.w3.org/2000/svg#polygon']) {
+      for (var nr in result['http://www.w3.org/2000/svg#polygon']) {
         version.svg_polygon = result['http://www.w3.org/2000/svg#polygon'][nr]['@value'] + '<end>';
       }
     }
@@ -798,10 +798,10 @@ console.log('anno.identifier: '+anno.identifier);
     anno.clean_svname = properties['sv:name'];
   }
 
-  if (typeof(anno.user_name) == 'undefined' || anno.user_name == '') {
+  if (typeof(anno.user_name) == 'undefined' || anno.user_name === '') {
     anno.user_name = anno.account;
   }
-  if (typeof(anno.jcr_modified) != 'undefined' && anno.jcr_modified != '') {
+  if (typeof(anno.jcr_modified) != 'undefined' && anno.jcr_modified !== '') {
     anno.jcr_modified_display = convertDate(anno.jcr_modified);
   }
 
@@ -809,7 +809,7 @@ console.log('anno.identifier: '+anno.identifier);
   if (anno.hasZones && typeof(options.iiif_url) != 'undefined' && typeof(options.iiif_img_width) != 'undefined' && typeof(options.iiif_img_height) != 'undefined' && options.iiif_url.length) {
     var allpolygons = [];
     if (typeof(anno.svg_polygon) != 'undefined') {
-      polygons = anno.svg_polygon.split('<end>');
+      var polygons = anno.svg_polygon.split('<end>');
       $.each(polygons, function (key, value) {
         if (value.length > 0 && typeof(value) != 'undefined' && value !== 'undefined') {
           allpolygons.push(JSON.parse('[' + value + ']'));
@@ -822,7 +822,7 @@ console.log('anno.identifier: '+anno.identifier);
   }
 
   return anno;
-};
+}
 
 function callHighlight(callback,annotations,active,csspraefix) {
     // Liste der Annotationen
@@ -983,6 +983,6 @@ function anno_toggle_iiif (context) {
     context.find('span').removeClass('fa-caret-right');
     context.find('span').addClass('fa-caret-down');
   }
-};
+}
 
 module.exports = {displayAnnotations};
