@@ -3,6 +3,7 @@ var Vue     = require('vue')
 var $       = require('jquery')
 var tinymce = require('tinymce')
 var Base64  = require('js-base64')
+var Cookies = require('js-cookie')
 
 // local modules
 var l10n       = require('./l10n')
