@@ -54,21 +54,21 @@ function displayAnnotations(htmlid,annotarget,options) {
         var v = config.texts[k]
         t[v] = l10n(options.lang, v);
     }
-  
+
     var html = '<div id="vueapp">'+annoColTemplate+'</div>';
     $(htmltarget).html(html);
-  
+
     Vue.component('annocomments', {
       props: ['anno','options','css'],
       template: annoCommentsTemplate,
     });
-  
+
     var app = new Vue({
       el: '#vueapp',
       data: {
         text: t,
         annotations: annotations,
-        options: options, 
+        options: options,
 //      Zur Schreibvereinfachung css nochmal separat...
         css: css,
         annoservicehosturl: config.annoservicehosturl,
@@ -89,18 +89,18 @@ function displayAnnotations(htmlid,annotarget,options) {
           return items;
         }
       },
-    }); 
-  
+    });
+
 //  Annotation, die ueber PURL addressiert wurde, hervorheben
     if (typeof(options.gotopurl) != 'undefined' && options.gotopurl.length) {
       $('#'+options.gotopurl).addClass(css+'PURL');
     }
-  
+
 //  Zone-Editor
     if (typeof(options.edit_img_url) != 'undefined' && typeof(options.edit_img_width) != 'undefined') {
-  
+
       $('#'+css+'_tab_zones').html(zoneEditTemplate);
-  
+
       var zoneapp = new Vue({
         el: '#'+css+'_tab_zones',
         data: {
@@ -111,7 +111,7 @@ function displayAnnotations(htmlid,annotarget,options) {
           css: css,
         }
       });
-  
+
       $('#'+css+'_zoneeditzoomout').on('click', function(){
         zoneeditdrawing.getViewbox().zoomOut();
         anno_navigationThumb(zoneeditthumb,zoneeditdrawing)
@@ -186,11 +186,11 @@ function displayAnnotations(htmlid,annotarget,options) {
           zoneeditdrawing.removeShape(zoneeditdrawing.getSelectedShape());
         }
       });
-  
+
       $('#'+css+'_but_zoneedit').on('click', function () {
         $('a[href="#'+css+'_tab_zones"').tab('show');
       });
-  
+
 //    Oeffnen Zone-Editor-Tab
       $('a[href="#'+css+'_tab_zones"').on('shown.bs.tab', function (e) {
         $('#'+css+'_zoneeditcanvas canvas').remove();
@@ -249,7 +249,7 @@ function displayAnnotations(htmlid,annotarget,options) {
         }
       });
     }
-  
+
 //  Dropdown Bildbezuege setzen
     if (typeof(Cookies) != 'undefined') {
       if (Cookies.get('showref')) {
@@ -264,7 +264,7 @@ function displayAnnotations(htmlid,annotarget,options) {
       $(htmltarget+' span.'+css+'showrefstatus').hide();
       $(htmltarget+' span.'+css+'showrefstatus_'+opt).show();
     });
-  
+
 //  Wenn Annotation zugeklappt...
     $(htmltarget+' .collapse').on('hide.bs.collapse', function() {
       var i = $(this).attr('id').substr(5);
@@ -292,7 +292,7 @@ function displayAnnotations(htmlid,annotarget,options) {
         $(htmltarget+' .'+css+'openall').removeClass('hidden');
       }
     });
-  
+
 //  Wenn Anntation aufgeklappt ...
     $(htmltarget+' .collapse').on('show.bs.collapse', function() {
       var i = $(this).attr('id').substr(5);
@@ -311,13 +311,13 @@ function displayAnnotations(htmlid,annotarget,options) {
         $(htmltarget+' .'+css+'closeall').removeClass('hidden');
       }
     });
-  
+
 //  Mouseover Annotation ...
     $(htmltarget+' .'+css+'item').hover(
       function() {
         setAnnotationStatus($(this).attr('id'),true,css);
         callHighlight(options['highlight'],annotations,$(this).attr('id'),css);
-      }, 
+      },
       function () {
         setAnnotationStatus($(this).attr('id'),false,css);
         callHighlight(options['highlight'],annotations,'',css);
@@ -334,11 +334,11 @@ function displayAnnotations(htmlid,annotarget,options) {
         callHighlight(options['highlight'],annotations,'',css);
       }
     );
-  
+
 //  PURL-Popover
     $(htmltarget+' .'+css+'purlbut').popover({title: popover_title(l10n(options.lang,'purl')), html: true, placement: 'left'});
-  
-  
+
+
 //  Alle öffnen, Alle Schließen setzen
     $(htmltarget+' .collapse').eq(0).collapse('show');
     $(htmltarget+' .'+css+'closeall').on('click', function() {
@@ -351,7 +351,7 @@ function displayAnnotations(htmlid,annotarget,options) {
       $(htmltarget+' .'+css+'closeall').removeClass('hidden');
       $(htmltarget+' .collapse').collapse('show');
     });
-  
+
 //  Sortierung
     $(htmltarget+' .'+css+'sortdate').on('click', function() {
       var optionsnew = options;
@@ -368,7 +368,7 @@ function displayAnnotations(htmlid,annotarget,options) {
       optionsnew.sort = 'title';
       displayAnnotations(htmlid,annotarget,optionsnew)
     });
-  
+
 //  Speichern im Editor
     $('#'+css+'_modal_edit .'+css+'savebut').on('click', function() {
       console.log($('#'+css+'_field_id').val())
@@ -398,20 +398,20 @@ function displayAnnotations(htmlid,annotarget,options) {
             $('#'+css+'_field_polygon').val(new_svg_polygon);
           }
         }
-  
-  
-  
-  
+
+
+
+
 // TODO
-  
-  
-  
-  
-  
+
+
+
+
+
         $('#'+css+'_modal_edit').modal('hide');
       }
     });
-  
+
 //  Version ausgewählt
     $(htmltarget+' .'+css+'versions a').on('click', function() {
       var annoid = $(this).closest('.'+css+'item').attr('id');
@@ -423,9 +423,9 @@ function displayAnnotations(htmlid,annotarget,options) {
         anno.shown_version = $(this).attr('data-versionid');
         anno.shown_version_polygons = ver.content.svg_polygon;
       }
-  
+
       $('#old_version_'+annoid).html(versionTemplate);
-  
+
       var app = new Vue({
         el: '#old_version_'+annoid,
         data: {
@@ -434,9 +434,9 @@ function displayAnnotations(htmlid,annotarget,options) {
 //        Zur Schreibvereinfachung css nochmal separat...
           css: css,
           created_display: ver.created_display,
-        } 
+        }
       });
-  
+
       $('#old_version_'+annoid).css('display','block');
       callHighlight(options['highlight'],annotations,annoid,css);
       $(htmltarget+' .'+css+'versclosebut').on('click', function() {
@@ -446,7 +446,7 @@ function displayAnnotations(htmlid,annotarget,options) {
         callHighlight(options['highlight'],annotations,'',css);
       });
     });
-  
+
 //  Neue Annotation
     $(htmltarget+' .'+css+'new').on('click', function() {
 //    Felder leeren
@@ -460,7 +460,7 @@ function displayAnnotations(htmlid,annotarget,options) {
       $('#'+css+'_modal_edit .modal-body .nav-tabs a:first').tab('show');
       $('#'+css+'_modal_edit').modal('toggle');
     });
-  
+
 //  Kommentar
     $(htmltarget+' .'+css+'commentbut').on('click', function() {
 //    Felder leeren
@@ -474,8 +474,8 @@ function displayAnnotations(htmlid,annotarget,options) {
       $('#'+css+'_field_parent').val(commentonanno.svname);
       $('#'+css+'_modal_edit .modal-body .nav-tabs a:first').tab('show');
       $('#'+css+'_modal_edit').modal('toggle');
-    });  
-  
+    });
+
 //   Annotation editieren
     $(htmltarget+' .'+css+'editbut').on('click', function() {
 //    Felder vorausfüllen
@@ -496,9 +496,9 @@ function displayAnnotations(htmlid,annotarget,options) {
       $('#'+css+'_modal_edit .modal-body .nav-tabs a:first').tab('show');
       $('#'+css+'_modal_edit').modal('toggle');
     });
-  
+
     callHighlight(options['highlight'],annotations,'',css);
-  
+
     $(document).on('focusin', function(e) {
       if ($(e.target).closest(".mce-window").length) {
           e.stopImmediatePropagation();
@@ -536,7 +536,7 @@ function initHTMLEditor (selector,language,content) {
 function getAnnotation(annotations,annoid) {
   var single_annotation = {};
   var gef = 0;
-  $.each(annotations, function (k, v) {  
+  $.each(annotations, function (k, v) {
     if (!gef && v.id == annoid) {
       single_annotation = v;
       gef = 1;
@@ -580,7 +580,7 @@ function getAnnotations(annotarget,options) {
           var a = val['@attributes'];
           if (a["sv:name"] == 'user_rights') {
             if (val['sv:value']['#text'] == 'comment') {
-         
+
 
 
             }
@@ -619,7 +619,7 @@ function getVersionContent(annotarget,annoidentifier,vers,options) {
   }).done(function (data) {
 //  ???
     if (typeof(data[0]['http://purl.org/dc/elements/1.1/title']) != 'undefined') {result = data[0]}
-    else {result = data[1]} 
+    else {result = data[1]}
   });
   if (typeof(result) != 'undefined') {
     if (typeof(result['http://purl.org/dc/elements/1.1/title']) != 'undefined') {
