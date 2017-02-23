@@ -903,7 +903,10 @@ function anno_navigationThumb (thumbdrawing,origdrawing) {
   $('#'+thumbdrawing.element_.id).fadeIn();
   $('#'+thumbdrawing.element_.id).next('.thumbEye').eq(0).fadeIn();
   clearTimeout(thumbTimeout);
-  thumbTimeout = window.setTimeout(function() {$('#'+thumbdrawing.element_.id).fadeOut(1000);$('#'+thumbdrawing.element_.id).next('.thumbEye').eq(0).fadeOut(1000);}, 3000);
+  thumbTimeout = setTimeout(function() {
+      $('#'+thumbdrawing.element_.id).fadeOut(1000)
+      $('#'+thumbdrawing.element_.id).next('.thumbEye').eq(0).fadeOut(1000)
+  }, 3000);
 
   var matrix = origdrawing.getViewbox().ctmDump();
   var trans = new goog.math.AffineTransform(matrix[0],matrix[1],matrix[2],matrix[3],matrix[4],matrix[5]);
