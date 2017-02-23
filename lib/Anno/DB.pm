@@ -4,14 +4,14 @@ use strict;
 use warnings;
 no warnings "uninitialized";
 use Carp;
-
 use DBI;
-use UUID ':all';
+use UUID::Tiny ':std';
 use JSON;
 
 sub new {
 	my($class, $dbh)=@_;
 	my $self=bless({}, $class);
+	if(ref($dbh) ne "DBI::db") { croak "...->new(\$dbh): ref(\$dbh) ne \"DBI::db\""; }
 	$self->{dbh}=$dbh;
 	$self->{dbh}->{RaiseError}=1;
 	return $self;
@@ -19,12 +19,13 @@ sub new {
 
 my $u=undef;
 my $slice={Slice=>{}};
+my $json_opt={pretty=>1};
 
 sub create_or_update { # falls ref($o->{target})==SCALAR -> target ist anno_id
 	my($self, $o)=@_;
 	my $dbh=$self->{dbh};
 
-	my $id=$$o{id}||uuid();
+	my $id=$$o{id}||create_uuid_as_string(UUID_RANDOM);
 	my $rev;
 
 	if(ref($$o{target}) ne "ARRAY" && $id eq $$o{target}) { croak "target_id == id"; return; } # keine Zirkelbezüge!
@@ -56,16 +57,18 @@ sub create_or_update { # falls ref($o->{target})==SCALAR -> target ist anno_id
 		$dbh->do("insert into anno (id,rev,is_latest,created, canonical,creator,motivation,rights,via) values (?,?,1,now(), ?,?,?,?,?)",$u, $id, $rev, 
 			$$o{canonical}, $$o{creator}, $$o{motivation}, $$o{rights}, $$o{via});
 
+		my $seq=1;
 		for my $b (@{$$o{body}}) {
-			$dbh->do("insert into body (id,rev,seq,is_latest, dc_title,format,languages,purpose,rights,type,value) values (?,?,0,1, ?,?,?,?,?,?,?)",$u, $id, $rev, 
+			$dbh->do("insert into body (id,rev,seq,is_latest, dc_title,format,languages,purpose,rights,type,value) values (?,?,?,1, ?,?,?,?,?,?,?)",$u, $id, $rev, $seq++,
 				$$b{dc_title}, $$b{"format"}, $$b{languages}, $$b{purpose}, $$b{rights}, $$b{type}, $$b{value});
 		}
 
 		if(ref($$o{target}) ne "ARRAY") { $dbh->commit; return "ok"; }
 
+		$seq=1;
 		for my $t (@{$$o{target}}) {
-			$dbh->do("insert into target (id,rev,seq,is_latest, format,languages,selector,service,url) values (?,?,0,1, ?,?,?,?,?)",$u, $id, $rev, 
-				$$t{"format"}, $$t{languages}, $$t{selector}, $$t{service}, $$t{url});
+			$dbh->do("insert into target (id,rev,seq,is_latest, format,languages,selector,service,url) values (?,?,?,1, ?,?,?,?,?)",$u, $id, $rev, $seq++,
+				$$t{"format"}, $$t{languages}, to_json($$t{selector}), $$t{service}, $$t{url});
 		}
 
 		$dbh->commit;	return "ok";
@@ -84,8 +87,17 @@ sub ld_ish {
 		for my $y (@{$x}) { ld_ish($y, $path); }
 	}
 	elsif(ref($x) eq "HASH") {
+		my $rev=$x->{rev};
+		my $seq=$x->{seq};
 		for my $k (keys %{$x}) {
-			if(($path=~m!/(target|body)$! && $k=~/^(id|rev|is_latest|seq)$/) || $k eq "anno_id") {
+			if($k eq "id") {
+				$x->{$k}.="/rev$rev";
+				if($path=~m!/(body|target)$!) {
+					$x->{$k}.="/$1/seq$seq";
+				}
+				next;
+			}
+			if($k eq "anno_id") {
 				delete $x->{$k};
 				next;
 			}
@@ -93,7 +105,12 @@ sub ld_ish {
 #				$x->{$k}="http://.../".$x->{$k}; 
 				next;
 			}
-			if($k=~/^(rev|is_latest)$/) {
+			if($k eq "dc_title") {
+				$x->{"dc:title"}=$x->{dc_title};
+				delete $x->{dc_title};
+				next;
+			}
+			if($k=~/^(rev|is_latest|seq)$/) {
 				$x->{"__$k"}=$x->{$k};
 				delete $x->{$k};
 				next;
@@ -116,7 +133,7 @@ sub get_comments {
 		$comments[$#comments]->{body}=$dbh->selectall_arrayref("select * from body where id=? and is_latest=1 order by seq",$slice, $row->{id});
 		$comments[$#comments]->{'@context'}="http://www.w3.org/ns/anno.jsonld";
 		my $c=$self->get_comments($row->{id});
-		if(defined($c)) { $comments[$#comments]->{is_targeted_by}=$c; }
+		if(defined($c)) { $comments[$#comments]->{targeted_by}=$c; }
 	}
 	if(!scalar(@comments)) { return undef; }
 	# kein ld_ish
@@ -132,12 +149,15 @@ sub get_by_url {
 		push @annos, $anno;
 		$annos[$#annos]->{'@context'}="http://www.w3.org/ns/anno.jsonld";
 		my $c=$self->get_comments($anno->{id});
-		if(defined($c)) { $annos[$#annos]->{is_targeted_by}=$c; }
+		if(defined($c)) { $annos[$#annos]->{targeted_by}=$c; }
 		$annos[$#annos]->{body}  =$dbh->selectall_arrayref("select * from body   where id=? and is_latest=1 order by seq",$slice, $anno->{id});
 		$annos[$#annos]->{target}=$dbh->selectall_arrayref("select * from target where id=? and is_latest=1 order by seq",$slice, $anno->{id});
+		for my $target (@{ $annos[$#annos]->{target} }) {
+			$target->{selector}=decode_json($target->{selector});
+		}
 	}
 	ld_ish(\@annos);
-	return to_json(\@annos);
+	return to_json(\@annos, $json_opt);
 }
 
 sub get_revs {
@@ -152,9 +172,13 @@ sub get_revs {
 		$annos[$#annos]->{'@context'}="http://www.w3.org/ns/anno.jsonld";
 		$annos[$#annos]->{body}  =$dbh->selectall_arrayref("select * from body   where id=? and rev=? order by seq",$slice, $aid, $anno->{rev});
 		$annos[$#annos]->{target}=$dbh->selectall_arrayref("select * from target where id=? and rev=? order by seq",$slice, $aid, $anno->{rev});
+		for my $target (@{ $annos[$#annos]->{target} }) {
+			$target->{selector}=decode_json($target->{selector});
+		}
+
 	}
 	ld_ish(\@annos);
-	return to_json(\@annos);
+	return to_json(\@annos, $json_opt);
 }
 
 1;
