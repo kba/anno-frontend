@@ -2,7 +2,6 @@
 # todo: r/w_secret dienstabhängig
 # todo: dienstweise repositories & secrets
 # todo: berechtigung prüfen
-# todo: ids zu namen ersetzen
 # todo: Editiermöglichkeiten eintragen
 use strict;
 use utf8;

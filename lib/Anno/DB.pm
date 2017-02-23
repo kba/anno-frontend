@@ -91,6 +91,12 @@ sub ld_ish {
 	elsif(ref($x) eq "HASH") {
 		my $rev=$x->{rev};
 		my $seq=$x->{seq};
+
+		my $tmp=$x->{creator};
+		$x->{creator}=$x->{name};
+		delete $x->{name};
+		$x->{__creator_id}=$tmp;
+
 		for my $k (keys %{$x}) {
 			if(!defined($x->{$k})) {
 				delete $x->{$k};
@@ -101,10 +107,6 @@ sub ld_ish {
 				if($path=~m!/(body|target)$!) {
 					$x->{$k}.="/$1/seq$seq";
 				}
-				next;
-			}
-			if($k eq "anno_id") {
-				delete $x->{$k};
 				next;
 			}
 			if($k eq "id") {
@@ -134,7 +136,7 @@ sub get_comments {
 	my $dbh=$self->{dbh};
 
 	my @comments;
-	for my $row (@{$dbh->selectall_arrayref("select anno_id,anno.* from anno_dest,anno where anno_id=id and dest_id=? and dest_type='anno' order by created",$slice, $aid)}) {
+	for my $row (@{$dbh->selectall_arrayref("select anno.*,name from anno_dest,anno left join creator on (anno.creator=creator.id) where anno_id=anno.id and dest_id=? and dest_type='anno' order by created",$slice, $aid)}) {
 		push @comments, $row;
 		$comments[$#comments]->{body}=$dbh->selectall_arrayref("select * from body where id=? and is_latest=1 order by seq",$slice, $row->{id});
 		$comments[$#comments]->{'@context'}="http://www.w3.org/ns/anno.jsonld";
@@ -151,7 +153,7 @@ sub get_by_url {
 	my $dbh=$self->{dbh};
 
 	my @annos;
-	for my $anno (@{$dbh->selectall_arrayref("select anno.* from target,anno where url=? and target.is_latest=1 and anno.id=target.id and anno.is_latest=1 order by created",$slice, $url)}) {
+	for my $anno (@{$dbh->selectall_arrayref("select anno.*,name from target,anno left join creator on (anno.creator=creator.id) where url=? and target.is_latest=1 and anno.id=target.id and anno.is_latest=1 order by created",$slice, $url)}) {
 		push @annos, $anno;
 		$annos[$#annos]->{'@context'}="http://www.w3.org/ns/anno.jsonld";
 		my $c=$self->get_comments($anno->{id});
@@ -173,7 +175,7 @@ sub get_revs {
 	$rev=~s/\D//g;
 	my $revsql=$rev?"and rev=$rev":"";
 	my @annos;
-	for my $anno (@{$dbh->selectall_arrayref("select * from anno where id=? $revsql order by rev",$slice, $aid)}) {
+	for my $anno (@{$dbh->selectall_arrayref("select * from anno,name left join creator on (anno.creator=creator.id) where id=? $revsql order by rev",$slice, $aid)}) {
 		push @annos, $anno;
 		$annos[$#annos]->{'@context'}="http://www.w3.org/ns/anno.jsonld";
 	}
