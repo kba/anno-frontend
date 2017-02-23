@@ -1,6 +1,6 @@
 var CoordUtils = module.exports =  {};
 
-CoordUtils.coordIIIF = function anno_coordIIIF (polygons,imgwidth,imgheight) {
+CoordUtils.coordIIIF = function coordIIIF (polygons,imgwidth,imgheight) {
   var maxx = 0;
   var minx = imgwidth;
   var maxy = 0;
@@ -30,9 +30,9 @@ CoordUtils.coordIIIF = function anno_coordIIIF (polygons,imgwidth,imgheight) {
   return parseInt(minx)+','+parseInt(miny)+','+Math.round(difx)+','+Math.round(dify);
 }
 
-CoordUtils.coordAbs2Rel = function anno_coordAbs2Rel (polygon,imgwidth) {
+CoordUtils.coordAbs2Rel = function coordAbs2Rel (polygon,imgwidth) {
   var i;
-  var polygonrel = new Array();
+  var polygonrel = [];
   if (Array.isArray(polygon) && imgwidth > 0) {
     for (i = 0; i < polygon.length; i++) {
       var p = polygon[i];
@@ -44,9 +44,9 @@ CoordUtils.coordAbs2Rel = function anno_coordAbs2Rel (polygon,imgwidth) {
   return polygonrel;
 }
 
-CoordUtils.coordRel2Abs = function anno_coordRel2Abs (polygon,imgwidth) {
+CoordUtils.coordRel2Abs = function coordRel2Abs (polygon,imgwidth) {
   var i;
-  var polygonabs = new Array();
+  var polygonabs = [];
   if (Array.isArray(polygon) && imgwidth > 0) {
     for (i = 0; i < polygon.length; i++) {
       var p = polygon[i];
@@ -58,8 +58,8 @@ CoordUtils.coordRel2Abs = function anno_coordRel2Abs (polygon,imgwidth) {
   return polygonabs;
 }
 
-CoordUtils.isRectangle = function anno_isRectangle(c) {
-  if ($.isArray(c)) {
+CoordUtils.isRectangle = function isRectangle(c) {
+  if (Array.isArray(c)) {
     if (c.length == 4) {
       var xcoords = {};
       var ycoords = {};
