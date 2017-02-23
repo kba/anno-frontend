@@ -206,7 +206,7 @@ function displayAnnotations(htmlid,annotarget,options) {
             if (z.length > 0) {
               var p = z.split('<end>');
               var i;
-              var shapes = new Array();
+              var shapes = [];
               for (i = 0; i < p.length; i++) {
                 if (p[i]) {
                   var coords = CoordUtils.coordRel2Abs(JSON.parse('['+p[i]+']'),options.edit_img_width);
@@ -915,17 +915,17 @@ function anno_navigationThumb (thumbdrawing,origdrawing) {
   var faktorX = thumbWidth/(origwidth*scaleX);
   var faktorY = thumbHeight/(origheight*scaleY);
 
-  var bildLO = new Array();
+  var bildLO = [];
   trans.transform([0,0],0,bildLO,0,1);
 
   var ausschnittWidth = origdrawing.getCanvas().getWidth();
   var ausschnittHeight = origdrawing.getCanvas().getHeight();
   var ausschnittRect = new xrx.shape.Rect(thumbdrawing);
 
-  var ausschnittRectP1 = new Array();
-  var ausschnittRectP2 = new Array();
-  var ausschnittRectP3 = new Array();
-  var ausschnittRectP4 = new Array();
+  var ausschnittRectP1 = [];
+  var ausschnittRectP2 = [];
+  var ausschnittRectP3 = [];
+  var ausschnittRectP4 = [];
   var angle = angle_from_matrix(matrix[0],matrix[1]);
 /* Drechung 90 Grad rechts */
   if (angle == 270) {
@@ -966,7 +966,7 @@ function anno_navigationThumb (thumbdrawing,origdrawing) {
   rect.setStrokeColor(color);
   rect.setFillColor(color);
   rect.setFillOpacity(0.15);
-  var rects = new Array();
+  var rects = [];
   rects.push(rect);
   thumbdrawing.getLayerShape().removeShapes();
   thumbdrawing.getLayerShape().addShapes(rect);
