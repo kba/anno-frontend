@@ -1,0 +1,27 @@
+{
+  "esversion": 6,
+  "asi": true,
+  "sub": true,
+  "predef": [
+    "goog",    // TODO
+    "xrx",     // TODO
+    "Cookies", // TODO
+    "alert",   // TODO
+    "require",
+    "console",
+    "window",
+    "process",
+    "setInterval",
+    "clearTimeout",
+    "setTimeout",
+    "module",
+    "__dirname",
+    "__filename"
+  ],
+  "undef": true,
+  "curly": false,
+  "laxbreak":true,
+  "quotmark": false,
+  "laxcomma":true,
+  "indent": false
+}
