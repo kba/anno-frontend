@@ -13,10 +13,15 @@ RM = rm -rf
 .PHONY: build
 build: node_modules
 	webpack
+	cp demo.html dist/index.html
 
 .PHONY: watch
 watch:
 	webpack -w
+
+.PHONY: serve
+serve:
+	webpack-dev-server --content-base .
 
 node_modules: package.json
 	$(NPM) install

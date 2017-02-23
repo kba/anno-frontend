@@ -24,7 +24,8 @@
     "js-cookie": "2.1.2",
     "raw-loader": "^0.5.1",
     "tinymce": "^4.5.0",
-    "vue": "2.1.10"
+    "vue": "2.1.10",
+    "webpack-dev-server": "^1.16.2"
   },
   "devDependencies": {
     "css-loader": "^0.26.1",
