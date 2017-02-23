@@ -13,13 +13,15 @@ sub new {
 	my $self=bless({}, $class);
 	if(ref($dbh) ne "DBI::db") { croak "...->new(\$dbh): ref(\$dbh) ne \"DBI::db\""; }
 	$self->{dbh}=$dbh;
+	$self->{json}=new JSON;
+	$self->{json}->pretty(1);
+	$self->{json}->canonical(1);
 	$self->{dbh}->{RaiseError}=1;
 	return $self;
 }
 
 my $u=undef;
 my $slice={Slice=>{}};
-my $json_opt={pretty=>1};
 
 sub create_or_update { # falls ref($o->{target})==SCALAR -> target ist anno_id
 	my($self, $o)=@_;
@@ -68,7 +70,7 @@ sub create_or_update { # falls ref($o->{target})==SCALAR -> target ist anno_id
 		$seq=1;
 		for my $t (@{$$o{target}}) {
 			$dbh->do("insert into target (id,rev,seq,is_latest, format,languages,selector,service,url) values (?,?,?,1, ?,?,?,?,?)",$u, $id, $rev, $seq++,
-				$$t{"format"}, $$t{languages}, to_json($$t{selector}), $$t{service}, $$t{url});
+				$$t{"format"}, $$t{languages}, $self->{json}->encode($$t{selector}), $$t{service}, $$t{url});
 		}
 
 		$dbh->commit;	return "ok";
@@ -90,6 +92,10 @@ sub ld_ish {
 		my $rev=$x->{rev};
 		my $seq=$x->{seq};
 		for my $k (keys %{$x}) {
+			if(!defined($x->{$k})) {
+				delete $x->{$k};
+				next;
+			}
 			if($k eq "id") {
 				$x->{$k}.="/rev$rev";
 				if($path=~m!/(body|target)$!) {
@@ -153,11 +159,11 @@ sub get_by_url {
 		$annos[$#annos]->{body}  =$dbh->selectall_arrayref("select * from body   where id=? and is_latest=1 order by seq",$slice, $anno->{id});
 		$annos[$#annos]->{target}=$dbh->selectall_arrayref("select * from target where id=? and is_latest=1 order by seq",$slice, $anno->{id});
 		for my $target (@{ $annos[$#annos]->{target} }) {
-			$target->{selector}=decode_json($target->{selector});
+			$target->{selector}=$self->{json}->decode($target->{selector});
 		}
 	}
 	ld_ish(\@annos);
-	return to_json(\@annos, $json_opt);
+	return $self->{json}->encode(\@annos);
 }
 
 sub get_revs {
@@ -173,12 +179,12 @@ sub get_revs {
 		$annos[$#annos]->{body}  =$dbh->selectall_arrayref("select * from body   where id=? and rev=? order by seq",$slice, $aid, $anno->{rev});
 		$annos[$#annos]->{target}=$dbh->selectall_arrayref("select * from target where id=? and rev=? order by seq",$slice, $aid, $anno->{rev});
 		for my $target (@{ $annos[$#annos]->{target} }) {
-			$target->{selector}=decode_json($target->{selector});
+			$target->{selector}=$self->{json}->decode($target->{selector});
 		}
 
 	}
 	ld_ish(\@annos);
-	return to_json(\@annos, $json_opt);
+	return $self->{json}->encode(\@annos);
 }
 
 1;

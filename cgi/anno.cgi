@@ -9,7 +9,7 @@ use utf8;
 use English;
 use CGI::Fast qw(:standard);
 use Crypt::JWT qw(encode_jwt decode_jwt);
-use JSON::XS;
+use JSON;
 use URI::Escape;
 use List::MoreUtils qw(uniq);
 use File::Slurp;
@@ -104,7 +104,14 @@ print $fff scalar(localtime(time))."\n";
 	elsif($q->request_method=~/^(PUT|POST)$/) { # modify content (title, ...)
 		print "Content-Type: application/json\r\n";
 		print "\r\n";
-		my($id,$rev)=$a_db->create_or_update(decode_json($q->get($q->request_method."DATA")));
+		my $data=decode_json($q->get($q->request_method."DATA"));
+		if($q->request_method eq "POST" && $data->{id}) {
+			error("POST (new anno) not together with id");
+		}
+		if($q->request_method eq "PUT" && !$data->{id}) {
+			error("PUT (modify anno) requires id");
+		}
+		my($id,$rev)=$a_db->create_or_update($data);
 		print qq!{"id": $id, "rev": $rev}!;
 		next;
 	}
