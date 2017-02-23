@@ -1,26 +1,31 @@
-CP = cp -r
-MKDIR = mkdir -p
+PATH := ./node_modules/.bin:$(PATH)
+NODE_ENV = development
+
 NPM = npm
 RM = rm -rf
 
-DEPS_DIR = deps
-NODE_MODULES_DIR = node_modules
+# .PHONY: check-deps
+# check-deps:
+#     @for bin in npm webpack;do\
+#         bash -c "type -P $$bin" >/dev/null || echo "'$$bin' not in \$$PATH";\
+#     done
 
-.PHONY: deps
-deps: $(NODE_MODULES_DIR)
-	$(MKDIR) $(DEPS_DIR)
-	$(RM) $(DEPS_DIR)/bootstrap
-	$(CP) $(NODE_MODULES_DIR)/bootstrap/dist $(DEPS_DIR)/bootstrap
-	$(MKDIR) $(DEPS_DIR)/font-awesome
-	$(CP) $(NODE_MODULES_DIR)/font-awesome/css $(DEPS_DIR)/font-awesome/
-	$(CP) $(NODE_MODULES_DIR)/font-awesome/fonts $(DEPS_DIR)/font-awesome/
-	$(CP) $(NODE_MODULES_DIR)/jquery/dist/jquery.min.js $(DEPS_DIR)/jquery.js
-	$(CP) $(NODE_MODULES_DIR)/js-cookie/src/js.cookie.js $(DEPS_DIR)/js.cookie.js
-	$(CP) $(NODE_MODULES_DIR)/tinymce $(DEPS_DIR)/tinymce
-	$(CP) $(NODE_MODULES_DIR)/vue/dist/vue.js $(DEPS_DIR)/vue.js
-	
-$(NODE_MODULES_DIR):
+.PHONY: build
+build: node_modules
+	webpack
+
+.PHONY: watch
+watch:
+	webpack -w
+
+node_modules: package.json
 	$(NPM) install
 
+.PHONY: clean
 clean:
 	$(RM) $(NODE_MODULES_DIR)
+	$(RM) dist
+
+.PHONY: test
+test:
+	tap -Rspec test/*.test.js

@@ -1,3 +1,5 @@
+var webpack = require('webpack')
+
 module.exports = {
     entry: "./entry.js",
     devtool: 'source-map',
@@ -31,5 +33,10 @@ module.exports = {
         alias: {
             'vue$': 'vue/dist/vue.common.js'
         }
-    }
+    },
+    plugins: [
+        // This will replace the string (!) process.env.NODE_ENV in the source
+        // code with the value of the NODE_ENV env var, hence nested quotes.
+        new webpack.DefinePlugin({ 'process.env': { NODE_ENV: `"${process.env.NODE_ENV}"` }})
+    ]
 };

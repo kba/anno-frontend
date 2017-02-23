@@ -1,40 +1,24 @@
-var annoservicehosturl = 'http://anno.ub.uni-heidelberg.de';
-var annoserviceurl = annoservicehosturl+'/cgi-bin/anno.cgi';
+// npmjs modules
+var Vue     = require('vue')
+var $       = require('jquery')
+var tinymce = require('tinymce')
+var Base64  = require('js-base64')
 
-var typeList = {
-  "dc:description-ger": "text",
-  "dc:identifier": "identifier",
-  "dc:title": "title",
-  "foaf:account": "account",
-  "foaf:name": "user_name",
-  "jcr:lastModified": "jcr_modified",
-  "jcr:uuid": "uuid",
-  "dc:source": "link",
-  "dc:sourceDescription": "sourcedescription",
-  "jcr:versionHistory": "versioned",
-  "dc:type": "type",
-  "svg:polygon": 'svg_polygon',
-  "user_rights": 'user_rights'
-};
+// local modules
+var l10n       = require('./l10n')
+var config     = require('./config')
+var CoordUtils = require('./coord-utils')
 
-var texts = ['headline','login','new','open_all','close','close_all','sort','edit','comment','commenttarget','reply','comments','previous','sortdate','sortdatereverse','sorttitle','purl','save','cancel','edit_headline','annofield_title','annofield_link','annofield_linktitle','license','version_from','showref','showrefdefault','showrefnever','showrefalways','metadata','zones','edit_zones'];
-
-var fields = {
-  'id': 'clean_svname',
-  'title': 'title',
-  'text': 'test',
-  'link': 'link',
-  'linktitle': 'sourcedescription',
-  'polygon': 'svg_polygon',
-};
+// HTML
+var annoColTemplate      = require('../html/annoCol.vue.html')
+var versionTemplate      = require('../html/version.vue.html')
+var zoneEditTemplate     = require('../html/zoneEdit.vue.html')
+var annoCommentsTemplate = require('../html/comments.vue.html')
 
 var zoneeditdrawing;
 var zoneeditthumb;
 
 function displayAnnotations(htmlid,annotarget,options) {
-// Einbinden von localizations.js
-  $.getScript("http://anno.ub.uni-heidelberg.de/js/localizations.js", function () {
-
     htmltarget = '#'+htmlid;
     var annotations = getAnnotations(annotarget,options);
     if (typeof(options['css']) == 'undefined') {options['css'] = 'anno'}
@@ -42,43 +26,17 @@ function displayAnnotations(htmlid,annotarget,options) {
     if (typeof(options['sort']) == 'undefined') {options['sort'] = 'date'}
     if (typeof(options['lang']) == 'undefined') {options['lang'] = 'en'}
     var t = {};
-    $.each(texts, function (k, v) {
-      t[v] = anno_l10n_text(options.lang,v);
-    });
+    for (let k in config.texts) {
+        var v = config.texts[k]
+        t[v] = l10n(options.lang, v);
+    };
   
     var html = '<div id="vueapp">'+annoColTemplate+'</div>';
     $(htmltarget).html(html);
   
     Vue.component('annocomments', {
       props: ['anno','options','css'],
-      template: ` 
-        <ul v-bind:class="css+'annochoicetree'">
-           <li v-for="item in anno.children" v-bind:id="item.id" v-bind:class="'media '+css+'comment'">
-             <div>
-               <div v-if="item.user_name" class="media-left"><button class="btn btn-xs"><span class="glyphicon glyphicon-user"></span> {{item.user_name}} {{item.jcr_modified_display}}</button></div>
-               <div class="media-body">
-                 <h4 v-html="item.title"></h4>
-                 <div v-html="item.text"></div>
-                 <p v-if="item.link"><a v-bind:href="item.link" target="_blank"><span v-if="item.sourcedescription">{{item.sourcedescription}}</span><span v-else>{{item.link}}</a></p>
-                 <div v-if="!options.no_oai" v-bind:class="css+'iiiflink'"><template v-if="item.iiif_url"><button class="btn-link" onclick="anno_toggle_iiif($(this));"><span class="fa fa-caret-right"></span> Bildausschnitt (IIIF-Image)</button><div><a v-bind:href="item.iiif_url" target="_blank">{{item.iiif_url}}</a></div></template></div>
-                 <!-- navigation -->
-                 <div class="btn-toolbar pull-right" role="toolbar" style="margin-top: 10px;">
-                   <div class="btn-group btn-group-xs pull-right" role="group">
-                     <button v-if="item.editable" v-bind:class="'btn btn-default '+css+'editbut'"><i class="fa fa-pencil"></i> &nbsp;{{text.edit}}</button>
-                     <button v-if="item.commentable" v-bind:class="'btn btn-default '+css+'commentbut'"><i class="fa fa-reply"></i> &nbsp;{{text.reply}}</button>
-                     <template v-if="item.versioned"><button class="btn btn-default dropdown-toggle" data-toggle="dropdown">{{text.previous}} <span class="caret"></span></button><ul v-bind:class="'dropdown-menu pull-right '+css+'versions'"></ul></template>
-                   </div>
-                 </div>
-                 <div style="clear: both; margin-bottom: 2px;"></div>
-               </div>
-             </div>
-             <template v-if="item.hasChildren">
-               <div><div v-bind:class="css+'separator'"></div></div>
-               <annocomments v-bind:anno="item" v-bind:options="options" v-bind:css="css"></annocomments>
-             </template>
-           </li>
-        </ul>
-     `, 
+      template: annoCommentsTemplate,
     });
   
     var app = new Vue({
@@ -89,7 +47,7 @@ function displayAnnotations(htmlid,annotarget,options) {
         options: options, 
 //      Zur Schreibvereinfachung css nochmal separat...
         css: css,
-        annoservicehosturl: annoservicehosturl,
+        annoservicehosturl: config.annoservicehosturl,
         zoneedit: (typeof(options.edit_img_url) != 'undefined' && typeof(options.edit_img_width) != 'undefined')?1:0,
       },
       computed: {
@@ -124,7 +82,7 @@ function displayAnnotations(htmlid,annotarget,options) {
         data: {
           text: t,
           options: options,
-          annoservicehosturl: annoservicehosturl,
+          annoservicehosturl: config.annoservicehosturl,
 //        Zur Schreibvereinfachung css nochmal separat...
           css: css,
         }
@@ -228,9 +186,9 @@ function displayAnnotations(htmlid,annotarget,options) {
               var shapes = new Array();
               for (i = 0; i < p.length; i++) {
                 if (p[i]) {
-                  var coords = anno_coordRel2Abs(JSON.parse('['+p[i]+']'),options.edit_img_width);
+                  var coords = CoordUtils.coordRel2Abs(JSON.parse('['+p[i]+']'),options.edit_img_width);
                   var shape;
-                  if (anno_isRectangle(coords)) {
+                  if (CoordUtils.isRectangle(coords)) {
                     shape = new xrx.shape.Rect(zoneeditdrawing);
                   }
                   else {
@@ -354,7 +312,7 @@ function displayAnnotations(htmlid,annotarget,options) {
     );
   
 //  PURL-Popover
-    $(htmltarget+' .'+css+'purlbut').popover({title: popover_title(anno_l10n_text(options.lang,'purl')), html: true, placement: 'left'});
+    $(htmltarget+' .'+css+'purlbut').popover({title: popover_title(l10n(options.lang,'purl')), html: true, placement: 'left'});
   
   
 //  Alle öffnen, Alle Schließen setzen
@@ -392,7 +350,7 @@ function displayAnnotations(htmlid,annotarget,options) {
       console.log($('#'+css+'_field_id').val())
       var ok = 1;
 //    Pflichtfelder ausgefüllt?
-      $.each(fields, function (k, v) {
+      $.each(config.fields, function (k, v) {
         if (typeof($('#'+css+'_field_'+k).attr('required')) != 'undefined' && !$('#'+css+'_field_'+k).val()) {
           $('#'+css+'_field_'+k).closest('.form-group').addClass('has-error');
           ok = 0;
@@ -406,7 +364,7 @@ function displayAnnotations(htmlid,annotarget,options) {
             var new_svg_polygon = '';
             for (var i = 0; i < shapes.length; i++) {
               var c = ''
-              var polygonnew = anno_coordAbs2Rel(shapes[i].getCoords(),options.edit_img_width);
+              var polygonnew = CoordUtils.coordAbs2Rel(shapes[i].getCoords(),options.edit_img_width);
               for (var j = 0; j < polygonnew.length; j++) {
                 if (j > 0) {c += ','}
                 c += JSON.stringify(polygonnew[j]);
@@ -468,7 +426,7 @@ function displayAnnotations(htmlid,annotarget,options) {
 //  Neue Annotation
     $(htmltarget+' .'+css+'new').on('click', function() {
 //    Felder leeren
-      $.each(fields, function (k, v) {
+      $.each(config.fields, function (k, v) {
         if (k != 'text') {
           $('#'+css+'_field_'+k).val('');
         }
@@ -482,7 +440,7 @@ function displayAnnotations(htmlid,annotarget,options) {
 //  Kommentar
     $(htmltarget+' .'+css+'commentbut').on('click', function() {
 //    Felder leeren
-      $.each(fields, function (k, v) {
+      $.each(config.fields, function (k, v) {
         if (k != 'text') {
           $('#'+css+'_field_'+k).val('');
         }
@@ -498,7 +456,7 @@ function displayAnnotations(htmlid,annotarget,options) {
     $(htmltarget+' .'+css+'editbut').on('click', function() {
 //    Felder vorausfüllen
       var editanno = getAnnotation(annotations,$(this).closest('.'+css+'item, .'+css+'comment').attr('id'));
-      $.each(fields, function (k, v) {
+      $.each(config.fields, function (k, v) {
         if (k != 'text') {
           $('#'+css+'_field_'+k).val(editanno[v]);
         }
@@ -522,7 +480,6 @@ function displayAnnotations(htmlid,annotarget,options) {
           e.stopImmediatePropagation();
       }
     });
-  });
 }
 
 function setAnnotationStatus(id,status,csspraefix) {
@@ -587,7 +544,7 @@ function getAnnotations(annotarget,options) {
     dataType: 'xml',
     url: 'http://digi.ub.uni-heidelberg.de/annotations?forward='+annotarget+'/fcr:export?recurse=true&skipBinary=false',
 // neu:
-//    url: annoserviceurl+'?service='+options.service+'&target='+annotarget+tokens,
+//    url: config.annoserviceurl+'?service='+options.service+'&target='+annotarget+tokens,
     async: false,
   }).done(function (annoxml) {
 //    var data = xmlToJson($.parseXML(annoxml));
@@ -633,7 +590,7 @@ function getVersionContent(annotarget,annoidentifier,vers,options) {
     dataType: 'jsonld',
     url: 'http://digi.ub.uni-heidelberg.de/annotations?forward='+annotarget+'/'+annoidentifier+'/fcr:versions/'+versionid+'/',
 // neu:
-//      url: annoserviceurl+'?service='+options.service+'&target='+annotarget+'/'+annoidentifier+'/fcr:versions/'+versionid+'/',
+//      url: config.annoserviceurl+'?service='+options.service+'&target='+annotarget+'/'+annoidentifier+'/fcr:versions/'+versionid+'/',
     async: false,
   }).done(function (data) {
 //  ???
@@ -683,7 +640,7 @@ function getVersions(anno,annotarget,options) {
       dataType: 'jsonld',
       url: 'http://digi.ub.uni-heidelberg.de/annotations?forward='+annotarget+'/'+anno.id+'/fcr:versions',
 // neu:
-//      url: annoserviceurl+'?service='+options.service+'&target='+annotarget+'/'+anno.id+'/fcr:versions',
+//      url: config.annoserviceurl+'?service='+options.service+'&target='+annotarget+'/'+anno.id+'/fcr:versions',
       async: false,
     }).done(function (versionjson) {
       if (typeof(versionjson) == 'object') {
@@ -704,24 +661,21 @@ function getVersions(anno,annotarget,options) {
   anno.versions_loaded = true;
 }
 
-var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}}
-
 function base64Decode(typ, s){
-  if(typ=== 'Binary'){
-    if (typeof s === 'object'){
-      var out='';
-      for (var i in s) {
-        out += Base64.decode(s[i]);
-      }
-      return out;
+    if (typ=== 'Binary') {
+        if (typeof s === 'object'){
+            var out='';
+            for (var i in s) {
+                out += Base64.decode(s[i]);
+            }
+            return out;
+        }
+        else {
+            return Base64.decode(s);
+        }
+    } else {
+        return s
     }
-    else {
-    return Base64.decode(s);
-  }
-    }
-  else {
-    return s
-  }
 }
 
 function xmlToJson(xml) {
@@ -785,7 +739,7 @@ console.log('anno.identifier: '+anno.identifier);
       anno.hasZones = 1;
     }
 
-    $.each(typeList, function (k, v) {
+    $.each(config.typeList, function (k, v) {
       if (a["sv:name"] === k) {
         var strn = "anno." + v;
         if (typeof(val['sv:value']) != 'undefined') {
@@ -840,7 +794,7 @@ console.log('anno.identifier: '+anno.identifier);
       });
     }
     if (allpolygons.length) {
-      anno.iiif_url = options.iiif_url + anno_coordIIIF(allpolygons,options.iiif_img_width,options.iiif_img_height) + '/full/0/default.jpg';
+      anno.iiif_url = options.iiif_url + CoordUtils.anno_coordIIIF(allpolygons,options.iiif_img_width,options.iiif_img_height) + '/full/0/default.jpg';
     }
   }
 
@@ -914,247 +868,7 @@ function popover_title(title) {
   return '<span class="text-info">'+title+'</span>&nbsp;&nbsp;<button type="button" id="close" class="close" onclick="$(\'.popover\').popover(\'hide\');">&times;</button>';
 }
 
-var annoColTemplate = `
-      <div v-bind:id="css+'_modal_edit'" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-           <div class="modal-content">
-             <div class="modal-header">
-               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-               <h4 class="modal-title">{{text.edit_headline}}</h4>
-             </div>
-             <div class="modal-body">
-               <ul class="nav nav-tabs">
-                 <li role="presentation" class="active"><a v-bind:href="'#'+css+'_tab_metadata'" role="tab" area-controls="tab_metadata" data-toggle="tab">{{text.metadata}}</a></li>
-                 <li role="presentation"><a v-bind:href="'#'+css+'_tab_zones'" role="tab" area-controls="tab_zones" data-toggle="tab">{{text.zones}}</a></li>
-               </ul>
-               <div class="tab-content">
-                 <div role="tabpanel" class="tab-pane active" v-bind:id="css+'_tab_metadata'">
-                   <form action="" method="get">
-                     <input v-bind:id="css+'_field_id'"/>
-                     <input v-bind:id="css+'_field_parent'"/>
-                     <div class="form-group"><input v-bind:id="css+'_field_title'" v-bind:placeholder="text.annofield_title" class="form-control" type="text" required="true"><br/></div>
-                     <div class="form-group"><textarea v-bind:id="css+'_field_text'"></textarea></div><br/>
-                     <div class="form-group"><input v-bind:id="css+'_field_link'" v-bind:placeholder="text.annofield_link" class="form-control" type="text"/><input v-bind:id="css+'_field_linktitle'" v-bind:placeholder="text.annofield_linktitle" class="form-control" type="text"/><br/></div>
-                     <button v-if="zoneedit" v-bind:id="css+'_but_zoneedit'" type="button"><img v-bind:src="annoservicehosturl+'/img/polygon.png'" alt="polygon"> {{text.edit_zones}}</button>
-                     <input v-if="zoneedit" v-bind:id="css+'_field_polygon'" class="form-control"/>
-                     <div v-bind:class="css+'license'">{{text.license}}</div>
-                     <div style="clear: both;"></div>
-                   </form>
-                 </div>
-                 <div role="tabpanel" class="tab-pane" v-bind:id="css+'_tab_zones'">
-                 </div>
-               </div>
-             </div>
-             <div class="modal-footer">
-               <button type="button" class="btn btn-default" data-dismiss="modal">{{text.cancel}}</button>
-               <button type="button" v-bind:class="css+'savebut btn btn-primary'">{{text.save}}</button>
-             </div>
-           </div>
-        </div>
-      </div>
-      <div class="panel panel-default">
-        <div v-bind:id="css+'_annotations'">
-          <span class="fa fa-comments" style="color: #606060;"></span> {{text.headline}} 
-          <div class="btn-group pull-right hidden-print" role="group">
-            <button v-if="options.writetoken" v-bind:class="'btn btn-default btn-xs '+css+'new'">{{text.new}}</button>
-            <a v-if="options.login && !options.readtoken" v-bind:href="options.login" class="btn btn-default btn-xs">{{text.login}}</a>
-            <button v-bind:class="'btn btn-default btn-xs '+css+'openall'">{{text.open_all}}</button>
-            <button v-bind:class="'btn btn-default btn-xs hidden '+css+'closeall'">{{text.close_all}}</button>
-            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{text.sort}} <span class="caret"></span></button>
-             <ul class="dropdown-menu small" role="menu">
-               <li><a v-bind:class="'small '+css+'sortdate'">{{text.sortdate}} <span v-if="options.sort == 'date'" class="glyphicon glyphicon-ok"></span></a></li>
-               <li><a v-bind:class="'small '+css+'sortdatereverse'">{{text.sortdatereverse}} <span v-if="options.sort == 'datereverse'" class="glyphicon glyphicon-ok"></span></a></li>
-               <li><a v-bind:class="'small '+css+'sorttitle'">{{text.sorttitle}} <span v-if="options.sort == 'title'" class="glyphicon glyphicon-ok"></span></a></li>
-             </ul>
-          </div>
-          <div style="clear: both;"></div>
-          <div v-bind:class="'hidden-print '+css+'showrefopt'">
-            <div class="dropdown pull-right">
-              <button type="button" class="btn btn-default btn-xs dropdown-toggle" v-bind:id="css+'dropdownMenuS'" data-toggle="dropdown" aria-expanded="false">{{text.showref}}: <span v-bind:class="css+'showrefstatus_0 '+css+'showrefstatus'">{{text.showrefdefault}}</span><span v-bind:class="css+'showrefstatus_1 '+css+'showrefstatus'">{{text.showrefalways}}</span><span v-bind:class="css+'showrefstatus_2 '+css+'showrefstatus'">{{text.showrefnever}}</span> <span class="caret"></span></button>
-              <ul class="dropdown-menu small" role="menu" v-bind:aria-labelledby="css+'dropdownMenuS'">
-                <li><a class="small" data-anno-showref="0">{{text.showrefdefault}}&nbsp;<span v-bind:class="'glyphicon glyphicon-ok '+css+'showrefstatus_0 '+css+'showrefstatus'" aria-hidden="true"></span></a></li>
-                <li><a class="small" data-anno-showref="1">{{text.showrefalways}}&nbsp;<span v-bind:class="'glyphicon glyphicon-ok '+css+'showrefstatus_1 '+css+'showrefstatus'" aria-hidden="true"></span></a></li>
-                <li><a class="small" data-anno-showref="2">{{text.showrefnever}}&nbsp;<span v-bind:class="'glyphicon glyphicon-ok '+css+'showrefstatus_2 '+css+'showrefstatus'" aria-hidden="true"></span></a></li>
-              </ul>
-            </div>
-            <div style="clear: both;"></div>
-          </div>
-          <div class="panel-group" role="tablist" aria-multiselectable="true">
-            <div v-for="item in annotations_sorted" v-bind:id="item.id" v-bind:class="css+'item panel panel-default'">
-              <div class="panel-heading" data-toggle="collapse" v-bind:href="'#coll_'+item.id" aria-expanded="true" v-bind:aria-controls="item.id" v-bind:id="css+'head_'+item.id" role="tab">
-                <h4 class="panel-title"><a role="button"><span class="glyphicon glyphicon-chevron-right"></span> {{item.title}}</a></h4>
-              </div>
-              <div v-bind:id="'coll_'+item.id" class="panel-collapse collapse" role="tabpanel" v-bind:aria-labbelledby="css+'head_'+item.id">
-                <div class="panel-body">
-                  <div v-bind:id="'old_version_'+item.id" v-bind:class="'well '+css+'_old_version'"></div>
-                  <div class="media" style="height: auto;">
-                    <div class="media-body">
-                      <div v-if="item.user_name">
-                        <button class="btn btn-xs"><span class="glyphicon glyphicon-user"> </span>{{item.user_name}} {{item.jcr_modified_display}}</button>
-                        <button v-bind:class="'btn btn-xs '+css+'purlbut'" data-toggle="popover" v-bind:data-content="options.purl+'/'+item.clean_svname"><span class="glyphicon glyphicon-link"></span></button>
-                      </div>
-                      <br>
-                      <div v-html="item.text"></div>
-                      <p v-if="item.link"><a v-bind:href="item.link" target="_blank"><span v-if="item.sourcedescription">{{item.sourcedescription}}</span><span v-else>{{item.link}}</span></a></p>
-                      <div v-if="!options.no_oai" v-bind:class="css+'iiiflink'"><template v-if="item.iiif_url"><button class="btn-link" onclick="anno_toggle_iiif($(this));"><span class="fa fa-caret-right"></span> Bildausschnitt (IIIF-Image)</button><div><a v-bind:href="item.iiif_url" target="_blank">{{item.iiif_url}}</a></div></template></div>
-                    </div>
-                  </div>
-                  <!-- navigation -->
-                  <div class="btn-toolbar pull-right" role="toolbar" style="margin-top: 10px;">
-                    <div class="btn-group btn-group-xs pull-right" role="group">
-                      <button v-if="item.editable" v-bind:class="'btn btn-default '+css+'editbut'"><i class="fa fa-pencil"></i> &nbsp;{{text.edit}}</button>
-                      <button v-if="item.commentable" v-bind:class="'btn btn-default '+css+'commentbut'"><i class="fa fa-reply"></i> &nbsp;{{text.comment}}</button>
-                      <template v-if="item.versioned"><button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">{{text.previous}} <span class="caret"></span></button><ul v-bind:class="'dropdown-menu pull-right '+css+'versions'"><li v-for="version in item.versions"><a class="small" v-bind:data-versionid="version.idshort"><span class="glyphicon glyphicon-time"></span> {{version.created_display}}</a></li></ul></template>
-                    </div>
-                  </div>
-                  <div style="clear: both; margin-bottom: 2px;"></div>
-                  <template v-if="item.hasChildren">
-                    <div><div v-bind:class="css+'separator'"><span v-if="item.hasComment">{{text.comments}}</span></div></div>
-                    <annocomments v-bind:anno="item" v-bind:options="options" v-bind:css="css"></annocomments>
-                  </template>
-              </div>
-            </div>
-            </div>
-          </div>
-        </div>
-      </div>
-`;
 
-var versionTemplate = `
-          <div v-bind:class="css+'versionhead'">{{text.version_from}}: {{created_display}}</div>
-          <h4 v-html="item.title"></h4>
-          <div v-html="item.text"></div>
-          <p v-if="item.link"><a v-bind:href="item.link" target="_blank"><span v-if="item.sourcedescription">{{item.sourcedescription}}</span><span v-else>{{item.link}}</span></a></p>
-          <div class="pull-right"><button v-bind:class="'btn btn-default btn-xs '+css+'versclosebut'"><i class="fa fa-times-circle-o"></i> {{text.close}}</button></div>
-          <div style="clear: both;"></div>
-`;
-
-var zoneEditTemplate = ` 
-          <div v-bind:id="css+'_zoneedittoolbar'">
-            <div class="btn-group" role="group" style="float: left;">
-              <button class="btn btn-default btn-sm" v-bind:id="css+'_zoneeditview'" v-bind:title="text.move_fak"><span class="glyphicon glyphicon-move"></span></button>
-              <button class="btn btn-default btn-sm" v-bind:id="css+'_zoneeditzoomout'" v-bind:title="text.zoom_out"><span class="glyphicon glyphicon-zoom-out"></span></button>
-              <button class="btn btn-default btn-sm" v-bind:id="css+'_zoneeditzoomin'" v-bind:title="text.zoom_in"><span class="glyphicon glyphicon-zoom-in"></span></button>
-              <button class="btn btn-default btn-sm" v-bind:id="css+'_zoneeditfittocanvas'" v-bind:title="text.fit"><span class="glyphicon glyphicon-fullscreen"></span></button>
-              <button class="btn btn-default btn-sm" v-bind:id="css+'_zoneeditrotleft'" v-bind:title="text.rotate_left"><span class="fa fa-rotate-left"></span></button>
-              <button class="btn btn-default btn-sm" v-bind:id="css+'_zoneeditrotright'" v-bind:title="text.rotate_right"><span class="fa fa-rotate-right"></span></button>
-            </div>
-            <div style="float: left; margin-left: 30px;"><span style="font-size: 90%; color: #505050;">{{text.zones}}</span>
-              <div class="btn-group" role="group" style="margin-left: 5px;">
-                <button class="btn btn-default btn-sm" v-bind:id="css+'_zoneeditpolygon'" v-bind:title="text.add_polygon"><span class="fa fa-plus"></span> <img v-bind:src="annoservicehosturl+'/img/polygon.png'" alt="polygon"></button>
-                <button class="btn btn-default btn-sm" v-bind:id="css+'_zoneeditrect'" v-bind:title="text.add_rect"><span class="fa fa-plus"></span> <img v-bind:src="annoservicehosturl+'/img/rect.png'" alt="rect"></button>
-                <button class="btn btn-default btn-sm" v-bind:id="css+'_zoneeditmove'" v-bind:title="text.move_zone"><span class="fa fa-hand-o-up"></span></button>
-              </div>
-              <div class="btn-group" role="group" style="margin-left: 5px;">
-                <button class="btn btn-default btn-sm disabled" v-bind:id="css+'_zoneeditdel'" v-bind:title="text.del_zones"><span class="glyphicon glyphicon-trash"></span></button>
-              </div>
-            </div>
-            <div style="clear: both;"></div>
-          </div>
-          <div style="position: relative">
-            <div v-bind:id="css+'_zoneeditcanvas'" style="width: 300px; height: 600px;"></div>
-            <div v-bind:id="css+'_zoneeditthumb'" style="position: absolute; z-index: 999; top: 2px; left: 2px; width: 120px; opacity: 0.7; height: 120px; border: 1px solid #404040; display: none;"></div>
-          </div>
-`;
-
-function anno_isRectangle(c) {
-  if ($.isArray(c)) {
-    if (c.length == 4) {
-      var xcoords = {};
-      var ycoords = {};
-      var i;
-      var oldx = 0;
-      var oldy = 0;
-      for (i = 0; i < c.length; i++) {
-        if (xcoords[c[i][0]]) {xcoords[c[i][0]]++}
-        else {xcoords[c[i][0]]=1}
-        if (ycoords[c[i][1]]) {ycoords[c[i][1]]++}
-        else {ycoords[c[i][1]]=1}
-        if (i > 0) {
-          if (c[i][0] != oldx && c[i][1] != oldy) {return false}
-        }
-        oldx = c[i][0];
-        oldy = c[i][1];
-      }
-      var size = 0, key;
-      for (key in xcoords) {
-        if (xcoords.hasOwnProperty(key)) {
-          size++;
-          if (xcoords[key] != 2) {return false}
-        }
-      }
-      if (size != 2) {return false}
-      size = 0;
-      for (key in ycoords) {
-        if (ycoords.hasOwnProperty(key)) {
-          size++;
-          if (ycoords[key] != 2) {return false}
-        }
-      }
-      if (size != 2) {return false}
-      return true;
-    }
-  }
-  return false;
-}
-
-function anno_coordIIIF (polygons,imgwidth,imgheight) {
-  var maxx = 0;
-  var minx = imgwidth;
-  var maxy = 0;
-  var miny = imgheight;
-
-  var i;
-  var j;
-
-  if ($.isArray(polygons)) {
-    for (i = 0; i < polygons.length; i++) {
-      if ($.isArray(polygons[i])) {
-        for (j = 0; j < polygons[i].length; j++) {
-          if (polygons[i][j][0] > maxx) {maxx = polygons[i][j][0]}
-          if (polygons[i][j][0] < minx) {minx = polygons[i][j][0]}
-          if (polygons[i][j][1] > maxy) {maxy = polygons[i][j][1]}
-          if (polygons[i][j][1] < miny) {miny = polygons[i][j][1]}
-        }
-      }
-    }
-  }
-  minx *= imgwidth/1000;
-  maxx *= imgwidth/1000;
-  miny *= imgwidth/1000;
-  maxy *= imgwidth/1000;
-  var difx = maxx-minx;
-  var dify = maxy-miny;
-  return parseInt(minx)+','+parseInt(miny)+','+Math.round(difx)+','+Math.round(dify);
-}
-
-function anno_coordAbs2Rel (polygon,imgwidth) {
-  var i;
-  var polygonrel = new Array();
-  if ($.isArray(polygon) && imgwidth > 0) {
-    for (i = 0; i < polygon.length; i++) {
-      var p = polygon[i];
-      var px = p[0] * 1000 / imgwidth;
-      var py = p[1] * 1000 / imgwidth;
-      polygonrel.push([px,py]);
-    }
-  }
-  return polygonrel;
-}
-
-function anno_coordRel2Abs (polygon,imgwidth) {
-  var i;
-  var polygonabs = new Array();
-  if ($.isArray(polygon) && imgwidth > 0) {
-    for (i = 0; i < polygon.length; i++) {
-      var p = polygon[i];
-      var px = Math.round(p[0] * imgwidth / 1000);
-      var py = Math.round(p[1] * imgwidth / 1000);
-      polygonabs.push([px,py]);
-    }
-  }
-  return polygonabs;
-}
 
 function anno_navigationThumb (thumbdrawing,origdrawing) {
   if (typeof(thumbdrawing) == 'undefined') {return}
@@ -1248,3 +962,4 @@ function anno_toggle_iiif (context) {
   }
 };
 
+module.exports = {displayAnnotations};
