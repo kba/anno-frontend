@@ -516,21 +516,31 @@ function setAnnotationStatus(id,status,csspraefix) {
 }
 
 function initHTMLEditor (selector,language,content) {
-  $(selector).val(content);
-  var ed = tinymce.editors;
-  if (ed.length) {
-    ed[0].setContent(content);
-  }
-  tinymce.init({
-      selector: selector,
-      plugins: 'image link',
-      language: language,
-      toolbar: 'undo redo | formatselect | bold italic underline blockquote | alignleft aligncenter alignright | bullist numlist indent outdent | link image',
-      menubar: false,
-      statusbar: false,
-      height: 400,
-      width: 350,
-  });
+    $(selector).val(content);
+    var ed = tinymce.editors;
+    if (ed.length) {
+        ed[0].setContent(content);
+    }
+    tinymce.init({
+        selector: selector,
+        plugins: 'image link',
+        language: language,
+        toolbar: [
+                'undo redo',
+                'formatselect',
+                'bold italic underline blockquote',
+                'alignleft aligncenter alignright',
+                'bullist numlist indent outdent',
+                'link image',
+            ].join('|'),
+        menubar: false,
+        statusbar: false,
+        height: 400,
+        width: 350,
+    });
+    Object.keys(config.tinymce_localizations).forEach(function(lang) {
+        tinymce.addI18n(lang, config.tinymce_localizations[lang]);
+    });
 }
 
 function getAnnotation(annotations,annoid) {
