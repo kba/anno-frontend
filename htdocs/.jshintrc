@@ -6,10 +6,8 @@
     "goog",     // TODO
     "xrx",      // TODO
     "alert",    // TODO
-    "document", // TODO
     "require",
     "console",
-    "window",
     "process",
     "setInterval",
     "clearTimeout",
