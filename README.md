@@ -2,6 +2,10 @@
 
 Basiert auf Web Annotation Data Model (https://www.w3.org/TR/annotation-model/)
 
+## Backend API
+
+Siehe Seite ["Backend Api" im Wiki](https://gitlab.ub.uni-heidelberg.de/Webservices/AnnotationService/wikis/backend-api)
+
 ## Aufruf
 
 Benötigt jQuery ab Version 1.11
@@ -33,23 +37,23 @@ displayAnnotations(htmlid, annotarget, options)
 * htmlid: ID des HTML-Elements, in dem die Liste der Annotationen ausgegeben werden soll
 * target: ID des Annotationen-Targets, für das die zugehörigen Annotationen ausgegeben werden soll
 * options:
- * service: Dienst, für den die Annotationen verwaltet werden (z.B. "diglit", zukünftig mit zu target)
- * css: Präfix für verwendete CSS-Klassen und IDs
- * sort: Sortierung: date, datereverse, title
- * lang: Sprache: de, en
- * no_oai: Keine Ausgabe von IIIF-URLs (ggf. umbenennen)
- * edit_img_url: Editor: URL zu Image, für das Polygone erstellt werden
- * edit_img_width: Editor: Breite des Images, für das Zonen erstellt werden, in Pixel
- * edit_img_thumb: Editor: URL zu Thumb-Image (Orientierungsthumb im Editor)
- * highlight: Callback Funktion für das Highlighting der Zonen
- * iiif_url: URL-Anfang für die IIIF-URL (Zonenausschnitt)
- * iiif_img_width: TODO: raus aus Optionen, muss automatisch ermittelt werden (Zones)
- * iiif_img_height: TODO: raus aus Optionen, muss automatisch ermittelt werden (Zones)
- * gotopurl: ID der Annotation, die hervorgehoben werden soll, weil der Dienst über die persistente URL der Annotatione aufgerufen wurde
- * purl: URL-Anfang für die persistenten URLs zu der Annotationen
- * login: URL für Login-Button in Annotationenanzeige
- * readtoken: Read-Token für Annotationenservice
- * writetoken: Write-Token für Annotationenservice
+ * `service`: Dienst, für den die Annotationen verwaltet werden (z.B. "diglit", zukünftig mit zu target)
+ * `css`: Präfix für verwendete CSS-Klassen und IDs
+ * `sort`: Sortierung: date, datereverse, title
+ * `lang`: Sprache: de, en
+ * `no_oai`: Keine Ausgabe von IIIF-URLs (ggf. umbenennen)
+ * `edit_img_url`: Editor: URL zu Image, für das Polygone erstellt werden
+ * `edit_img_width`: Editor: Breite des Images, für das Zonen erstellt werden, in Pixel
+ * `edit_img_thumb`: Editor: URL zu Thumb-Image (Orientierungsthumb im Editor)
+ * `highlight`: Callback Funktion für das Highlighting der Zonen
+ * `iiif_url`: URL-Anfang für die IIIF-URL (Zonenausschnitt)
+ * `iiif_img_width`: TODO: raus aus Optionen, muss automatisch ermittelt werden (Zones)
+ * `iiif_img_height`: TODO: raus aus Optionen, muss automatisch ermittelt werden (Zones)
+ * `gotopurl`: ID der Annotation, die hervorgehoben werden soll, weil der Dienst über die persistente URL der Annotatione aufgerufen wurde
+ * `purl`: URL-Anfang für die persistenten URLs zu der Annotationen
+ * `login`: URL für Login-Button in Annotationenanzeige
+ * `readtoken`: Read-Token für Annotationenservice
+ * `writetoken`: Write-Token für Annotationenservice
 
 
 ## Demo
