@@ -16,6 +16,7 @@ sub new {
 	$self->{json}=new JSON;
 	$self->{json}->pretty(1);
 	$self->{json}->canonical(1);
+	$self->{json}->allow_nonref(1);
 	$self->{dbh}->{RaiseError}=1;
 	return $self;
 }
@@ -48,21 +49,29 @@ sub create_or_update { # falls ref($o->{target})==SCALAR -> target ist anno_id
 			if($creator[0] ne $$n{creator}) { croak "creator ne first_creator"; }
 		}
 
-		$rev=$latest_rev[0] + 1;
-		if( ! $latest_rev[0]) {
-			$dbh->do("insert latest_rev (id,rev) values (?,?)",$u, $id, $rev);
-			$dbh->do("insert into anno_dest (anno_id,dest_id,dest_type) values (?,?,?)",$u, $id, $$n{target}||$id, ref($$n{target}) ne "ARRAY"?"anno":"target");
-#			$dbh->do("insert into anno_body (anno_id,body_id) values (?,?)",$u, $id, $id);
+		if($n->{rev}) { # Admin-Änderung
+			$rev=$n->{rev};
+			if($rev<1 || $rev>$latest_rev[0]) { croak "admin change: rev out of range"; }
+			$dbh->do("delete from body   where id=? and rev=?",$u, $id, $rev);
+			$dbh->do("delete from target where id=? and rev=?",$u, $id, $rev);
+			$dbh->do("update anno set modified=now() where id=? and rev=?", $u, $id, $rev);
 		}
-		else { # es gibt ältere Versionen
-			$dbh->do("update latest_rev set rev=? where id=?",$u, $rev, $id);
-			$dbh->do("update anno   set is_latest=0 where id=? and rev=?",$u, $id, $latest_rev[0]);
-			$dbh->do("update target set is_latest=0 where id=? and rev=?",$u, $id, $latest_rev[0]);
-			$dbh->do("update body   set is_latest=0 where id=? and rev=?",$u, $id, $latest_rev[0]);
+		else { # keine Admin-Änderung
+			$rev=$latest_rev[0] + 1;
+			if( ! $latest_rev[0]) { # neue Anno
+				$dbh->do("insert latest_rev (id,rev) values (?,?)",$u, $id, $rev);
+				$dbh->do("insert into anno_dest (anno_id,dest_id,dest_type) values (?,?,?)",$u, $id, $$n{target}||$id, ref($$n{target}) ne "ARRAY"?"anno":"target");
+	#			$dbh->do("insert into anno_body (anno_id,body_id) values (?,?)",$u, $id, $id);
+			}
+			else { # es gibt ältere Versionen
+				$dbh->do("update latest_rev set rev=? where id=?",$u, $rev, $id);
+				$dbh->do("update anno   set is_latest=0 where id=? and rev=?",$u, $id, $latest_rev[0]);
+				$dbh->do("update target set is_latest=0 where id=? and rev=?",$u, $id, $latest_rev[0]);
+				$dbh->do("update body   set is_latest=0 where id=? and rev=?",$u, $id, $latest_rev[0]);
+			}
+			$dbh->do("insert into anno (id,rev,is_latest,created, canonical,creator,motivation,rights,via) values (?,?,1,now(), ?,?,?,?,?)",$u, $id, $rev, 
+				$$n{canonical}, $$n{creator}, $$n{motivation}, $$n{rights}, $$n{via});
 		}
-
-		$dbh->do("insert into anno (id,rev,is_latest,created, canonical,creator,motivation,rights,via) values (?,?,1,now(), ?,?,?,?,?)",$u, $id, $rev, 
-			$$n{canonical}, $$n{creator}, $$n{motivation}, $$n{rights}, $$n{via});
 
 		my $seq=1;
 		for my $b (@{$$n{body}}) {
@@ -182,7 +191,7 @@ sub get_revs {
 	$rev=~s/\D//g;
 	my $revsql=$rev?"and rev=$rev":"";
 	my @annos;
-	for my $anno (@{$dbh->selectall_arrayref("select * from anno,name left join creator on (anno.creator=creator.id) where id=? $revsql order by rev",$slice, $aid)}) {
+	for my $anno (@{$dbh->selectall_arrayref("select * from anno left join creator on (anno.creator=creator.id) where anno.id=? $revsql order by rev",$slice, $aid)}) {
 		push @annos, $anno;
 		$annos[$#annos]->{'@context'}="http://www.w3.org/ns/anno.jsonld";
 	}
