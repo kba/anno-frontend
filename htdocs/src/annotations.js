@@ -999,4 +999,7 @@ function anno_toggle_iiif (context) {
   }
 }
 
-module.exports = {displayAnnotations};
+module.exports = {
+    config,
+    displayAnnotations,
+};
