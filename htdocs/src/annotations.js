@@ -940,7 +940,7 @@ function anno_navigationThumb (thumbdrawing,origdrawing) {
   var ausschnittRectP2 = [];
   var ausschnittRectP3 = [];
   var ausschnittRectP4 = [];
-  var angle = angle_from_matrix(matrix[0],matrix[1]);
+  var angle = CoordUtils.angleFromMatrix(matrix[0],matrix[1]);
 /* Drechung 90 Grad rechts */
   if (angle == 270) {
     ausschnittRectP1 = [(0-bildLO[1])*faktorY,(bildLO[0]-ausschnittWidth)*faktorX];
