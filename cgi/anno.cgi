@@ -24,6 +24,11 @@ my $secret='@9g;WQ_wZECHKz)O(*j/pmb^%$IzfQ,rbe~=dK3S6}vmvQL;F;O]i(W<nl.IHwPlJ)<y
 
 sub error {
 	my $mesg=shift;
+	my $code = shift() || 400;
+	printf 'Status: %s\n', (
+        ($code == 401) ? '401 Authorization Required'
+        : '400 Bad Request'
+    );
 #	print "Status: 400 Bad Request\r\n";
 	printf "Content-Type: text/plain\r\n\r\nError:\n$0:\n%s\n", $mesg;
 	goto next_request;
@@ -75,15 +80,23 @@ print $fff scalar(localtime(time))."\n";
 
 
 	my $target_url=$q_param{"target.url"};
-	my $service = $wtok->{service} ? $wtok->{service} : $rtok->{service} ? $rtok->{service} : undef;
+	my $service =
+	      $wtok->{service}    ? $wtok->{service}
+	    : $rtok->{service}    ? $rtok->{service}
+	    : $q_param{service} ? $q_param{service}
+	    : undef;
 
 	# TODO: Berechtigungsprüfung
-	if($q->request_method eq "POST" && Anno::Rights::rights($service, $target_url, $uid)<1) { # create
-		error "not enough rights to create";
-	}
-	if($q->request_method eq "PUT" && Anno::Rights::rights($service, $target_url, $uid)<2) { # modi
-		error "not enough rights to modify";
-	}
+    if ($service) {
+        # my $rights = 'foo';
+        my $rights = Anno::Rights::rights($service, $target_url, $uid);
+        if($q->request_method eq "POST" && $rights < 1) { # create
+            error("not enough rights to create (service='$service', target='$target_url', uid='$uid') => $rights", 401);
+        }
+        if($q->request_method eq "PUT" && $rights < 2) { # modi
+            error("not enough rights to modify (service='$service', target='$target_url', uid='$uid') => $rights", 401);
+        }
+    }
 
 	my $a_db=Anno::DB->new($dbh);
 	if($q->request_method eq "GET") {
@@ -111,7 +124,7 @@ print $fff scalar(localtime(time))."\n";
 		next;
 	}
 
-	error "an error occured (request_method=".$q->request_method.")";
+	error("an error occured (request_method=".$q->request_method." not supported)");
 
 	next_request:
 }
