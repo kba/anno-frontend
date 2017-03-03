@@ -9,6 +9,7 @@ var Cookies = require('js-cookie')
 var l10n       = require('./l10n')
 var config     = require('./config')
 var CoordUtils = require('./coord-utils')
+var AnnoClient = require('./anno-client')
 
 // HTML
 var annoColTemplate      = require('../html/annoCol.vue.html')
@@ -18,6 +19,7 @@ var annoCommentsTemplate = require('../html/comments.vue.html')
 
 var zoneeditdrawing;
 var zoneeditthumb;
+
 var thumbTimeout;
 
 /**
