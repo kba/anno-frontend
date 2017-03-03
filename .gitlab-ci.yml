@@ -1,0 +1,24 @@
+stages:
+  - build
+  - test
+
+before_script:
+  - cd htdocs
+  - npm install
+
+build:
+  stage: build
+  script:
+    - npm build
+  cache:
+    paths:
+    - htdocs/node_modules/
+    - htdocs/dist/
+
+test:
+  stage: test
+  script:
+    - npm test
+  cache:
+    paths:
+    - htdocs/node_modules/

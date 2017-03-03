@@ -16,6 +16,7 @@ sub new {
 	$self->{json}=new JSON;
 	$self->{json}->pretty(1);
 	$self->{json}->canonical(1);
+	$self->{json}->allow_nonref(1);
 	$self->{dbh}->{RaiseError}=1;
 	return $self;
 }
@@ -24,51 +25,64 @@ my $u=undef;
 my $slice={Slice=>{}};
 
 sub create_or_update { # falls ref($o->{target})==SCALAR -> target ist anno_id
-	my($self, $o)=@_;
+	my($self, $n)=@_;
 	my $dbh=$self->{dbh};
 
-	my $id=$$o{id}||create_uuid_as_string(UUID_RANDOM);
+	my $id=$$n{id}||create_uuid_as_string(UUID_RANDOM);
 	my $rev;
 
-	if(ref($$o{target}) ne "ARRAY" && $id eq $$o{target}) { croak "target_id == id"; return; } # keine Zirkelbezüge!
-	if(ref($$o{body}) ne "ARRAY") { croak "body is not ARRAY"; return; }
+	if(ref($$n{target}) ne "ARRAY" && $id eq $$n{target}) { croak "target_id == id"; } # keine Zirkelbezüge!
+	if(ref($$n{body})   ne "ARRAY") { croak "body is not ARRAY"; }
 
 	my $ret=eval {
 		$dbh->begin_work;
 
-		if(ref($$o{target}) ne "ARRAY") {
-			my @target_ex=$dbh->selectrow_array("select rev from latest_rev where id=?",$u, $$o{target});
-			if(!$target_ex[0]) { croak "target annotation $$o{target} does not exist"; return; }
+		if(ref($$n{target}) ne "ARRAY") {
+			my @target_ex=$dbh->selectrow_array("select rev from latest_rev where id=?",$u, $$n{target});
+			if(!$target_ex[0]) { croak "target annotation $$n{target} does not exist"; }
 		}
 
 		my @latest_rev=$dbh->selectrow_array("select rev from latest_rev where id=?",$u, $id);	
-		if($$o{id} && !$latest_rev[0]) { croak "requesting new revision for non-existent annotation $$o{id}"; return; }
-		$rev=$latest_rev[0] + 1;
-		if( ! $latest_rev[0]) {
-			$dbh->do("insert latest_rev (id,rev) values (?,?)",$u, $id, $rev);
-			$dbh->do("insert into anno_dest (anno_id,dest_id,dest_type) values (?,?,?)",$u, $id, $$o{target}||$id, ref($$o{target}) ne "ARRAY"?"anno":"target");
-#			$dbh->do("insert into anno_body (anno_id,body_id) values (?,?)",$u, $id, $id);
-		}
-		else { # es gibt ältere Versionen
-			$dbh->do("update latest_rev set rev=? where id=?",$u, $rev, $id);
-			$dbh->do("update anno   set is_latest=0 where id=? and rev=?",$u, $id, $latest_rev[0]);
-			$dbh->do("update target set is_latest=0 where id=? and rev=?",$u, $id, $latest_rev[0]);
-			$dbh->do("update body   set is_latest=0 where id=? and rev=?",$u, $id, $latest_rev[0]);
+		if($$n{id}) {
+			if(!$latest_rev[0]) { croak "requesting new revision for non-existent annotation $$n{id}"; }
+			my @creator=$dbh->selectrow_array("select creator from anno where id=? and rev=1",$u, $$n{id});
+			if($creator[0] ne $$n{creator}) { croak "creator ne first_creator"; }
 		}
 
-		$dbh->do("insert into anno (id,rev,is_latest,created, canonical,creator,motivation,rights,via) values (?,?,1,now(), ?,?,?,?,?)",$u, $id, $rev, 
-			$$o{canonical}, $$o{creator}, $$o{motivation}, $$o{rights}, $$o{via});
+		if($n->{rev}) { # Admin-Änderung
+			$rev=$n->{rev};
+			if($rev<1 || $rev>$latest_rev[0]) { croak "admin change: rev out of range"; }
+			$dbh->do("delete from body   where id=? and rev=?",$u, $id, $rev);
+			$dbh->do("delete from target where id=? and rev=?",$u, $id, $rev);
+			$dbh->do("update anno set modified=now() where id=? and rev=?", $u, $id, $rev);
+		}
+		else { # keine Admin-Änderung
+			$rev=$latest_rev[0] + 1;
+			if( ! $latest_rev[0]) { # neue Anno
+				$dbh->do("insert latest_rev (id,rev) values (?,?)",$u, $id, $rev);
+				$dbh->do("insert into anno_dest (anno_id,dest_id,dest_type) values (?,?,?)",$u, $id, $$n{target}||$id, ref($$n{target}) ne "ARRAY"?"anno":"target");
+	#			$dbh->do("insert into anno_body (anno_id,body_id) values (?,?)",$u, $id, $id);
+			}
+			else { # es gibt ältere Versionen
+				$dbh->do("update latest_rev set rev=? where id=?",$u, $rev, $id);
+				$dbh->do("update anno   set is_latest=0 where id=? and rev=?",$u, $id, $latest_rev[0]);
+				$dbh->do("update target set is_latest=0 where id=? and rev=?",$u, $id, $latest_rev[0]);
+				$dbh->do("update body   set is_latest=0 where id=? and rev=?",$u, $id, $latest_rev[0]);
+			}
+			$dbh->do("insert into anno (id,rev,is_latest,created, canonical,creator,motivation,rights,via) values (?,?,1,now(), ?,?,?,?,?)",$u, $id, $rev, 
+				$$n{canonical}, $$n{creator}, $$n{motivation}, $$n{rights}, $$n{via});
+		}
 
 		my $seq=1;
-		for my $b (@{$$o{body}}) {
+		for my $b (@{$$n{body}}) {
 			$dbh->do("insert into body (id,rev,seq,is_latest, dc_title,format,languages,purpose,rights,type,value) values (?,?,?,1, ?,?,?,?,?,?,?)",$u, $id, $rev, $seq++,
 				$$b{dc_title}, $$b{"format"}, $$b{languages}, $$b{purpose}, $$b{rights}, $$b{type}, $$b{value});
 		}
 
-		if(ref($$o{target}) ne "ARRAY") { $dbh->commit; return "ok"; }
+		if(ref($$n{target}) ne "ARRAY") { $dbh->commit; return "ok"; }
 
 		$seq=1;
-		for my $t (@{$$o{target}}) {
+		for my $t (@{$$n{target}}) {
 			$dbh->do("insert into target (id,rev,seq,is_latest, format,languages,selector,service,url) values (?,?,?,1, ?,?,?,?,?)",$u, $id, $rev, $seq++,
 				$$t{"format"}, $$t{languages}, $self->{json}->encode($$t{selector}), $$t{service}, $$t{url});
 		}
@@ -92,13 +106,15 @@ sub ld_ish {
 		my $rev=$x->{rev};
 		my $seq=$x->{seq};
 
-		my $tmp=$x->{creator};
-		$x->{creator}=$x->{name};
-		delete $x->{name};
-		$x->{__creator_id}=$tmp;
+		if(length($x->{name})) {
+			my $tmp=$x->{creator};
+			$x->{creator}=$x->{name};
+			delete $x->{name};
+			$x->{__creator_id}=$tmp;
+		}
 
 		for my $k (keys %{$x}) {
-			if(!defined($x->{$k})) {
+			if(0 && !defined($x->{$k})) {
 				delete $x->{$k};
 				next;
 			}
@@ -175,7 +191,7 @@ sub get_revs {
 	$rev=~s/\D//g;
 	my $revsql=$rev?"and rev=$rev":"";
 	my @annos;
-	for my $anno (@{$dbh->selectall_arrayref("select * from anno,name left join creator on (anno.creator=creator.id) where id=? $revsql order by rev",$slice, $aid)}) {
+	for my $anno (@{$dbh->selectall_arrayref("select * from anno left join creator on (anno.creator=creator.id) where anno.id=? $revsql order by rev",$slice, $aid)}) {
 		push @annos, $anno;
 		$annos[$#annos]->{'@context'}="http://www.w3.org/ns/anno.jsonld";
 	}
