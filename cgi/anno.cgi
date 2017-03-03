@@ -17,7 +17,6 @@ use Anno::Rights;
 use Anno::DB;
 $OUTPUT_AUTOFLUSH=1;
 
-my $annotation_repository_url = "http://localhost:8080/fedora/rest/annotations";
 my $secret='@9g;WQ_wZECHKz)O(*j/pmb^%$IzfQ,rbe~=dK3S6}vmvQL;F;O]i(W<nl.IHwPlJ)<y8fGOel$(aNbZ';
 
 # Beispiel rtok: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiamIifQ.H52l5V2CUgilIx5hrqSDHGvwE6kqXpG3zBMupyJrI90
@@ -34,13 +33,25 @@ sub error {
 	goto next_request;
 }
 
-my $dbpasswd=read_file("/home/jb/db-passwd");
-$dbpasswd=~s/[^\x20-\x7e]//g;
-if(!length($dbpasswd)) { die "db-passwd not set\n"; }
+my $UBHDANNO_DB_NAME = $ENV{UBHDANNO_DB_NAME} || 'annotations';
+my $UBHDANNO_DB_USER = $ENV{UBHDANNO_DB_USER} || 'diglit';
+my $UBHDANNO_DB_PASSWORD = $ENV{UBHDANNO_DB_PASSWORD};
+unless ($UBHDANNO_DB_PASSWORD) {
+  $UBHDANNO_DB_PASSWORD = read_file("/home/jb/db-passwd");
+  $UBHDANNO_DB_PASSWORD = ~s/[^\x20-\x7e]//g;
+}
+if(!length($UBHDANNO_DB_PASSWORD)) { die "db-passwd not set\n"; }
+
+my $annotation_repository_url = "http://localhost:8080/fedora/rest/annotations";
 
 my $dbh;
 while(my $q=new CGI::Fast) {
-	$dbh||=DBI->connect("DBI:mysql:database=annotations", "diglit", $dbpasswd, {mysql_enable_utf8=>1, RaiseError=>1});
+	$dbh||=DBI->connect("DBI:mysql:database=$UBHDANNO_DB_NAME",
+	  $UBHDANNO_DB_USER,
+	  $UBHDANNO_DB_PASSWORD, {
+	  	mysql_enable_utf8=>1,
+	  	RaiseError=>1
+	  });
 open my $fff, ">>/tmp/anno.log";
 print $fff scalar(localtime(time))."\n";
 
