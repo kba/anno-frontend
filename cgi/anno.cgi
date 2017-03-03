@@ -75,8 +75,7 @@ print $fff scalar(localtime(time))."\n";
 
 
 	my $target_url=$q_param{"target.url"};
-	my $service=$q_param{service};
-	if(!length($service)) { error "service=?"; }
+	my $service = $wtok->{service} ? $wtok->{service} : $rtok->{service} ? $rtok->{service} : undef;
 
 	# TODO: Berechtigungsprüfung
 	if($q->request_method eq "POST" && Anno::Rights::rights($service, $target_url, $uid)<1) { # create
@@ -85,9 +84,6 @@ print $fff scalar(localtime(time))."\n";
 	if($q->request_method eq "PUT" && Anno::Rights::rights($service, $target_url, $uid)<2) { # modi
 		error "not enough rights to modify";
 	}
-
-	my $service_path=Anno::Rights::service_path($service);
-	if(!length($service_path)) { error "service_path?"; }
 
 	my $a_db=Anno::DB->new($dbh);
 	if($q->request_method eq "GET") {
