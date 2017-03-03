@@ -109,7 +109,7 @@ print $fff scalar(localtime(time))."\n";
 	elsif($q->request_method=~/^(PUT|POST)$/) { # modify content (title, ...)
 		print "Content-Type: application/json\r\n";
 		print "\r\n";
-		my $data=decode_json($q->get($q->request_method."DATA"));
+		my $data=decode_json($q->param($q->request_method."DATA"));
 		if($q->request_method eq "POST" && $data->{id}) {
 			error("POST (new anno) not together with id");
 		}
@@ -126,3 +126,4 @@ print $fff scalar(localtime(time))."\n";
 	next_request:
 }
 
+# vim: noet sw=2
