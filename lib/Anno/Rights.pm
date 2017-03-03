@@ -92,12 +92,16 @@ sub common_obj {
 
 sub rights {
 	my($service, $obj, $uid)=@_;
-	my @uid_groups=find_uid_groups($uid);
-	my $service_config = $conf{service}->{$service};
-	if (!$service_config) {
+	if (!$service) {
         # XXX TODO what to do with undefined groups?
         return -1;
     }
+	my $service_config = $conf{service}->{$service};
+	if (!$service_config) {
+        # XXX TODO what to do with unconfigured groups?
+        return -1;
+    }
+	my @uid_groups=find_uid_groups($uid);
 	my @obj_groups=grep { length($_) } split /[ ,;]+/, $service_config->{groupservice}->($obj);
 	my $right;
 	while(my($a_obj, $a_subj_rights)=each %{$conf{access}->{$service}}) { # alle "access" durchgehen...

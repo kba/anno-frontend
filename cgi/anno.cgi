@@ -87,7 +87,6 @@ print $fff scalar(localtime(time))."\n";
 	    : undef;
 
 	# TODO: Berechtigungsprüfung
-    if ($service) {
         # my $rights = 'foo';
         my $rights = Anno::Rights::rights($service, $target_url, $uid);
         if($q->request_method eq "POST" && $rights < 1) { # create
@@ -96,7 +95,6 @@ print $fff scalar(localtime(time))."\n";
         if($q->request_method eq "PUT" && $rights < 2) { # modi
             error("not enough rights to modify (service='$service', target='$target_url', uid='$uid') => $rights", 401);
         }
-    }
 
 	my $a_db=Anno::DB->new($dbh);
 	if($q->request_method eq "GET") {
