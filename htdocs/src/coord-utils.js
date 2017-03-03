@@ -1,5 +1,11 @@
 var CoordUtils = module.exports =  {};
 
+CoordUtils.angleFromMatrix = function angleFromMatrix(m00, m01) {
+  var deg=Math.atan2(m01*-1, m00)*180/Math.PI;
+  if(deg<0) { deg+=360; }
+  return Math.round(deg);
+} 
+
 CoordUtils.coordIIIF = function coordIIIF (polygons,imgwidth,imgheight) {
   var maxx = 0;
   var minx = imgwidth;

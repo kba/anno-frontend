@@ -1,5 +1,7 @@
 PATH := ./node_modules/.bin:$(PATH)
 NODE_ENV = development
+DEPLOY_SERVER = serv7
+DEPLOY_PATH = /usr/local/AnnotationService/htdocs/dist
 
 NPM = npm
 RM = rm -rf
@@ -11,9 +13,7 @@ RM = rm -rf
 #     done
 
 .PHONY: build
-build: node_modules
-	webpack
-	cp demo.html dist/index.html
+build: dist node_modules
 
 .PHONY: watch
 watch:
@@ -23,9 +23,6 @@ watch:
 serve:
 	webpack-dev-server --content-base .
 
-node_modules: package.json
-	$(NPM) install
-
 .PHONY: clean
 clean:
 	$(RM) $(NODE_MODULES_DIR)
@@ -34,3 +31,15 @@ clean:
 .PHONY: test
 test:
 	tap -Rspec test/*.test.js
+
+.PHONY: deploy
+deploy: dist
+	ssh $(DEPLOY_SERVER) mkdir -p $(DEPLOY_PATH)
+	scp dist/* $(DEPLOY_SERVER):$(DEPLOY_PATH)
+	
+dist: src
+	webpack
+	cp demo.html dist/index.html
+
+node_modules: package.json
+	$(NPM) install

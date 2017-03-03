@@ -1,0 +1,10 @@
+*~
+
+# convenience symlinks
+/node_modules
+/package.json
+
+# compiled files, libs and such
+htdocs/node_modules
+htdocs/dist
+htdocs/js/ubhd3.js
