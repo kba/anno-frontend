@@ -9,6 +9,7 @@ PORT = 5000
 UBHDANNO_DB_NAME     = ubhd_anno_test
 UBHDANNO_DB_PASSWORD = ub
 UBHDANNO_DB_USER     = dummy
+UBHDANNO_USE_CGI     = true
 
 help:
 	@echo ""
@@ -26,6 +27,7 @@ help:
 	@echo "    UBHDANNO_DB_NAME      Database to use. Default $(UBHDANNO_DB_NAME)"
 	@echo "    UBHDANNO_DB_USER      Database user. Default $(UBHDANNO_DB_USER)"
 	@echo "    UBHDANNO_DB_PASSWORD  Database user password. Default $(UBHDANNO_DB_PASSWORD)"
+	@echo "    UBHDANNO_USE_CGI      Whether to run anno.cgi as a plain old CGI script"
 	@echo "    PORT                  Port to run the backend dev at. Default: $(PORT)"
 
 
@@ -37,11 +39,13 @@ recreate-db:
 	$(MYSQL) $(UBHDANNO_DB_NAME) < doc/annotations.empty.dump
 
 start:
-	export UBHDANNO_DB_NAME=$(UBHDANNO_DB_NAME); \
-	export UBHDANNO_DB_USER=$(UBHDANNO_DB_USER); \
-	export UBHDANNO_DB_PASSWORD=$(UBHDANNO_DB_PASSWORD); \
+	export UBHDANNO_DB_NAME="$(UBHDANNO_DB_NAME)"; \
+	export UBHDANNO_DB_USER="$(UBHDANNO_DB_USER)"; \
+	export UBHDANNO_DB_PASSWORD="$(UBHDANNO_DB_PASSWORD)"; \
+	export UBHDANNO_USE_CGI="$(UBHDANNO_USE_CGI)"; \
 	plackup \
 		-Ilib \
+		-sFCGI \
 		-p $(PORT) \
 		-MPlack::App::WrapCGI \
 		-e 'Plack::App::WrapCGI->new(script => "./cgi/anno.cgi")->to_app'
