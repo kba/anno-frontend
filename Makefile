@@ -50,8 +50,6 @@ stop:
 	pkill -f -9 'plackup'
 
 integration-test:
-	export serve_pid
-	$(MAKE) create-db
-	$(MAKE) serve & serve_pid="$$!"
-	sleep 5
-	kill $$serve_pid
+	$(MAKE) start &
+	-$(MAKE) -C htdocs test
+	$(MAKE) stop
