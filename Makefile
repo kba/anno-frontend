@@ -20,3 +20,11 @@ serve:
 	export UBHDANNO_DB_DB=$(UBHDANNO_DB_NAME); \
 	export UBHDANNO_DB_PASSWORD=$(UBHDANNO_DB_PASSWORD); \
 	plackup -Ilib -s FCGI --listen /tmp/annocgi-test.sock $(PWD)/cgi/anno.cgi
+
+integration-test:
+	export serve_pid
+	$(MAKE) create-db
+	$(MAKE) serve & serve_pid="$$!"
+	sleep 5
+	kill $$serve_pid
+
