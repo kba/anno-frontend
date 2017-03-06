@@ -32,7 +32,7 @@ sub create_or_update { # falls ref($o->{target})==SCALAR -> target ist anno_id
 	my $rev;
 
 	if(ref($$n{target}) ne "ARRAY" && $id eq $$n{target}) { croak "target_id == id"; } # keine Zirkelbezüge!
-	if(ref($$n{body})   ne "ARRAY") { croak "body is not ARRAY"; }
+	if(ref($$n{body})   ne "ARRAY") { croak "body is not ARRAY but " . ref($$n{body}); }
 
 	my $ret=eval {
 		$dbh->begin_work;
