@@ -3,6 +3,7 @@
 # todo: dienstweise repositories & secrets
 # todo: berechtigung prüfen
 # todo: Editiermöglichkeiten eintragen
+use 5.010;
 use strict;
 use utf8;
 use English;
@@ -42,18 +43,16 @@ unless ($UBHDANNO_DB_PASSWORD) {
 }
 if(!length($UBHDANNO_DB_PASSWORD)) { die "db-passwd not set\n"; }
 
-my $annotation_repository_url = "http://localhost:8080/fedora/rest/annotations";
-
 my $dbh;
 while(my $q=new CGI::Fast) {
 	$dbh||=DBI->connect("DBI:mysql:database=$UBHDANNO_DB_NAME",
-	  $UBHDANNO_DB_USER,
-	  $UBHDANNO_DB_PASSWORD, {
+	  $UBHDANNO_DB_USER, $UBHDANNO_DB_PASSWORD,
+	  {
 	  	mysql_enable_utf8=>1,
 	  	RaiseError=>1
 	  });
-open my $fff, ">>/tmp/anno.log";
-print $fff scalar(localtime(time))."\n";
+# open my $fff, ">>/tmp/anno.log";
+# print $fff scalar(localtime(time))."\n";
 
 	# bei PUT wird QUERY_STRING nicht ausgewertet, daher geht $q->param(...) nicht. Also selber machen:
 	my %q_param;
