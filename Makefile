@@ -30,7 +30,6 @@ help:
 	@echo "    UBHDANNO_USE_CGI      Whether to run anno.cgi as a plain old CGI script"
 	@echo "    PORT                  Port to run the backend dev at. Default: $(PORT)"
 
-
 .PHONY: create-db start stop integration-test
 recreate-db:
 	echo "DROP DATABASE IF EXISTS $(UBHDANNO_DB_NAME)" | $(MYSQL)
