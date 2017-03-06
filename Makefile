@@ -16,10 +16,10 @@ create-db:
 	$(MYSQL) $(UBHDANNO_DB_NAME) < doc/annotations.empty.dump
 
 serve:
+	export UBHDANNO_DB_NAME=$(UBHDANNO_DB_NAME); \
 	export UBHDANNO_DB_USER=$(UBHDANNO_DB_USER); \
-	export UBHDANNO_DB_DB=$(UBHDANNO_DB_NAME); \
 	export UBHDANNO_DB_PASSWORD=$(UBHDANNO_DB_PASSWORD); \
-	plackup -Ilib -s FCGI --listen /tmp/annocgi-test.sock $(PWD)/cgi/anno.cgi
+	plackup -Ilib -MPlack::App::WrapCGI -e 'Plack::App::WrapCGI->new(script => "./cgi/anno.cgi")->to_app'
 
 integration-test:
 	export serve_pid
@@ -27,4 +27,3 @@ integration-test:
 	$(MAKE) serve & serve_pid="$$!"
 	sleep 5
 	kill $$serve_pid
-
