@@ -3,6 +3,7 @@
 # todo: dienstweise repositories & secrets
 # todo: berechtigung prüfen
 # todo: Editiermöglichkeiten eintragen
+use lib qw(/usr/local/diglit, ../lib);
 use 5.010;
 use strict;
 use utf8;
@@ -13,12 +14,12 @@ use JSON;
 use URI::Escape;
 use List::MoreUtils qw(uniq);
 use File::Slurp;
-use lib qw(/usr/local/diglit, ../lib);
+use Data::Dumper;
 use Anno::Rights;
 use Anno::DB;
 $OUTPUT_AUTOFLUSH=1;
 
-my $secret='@9g;WQ_wZECHKz)O(*j/pmb^%$IzfQ,rbe~=dK3S6}vmvQL;F;O]i(W<nl.IHwPlJ)<y8fGOel$(aNbZ';
+our $secret='@9g;WQ_wZECHKz)O(*j/pmb^%$IzfQ,rbe~=dK3S6}vmvQL;F;O]i(W<nl.IHwPlJ)<y8fGOel$(aNbZ';
 # Beispiel rtok: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiamIifQ.H52l5V2CUgilIx5hrqSDHGvwE6kqXpG3zBMupyJrI90
 
 my $dbh;
@@ -55,10 +56,17 @@ sub db_connect {
 		});
 }
 
+sub token_from_header {
+	my $q = shift;
+	my $auth = $q->http('Authorization');
+	$auth =~ s/^Bearer //;
+	return decode_jwt(token => scalar($auth), key => $secret);
+}
+
 sub handler {
 	my $q = shift;
+	$dbh ||= db_connect();
 	eval {
-		$dbh ||= db_connect();
 	# open my $fff, ">>/tmp/anno.log";
 	# print $fff scalar(localtime(time))."\n";
 
@@ -71,34 +79,21 @@ sub handler {
 			$q_param{$k}=uri_unescape($v);
 		}
 
-		my $rtok;
-		eval { $rtok=decode_jwt(token=>scalar($q_param{rtok}), key=>$secret) };
-		my $ruser;
-		if($q->request_method=~/^(GET)$/) {
-			if($rtok && ref($rtok) eq "HASH") { 
-				$ruser=$rtok->{user};
-			}
-		}
+		my $token = token_from_header($q);
 
-		my $wtok;
-		eval { $wtok=decode_jwt(token=>scalar($q_param{wtok}), key=>$secret) };
-		my $wuser;
 		if($q->request_method=~/^(PATCH|PUT)$/) {
 			if(!length($q->param($q->request_method."DATA"))) {
 				error("PUT: q->param(...DATA) empty. Content-Type != application/x-www-form-urlencoded && !=multipart/form-data ?"); # siehe man CGI 
 			}
-			# TODO! if(!$q->https()) { error "wtok: no https\n"; }
-			if(!$wtok || ref($wtok) ne "HASH" || !length($wtok->{user}) || $wtok->{write}!=1) { 
-				error "wtok $@\n";
+			if(!$token || ref($token) ne "HASH" || !length($token->{user}) || $token->{write} != 1) {
+				error "token $@\n";
 			}
-			$wuser=$wtok->{user};
 		}
 
-		my $uid=$wuser || $ruser;
-
+		my $uid = $token->{user}; 
 
 		my $target_url=$q_param{"target.url"};
-		my $service = $wtok->{service} || $rtok->{service} || $q_param{service} || 'kba-test-service';
+		my $service = $token->{service} || $q_param{service} || 'kba-test-service';
 
 		# TODO: Berechtigungsprüfung
 		# XXX: Skip right checks if target url contains 'open.sesame'
@@ -143,7 +138,7 @@ sub handler {
 	} or do {
 		my ($resp) = @_;
 		say STDERR "\$!: $!";
-		say STDERR "$resp";
+		# say STDERR "$resp";
 		print $resp;
 	}
 }
