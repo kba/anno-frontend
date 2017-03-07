@@ -44,7 +44,7 @@ sub db_connect {
 	my $UBHDANNO_DB_PASSWORD = $ENV{UBHDANNO_DB_PASSWORD};
 	unless ($UBHDANNO_DB_PASSWORD) {
 		$UBHDANNO_DB_PASSWORD = read_file("/home/jb/db-passwd") or die "Could not open password file";
-		$UBHDANNO_DB_PASSWORD = ~s/[^\x20-\x7e]//g;
+		$UBHDANNO_DB_PASSWORD =~ s/[^\x20-\x7e]//g;
 	}
 	if(!length($UBHDANNO_DB_PASSWORD)) { die "db-passwd not set\n"; }
 	return DBI->connect(
