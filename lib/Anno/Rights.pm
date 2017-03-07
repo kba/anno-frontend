@@ -2,7 +2,7 @@ package Anno::Rights;
 use strict;
 use List::Util qw(first min max);
 
-my %level=(
+our %level=(
 	"read"=>0,
 	"write"=>1,
 	"admin"=>2,
@@ -92,6 +92,12 @@ sub common_obj {
 
 sub rights {
 	my($service, $obj, $uid)=@_;
+	if ($service eq 'kba-test-service') {
+        # XXX TODO
+        # XXX TODO This is a bold hack by kba for testing!
+        # XXX TODO
+	    return 2;
+    }
 	if (!$service) {
         # XXX TODO what to do with undefined groups?
         return -1;
