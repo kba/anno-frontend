@@ -84,6 +84,22 @@ sub token_from_header {
 }
 
 #
+# parse_query
+#
+# Parse QUERY_STRING into key-value-pairs
+#
+sub parse_query {
+	my %q_param;
+	my $qs = $ENV{QUERY_STRING};
+	$qs =~ s/#.*//;
+	for my $kv (split /[&;]+/, $qs) {
+		my ($k,$v) = split /=/, $kv, 2;
+		$q_param{$k} = uri_unescape($v);
+	}
+	return \%q_param;
+}
+
+#
 # handler($cgi_like_object)
 #
 # Handle the request.
@@ -93,13 +109,7 @@ sub handler {
 	$dbh ||= db_connect();
 
 	# bei PUT wird QUERY_STRING nicht ausgewertet, daher geht $q->param(...) nicht. Also selber machen:
-	my %q_param;
-	my $qs=$ENV{QUERY_STRING};
-	$qs=~s/#.*//;
-	for my $kv (split /[&;]+/, $qs) {
-		my($k,$v)=split /=/, $kv, 2;
-		$q_param{$k}=uri_unescape($v);
-	}
+	my $q_param = parse_query();
 
 	my $token = eval { token_from_header($q) };
 	$token ||= {};
@@ -117,11 +127,11 @@ sub handler {
 
 		my $uid = $token->{user}; 
 
-		my $target_url=$q_param{"target.url"};
-		my $service = $token->{service} || $q_param{service} || 'kba-test-service';
+		my $target_url = $q_param->{"target.url"};
+		my $service = $token->{service} || $q_param->{service} || 'kba-test-service';
 
 		# TODO: Berechtigungsprüfung
-		# XXX: Skip right checks if target url contains 'open.sesame'
+		# XXX: Skip right checks if service is 'kba-test-service'
 		unless ($service eq 'kba-test-service') {
 			# my $rights = 'foo';
 			my $rights = Anno::Rights::rights($service, $target_url, $uid);
@@ -137,8 +147,8 @@ sub handler {
 		if($q->request_method eq "GET") {
 			print "Content-Type: application/json\r\n";
 			print "\r\n";
-			if($q_param{id}) {
-				print $a_db->get_revs($q_param{id}, $q_param{rev}); # body+target gibt's nur für einzelne revs
+			if($q_param->{id}) {
+				print $a_db->get_revs($q_param->{id}, $q_param->{rev}); # body+target gibt's nur für einzelne revs
 				return;
 			}
 			print $a_db->get_by_url($target_url);
