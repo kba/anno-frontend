@@ -125,72 +125,6 @@ sub send_jsonld {
 #-----------------------------------------------------------------------------
 
 #
-# handle_GET_targeturl($request)
-#
-# GET /anno
-#
-sub handle_GET_targeturl {
-	my ($request) = @_;
-	send_jsonld($request->{db}->get_by_url($request->{target_url}));
-}
-
-#
-# handle_GET_id($request)
-#
-# GET /anno/{id}
-#
-sub handle_GET_id {
-	my ($request) = @_;
-	send_jsonld($request->{db}->get_revs($request->{id}));
-}
-
-#
-# handle_GET_id_rev($request)
-#
-# GET /anno/{id}/{rev}
-#
-sub handle_GET_id_rev {
-	my ($request) = @_;
-	send_jsonld($request->{db}->get_revs($request->{id}, $request->{rev}));
-}
-
-#
-# handle_POST($request)
-#
-# POST /anno
-#
-sub handle_POST {
-	my ($request) = @_;
-
-	# TODO: Berechtigungsprüfung
-	if (my $err = Anno::Rights::is_request_allowed_to($request, 'write')) {
-		return error($err, 401)
-	}
-
-	# TODO: Return representation and/or set Location header
-	my ($id,$rev) = $request->{db}->create_or_update($request->{body});
-	return send_jsonld({id => $id, rev => $rev}, $rev == 1 ? 201 : 200);
-}
-
-#
-# handle_PUT_id($request)
-#
-# PUT /anno/{id}
-#
-sub handle_PUT_id {
-	my ($request) = @_;
-
-	# TODO: Berechtigungsprüfung
-	if (my $err = Anno::Rights::is_request_allowed_to($request, 'admin')) {
-		return error($err, 401)
-	}
-
-	# TODO: Return representation and/or set Location header
-	my ($id,$rev) = $request->{db}->create_or_update($request->{body});
-	return send_jsonld({id => $id, rev => $rev}, $rev == 1 ? 201 : 200);
-}
-
-#
 # handler($cgi_like_object)
 #
 # Handle the request.
@@ -229,13 +163,13 @@ sub handler {
 		defined ($request->{target_url})
 	) {
 
-		return handle_GET_targeturl($request);
+		return send_jsonld($request->{db}->get_by_url($request->{target_url}));
 
 	} elsif ($request->{method} eq 'GET' &&
 		defined($request->{id})            &&
 		! defined($request->{rev})) {
 
-		return handle_GET_id($request);
+		return send_jsonld($request->{db}->get_revs($request->{id}));
 
 	} elsif ($request->{method} eq 'GET' &&
 		defined($request->{id})            &&
@@ -243,7 +177,7 @@ sub handler {
 		! defined($request->{target_url}))
 	{
 
-		return handle_GET_id_rev($request);
+		return send_jsonld($request->{db}->get_revs($request->{id}, $request->{rev}));
 
 	} elsif ($request->{method} eq 'PUT' &&
 		defined($request->{id})            &&
@@ -251,7 +185,14 @@ sub handler {
 		! defined($request->{target_url})
 	) {
 
-		return handle_PUT_id($request);
+		# TODO: Berechtigungsprüfung
+		if (my $err = Anno::Rights::is_request_allowed_to($request, 'admin')) {
+			return error($err, 401)
+		}
+
+		# TODO: Return representation and/or set Location header
+		my ($id,$rev) = $request->{db}->create_or_update($request->{body});
+		return send_jsonld({id => $id, rev => $rev}, $rev == 1 ? 201 : 200);
 
 	} elsif ($request->{method} eq 'POST' &&
 		! defined($request->{id}) &&
@@ -259,7 +200,14 @@ sub handler {
 		! defined($request->{target_url})
 	) {
 
-		return handle_POST($request);
+		# TODO: Berechtigungsprüfung
+		if (my $err = Anno::Rights::is_request_allowed_to($request, 'write')) {
+			return error($err, 401)
+		}
+
+		# TODO: Return representation and/or set Location header
+		my ($id,$rev) = $request->{db}->create_or_update($request->{body});
+		return send_jsonld({id => $id, rev => $rev}, $rev == 1 ? 201 : 200);
 
 	} else {
 
