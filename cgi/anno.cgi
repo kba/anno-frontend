@@ -66,20 +66,20 @@ sub token_from_header {
 sub handler {
 	my $q = shift;
 	$dbh ||= db_connect();
+
+	# bei PUT wird QUERY_STRING nicht ausgewertet, daher geht $q->param(...) nicht. Also selber machen:
+	my %q_param;
+	my $qs=$ENV{QUERY_STRING};
+	$qs=~s/#.*//;
+	for my $kv (split /[&;]+/, $qs) {
+		my($k,$v)=split /=/, $kv, 2;
+		$q_param{$k}=uri_unescape($v);
+	}
+
+	my $token = eval { token_from_header($q) };
+	$token ||= {};
+
 	eval {
-	# open my $fff, ">>/tmp/anno.log";
-	# print $fff scalar(localtime(time))."\n";
-
-		# bei PUT wird QUERY_STRING nicht ausgewertet, daher geht $q->param(...) nicht. Also selber machen:
-		my %q_param;
-		my $qs=$ENV{QUERY_STRING};
-		$qs=~s/#.*//;
-		for my $kv (split /[&;]+/, $qs) {
-			my($k,$v)=split /=/, $kv, 2;
-			$q_param{$k}=uri_unescape($v);
-		}
-
-		my $token = token_from_header($q);
 
 		if($q->request_method=~/^(PATCH|PUT)$/) {
 			if(!length($q->param($q->request_method."DATA"))) {
