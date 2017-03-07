@@ -24,6 +24,13 @@ our $secret='@9g;WQ_wZECHKz)O(*j/pmb^%$IzfQ,rbe~=dK3S6}vmvQL;F;O]i(W<nl.IHwPlJ)<
 
 my $dbh;
 
+
+#
+# error($mesg, [$code=400])
+#
+# Print an HTTP text/plain response with $mesg as the body and $code as the
+# HTTP return code.
+#
 sub error {
 	my $mesg=shift;
 	my $code = shift() || 400;
@@ -32,12 +39,20 @@ sub error {
 		($code == 401) ? '401 Authorization Required'
 		: '400 Bad Request'
 	);
-#	print "Status: 400 Bad Request\r\n";
 	$resp .= sprintf "Content-Type: text/plain\r\n\r\nError:\n$0:\n%s\n", $mesg;
 	say STDERR "$resp";
 	die $resp;
 }
 
+#
+# db_connect()
+#
+# Connect to a MySQL database.
+#
+# $UBHDANNO_DB_NAME, $UBHDANNO_DB_USER, $UBHDANNO_DB_PASSWORD are read from environment variables.
+#
+# If $UBHDANNO_DB_PASSWORD is not set, is read from /home/jb/db-passwd
+#
 sub db_connect {
 	my $UBHDANNO_DB_NAME = $ENV{UBHDANNO_DB_NAME} || 'annotations';
 	my $UBHDANNO_DB_USER = $ENV{UBHDANNO_DB_USER} || 'diglit';
@@ -56,6 +71,11 @@ sub db_connect {
 		});
 }
 
+#
+# token_from_header($cgi_like_object)
+#
+# Try to read the JSON web token from the "Authorization" HTTP Header.
+#
 sub token_from_header {
 	my $q = shift;
 	my $auth = $q->http('Authorization');
@@ -63,6 +83,11 @@ sub token_from_header {
 	return decode_jwt(token => scalar($auth), key => $secret);
 }
 
+#
+# handler($cgi_like_object)
+#
+# Handle the request.
+#
 sub handler {
 	my $q = shift;
 	$dbh ||= db_connect();
@@ -143,11 +168,14 @@ sub handler {
 	}
 }
 
+#
+# If the UBHDANNO_USE_CGI environment var is set, fall back to legacy CGI.pm
+#
+# Otherwise use a CGI::Fast while-loop.
+#
 if ($ENV{UBHDANNO_USE_CGI}) {
-	# plain CGI for being easier to start.
 	handler(CGI->new);
 } else {
-	# fast CGI to reuse $dbh
 	while(my $q=CGI::Fast->new) { handler($q); }
 }
 
