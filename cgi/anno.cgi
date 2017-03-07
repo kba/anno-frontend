@@ -23,7 +23,15 @@ our $secret='@9g;WQ_wZECHKz)O(*j/pmb^%$IzfQ,rbe~=dK3S6}vmvQL;F;O]i(W<nl.IHwPlJ)<
 # Beispiel rtok: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiamIifQ.H52l5V2CUgilIx5hrqSDHGvwE6kqXpG3zBMupyJrI90
 
 my $dbh;
+our $json = JSON->new->pretty;
 
+
+#
+# error($mesg, [$code=400])
+#
+# Print an HTTP text/plain response with $mesg as the body and $code as the
+# HTTP return code.
+#
 sub error {
 	my $mesg=shift;
 	my $code = shift() || 400;
@@ -32,19 +40,27 @@ sub error {
 		($code == 401) ? '401 Authorization Required'
 		: '400 Bad Request'
 	);
-#	print "Status: 400 Bad Request\r\n";
 	$resp .= sprintf "Content-Type: text/plain\r\n\r\nError:\n$0:\n%s\n", $mesg;
 	say STDERR "$resp";
 	die $resp;
 }
 
+#
+# db_connect()
+#
+# Connect to a MySQL database.
+#
+# $UBHDANNO_DB_NAME, $UBHDANNO_DB_USER, $UBHDANNO_DB_PASSWORD are read from environment variables.
+#
+# If $UBHDANNO_DB_PASSWORD is not set, is read from /home/jb/db-passwd
+#
 sub db_connect {
 	my $UBHDANNO_DB_NAME = $ENV{UBHDANNO_DB_NAME} || 'annotations';
 	my $UBHDANNO_DB_USER = $ENV{UBHDANNO_DB_USER} || 'diglit';
 	my $UBHDANNO_DB_PASSWORD = $ENV{UBHDANNO_DB_PASSWORD};
 	unless ($UBHDANNO_DB_PASSWORD) {
 		$UBHDANNO_DB_PASSWORD = read_file("/home/jb/db-passwd") or die "Could not open password file";
-		$UBHDANNO_DB_PASSWORD = ~s/[^\x20-\x7e]//g;
+		$UBHDANNO_DB_PASSWORD =~ s/[^\x20-\x7e]//g;
 	}
 	if(!length($UBHDANNO_DB_PASSWORD)) { die "db-passwd not set\n"; }
 	return DBI->connect(
@@ -56,6 +72,11 @@ sub db_connect {
 		});
 }
 
+#
+# token_from_header($cgi_like_object)
+#
+# Try to read the JSON web token from the "Authorization" HTTP Header.
+#
 sub token_from_header {
 	my $q = shift;
 	my $auth = $q->http('Authorization');
@@ -63,23 +84,51 @@ sub token_from_header {
 	return decode_jwt(token => scalar($auth), key => $secret);
 }
 
+#
+# parse_query
+#
+# Parse QUERY_STRING into key-value-pairs
+#
+sub parse_query {
+	my %q_param;
+	my $qs = $ENV{QUERY_STRING};
+	$qs =~ s/#.*//;
+	for my $kv (split /[&;]+/, $qs) {
+		my ($k,$v) = split /=/, $kv, 2;
+		$q_param{$k} = uri_unescape($v);
+	}
+	return \%q_param;
+}
+
+#
+# send_jsonld($data, $code=200)
+#
+# Send $data as JSON with a JSON-LD header
+#
+sub send_jsonld {
+	my $data = $_[0];
+	my $code = $_[1] || 200;
+	say "Content-Type: application/ld+json";
+	say "";
+	say ref($data) ? $json->encode($data) : $data;
+}
+
+#
+# handler($cgi_like_object)
+#
+# Handle the request.
+#
 sub handler {
 	my $q = shift;
 	$dbh ||= db_connect();
+
+	# bei PUT wird QUERY_STRING nicht ausgewertet, daher geht $q->param(...) nicht. Also selber machen:
+	my $q_param = parse_query();
+
+	my $token = eval { token_from_header($q) };
+	$token ||= {};
+
 	eval {
-	# open my $fff, ">>/tmp/anno.log";
-	# print $fff scalar(localtime(time))."\n";
-
-		# bei PUT wird QUERY_STRING nicht ausgewertet, daher geht $q->param(...) nicht. Also selber machen:
-		my %q_param;
-		my $qs=$ENV{QUERY_STRING};
-		$qs=~s/#.*//;
-		for my $kv (split /[&;]+/, $qs) {
-			my($k,$v)=split /=/, $kv, 2;
-			$q_param{$k}=uri_unescape($v);
-		}
-
-		my $token = token_from_header($q);
 
 		if($q->request_method=~/^(PATCH|PUT)$/) {
 			if(!length($q->param($q->request_method."DATA"))) {
@@ -92,11 +141,11 @@ sub handler {
 
 		my $uid = $token->{user}; 
 
-		my $target_url=$q_param{"target.url"};
-		my $service = $token->{service} || $q_param{service} || 'kba-test-service';
+		my $target_url = $q_param->{"target.url"};
+		my $service = $token->{service} || $q_param->{service} || 'kba-test-service';
 
 		# TODO: Berechtigungsprüfung
-		# XXX: Skip right checks if target url contains 'open.sesame'
+		# XXX: Skip right checks if service is 'kba-test-service'
 		unless ($service eq 'kba-test-service') {
 			# my $rights = 'foo';
 			my $rights = Anno::Rights::rights($service, $target_url, $uid);
@@ -109,45 +158,44 @@ sub handler {
 		}
 
 		my $a_db=Anno::DB->new($dbh);
-		if($q->request_method eq "GET") {
-			print "Content-Type: application/json\r\n";
-			print "\r\n";
-			if($q_param{id}) {
-				print $a_db->get_revs($q_param{id}, $q_param{rev}); # body+target gibt's nur für einzelne revs
-				return;
+		if ($q->request_method eq "GET") {
+			if ($q_param->{id}) {
+				send_jsonld($a_db->get_revs($q_param->{id}, $q_param->{rev})); # body+target gibt's nur für einzelne revs
+			} else {
+				send_jsonld($a_db->get_by_url($target_url));
 			}
-			print $a_db->get_by_url($target_url);
-			return;
 		}
 		elsif($q->request_method=~/^(PUT|POST)$/) { # modify content (title, ...)
-			print "Content-Type: application/json\r\n";
-			print "\r\n";
-			my $data=decode_json($q->param($q->request_method."DATA"));
-			if($q->request_method eq "POST" && $data->{id}) {
+			my $data = $json->decode($q->param($q->request_method."DATA"));
+			if ($q->request_method eq "POST" && $data->{id}) {
 				error("POST (new anno) not together with id");
 			}
-			if($q->request_method eq "PUT" && !$data->{id}) {
+			if ($q->request_method eq "PUT" && !$data->{id}) {
 				error("PUT (modify anno) requires id");
 			}
-			my($id,$rev)=$a_db->create_or_update($data);
-			print qq!{"id": $id, "rev": $rev}!;
-			return;
+			my ($id,$rev) = $a_db->create_or_update($data);
+			send_jsonld({id => $id, rev => $rev}, $rev == 1 ? 201 : 200);
+		} else {
+			# XXX UNHANDLED
+			error("an error occured (request_method=".$q->request_method." not supported)");
 		}
 
-		error("an error occured (request_method=".$q->request_method." not supported)");
 	} or do {
 		my ($resp) = @_;
 		say STDERR "\$!: $!";
-		# say STDERR "$resp";
+		say STDERR "$resp";
 		print $resp;
 	}
 }
 
+#
+# If the UBHDANNO_USE_CGI environment var is set, fall back to legacy CGI.pm
+#
+# Otherwise use a CGI::Fast while-loop.
+#
 if ($ENV{UBHDANNO_USE_CGI}) {
-	# plain CGI for being easier to start.
 	handler(CGI->new);
 } else {
-	# fast CGI to reuse $dbh
 	while(my $q=CGI::Fast->new) { handler($q); }
 }
 
