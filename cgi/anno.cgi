@@ -24,6 +24,13 @@ our $secret='@9g;WQ_wZECHKz)O(*j/pmb^%$IzfQ,rbe~=dK3S6}vmvQL;F;O]i(W<nl.IHwPlJ)<
 
 my $dbh;
 
+
+#
+# error($mesg, [$code=400])
+#
+# Print an HTTP text/plain response with $mesg as the body and $code as the
+# HTTP return code.
+#
 sub error {
 	my $mesg=shift;
 	my $code = shift() || 400;
@@ -32,12 +39,20 @@ sub error {
 		($code == 401) ? '401 Authorization Required'
 		: '400 Bad Request'
 	);
-#	print "Status: 400 Bad Request\r\n";
 	$resp .= sprintf "Content-Type: text/plain\r\n\r\nError:\n$0:\n%s\n", $mesg;
 	say STDERR "$resp";
 	die $resp;
 }
 
+#
+# db_connect()
+#
+# Connect to a MySQL database.
+#
+# $UBHDANNO_DB_NAME, $UBHDANNO_DB_USER, $UBHDANNO_DB_PASSWORD are read from environment variables.
+#
+# If $UBHDANNO_DB_PASSWORD is not set, is read from /home/jb/db-passwd
+#
 sub db_connect {
 	my $UBHDANNO_DB_NAME = $ENV{UBHDANNO_DB_NAME} || 'annotations';
 	my $UBHDANNO_DB_USER = $ENV{UBHDANNO_DB_USER} || 'diglit';
@@ -56,6 +71,11 @@ sub db_connect {
 		});
 }
 
+#
+# token_from_header($cgi_like_object)
+#
+# Try to read the JSON web token from the "Authorization" HTTP Header.
+#
 sub token_from_header {
 	my $q = shift;
 	my $auth = $q->http('Authorization');
@@ -63,18 +83,33 @@ sub token_from_header {
 	return decode_jwt(token => scalar($auth), key => $secret);
 }
 
+#
+# parse_query
+#
+# Parse QUERY_STRING into key-value-pairs
+#
+sub parse_query {
+	my %q_param;
+	my $qs = $ENV{QUERY_STRING};
+	$qs =~ s/#.*//;
+	for my $kv (split /[&;]+/, $qs) {
+		my ($k,$v) = split /=/, $kv, 2;
+		$q_param{$k} = uri_unescape($v);
+	}
+	return \%q_param;
+}
+
+#
+# handler($cgi_like_object)
+#
+# Handle the request.
+#
 sub handler {
 	my $q = shift;
 	$dbh ||= db_connect();
 
 	# bei PUT wird QUERY_STRING nicht ausgewertet, daher geht $q->param(...) nicht. Also selber machen:
-	my %q_param;
-	my $qs=$ENV{QUERY_STRING};
-	$qs=~s/#.*//;
-	for my $kv (split /[&;]+/, $qs) {
-		my($k,$v)=split /=/, $kv, 2;
-		$q_param{$k}=uri_unescape($v);
-	}
+	my $q_param = parse_query();
 
 	my $token = eval { token_from_header($q) };
 	$token ||= {};
@@ -92,11 +127,11 @@ sub handler {
 
 		my $uid = $token->{user}; 
 
-		my $target_url=$q_param{"target.url"};
-		my $service = $token->{service} || $q_param{service} || 'kba-test-service';
+		my $target_url = $q_param->{"target.url"};
+		my $service = $token->{service} || $q_param->{service} || 'kba-test-service';
 
 		# TODO: Berechtigungsprüfung
-		# XXX: Skip right checks if target url contains 'open.sesame'
+		# XXX: Skip right checks if service is 'kba-test-service'
 		unless ($service eq 'kba-test-service') {
 			# my $rights = 'foo';
 			my $rights = Anno::Rights::rights($service, $target_url, $uid);
@@ -112,8 +147,8 @@ sub handler {
 		if($q->request_method eq "GET") {
 			print "Content-Type: application/json\r\n";
 			print "\r\n";
-			if($q_param{id}) {
-				print $a_db->get_revs($q_param{id}, $q_param{rev}); # body+target gibt's nur für einzelne revs
+			if($q_param->{id}) {
+				print $a_db->get_revs($q_param->{id}, $q_param->{rev}); # body+target gibt's nur für einzelne revs
 				return;
 			}
 			print $a_db->get_by_url($target_url);
@@ -143,11 +178,14 @@ sub handler {
 	}
 }
 
+#
+# If the UBHDANNO_USE_CGI environment var is set, fall back to legacy CGI.pm
+#
+# Otherwise use a CGI::Fast while-loop.
+#
 if ($ENV{UBHDANNO_USE_CGI}) {
-	# plain CGI for being easier to start.
 	handler(CGI->new);
 } else {
-	# fast CGI to reuse $dbh
 	while(my $q=CGI::Fast->new) { handler($q); }
 }
 
