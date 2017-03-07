@@ -11,6 +11,12 @@ produces:
 tags:
   - name: anno
     description: Handling annotations
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    description: "Format: 'Bearer HIER_DAS_TOKEN'"
+    in: header
 
 ##############################################################################
 #
@@ -27,6 +33,7 @@ paths:
       parameters:
         - in: 'query'
           name: 'target.url'
+          required: true
           type: 'string'
           format: 'url'
       responses:
@@ -38,6 +45,8 @@ paths:
     'post':
       tags:
         - 'anno'
+      security:
+        - Bearer: []
       summary: 'Post a new annotation'
       parameters:
         - in: 'body'
@@ -55,9 +64,10 @@ paths:
       tags: ['anno']
       summary: 'Get a single annotation including all revisions'
       parameters:
-        - in: 'query'
+        - in: 'path'
           name: 'annoId'
           type: 'string'
+          required: true
           description: 'ID of the annotation'
       responses:
         200:
@@ -66,13 +76,15 @@ paths:
       tags: ['anno']
       summary: 'Store a new revision of an annotation'
       parameters:
-        - in: 'query'
+        - in: 'path'
           name: 'annoId'
           type: 'string'
+          required: true
           description: 'ID of the annotation'
         - in: 'body'
           name: 'body'
           description: 'Updated annotation'
+          required: true
           schema:
             $ref: '#/definitions/FullAnnotation'
       responses:
@@ -88,13 +100,15 @@ paths:
         - 'anno'
       summary: 'Get a single revision of one annotation'
       parameters:
-        - in: 'query'
+        - in: 'path'
           name: 'annoId'
           type: 'string'
+          required: true
           description: 'ID of the annotation'
-        - in: 'query'
+        - in: 'path'
           name: 'revId'
           type: 'string'
+          required: true
           description: "ID of the revision"
       responses:
         200:
