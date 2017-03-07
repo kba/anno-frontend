@@ -1,5 +1,7 @@
 package Anno::Rights;
 use strict;
+use warnings;
+use Data::Dumper;
 use List::Util qw(first min max);
 
 our %level=(
@@ -124,6 +126,33 @@ sub rights {
 		}
 	}
 	return $right;
+}
+
+#
+# is_request_allowed_to($request, $level)
+#
+# Check that $request obj has $level clearance. Die with the error otherwise.
+#
+# $request must have {
+#   token => {service: '...', user: '...'},
+#   "target.url" => '...',          # ???
+# }
+#
+sub is_request_allowed_to {
+    my ($request, $level_str) = @_;
+    if (!defined($level{$level_str})) {
+        die "Server error. Invalid right level. Possible values: " . Dumper(\ keys(%level));
+    }
+	my $token = $request->{token};
+	if ($token->{write} != 1) {
+	    die "Did not provide a write token: " . Dumper($token);
+	}
+	my ($service, $target_url, $uid) = ($token->{service}, $request->{target_url}, $token->{user});
+    my $rights_determined = rights($service, $target_url, $uid);
+	if($rights_determined < $level{$level_str}) {
+		die "Not enough rights $level_str (service='$service', target='$target_url', uid='$uid') => $rights_determined";
+	}
+	return 1;
 }
 
 1;
