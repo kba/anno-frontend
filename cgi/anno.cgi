@@ -23,6 +23,7 @@ our $secret='@9g;WQ_wZECHKz)O(*j/pmb^%$IzfQ,rbe~=dK3S6}vmvQL;F;O]i(W<nl.IHwPlJ)<
 # Beispiel rtok: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiamIifQ.H52l5V2CUgilIx5hrqSDHGvwE6kqXpG3zBMupyJrI90
 
 my $dbh;
+our $json = JSON->new->pretty;
 
 
 #
@@ -100,6 +101,19 @@ sub parse_query {
 }
 
 #
+# send_jsonld($data, $code=200)
+#
+# Send $data as JSON with a JSON-LD header
+#
+sub send_jsonld {
+	my $data = $_[0];
+	my $code = $_[1] || 200;
+	say "Content-Type: application/ld+json";
+	say "";
+	say ref($data) ? $json->encode($data) : $data;
+}
+
+#
 # handler($cgi_like_object)
 #
 # Handle the request.
@@ -144,36 +158,32 @@ sub handler {
 		}
 
 		my $a_db=Anno::DB->new($dbh);
-		if($q->request_method eq "GET") {
-			print "Content-Type: application/json\r\n";
-			print "\r\n";
-			if($q_param->{id}) {
-				print $a_db->get_revs($q_param->{id}, $q_param->{rev}); # body+target gibt's nur für einzelne revs
-				return;
+		if ($q->request_method eq "GET") {
+			if ($q_param->{id}) {
+				send_jsonld($a_db->get_revs($q_param->{id}, $q_param->{rev})); # body+target gibt's nur für einzelne revs
+			} else {
+				send_jsonld($a_db->get_by_url($target_url));
 			}
-			print $a_db->get_by_url($target_url);
-			return;
 		}
 		elsif($q->request_method=~/^(PUT|POST)$/) { # modify content (title, ...)
-			print "Content-Type: application/json\r\n";
-			print "\r\n";
-			my $data=decode_json($q->param($q->request_method."DATA"));
-			if($q->request_method eq "POST" && $data->{id}) {
+			my $data = $json->decode($q->param($q->request_method."DATA"));
+			if ($q->request_method eq "POST" && $data->{id}) {
 				error("POST (new anno) not together with id");
 			}
-			if($q->request_method eq "PUT" && !$data->{id}) {
+			if ($q->request_method eq "PUT" && !$data->{id}) {
 				error("PUT (modify anno) requires id");
 			}
-			my($id,$rev)=$a_db->create_or_update($data);
-			print qq!{"id": $id, "rev": $rev}!;
-			return;
+			my ($id,$rev) = $a_db->create_or_update($data);
+			send_jsonld({id => $id, rev => $rev}, $rev == 1 ? 201 : 200);
+		} else {
+			# XXX UNHANDLED
+			error("an error occured (request_method=".$q->request_method." not supported)");
 		}
 
-		error("an error occured (request_method=".$q->request_method." not supported)");
 	} or do {
 		my ($resp) = @_;
 		say STDERR "\$!: $!";
-		# say STDERR "$resp";
+		say STDERR "$resp";
 		print $resp;
 	}
 }
