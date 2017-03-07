@@ -1,6 +1,8 @@
 MYSQL_USER = root
 MYSQL_PASSWORD = root
 
+PUBLIC_HTML = htdocs/dist
+
 SHUTUP = 2>/dev/null
 MYSQL = mysql -u "$(MYSQL_USER)" --password="$(MYSQL_PASSWORD)" # $(SHUTUP)
 
@@ -8,6 +10,8 @@ UBHDANNO_DB_NAME     = ubhd_anno_test
 UBHDANNO_DB_PASSWORD = ub
 UBHDANNO_DB_USER     = dummy
 UBHDANNO_USE_CGI     = true
+
+MKDIR = mkdir -p
 
 help:
 	@echo ""
@@ -17,6 +21,7 @@ help:
 	@echo "    start             Start a development backend at port $(PORT)"
 	@echo "    stop              Stop the development backend"
 	@echo "    integration-test  Run the dev backend, run the integration-tests, stop the dev backend"
+	@echo "    public            Generate statically served files"
 	@echo ""
 	@echo "Variables"
 	@echo ""
@@ -29,24 +34,45 @@ help:
 	@echo "    PORT                  Port to run the backend dev at. Default: $(PORT)"
 
 
-.PHONY: create-db start stop integration-test
+.PHONY: recreate-db
 recreate-db:
 	echo "DROP DATABASE IF EXISTS $(UBHDANNO_DB_NAME)" | $(MYSQL)
 	echo "CREATE DATABASE $(UBHDANNO_DB_NAME) CHARACTER SET 'utf8' COLLATE utf8_unicode_ci;" | $(MYSQL)
 	echo "GRANT ALL PRIVILEGES on $(UBHDANNO_DB_NAME).* TO '$(UBHDANNO_DB_USER)'@localhost IDENTIFIED BY '$(UBHDANNO_DB_PASSWORD)';"|$(MYSQL)
 	$(MYSQL) $(UBHDANNO_DB_NAME) < doc/annotations.empty.dump
 
+.PHONY: start
 start:
 	export UBHDANNO_DB_NAME="$(UBHDANNO_DB_NAME)"; \
 	export UBHDANNO_DB_USER="$(UBHDANNO_DB_USER)"; \
 	export UBHDANNO_DB_PASSWORD="$(UBHDANNO_DB_PASSWORD)"; \
 	export UBHDANNO_USE_CGI="$(UBHDANNO_USE_CGI)"; \
-	plackup \
-		-Ilib \
-		-sFCGI \
-		-p $(PORT) \
-		-MPlack::App::WrapCGI \
+	plackup -Ilib -p $(PORT) -MPlack::App::WrapCGI \
 		-e 'Plack::App::WrapCGI->new(script => "./cgi/anno.cgi")->to_app'
 
+.PHONY: stop
 stop:
 	pkill -f -9 'plackup'
+
+#
+# Swagger Defaults:
+#
+# docExpansion: "none",
+# jsonEditor: false,
+# defaultModelRendering: 'schema',
+# showRequestHeaders: false,
+# showOperationIds: false
+.PHONY: public
+public: $(PUBLIC_HTML)/swagger.json
+	$(MKDIR) $(PUBLIC_HTML)/swagger-ui
+	cp -r vendor/swagger-ui/dist/* $(PUBLIC_HTML)/swagger-ui
+	sed -i \
+		-e 's,http://petstore.swagger.io/v2/swagger.json,/dist/swagger.json,' \
+		-e 's/docExpansion:.*/docExpansion: "list",/' \
+		-e 's/jsonEditor:.*/jsonEditor: true,/' \
+		$(PUBLIC_HTML)/swagger-ui/index.html
+
+$(PUBLIC_HTML)/swagger.json: swagger.yml
+	$(MKDIR) $(dir $@)
+	ruby -ryaml -rjson -e 'puts JSON.pretty_generate(YAML.load(ARGF))' "$<" > "$@"
+
