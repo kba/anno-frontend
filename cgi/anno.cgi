@@ -23,6 +23,7 @@ our $secret='@9g;WQ_wZECHKz)O(*j/pmb^%$IzfQ,rbe~=dK3S6}vmvQL;F;O]i(W<nl.IHwPlJ)<
 # Beispiel rtok: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiamIifQ.H52l5V2CUgilIx5hrqSDHGvwE6kqXpG3zBMupyJrI90
 
 my $dbh;
+our $json = JSON->new->pretty;
 
 
 #
@@ -100,6 +101,19 @@ sub parse_query {
 }
 
 #
+# send_jsonld($data, $code=200)
+#
+# Send $data as JSON with a JSON-LD header
+#
+sub send_jsonld {
+	my $data = $_[0];
+	my $code = $_[1] || 200;
+	say "Content-Type: application/ld+json";
+	say "";
+	say $json->encode($data);
+}
+
+#
 # handler($cgi_like_object)
 #
 # Handle the request.
@@ -155,9 +169,7 @@ sub handler {
 			return;
 		}
 		elsif($q->request_method=~/^(PUT|POST)$/) { # modify content (title, ...)
-			print "Content-Type: application/json\r\n";
-			print "\r\n";
-			my $data=decode_json($q->param($q->request_method."DATA"));
+			my $data = $json->decode($q->param($q->request_method."DATA"));
 			if($q->request_method eq "POST" && $data->{id}) {
 				error("POST (new anno) not together with id");
 			}
@@ -165,15 +177,16 @@ sub handler {
 				error("PUT (modify anno) requires id");
 			}
 			my($id,$rev)=$a_db->create_or_update($data);
-			print qq!{"id": $id, "rev": $rev}!;
-			return;
+			return send_jsonld({id => $id, rev => $rev}, $rev == 1 ? 201 : 200);
 		}
 
+		# XXX UNHANDLED
 		error("an error occured (request_method=".$q->request_method." not supported)");
+
 	} or do {
 		my ($resp) = @_;
 		say STDERR "\$!: $!";
-		# say STDERR "$resp";
+		say STDERR "$resp";
 		print $resp;
 	}
 }
