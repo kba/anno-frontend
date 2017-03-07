@@ -59,7 +59,7 @@ public: $(PUBLIC_HTML)/swagger.json
 	$(MKDIR) $(PUBLIC_HTML)/swagger-ui
 	cp -r vendor/swagger-ui/dist/* $(PUBLIC_HTML)/swagger-ui
 	sed -i \
-		's,http://petstore.swagger.io/v2/swagger.json,https://anno.ub.uni-heidelberg.de/dist/swagger.json,' \
+		's,http://petstore.swagger.io/v2/swagger.json,/dist/swagger.json,' \
 		$(PUBLIC_HTML)/swagger-ui/index.html
 
 $(PUBLIC_HTML)/swagger.json: swagger.yml
