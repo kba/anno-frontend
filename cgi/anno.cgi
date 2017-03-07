@@ -110,7 +110,7 @@ sub send_jsonld {
 	my $code = $_[1] || 200;
 	say "Content-Type: application/ld+json";
 	say "";
-	say $json->encode($data);
+	say ref($data) ? $json->encode($data) : $data;
 }
 
 #
@@ -158,30 +158,27 @@ sub handler {
 		}
 
 		my $a_db=Anno::DB->new($dbh);
-		if($q->request_method eq "GET") {
-			print "Content-Type: application/json\r\n";
-			print "\r\n";
-			if($q_param->{id}) {
-				print $a_db->get_revs($q_param->{id}, $q_param->{rev}); # body+target gibt's nur für einzelne revs
-				return;
+		if ($q->request_method eq "GET") {
+			if ($q_param->{id}) {
+				send_jsonld($a_db->get_revs($q_param->{id}, $q_param->{rev})); # body+target gibt's nur für einzelne revs
+			} else {
+				send_jsonld($a_db->get_by_url($target_url));
 			}
-			print $a_db->get_by_url($target_url);
-			return;
 		}
 		elsif($q->request_method=~/^(PUT|POST)$/) { # modify content (title, ...)
 			my $data = $json->decode($q->param($q->request_method."DATA"));
-			if($q->request_method eq "POST" && $data->{id}) {
+			if ($q->request_method eq "POST" && $data->{id}) {
 				error("POST (new anno) not together with id");
 			}
-			if($q->request_method eq "PUT" && !$data->{id}) {
+			if ($q->request_method eq "PUT" && !$data->{id}) {
 				error("PUT (modify anno) requires id");
 			}
-			my($id,$rev)=$a_db->create_or_update($data);
-			return send_jsonld({id => $id, rev => $rev}, $rev == 1 ? 201 : 200);
+			my ($id,$rev) = $a_db->create_or_update($data);
+			send_jsonld({id => $id, rev => $rev}, $rev == 1 ? 201 : 200);
+		} else {
+			# XXX UNHANDLED
+			error("an error occured (request_method=".$q->request_method." not supported)");
 		}
-
-		# XXX UNHANDLED
-		error("an error occured (request_method=".$q->request_method." not supported)");
 
 	} or do {
 		my ($resp) = @_;
