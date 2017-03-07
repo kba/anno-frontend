@@ -142,18 +142,17 @@ sub rights {
 sub is_request_allowed_to {
 	my ($request, $level_str) = @_;
 	if (!defined($level{$level_str})) {
-		die "Server error. Invalid right level. Possible values: " . Dumper(\ keys(%level));
+		return "Server error. Invalid right level. Possible values: " . Dumper(\ keys(%level));
 	}
 	my $token = $request->{token};
-	if (! $token->{write} || $token->{write} != 1) {
-		die "Did not provide a write token: " . Dumper($token);
+	if (!$token || !ref($token) || ! $token->{write} || $token->{write} != 1) {
+		return "Did not provide a write token: " . Dumper($token);
 	}
 	my ($service, $target_url, $uid) = ($token->{service}, $request->{target_url}, $token->{user});
 	my $rights_determined = rights($service, $target_url, $uid);
 	if($rights_determined < $level{$level_str}) {
-		die "Not enough rights $level_str (service='$service', target='$target_url', uid='$uid') => $rights_determined";
+		return "Not enough rights $level_str (service='$service', target='$target_url', uid='$uid') => $rights_determined";
 	}
-	return 1;
 }
 
 1;
