@@ -38,17 +38,16 @@ our $json = JSON->new->pretty;
 # HTTP return code.
 #
 sub error {
-	my $mesg=shift;
+	my $mesg = shift();
 	my $code = shift() || 400;
 	my $resp = '';
-	$resp .= sprintf 'Status: %s\n', (
+	$resp .= sprintf "Status: %s\n", (
 		($code == 401) ? '401 Authorization Required'
 		: '400 Bad Request'
 	);
 	if (ref $mesg) { $mesg = Dumper($mesg) };
-	$resp .= sprintf "Content-Type: text/plain\r\n\r\nError:\n$0:\n%s\n", $mesg;
-	say STDERR "$resp";
-	die $resp;
+	$resp .= sprintf "Content-Type: text/plain\n\nError:\n$0:\n%s\n", $mesg;
+	say $resp;
 }
 
 #
@@ -164,7 +163,9 @@ sub handle_POST {
 	my ($request) = @_;
 
 	# TODO: Berechtigungsprüfung
-	eval { Anno::Rights::is_request_allowed_to($request, 'write') } or do { error($_[0], 401) };
+	if (my $err = Anno::Rights::is_request_allowed_to($request, 'write')) {
+		return error($err, 401)
+	}
 
 	# TODO: Return representation and/or set Location header
 	my ($id,$rev) = $request->{db}->create_or_update($request->{body});
@@ -180,7 +181,9 @@ sub handle_PUT_id {
 	my ($request) = @_;
 
 	# TODO: Berechtigungsprüfung
-	eval { Anno::Rights::is_request_allowed_to($request, 'admin') } or do { error($_[0], 401) };
+	if (my $err = Anno::Rights::is_request_allowed_to($request, 'admin')) {
+		return error($err, 401)
+	}
 
 	# TODO: Return representation and/or set Location header
 	my ($id,$rev) = $request->{db}->create_or_update($request->{body});
@@ -211,67 +214,56 @@ sub handler {
 	# XXX HACK
 	$request->{token}->{service} //= 'kba-test-service';
 
-	eval {
+	# Parse body if any was provided
+	my $body_raw = $cgi->param($request->{method} . "DATA");
+	if ($request->{method} eq 'PUT' && !length($body_raw)) {
+		return error("PUT: q->param(...DATA) empty. Content-Type != application/x-www-form-urlencoded && !=multipart/form-data ?"); # siehe man CGI 
+	}
+	if ($body_raw) {
+		$request->{body} = $json->decode($body_raw);
+	}
 
-		# Parse body if any was provided
-		my $body_raw = $cgi->param($request->{method} . "DATA");
-		if ($request->{method} eq 'PUT' && !length($body_raw)) {
-			error("PUT: q->param(...DATA) empty. Content-Type != application/x-www-form-urlencoded && !=multipart/form-data ?"); # siehe man CGI 
-		}
-		if ($body_raw) {
-			$request->{body} = $json->decode($body_raw);
-		}
+	if($request->{method} eq 'GET' &&
+		! defined($request->{id})    &&
+		! defined($request->{rev})   &&
+		defined ($request->{target_url})
+	) {
 
-		if($request->{method} eq 'GET' &&
-			! defined($request->{id})    &&
-			! defined($request->{rev})   &&
-			defined ($request->{target_url})
-		) {
+		return handle_GET_targeturl($request);
 
-			return handle_GET_targeturl($request);
+	} elsif ($request->{method} eq 'GET' &&
+		defined($request->{id})            &&
+		! defined($request->{rev})) {
 
-		} elsif ($request->{method} eq 'GET' &&
-			defined($request->{id})            &&
-			! defined($request->{rev})) {
+		return handle_GET_id($request);
 
-			return handle_GET_id($request);
+	} elsif ($request->{method} eq 'GET' &&
+		defined($request->{id})            &&
+		defined($request->{rev})           &&
+		! defined($request->{target_url}))
+	{
 
-		} elsif ($request->{method} eq 'GET' &&
-			defined($request->{id})            &&
-			defined($request->{rev})           &&
-			! defined($request->{target_url}))
-		{
+		return handle_GET_id_rev($request);
 
-			handle_GET_id_rev($request);
+	} elsif ($request->{method} eq 'PUT' &&
+		defined($request->{id})            &&
+		! defined($request->{rev})         &&
+		! defined($request->{target_url})
+	) {
 
-		} elsif ($request->{method} eq 'PUT' &&
-			defined($request->{id})            &&
-			! defined($request->{rev})         &&
-			! defined($request->{target_url})
-		) {
+		return handle_PUT_id($request);
 
-			handle_PUT_id($request);
+	} elsif ($request->{method} eq 'POST' &&
+		! defined($request->{id}) &&
+		! defined($request->{rev}) &&
+		! defined($request->{target_url})
+	) {
 
-		} elsif ($request->{method} eq 'POST' &&
-			! defined($request->{id}) &&
-			! defined($request->{rev}) &&
-			! defined($request->{target_url})
-		) {
+		return handle_POST($request);
 
-			handle_POST($request);
+	} else {
 
-		} else {
-
-			error("Unhandled request " . Dumper($request));
-
-		}
-
-	} or do {
-
-		my ($resp) = @_;
-		say STDERR "\$!: $!";
-		say STDERR "$resp";
-		print $resp;
+		return error("Unhandled request " . Dumper($request));
 
 	}
 
