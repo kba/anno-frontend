@@ -45,6 +45,7 @@ sub error {
 		($code == 401) ? '401 Authorization Required'
 		: '400 Bad Request'
 	);
+	if (ref $mesg) { $mesg = Dumper($mesg) };
 	$resp .= sprintf "Content-Type: text/plain\r\n\r\nError:\n$0:\n%s\n", $mesg;
 	say STDERR "$resp";
 	die $resp;
@@ -131,8 +132,7 @@ sub send_jsonld {
 #
 sub handle_GET_targeturl {
 	my ($request) = @_;
-	my $a_db=Anno::DB->new($dbh);
-	send_jsonld($a_db->get_by_url($request->{target_url}));
+	send_jsonld($request->{db}->get_by_url($request->{target_url}));
 }
 
 #
@@ -142,8 +142,7 @@ sub handle_GET_targeturl {
 #
 sub handle_GET_id {
 	my ($request) = @_;
-	my $a_db=Anno::DB->new($dbh);
-	send_jsonld($a_db->get_revs($request->{id}));
+	send_jsonld($request->{db}->get_revs($request->{id}));
 }
 
 #
@@ -153,57 +152,38 @@ sub handle_GET_id {
 #
 sub handle_GET_id_rev {
 	my ($request) = @_;
-	my $a_db=Anno::DB->new($dbh);
-	send_jsonld($a_db->get_revs($request->{id}, $request->{rev}));
+	send_jsonld($request->{db}->get_revs($request->{id}, $request->{rev}));
 }
 
 #
-# handle_POST($q, $body)
+# handle_POST($request)
 #
 # POST /anno
 #
 sub handle_POST {
 	my ($request) = @_;
-	my $token = $request->{token};
 
-	# XXX ?
-	if (!length($token->{user}) || $token->{write} != 1) { error "token " . $json->encode($token); }
-	my ($service, $target_url, $uid) = ($token->{service}, $request->{target_url}, $token->{user});
-	my $rights = Anno::Rights::rights($service, $target_url, $uid);
-	if($rights < 1) { # modi
-		error("not enough rights to create (service='$service', target='$target_url', uid='$uid') => $rights", 401);
-	}
+	# TODO: Berechtigungsprüfung
+	eval { Anno::Rights::is_request_allowed_to($request, 'write') } or do { error($_[0], 401) };
 
-	my $data = $json->decode($request->{body});
-	my $a_db=Anno::DB->new($dbh);
-	my ($id,$rev) = $a_db->create_or_update($data);
+	# TODO: Return representation and/or set Location header
+	my ($id,$rev) = $request->{db}->create_or_update($request->{body});
 	return send_jsonld({id => $id, rev => $rev}, $rev == 1 ? 201 : 200);
 }
 
 #
-# handle_PUT_id($q, $id, $body)
+# handle_PUT_id($request)
 #
 # PUT /anno/{id}
 #
 sub handle_PUT_id {
 	my ($request) = @_;
 
-	my $token = $request->{token};
-	# XXX ?
-	if (!length($token->{user}) || $token->{write} != 1) { error "token " . $json->encode($token); }
-	my ($service, $target_url, $uid) = ($token->{service}, $request->{target_url}, $token->{user});
-	my $rights = Anno::Rights::rights($service, $target_url, $uid);
-	if($rights < 2) { # modi
-		error("not enough rights to modify (service='$service', target='$target_url', uid='$uid') => $rights", 401);
-	}
+	# TODO: Berechtigungsprüfung
+	eval { Anno::Rights::is_request_allowed_to($request, 'admin') } or do { error($_[0], 401) };
 
-	if (!length($request->{body})) {
-		error("PUT: q->param(...DATA) empty. Content-Type != application/x-www-form-urlencoded && !=multipart/form-data ?"); # siehe man CGI 
-	}
-
-	my $data = $json->decode($request->{body});
-	my $a_db=Anno::DB->new($dbh);
-	my ($id,$rev) = $a_db->create_or_update($data);
+	# TODO: Return representation and/or set Location header
+	my ($id,$rev) = $request->{db}->create_or_update($request->{body});
 	return send_jsonld({id => $id, rev => $rev}, $rev == 1 ? 201 : 200);
 }
 
@@ -223,12 +203,24 @@ sub handler {
 		id         => $q_param->{id},
 		rev        => $q_param->{rev},
 		target_url => $q_param->{'target.url'},
-		body       => $cgi->param($cgi->request_method . "DATA")
+		db         => Anno::DB->new($dbh),
 	};
 
+	# XXX HACK
+	# XXX HACK This is a test service
+	# XXX HACK
 	$request->{token}->{service} //= 'kba-test-service';
 
 	eval {
+
+		# Parse body if any was provided
+		my $body_raw = $cgi->param($request->{method} . "DATA");
+		if ($request->{method} eq 'PUT' && !length($body_raw)) {
+			error("PUT: q->param(...DATA) empty. Content-Type != application/x-www-form-urlencoded && !=multipart/form-data ?"); # siehe man CGI 
+		}
+		if ($body_raw) {
+			$request->{body} = $json->decode($body_raw);
+		}
 
 		if($request->{method} eq 'GET' &&
 			! defined($request->{id})    &&
@@ -270,14 +262,9 @@ sub handler {
 
 		} else {
 
-			error("Unhandled request $request->{method} " . ($request->{id}?"id=$request->{id}":'') . ($request->{rev}?"&rev=$request->{rev}":''), 406);
+			error("Unhandled request " . Dumper($request));
 
 		}
-
-		# TODO: Berechtigungsprüfung
-		# XXX: Skip right checks if service is 'kba-test-service'
-		# unless ($service eq 'kba-test-service') {
-		# }
 
 	} or do {
 
