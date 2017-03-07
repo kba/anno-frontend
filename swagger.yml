@@ -1,22 +1,112 @@
 swagger: '2.0'
+basePath: '/cgi-bin'
 info:
   title: 'Anno Server API'
+
+  version: '0.0.1'
 consumes:
   - application/ld+json
 produces:
   - application/ld+json
 tags:
-  - 'anno':
-      name: anno
-      description: Handling annotations
+  - name: anno
+    description: Handling annotations
 
+##############################################################################
+#
+# PATHS
+#
+##############################################################################
+paths:
+
+  '/anno.cgi':
+    get:
+      tags:
+        - 'anno'
+      summary: 'Get all annotations that adhere to query'
+      parameters:
+        - in: 'query'
+          name: 'target.url'
+          type: 'string'
+          format: 'url'
+      responses:
+        200:
+          description: all okay
+          schema:
+            $ref: '#/definitions/ListOfFullAnnotations'
+
+    'post':
+      tags:
+        - 'anno'
+      summary: 'Post a new annotation'
+      parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'New annotation to post'
+          schema:
+            $ref: '#/definitions/AnnotationToPost'
+      responses:
+        200:
+          description: all okay
+
+
+  '/anno.cgi/?id={annoId}':
+    get:
+      tags: ['anno']
+      summary: 'Get a single annotation including all revisions'
+      parameters:
+        - in: 'query'
+          name: 'annoId'
+          type: 'string'
+          description: 'ID of the annotation'
+      responses:
+        200:
+          description: 'all okay'
+    put:
+      tags: ['anno']
+      summary: 'Store a new revision of an annotation'
+      parameters:
+        - in: 'query'
+          name: 'annoId'
+          type: 'string'
+          description: 'ID of the annotation'
+        - in: 'body'
+          name: 'body'
+          description: 'Updated annotation'
+          schema:
+            $ref: '#/definitions/FullAnnotation'
+      responses:
+        200:
+          description: Created a new revision
+          schema:
+            $ref: '#/definitions/FullAnnotation'
+
+
+  '/anno.cgi/?id={annoId}&rev={revId}':
+    get:
+      tags:
+        - 'anno'
+      summary: 'Get a single revision of one annotation'
+      parameters:
+        - in: 'query'
+          name: 'annoId'
+          type: 'string'
+          description: 'ID of the annotation'
+        - in: 'query'
+          name: 'revId'
+          type: 'string'
+          description: "ID of the revision"
+      responses:
+        200:
+          description: all okay
+
+##############################################################################
+#
+# DEFINITIONS
+#
+##############################################################################
 definitions:
 
-    # target:
-      # - source:  "https://example.org/somePage"
-        # selector:
-          # type: "FragmentSelector"
-          # value: 'xywh=1,1,1,1'
   AnnotationSelector:
     type: 'object'
     properties:
@@ -50,18 +140,25 @@ definitions:
       value:
         type: 'string'
 
-  AnnotationToPost:
-    type: object
+  FullAnnotation:
+    type: 'object'
     properties:
-      # created:
-      #   type: 'string'
-      #   format: 'date'
-      # modified:
-      #   type: 'string'
-      #   format: 'date'
-      # creator:
-      #   type: 'string'
-      #   format: 'email'
+      created:
+        type: 'string'
+        format: 'date-time'
+      modified:
+        type: 'string'
+        format: 'date-time'
+      creator:
+        $ref: '#/definitions/User'
+      hasVersion:
+        type: 'array'
+        items:
+          $ref: '#/definitions/AnnotationRevisionDescription'
+      hasComment:
+        type: 'array'
+        items:
+          $ref: '#/definitions/FullAnnotation'
       body:
         type: 'array'
         items:
@@ -72,97 +169,39 @@ definitions:
           minItems: 1
           $ref: '#/definitions/AnnotationTarget'
 
-paths:
 
-  '/anno/':
-    get:
-      tags:
-        - 'anno'
-      summary: 'Get all annotations'
-      parameters: []
-      responses:
-        200:
-          description: all okay
-    post:
-      tags:
-        - 'anno'
-      summary: 'Post a new annotation'
-      parameters:
-        - in: 'body'
-          name: 'body'
-          description: 'New annotation to post'
-          schema:
-            $ref: '#/definitions/AnnotationToPost'
-      responses:
-        200:
-          description: all okay
+  AnnotationRevisionDescription:
+    type: 'object'
+    properties:
+      id:
+        type: 'string'
+        format: 'url'
+      modified:
+        type: 'string'
+        format: 'date'
 
+  AnnotationToPost:
+    type: object
+    additionalProperties: false
+    properties:
+      body:
+        type: 'array'
+        items:
+          $ref: '#/definitions/AnnotationBody'
+      target:
+        type: 'array'
+        items:
+          minItems: 1
+          $ref: '#/definitions/AnnotationTarget'
 
-  '/anno/{annoId}':
-    get:
-      tags:
-        - 'anno'
-      summary: 'Get a single annotation including all revisions'
-      parameters:
-        - annoId:
-          name: ID of the annotation
-      responses:
-        200:
-          description: all okay
+  User:
+    type: 'object'
+    properties:
+      email:
+        type: 'string'
+        format: 'email'
 
-  '/anno/{annoId}/rev/{revId}':
-    get:
-      tags:
-        - 'anno'
-      summary: 'Get a single revision of one annotation'
-      parameters:
-        - annoId:
-          name: ID of the annotation
-        - revId:
-          name: ID of the revision
-      responses:
-        200:
-          description: all okay
-
-  '/anno/{annoId}/comment/{commentId}':
-    get:
-      tags:
-        - 'anno'
-      summary: 'Get a single comment on an annotation'
-      parameters:
-        - annoId:
-          name: ID of the annotation
-        - revId:
-          name: ID of the revision
-      responses:
-        200:
-          description: all okay
-
-  # User:
-  #   type: 'object'
-  #   properties:
-  #     email:
-  #       type: 'string'
-  #       format: 'email'
-  #     groups:
-
-  # AnnotationTarget:
-  #     type: 'object'
-  #     properties:
-
-  # Annotation:
-  #   type: object
-  #   properties:
-  #     id:
-  #       type: 'string'
-  #       format: 'url'
-  #     modified:
-  #       type: 'date'
-  #     creator:
-  #       type:
-  #         $ref: '#/definitions/User'
-  #     revisions:
-  #       type: 'array'
-  #       items:
-  #         type: '#/definitions/AnnotationRevision'
-
+  ListOfFullAnnotations:
+    type: 'array'
+    items:
+      $ref: '#/definitions/FullAnnotation'

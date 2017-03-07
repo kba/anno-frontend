@@ -54,12 +54,22 @@ start:
 stop:
 	pkill -f -9 'plackup'
 
+#
+# Swagger Defaults:
+#
+# docExpansion: "none",
+# jsonEditor: false,
+# defaultModelRendering: 'schema',
+# showRequestHeaders: false,
+# showOperationIds: false
 .PHONY: public
 public: $(PUBLIC_HTML)/swagger.json
 	$(MKDIR) $(PUBLIC_HTML)/swagger-ui
 	cp -r vendor/swagger-ui/dist/* $(PUBLIC_HTML)/swagger-ui
 	sed -i \
-		's,http://petstore.swagger.io/v2/swagger.json,/dist/swagger.json,' \
+		-e 's,http://petstore.swagger.io/v2/swagger.json,/dist/swagger.json,' \
+		-e 's/docExpansion:.*/docExpansion: "list",/' \
+		-e 's/jsonEditor:.*/jsonEditor: true,/' \
 		$(PUBLIC_HTML)/swagger-ui/index.html
 
 $(PUBLIC_HTML)/swagger.json: swagger.yml
