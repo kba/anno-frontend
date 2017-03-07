@@ -4,6 +4,13 @@ Basiert auf Web Annotation Data Model (https://www.w3.org/TR/annotation-model/)
 
 ## Backend API
 
+Apache Deploy:
+
+```
+RewriteCond %{HTTP:Authorization} ^(.+)
+RewriteRule ^(.*)$ $1 [E=HTTP_AUTHORIZATION:%1,PT]
+```
+
 Siehe Seite ["Backend Api" im Wiki](https://gitlab.ub.uni-heidelberg.de/Webservices/AnnotationService/wikis/backend-api)
 
 ## Aufruf
