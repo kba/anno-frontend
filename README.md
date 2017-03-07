@@ -6,6 +6,8 @@ Basiert auf Web Annotation Data Model (https://www.w3.org/TR/annotation-model/)
 
 Siehe Seite ["Backend Api" im Wiki](https://gitlab.ub.uni-heidelberg.de/Webservices/AnnotationService/wikis/backend-api)
 
+Swagger Interface to [live-test the API](http://anno.ub.uni-heidelberg.de/dist/swagger-ui)
+
 ## Aufruf
 
 Benötigt jQuery ab Version 1.11
