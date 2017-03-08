@@ -12,7 +12,8 @@ use FindBin qw($Bin);
 sub new {
 	my ($class) = @_;
 	my $self = bless({}, $class);
-	$self->{swagger} = decode_json(read_file("$Bin/../swagger.json"));
+	my $swaggerJsonFile = $ENV{UBHDANNO_SWAGGER_JSON} || "$Bin/../swagger.json";
+	$self->{swagger} = decode_json(read_file($swaggerJsonFile));
 	$self->{validate} = {};
   # for my $k (keys %{ $self->{swagger}->{definitions} }) {
   for my $k ('AnnotationToPost', 'RevisionToPut') {
