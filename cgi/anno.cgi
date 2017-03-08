@@ -106,14 +106,41 @@ sub parse_query {
 }
 
 #
+# build_url(%query_params)
+#
+# Build a URL by concatenating UBHDANNO_BASEURL with a query string of the
+# provided %query_params
+#
+#
+sub build_url {
+	my %query_params = @_;
+	my $ret = $ENV{UBHDANNO_BASEURL} || 'https://anno.ub.uni-heidelberg.de/cgi-bin/anno.cgi';
+	$ret .= '?';
+	for my $k (sort keys %query_params) {
+		my $v = $query_params{$k};
+		$ret .= $k;
+		$ret .= '=';
+		$ret .= uri_escape($v);
+		$ret .= '&';
+	}
+	$ret =~ s/&$//;
+	return $ret;
+}
+
+#
 # send_jsonld($data, $code=200)
 #
 # Send $data as JSON with a JSON-LD header
 #
 sub send_jsonld {
-	my $data = $_[0];
-	my $code = $_[1] || 200;
+	my $data = shift;
+	my $code = shift || 200;
+	my %headers = @_;
+	say "Status: $code";
 	say "Content-Type: application/ld+json";
+	while (my ($k, $v) = each(%headers)) {
+		say "$k: $v";
+	}
 	say "";
 	say ref($data) ? $json->encode($data) : $data;
 }
@@ -192,7 +219,11 @@ sub handler {
 
 		# TODO: Return representation and/or set Location header
 		my ($id,$rev) = $request->{db}->create_or_update($request->{body});
-		return send_jsonld({id => $id, rev => $rev}, $rev == 1 ? 201 : 200);
+		return send_jsonld(
+			{id => $id, rev => $rev},
+			201,
+			Location => build_url(id => $id, rev => $rev),
+		);
 
 	} elsif ($request->{method} eq 'POST' &&
 		! defined($request->{id}) &&
@@ -207,7 +238,11 @@ sub handler {
 
 		# TODO: Return representation and/or set Location header
 		my ($id,$rev) = $request->{db}->create_or_update($request->{body});
-		return send_jsonld({id => $id, rev => $rev}, $rev == 1 ? 201 : 200);
+		return send_jsonld(
+			{id => $id, rev => $rev},
+			201,
+			"Location" => build_url(id => $id, rev => $rev),
+		);
 
 	} else {
 
