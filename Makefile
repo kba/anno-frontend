@@ -72,7 +72,10 @@ public: $(PUBLIC_HTML)/swagger.json
 		-e 's/jsonEditor:.*/jsonEditor: true,/' \
 		$(PUBLIC_HTML)/swagger-ui/index.html
 
-$(PUBLIC_HTML)/swagger.json: swagger.yml
+$(PUBLIC_HTML)/swagger.json: swagger.json
 	$(MKDIR) $(dir $@)
+	cp "$<" "$@"
+
+swagger.json: swagger.yml
 	ruby -ryaml -rjson -e 'puts JSON.pretty_generate(YAML.load(ARGF))' "$<" > "$@"
 
