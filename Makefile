@@ -14,6 +14,8 @@ UBHDANNO_DB_NAME     = ubhd_anno_test
 UBHDANNO_DB_PASSWORD = ub
 UBHDANNO_DB_USER     = dummy
 UBHDANNO_USE_CGI     = true
+UBHDANNO_BASEURL     = http://localhost:$(PORT)
+UBHDANNO_SWAGGER_JSON = $(PWD)/swagger.json
 
 MKDIR = mkdir -p
 
@@ -35,6 +37,7 @@ help:
 	@echo "    UBHDANNO_DB_USER      Database user. Default $(UBHDANNO_DB_USER)"
 	@echo "    UBHDANNO_DB_PASSWORD  Database user password. Default $(UBHDANNO_DB_PASSWORD)"
 	@echo "    UBHDANNO_USE_CGI      Whether to run anno.cgi as a plain old CGI script"
+	@echo "    UBHDANNO_SWAGGER_JSON JSON file with the API/schema definitions."
 	@echo "    PORT                  Port to run the backend dev at. Default: $(PORT)"
 
 .PHONY: recreate-db
@@ -45,8 +48,10 @@ recreate-db:
 	$(MYSQL) $(UBHDANNO_DB_NAME) < doc/annotations.empty.dump
 
 .PHONY: start
-start:
+start: swagger.json
 	export UBHDANNO_DB_NAME="$(UBHDANNO_DB_NAME)"; \
+	export UBHDANNO_BASEURL="$(UBHDANNO_BASEURL)"; \
+	export UBHDANNO_SWAGGER_JSON="$(UBHDANNO_SWAGGER_JSON)"; \
 	export UBHDANNO_DB_USER="$(UBHDANNO_DB_USER)"; \
 	export UBHDANNO_DB_PASSWORD="$(UBHDANNO_DB_PASSWORD)"; \
 	export UBHDANNO_USE_CGI="$(UBHDANNO_USE_CGI)"; \
@@ -58,9 +63,8 @@ stop:
 	pkill -f -9 'plackup'
 
 integration-test:
-	$(MAKE) start &
-	-$(MAKE) -C htdocs test
-	$(MAKE) stop
+	export UBHDANNO_BASEURL="$(UBHDANNO_BASEURL)"; \
+	$(MAKE) start & $(MAKE) -C htdocs test; $(MAKE) stop
 
 #
 # Swagger Defaults:
