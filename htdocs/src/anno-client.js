@@ -3,41 +3,46 @@ const querystring = require('querystring')
 
 module.exports = class AnnoClient {
 
-    constructor(endpoint, readToken, writeToken) {
+    constructor(endpoint, writeToken) {
         this.endpoint = endpoint
-        this.readToken = readToken
-        this.writeToken = writeToken
         this._client = axios.create({
             baseURL: endpoint,
             headers: {
-                rtok: readToken
+                authorization: `Bearer ${writeToken}`
             }
         })
     }
 
     _qs(param={}) {
-        Object.assign(param, {rtok: this.readToken, wtok: this.writeToken})
-        return `${this.endpoint}?${querystring.stringify(param)}`
+        var ret = this.endpoint
+        if (Object.keys(param).length > 0) {
+            ret += '?' + querystring.stringify(param)
+        }
+        return ret
+    }
+
+    get(url) {
+        return this._client.get(url);
     }
 
     getAllRevsOfAnno(id) {
-        return axios.get(this._qs({ id }))
+        return this._client.get(this._qs({ id }))
     }
 
     getOneRevOfAnno(id, rev) {
-        return axios.get(this._qs({ id, rev }))
+        return this._client.get(this._qs({ id, rev }))
     }
 
     listAnnoForURL(url) {
-        return axios.get(this._qs({'target.url': url}))
+        return this._client.get(this._qs({'target.url': url}))
     }
 
     createAnno(anno) {
-        return axios.post(this._qs(), anno)
+        return this._client.post(this._qs(), anno)
     }
 
     reviseAnno(id, anno) {
-        return axios.put(this._qs({id}), anno)
+        return this._client.put(this._qs({id}), anno)
     }
 
     replaceRevForAnno(anno) {
