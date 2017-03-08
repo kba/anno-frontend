@@ -17,6 +17,7 @@ use File::Slurp;
 use Data::Dumper;
 use Anno::Rights;
 use Anno::DB;
+use Anno::Validate;
 $OUTPUT_AUTOFLUSH=1;
 
 our $secret='@9g;WQ_wZECHKz)O(*j/pmb^%$IzfQ,rbe~=dK3S6}vmvQL;F;O]i(W<nl.IHwPlJ)<y8fGOel$(aNbZ';
@@ -161,6 +162,7 @@ sub handler {
 	$dbh ||= db_connect();
 
 	my $q_param = parse_query;
+	my $schema = Anno::Validate->new();
 	my $request = {
 		method     => $cgi->request_method,
 		token      => eval { token_from_header($cgi) } || {},
@@ -217,7 +219,9 @@ sub handler {
 			return error($err, 401)
 		}
 
-		# TODO: Return representation and/or set Location header
+		my $report = $schema->validate('RevisionToPut', $request->{body});
+		return error($report, 400) unless ($report->{valid});
+
 		my ($id,$rev) = $request->{db}->create_or_update($request->{body});
 		return send_jsonld(
 			{id => $id, rev => $rev},
@@ -236,7 +240,9 @@ sub handler {
 			return error($err, 401)
 		}
 
-		# TODO: Return representation and/or set Location header
+		my $report = $schema->validate('AnnotationToPost', $request->{body});
+		return error($report, 400) unless ($report->{valid});
+
 		my ($id,$rev) = $request->{db}->create_or_update($request->{body});
 		return send_jsonld(
 			{id => $id, rev => $rev},
