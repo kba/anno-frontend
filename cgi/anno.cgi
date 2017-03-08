@@ -3,7 +3,7 @@
 # todo: dienstweise repositories & secrets
 # todo: berechtigung prüfen
 # todo: Editiermöglichkeiten eintragen
-use lib qw(/usr/local/diglit, ../lib);
+use lib qw(/usr/local/diglit ../lib);
 use 5.010;
 use strict;
 use utf8;
@@ -17,13 +17,20 @@ use File::Slurp;
 use Data::Dumper;
 use Anno::Rights;
 use Anno::DB;
+use Anno::Validate;
 $OUTPUT_AUTOFLUSH=1;
 
 our $secret='@9g;WQ_wZECHKz)O(*j/pmb^%$IzfQ,rbe~=dK3S6}vmvQL;F;O]i(W<nl.IHwPlJ)<y8fGOel$(aNbZ';
 # Beispiel rtok: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiamIifQ.H52l5V2CUgilIx5hrqSDHGvwE6kqXpG3zBMupyJrI90
 
 my $dbh;
+our $json = JSON->new->pretty;
 
+#-----------------------------------------------------------------------------
+#
+# Helpers
+#
+#-----------------------------------------------------------------------------
 
 #
 # error($mesg, [$code=400])
@@ -32,16 +39,16 @@ my $dbh;
 # HTTP return code.
 #
 sub error {
-	my $mesg=shift;
+	my $mesg = shift();
 	my $code = shift() || 400;
 	my $resp = '';
-	$resp .= sprintf 'Status: %s\n', (
+	$resp .= sprintf "Status: %s\n", (
 		($code == 401) ? '401 Authorization Required'
 		: '400 Bad Request'
 	);
-	$resp .= sprintf "Content-Type: text/plain\r\n\r\nError:\n$0:\n%s\n", $mesg;
-	say STDERR "$resp";
-	die $resp;
+	if (ref $mesg) { $mesg = Dumper($mesg) };
+	$resp .= sprintf "Content-Type: text/plain\n\nError:\n$0:\n%s\n", $mesg;
+	say $resp;
 }
 
 #
@@ -84,7 +91,7 @@ sub token_from_header {
 }
 
 #
-# parse_query
+#     parse_query
 #
 # Parse QUERY_STRING into key-value-pairs
 #
@@ -100,82 +107,156 @@ sub parse_query {
 }
 
 #
+# build_url(%query_params)
+#
+# Build a URL by concatenating UBHDANNO_BASEURL with a query string of the
+# provided %query_params
+#
+#
+sub build_url {
+	my %query_params = @_;
+	my $ret = $ENV{UBHDANNO_BASEURL} || 'http://anno.ub.uni-heidelberg.de/cgi-bin/anno.cgi';
+	$ret .= '?';
+	for my $k (sort keys %query_params) {
+		my $v = $query_params{$k};
+		$ret .= $k;
+		$ret .= '=';
+		$ret .= uri_escape($v);
+		$ret .= '&';
+	}
+	$ret =~ s/&$//;
+	return $ret;
+}
+
+#
+# send_jsonld($data, $code=200)
+#
+# Send $data as JSON with a JSON-LD header
+#
+sub send_jsonld {
+	my $data = shift;
+	my $code = shift || 200;
+	my %headers = @_;
+	say "Status: $code";
+	say "Content-Type: application/ld+json";
+	while (my ($k, $v) = each(%headers)) {
+		say "$k: $v";
+	}
+	say "";
+	say ref($data) ? $json->encode($data) : $data;
+}
+
+#-----------------------------------------------------------------------------
+#
+# Handlers
+#
+#-----------------------------------------------------------------------------
+
+#
 # handler($cgi_like_object)
 #
 # Handle the request.
 #
 sub handler {
-	my $q = shift;
+	my $cgi = shift;
 	$dbh ||= db_connect();
 
-	# bei PUT wird QUERY_STRING nicht ausgewertet, daher geht $q->param(...) nicht. Also selber machen:
-	my $q_param = parse_query();
+	my $q_param = parse_query;
+	my $schema = Anno::Validate->new();
+	my $request = {
+		method     => $cgi->request_method,
+		token      => eval { token_from_header($cgi) } || {},
+		id         => $q_param->{id},
+		rev        => $q_param->{rev},
+		target_url => $q_param->{'target.url'},
+		db         => Anno::DB->new($dbh),
+	};
 
-	my $token = eval { token_from_header($q) };
-	$token ||= {};
+	# XXX HACK
+	# XXX HACK This is a test service
+	# XXX HACK
+	$request->{token}->{service} //= 'kba-test-service';
 
-	eval {
+	# Parse body if any was provided
+	my $body_raw = $cgi->param($request->{method} . "DATA");
+	if ($request->{method} eq 'PUT' && !length($body_raw)) {
+		return error("PUT: q->param(...DATA) empty. Content-Type != application/x-www-form-urlencoded && !=multipart/form-data ?"); # siehe man CGI 
+	}
+	if ($body_raw) {
+		$request->{body} = $json->decode($body_raw);
+	}
 
-		if($q->request_method=~/^(PATCH|PUT)$/) {
-			if(!length($q->param($q->request_method."DATA"))) {
-				error("PUT: q->param(...DATA) empty. Content-Type != application/x-www-form-urlencoded && !=multipart/form-data ?"); # siehe man CGI 
-			}
-			if(!$token || ref($token) ne "HASH" || !length($token->{user}) || $token->{write} != 1) {
-				error "token $@\n";
-			}
-		}
+	if($request->{method} eq 'GET' &&
+		! defined($request->{id})    &&
+		! defined($request->{rev})   &&
+		defined ($request->{target_url})
+	) {
 
-		my $uid = $token->{user}; 
+		return send_jsonld($request->{db}->get_by_url($request->{target_url}));
 
-		my $target_url = $q_param->{"target.url"};
-		my $service = $token->{service} || $q_param->{service} || 'kba-test-service';
+	} elsif ($request->{method} eq 'GET' &&
+		defined($request->{id})            &&
+		! defined($request->{rev})) {
+
+		# TODO
+		return send_jsonld($request->{db}->get_revs($request->{id}));
+
+	} elsif ($request->{method} eq 'GET' &&
+		defined($request->{id})            &&
+		defined($request->{rev})           &&
+		! defined($request->{target_url}))
+	{
+
+		return send_jsonld($request->{db}->get_revs($request->{id}, $request->{rev}));
+
+	} elsif ($request->{method} eq 'PUT' &&
+		defined($request->{id})            &&
+		! defined($request->{rev})         &&
+		! defined($request->{target_url})
+	) {
 
 		# TODO: Berechtigungsprüfung
-		# XXX: Skip right checks if service is 'kba-test-service'
-		unless ($service eq 'kba-test-service') {
-			# my $rights = 'foo';
-			my $rights = Anno::Rights::rights($service, $target_url, $uid);
-			if($q->request_method eq "POST" && $rights < 1) { # create
-				error("not enough rights to create (service='$service', target='$target_url', uid='$uid') => $rights", 401);
-			}
-			if($q->request_method eq "PUT" && $rights < 2) { # modi
-				error("not enough rights to modify (service='$service', target='$target_url', uid='$uid') => $rights", 401);
-			}
+		if (my $err = Anno::Rights::is_request_allowed_to($request, 'admin')) {
+			return error($err, 401)
 		}
 
-		my $a_db=Anno::DB->new($dbh);
-		if($q->request_method eq "GET") {
-			print "Content-Type: application/json\r\n";
-			print "\r\n";
-			if($q_param->{id}) {
-				print $a_db->get_revs($q_param->{id}, $q_param->{rev}); # body+target gibt's nur für einzelne revs
-				return;
-			}
-			print $a_db->get_by_url($target_url);
-			return;
-		}
-		elsif($q->request_method=~/^(PUT|POST)$/) { # modify content (title, ...)
-			print "Content-Type: application/json\r\n";
-			print "\r\n";
-			my $data=decode_json($q->param($q->request_method."DATA"));
-			if($q->request_method eq "POST" && $data->{id}) {
-				error("POST (new anno) not together with id");
-			}
-			if($q->request_method eq "PUT" && !$data->{id}) {
-				error("PUT (modify anno) requires id");
-			}
-			my($id,$rev)=$a_db->create_or_update($data);
-			print qq!{"id": $id, "rev": $rev}!;
-			return;
+		my $report = $schema->validate('RevisionToPut', $request->{body});
+		return error($report, 400) unless ($report->{valid});
+
+		my ($id,$rev) = $request->{db}->create_or_update($request);
+		return send_jsonld(
+			{id => $id, rev => $rev},
+			201,
+			Location => build_url(id => $id, rev => $rev),
+		);
+
+	} elsif ($request->{method} eq 'POST' &&
+		! defined($request->{id}) &&
+		! defined($request->{rev}) &&
+		! defined($request->{target_url})
+	) {
+
+		# TODO: Berechtigungsprüfung
+		if (my $err = Anno::Rights::is_request_allowed_to($request, 'write')) {
+			return error($err, 401)
 		}
 
-		error("an error occured (request_method=".$q->request_method." not supported)");
-	} or do {
-		my ($resp) = @_;
-		say STDERR "\$!: $!";
-		# say STDERR "$resp";
-		print $resp;
+		my $report = $schema->validate('AnnotationToPost', $request->{body});
+		return error($report, 400) unless ($report->{valid});
+
+		my ($id,$rev) = $request->{db}->create_or_update($request);
+		return send_jsonld(
+			{id => $id, rev => $rev},
+			201,
+			"Location" => build_url(id => $id, rev => $rev),
+		);
+
+	} else {
+
+		return error("Unhandled request " . Dumper($request));
+
 	}
+
 }
 
 #
@@ -186,7 +267,7 @@ sub handler {
 if ($ENV{UBHDANNO_USE_CGI}) {
 	handler(CGI->new);
 } else {
-	while(my $q=CGI::Fast->new) { handler($q); }
+	while(my $cgi=CGI::Fast->new) { handler($cgi); }
 }
 
 # vim: noet sw=2 ts=2

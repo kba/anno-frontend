@@ -2,9 +2,25 @@
 
 Basiert auf Web Annotation Data Model (https://www.w3.org/TR/annotation-model/)
 
+## Requirements
+
+Von CPAN
+
+* [JSON::Validator](http://search.cpan.org/~jhthorsen/JSON-Validator-0.96/)
+  * [Mojolicious](http://search.cpan.org/~sri/Mojolicious-7.28/)
+
 ## Backend API
 
+### Apache Deploy:
+
+```
+RewriteCond %{HTTP:Authorization} ^(.+)
+RewriteRule ^(.*)$ $1 [E=HTTP_AUTHORIZATION:%1,PT]
+```
+
 Siehe Seite ["Backend Api" im Wiki](https://gitlab.ub.uni-heidelberg.de/Webservices/AnnotationService/wikis/backend-api)
+
+Swagger Interface to [live-test the API](http://anno.ub.uni-heidelberg.de/dist/swagger-ui)
 
 ## Aufruf
 
