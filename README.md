@@ -2,9 +2,16 @@
 
 Basiert auf Web Annotation Data Model (https://www.w3.org/TR/annotation-model/)
 
+## Requirements
+
+Von CPAN
+
+* [JSON::Validator](http://search.cpan.org/~jhthorsen/JSON-Validator-0.96/)
+  * [Mojolicious](http://search.cpan.org/~sri/Mojolicious-7.28/)
+
 ## Backend API
 
-Apache Deploy:
+### Apache Deploy:
 
 ```
 RewriteCond %{HTTP:Authorization} ^(.+)

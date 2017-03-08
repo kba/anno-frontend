@@ -115,7 +115,7 @@ sub parse_query {
 #
 sub build_url {
 	my %query_params = @_;
-	my $ret = $ENV{UBHDANNO_BASEURL} || 'https://anno.ub.uni-heidelberg.de/cgi-bin/anno.cgi';
+	my $ret = $ENV{UBHDANNO_BASEURL} || 'http://anno.ub.uni-heidelberg.de/cgi-bin/anno.cgi';
 	$ret .= '?';
 	for my $k (sort keys %query_params) {
 		my $v = $query_params{$k};
@@ -198,6 +198,7 @@ sub handler {
 		defined($request->{id})            &&
 		! defined($request->{rev})) {
 
+		# TODO
 		return send_jsonld($request->{db}->get_revs($request->{id}));
 
 	} elsif ($request->{method} eq 'GET' &&
@@ -222,7 +223,7 @@ sub handler {
 		my $report = $schema->validate('RevisionToPut', $request->{body});
 		return error($report, 400) unless ($report->{valid});
 
-		my ($id,$rev) = $request->{db}->create_or_update($request->{body});
+		my ($id,$rev) = $request->{db}->create_or_update($request);
 		return send_jsonld(
 			{id => $id, rev => $rev},
 			201,
@@ -243,7 +244,7 @@ sub handler {
 		my $report = $schema->validate('AnnotationToPost', $request->{body});
 		return error($report, 400) unless ($report->{valid});
 
-		my ($id,$rev) = $request->{db}->create_or_update($request->{body});
+		my ($id,$rev) = $request->{db}->create_or_update($request);
 		return send_jsonld(
 			{id => $id, rev => $rev},
 			201,

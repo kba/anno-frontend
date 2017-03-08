@@ -50,6 +50,7 @@ sub create_or_update { # falls ref($o->{target})==SCALAR -> target ist anno_id
   # If the annotation has an 'id', then it is a URL which needs parsing
   if ($n->{id}) {
     ($id, $rev) = @{ parse_url($n->{id}) };
+    $n->{id} = $id; # XXX HACK
   } else {
     $id = create_uuid_as_string(UUID_RANDOM);
   }
@@ -77,9 +78,10 @@ sub create_or_update { # falls ref($o->{target})==SCALAR -> target ist anno_id
 			if($creator[0] ne $$n{creator}) { croak "creator ne first_creator"; }
 		}
 
-    # XXX annotation should not have a 'rev' field, $rev should be
-    # * deduced from the 'id' field -> parse_url
-    # * the latest_rev
+    # XXX annotation should not have a 'rev' field, $rev should be either
+    # deduced from the 'id' field -> parse_url
+    # or
+    # the latest_rev
 		if($n->{rev}) { # Admin-Änderung
 			$rev=$n->{rev};
 			if($rev<1 || $rev>$latest_rev[0]) { croak "admin change: rev out of range"; }
@@ -149,14 +151,15 @@ sub ld_ish {
 				delete $x->{$k};
 				next;
 			}
+
 			if($k eq "id") {
-				$x->{$k}.="/rev$rev";
 				if($path=~m!/(body|target)$!) {
 					$x->{$k}.="/$1/seq$seq";
 				}
-				next;
-			}
-			if($k eq "id") {
+				if ($rev) {
+          $x->{$k}.="&rev=$rev";
+        }
+        $x->{$k} = ($ENV{UBHDANNO_BASEURL} || 'http://anno.ub.uni-heidelberg.de/cgi-bin/anno.cgi?id=') . $x->{$k};
 #				$x->{$k}="http://.../".$x->{$k}; 
 				next;
 			}
@@ -224,6 +227,7 @@ sub get_revs {
 	my @annos;
 	for my $anno (@{$dbh->selectall_arrayref("select * from anno left join creator on (anno.creator=creator.id) where anno.id=? $revsql order by rev",$slice, $aid)}) {
 		push @annos, $anno;
+		$anno->{id} = $aid;
 		$annos[$#annos]->{'@context'}="http://www.w3.org/ns/anno.jsonld";
 	}
 
@@ -236,8 +240,12 @@ sub get_revs {
 		}
 	}
 
-	ld_ish(\@annos);
-	return $self->{json}->encode(\@annos);
+  my $ret = {
+    id => $aid,
+    hasVersion => \@annos
+  };
+  ld_ish($ret);
+	return $self->{json}->encode($ret);
 }
 
 1;
