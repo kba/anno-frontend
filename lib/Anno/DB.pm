@@ -35,11 +35,18 @@ sub parse_url {
   return [$id, $rev];
 }
 
+# XXX: Why the double-dollar dereference sometimes but arrow other times?
 sub create_or_update { # falls ref($o->{target})==SCALAR -> target ist anno_id
-	my($self, $n)=@_;
+	my($self, $request)=@_;
+
+	my $n = $request->{body};
+  # TODO Users should not be allowed to create/change other user's annotations.
+  # TODO Admin tasks should use different method
+  $n->{creator} = $request->{token}->{user};
+
 	my $dbh=$self->{dbh};
 
-  my ($id, $ref);
+  my ($id, $rev);
   # If the annotation has an 'id', then it is a URL which needs parsing
   if ($n->{id}) {
     ($id, $rev) = @{ parse_url($n->{id}) };
@@ -47,24 +54,32 @@ sub create_or_update { # falls ref($o->{target})==SCALAR -> target ist anno_id
     $id = create_uuid_as_string(UUID_RANDOM);
   }
 
+  # XXX target/body not being arrays should be caught in validation step
 	if(ref($$n{target}) ne "ARRAY" && $id eq $$n{target}) { croak "target_id == id"; } # keine Zirkelbezüge!
 	if(ref($$n{body})   ne "ARRAY") { croak "body is not ARRAY"; }
 
 	my $ret=eval {
 		$dbh->begin_work;
 
+    # TODO use parse_url since id will be a URL
+    # XXX this seems fragile: What if target is a scalar but not one of our URLs?
 		if(ref($$n{target}) ne "ARRAY") {
 			my @target_ex=$dbh->selectrow_array("select rev from latest_rev where id=?",$u, $$n{target});
 			if(!$target_ex[0]) { croak "target annotation $$n{target} does not exist"; }
 		}
 
 		my @latest_rev=$dbh->selectrow_array("select rev from latest_rev where id=?",$u, $id);	
+
+    # XXX shouldn't this be $id not $$n{id} ?
 		if($$n{id}) {
 			if(!$latest_rev[0]) { croak "requesting new revision for non-existent annotation $$n{id}"; }
 			my @creator=$dbh->selectrow_array("select creator from anno where id=? and rev=1",$u, $$n{id});
 			if($creator[0] ne $$n{creator}) { croak "creator ne first_creator"; }
 		}
 
+    # XXX annotation should not have a 'rev' field, $rev should be
+    # * deduced from the 'id' field -> parse_url
+    # * the latest_rev
 		if($n->{rev}) { # Admin-Änderung
 			$rev=$n->{rev};
 			if($rev<1 || $rev>$latest_rev[0]) { croak "admin change: rev out of range"; }
