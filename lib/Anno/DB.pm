@@ -24,12 +24,28 @@ sub new {
 my $u=undef;
 my $slice={Slice=>{}};
 
+#
+# parse_url($url)
+#
+# Turn an id as it is used in an 'id' URL into a id/rev arrayref
+#
+sub parse_url {
+  my $url = $_[0];
+  my ($id, $rev) = $url =~ m/id=([^&]+)(?:&rev=(\d+))?/;
+  return [$id, $rev];
+}
+
 sub create_or_update { # falls ref($o->{target})==SCALAR -> target ist anno_id
 	my($self, $n)=@_;
 	my $dbh=$self->{dbh};
 
-	my $id=$$n{id}||create_uuid_as_string(UUID_RANDOM);
-	my $rev;
+  my ($id, $ref);
+  # If the annotation has an 'id', then it is a URL which needs parsing
+  if ($n->{id}) {
+    ($id, $rev) = @{ parse_url($n->{id}) };
+  } else {
+    $id = create_uuid_as_string(UUID_RANDOM);
+  }
 
 	if(ref($$n{target}) ne "ARRAY" && $id eq $$n{target}) { croak "target_id == id"; } # keine Zirkelbezüge!
 	if(ref($$n{body})   ne "ARRAY") { croak "body is not ARRAY"; }
