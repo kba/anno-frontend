@@ -25,23 +25,6 @@ securityDefinitions:
 ##############################################################################
 paths:
 
-  '/anno.cgi?target.url={url}':
-    get:
-      tags:
-        - 'anno'
-      summary: 'Get all annotations that adhere to query'
-      parameters:
-        - in: 'path'
-          name: 'url'
-          required: true
-          type: 'string'
-          format: 'url'
-      responses:
-        200:
-          description: all okay
-          schema:
-            $ref: '#/definitions/ListOfFullAnnotations'
-
   '/anno.cgi':
     'post':
       tags:
@@ -59,8 +42,25 @@ paths:
         200:
           description: all okay
 
+  '/anno.cgi?target.url={url}':
+    get:
+      tags:
+        - 'anno'
+      summary: 'Get all annotations that adhere to query'
+      parameters:
+        - in: 'path'
+          name: 'url'
+          required: true
+          type: 'string'
+          format: 'url'
+      responses:
+        200:
+          description: all okay
+          schema:
+            $ref: '#/definitions/ListOfFullAnnotations'
 
   '/anno.cgi/?id={annoId}':
+
     get:
       tags: ['anno']
       summary: 'Get a single annotation including all revisions'
@@ -73,6 +73,7 @@ paths:
       responses:
         200:
           description: 'all okay'
+
     put:
       tags: ['anno']
       summary: 'Store a new revision of an annotation'
@@ -183,7 +184,11 @@ definitions:
         items:
           minItems: 1
           $ref: '#/definitions/AnnotationTarget'
-
+    requiredProperties:
+      - 'created'
+      - 'creator'
+      - 'target'
+      - 'comment'
 
   AnnotationRevisionDescription:
     type: 'object'
