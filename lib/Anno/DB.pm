@@ -159,7 +159,7 @@ sub ld_ish {
 				if ($rev) {
           $x->{$k}.="&rev=$rev";
         }
-        $x->{$k} = ($ENV{UBHDANNO_BASEURL} || 'http://anno.ub.uni-heidelberg.de/cgi-bin/anno.cgi?id=') . $x->{$k};
+        $x->{$k} = ($ENV{UBHDANNO_BASEURL} || 'http://anno.ub.uni-heidelberg.de/cgi-bin/anno.cgi') . '?id=' . $x->{$k};
 #				$x->{$k}="http://.../".$x->{$k}; 
 				next;
 			}
