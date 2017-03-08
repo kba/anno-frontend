@@ -1,6 +1,8 @@
 MYSQL_USER = root
 MYSQL_PASSWORD = root
 
+YAML2JSON = ruby -ryaml -rjson -e 'puts JSON.pretty_generate(YAML.load(ARGF))'
+
 SHUTUP = 2>/dev/null
 MYSQL = mysql -u "$(MYSQL_USER)" --password="$(MYSQL_PASSWORD)" # $(SHUTUP)
 
@@ -50,3 +52,6 @@ start:
 
 stop:
 	pkill -f -9 'plackup'
+
+doc/context.json: doc/context.yml
+	$(YAML2JSON) "$<" > "$@"
