@@ -19,7 +19,7 @@ test:
   stage: test
   script:
     - cd ..
-    - make recreate-db
+    - make -s recreate-db
     - make integration-test
   cache:
     paths:
