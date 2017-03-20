@@ -1,5 +1,5 @@
-<ul v-bind:class="ubdannoprefix+'annochoicetree'">
-  <li v-for="item in anno.children" v-bind:id="item.id" v-bind:class="`media ${ubdannoprefix}comment`">
+<ul v-bind:class="prefix+'annochoicetree'">
+  <li v-for="item in anno.children" v-bind:id="item.id" v-bind:class="`media ${prefix}comment`">
     <div>
       <div v-if="item.user_name" class="media-left">
         <button class="btn btn-xs">
@@ -16,7 +16,7 @@
             <span v-else>{{item.link}}</span>
           </a>
         </p>
-        <div v-if="!options.no_oai" v-bind:class="ubdannoprefix+'iiiflink'">
+        <div v-if="!options.no_oai" v-bind:class="prefix+'iiiflink'">
           <template v-if="item.iiif_url">
             <button class="btn-link" onclick="anno_toggle_iiif($(this));">
               <span class="fa fa-caret-right"></span>
@@ -31,11 +31,11 @@
         <!-- navigation -->
         <div class="btn-toolbar pull-right" role="toolbar" style="margin-top: 10px;">
           <div class="btn-group btn-group-xs pull-right" role="group">
-            <button v-if="item.editable" v-bind:class="'btn btn-default '+ubdannoprefix+'editbut'">
+            <button v-if="item.editable" v-bind:class="'btn btn-default '+prefix+'editbut'">
               <i class="fa fa-pencil"></i> &nbsp;
               {{text.edit}}
             </button>
-            <button v-if="item.commentable" v-bind:class="'btn btn-default '+ubdannoprefix+'commentbut'">
+            <button v-if="item.commentable" v-bind:class="'btn btn-default '+prefix+'commentbut'">
               <i class="fa fa-reply"></i> &nbsp;
               {{text.reply}}
             </button>
@@ -44,7 +44,7 @@
                 {{text.previous}}
                 <span class="caret"></span>
               </button>
-              <ul v-bind:class="'dropdown-menu pull-right '+ubdannoprefix+'versions'">
+              <ul v-bind:class="'dropdown-menu pull-right '+prefix+'versions'">
               </ul>
             </template>
           </div>
@@ -53,11 +53,11 @@
       </div>
     </div>
     <template v-if="item.hasChildren">
-      <div><div v-bind:class="ubdannoprefix+'separator'"></div></div>
+      <div><div v-bind:class="prefix+'separator'"></div></div>
       <annocomments
         v-bind:anno="item"
         v-bind:options="options"
-        v-bind:ubdannoprefix="ubdannoprefix"
+        v-bind:prefix="prefix"
         ></annocomments>
     </template>
   </li>

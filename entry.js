@@ -8,4 +8,4 @@ require('style-loader!css-loader!font-awesome/css/font-awesome.css');
 require('style-loader!css-loader!./css/annotations.css')
 
 // Code
-window.ubhdAnno = require('./src/annotations.js')
+window.UBHDAnnoApp = require('./src/annotations.js')

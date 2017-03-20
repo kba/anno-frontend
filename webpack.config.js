@@ -9,6 +9,19 @@ module.exports = {
     },
     module: {
         loaders: [
+            {
+                test: require.resolve('tinymce/tinymce'),
+                loaders: [
+                    'imports-loader?this=>window',
+                    'exports-loader?window.tinymce'
+                ]
+            },
+            {
+                test: /tinymce\/(themes|plugins)\//,
+                loaders: [
+                    'imports-loader?this=>window'
+                ]
+            },
             // **IMPORTANT** This is needed so that each bootstrap js file required by
             // bootstrap-webpack has access to the jQuery object
             {
