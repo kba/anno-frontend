@@ -1,6 +1,8 @@
 var C = module.exports = {}
+
 C.annoservicehosturl = process.env.annoservicehosturl || 'http://anno.ub.uni-heidelberg.de'
 C.annoserviceurl     = process.env.annoserviceurl     || C.annoservicehosturl + '/cgi-bin/anno.cgi';
+
 C.typeList = {
     "dc:description-ger":   "text",
     "dc:identifier":        "identifier",

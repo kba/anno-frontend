@@ -18,7 +18,9 @@ build:
 test:
   stage: test
   script:
-    - npm test
+    - cd ..
+    - make -s recreate-db
+    - make integration-test
   cache:
     paths:
     - htdocs/node_modules/
