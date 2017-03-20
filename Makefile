@@ -6,11 +6,24 @@ DEPLOY_PATH = /usr/local/AnnotationService/htdocs/dist
 NPM = npm
 RM = rm -rf
 
-# .PHONY: check-deps
-# check-deps:
-#     @for bin in npm webpack;do\
-#         bash -c "type -P $$bin" >/dev/null || echo "'$$bin' not in \$$PATH";\
-#     done
+.PHONY: help
+help:
+	@echo ""
+	@echo "Targets:"
+	@echo ""
+	@echo "    build   webpack"
+	@echo "    watch   webpack -w "
+	@echo "    serve   webpack-dev-server "
+	@echo "    clean   remove dist"
+	@echo "    dist    Build js and html"
+	@echo "    dist    Build js and html"
+	@echo '    deploy  SSH-Copy to $$(DEPLOY_SERVER):$$(DEPLOY_PATH)'
+	@echo ""
+	@echo "Variables:"
+	@echo ""
+	@echo "    DEPLOY_SERVER: Server to deploy to. Default: $(DEPLOY_SERVER)"
+	@echo "    DEPLOY_PATH: Path to deploy to. Default: $(DEPLOY_PATH)"
+
 
 .PHONY: build
 build: dist node_modules
@@ -25,7 +38,6 @@ serve:
 
 .PHONY: clean
 clean:
-	$(RM) $(NODE_MODULES_DIR)
 	$(RM) dist
 
 .PHONY: test
