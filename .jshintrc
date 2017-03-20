@@ -3,7 +3,9 @@
   "asi": true,
   "sub": true,
   "predef": [
-    "alert",    // TODO
+    "window",    // TODO
+    "document",    // TODO
+    "zonecolor", // TODO
     "require",
     "console",
     "process",
