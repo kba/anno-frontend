@@ -726,14 +726,14 @@ function xmlToJson(xml) {
 
   if (key === 1 && attrs.length) {
     obj[key = '@attributes'] = {};
-    while (attr = attrs.item(++i)) {
+    while ((attr = attrs.item(++i))) {
       obj[key][attr.nodeName] = attr.value;
     }
     i = -1;
   } else if (key === 3) {
     obj = xml.nodeValue;
   }
-  while (child = children.item(++i)) {
+  while ((child = children.item(++i))) {
     key = child.nodeName;
     if (obj.hasOwnProperty(key)) {
       if (obj.toString.call(obj[key]) !== '[object Array]') {
@@ -902,7 +902,11 @@ function convertTree(toAdd, data1, parent_string, annotarget, options) {
 }
 
 function popover_title(title) {
-  return '<span class="text-info">'+title+'</span>&nbsp;&nbsp;<button type="button" id="close" class="close" onclick="$(\'.popover\').popover(\'hide\');">&times;</button>';
+    return `
+        <span class="text-info">${title}</span>
+        &nbsp;&nbsp;
+        <button type="button" id="close" class="close" onclick="$('.popover').popover('hide');">&times;</button>'
+      `
 }
 
 
