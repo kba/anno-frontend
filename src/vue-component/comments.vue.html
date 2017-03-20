@@ -1,0 +1,64 @@
+<ul v-bind:class="ubdannoprefix+'annochoicetree'">
+  <li v-for="item in anno.children" v-bind:id="item.id" v-bind:class="`media ${ubdannoprefix}comment`">
+    <div>
+      <div v-if="item.user_name" class="media-left">
+        <button class="btn btn-xs">
+          <span class="glyphicon glyphicon-user"></span>
+          {{item.user_name}} {{item.jcr_modified_display}}
+        </button>
+      </div>
+      <div class="media-body">
+        <h4 v-html="item.title"></h4>
+        <div v-html="item.text"></div>
+        <p v-if="item.link">
+          <a v-bind:href="item.link" target="_blank">
+            <span v-if="item.sourcedescription">{{item.sourcedescription}}</span>
+            <span v-else>{{item.link}}</span>
+          </a>
+        </p>
+        <div v-if="!options.no_oai" v-bind:class="ubdannoprefix+'iiiflink'">
+          <template v-if="item.iiif_url">
+            <button class="btn-link" onclick="anno_toggle_iiif($(this));">
+              <span class="fa fa-caret-right"></span>
+              Bildausschnitt (IIIF-Image)
+            </button>
+            <div>
+              <a v-bind:href="item.iiif_url" target="_blank">{{item.iiif_url}}
+              </a>
+            </div>
+          </template>
+        </div>
+        <!-- navigation -->
+        <div class="btn-toolbar pull-right" role="toolbar" style="margin-top: 10px;">
+          <div class="btn-group btn-group-xs pull-right" role="group">
+            <button v-if="item.editable" v-bind:class="'btn btn-default '+ubdannoprefix+'editbut'">
+              <i class="fa fa-pencil"></i> &nbsp;
+              {{text.edit}}
+            </button>
+            <button v-if="item.commentable" v-bind:class="'btn btn-default '+ubdannoprefix+'commentbut'">
+              <i class="fa fa-reply"></i> &nbsp;
+              {{text.reply}}
+            </button>
+            <template v-if="item.versioned">
+              <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                {{text.previous}}
+                <span class="caret"></span>
+              </button>
+              <ul v-bind:class="'dropdown-menu pull-right '+ubdannoprefix+'versions'">
+              </ul>
+            </template>
+          </div>
+        </div>
+        <div style="clear: both; margin-bottom: 2px;"></div>
+      </div>
+    </div>
+    <template v-if="item.hasChildren">
+      <div><div v-bind:class="ubdannoprefix+'separator'"></div></div>
+      <annocomments
+        v-bind:anno="item"
+        v-bind:options="options"
+        v-bind:ubdannoprefix="ubdannoprefix"
+        ></annocomments>
+    </template>
+  </li>
+</ul>
