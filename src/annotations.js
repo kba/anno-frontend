@@ -16,6 +16,9 @@ var versionTemplate      = require('../template/version.vue.html')
 var zoneEditTemplate     = require('../template/zoneEdit.vue.html')
 var annoCommentsTemplate = require('../template/comments.vue.html')
 
+// SemToNotes
+var {xrx, goog} = require('semtonotes-client')
+
 var zoneeditdrawing;
 var zoneeditthumb;
 var thumbTimeout;

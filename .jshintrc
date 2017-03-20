@@ -3,8 +3,6 @@
   "asi": true,
   "sub": true,
   "predef": [
-    "goog",     // TODO
-    "xrx",      // TODO
     "alert",    // TODO
     "require",
     "console",
