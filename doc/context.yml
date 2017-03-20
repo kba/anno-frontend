@@ -1,0 +1,40 @@
+#
+# See also https://www.w3.org/TR/prov-o/#narrative-example-expanded-1
+#
+"@context":
+  - https://www.w3.org/ns/anno.jsonld
+  - ubhdanno: http://anno.ub.uni-heidelberg.de/onto/
+    TopLevelAnnotation:
+      "@id": ubhdanno:TopLevelAnnotation
+      rdfs:subClassOf: oa:Annotation
+      rdfs:comment: >
+        An abstract annotation, its values defaulting to the latest revision
+        Must have at least one revision (hasRevision)
+    AnnotationComment:
+      "@id": ubhdanno:AnnotationComment
+      rdfs:subClassOf: oa:Annotation
+      rdfs:comment: An annotation that annotates another annotation. Turtles all the way down.
+    AnnotationRevision:
+      "@id": ubhdanno:AnnotationRevision
+      rdfs:comment: A revision of an annotation
+    hasReply:
+      "@id": ubhdanno:hasReply
+      "@type": "@id"
+      rdfs:subClassOf: http://rdfs.org/sioc/ns#has_reply
+      rdfs:domain: oa:Annotation
+      rdfs:range: ubhdanno:AnnotationComment
+      owl:inverseOf: {"@id": "hasReply"}
+    replyTo:
+      "@id": ubhdanno:replyTo
+      "@type": "@id"
+      rdfs:subClassOf: http://rdfs.org/sioc/ns#reply_to
+      rdfs:domain: ubhdanno:AnnotationComment
+      rdfs:range: oa:Annotation
+      owl:inverseOf: {"@id": "replyTo"}
+    hasVersion:
+      "@id": http://purl.org/pav/hasVersion
+      "@type": "@id"
+    versionOf: 
+      "@id": ubhdanno:versionOf
+      "@type": "@id"
+      owl:inverseOf: {"@id": "hasVersion"}
