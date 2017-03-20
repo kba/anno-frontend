@@ -1,6 +1,3 @@
-[submodule "htdocs/js/drawing/SemToNotes"]
-	path = htdocs/js/drawing/SemToNotes
+[submodule "vendor/SemToNotes"]
+	path = vendor/SemToNotes
 	url = https://github.com/UB-Heidelberg/SemToNotes
-[submodule "vendor/swagger-ui"]
-	path = vendor/swagger-ui
-	url = https://github.com/swagger-api/swagger-ui

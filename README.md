@@ -1,33 +1,82 @@
-# Dienstübergreifender Annotationen-Service 
+# UB Heidelberg Annotationen Frontend
 
-Basiert auf Web Annotation Data Model (https://www.w3.org/TR/annotation-model/)
+## Building - Set up Repository
 
-## Backend API
+Clone the repository and initialize submodules.
 
-Siehe Seite ["Backend Api" im Wiki](https://gitlab.ub.uni-heidelberg.de/Webservices/AnnotationService/wikis/backend-api)
-
-## Aufruf
-
-Benötigt jQuery ab Version 1.11
-
-Außerdem:
-
-```html
-<script type="text/javascript" src="http://anno.ub.uni-heidelberg.de/js/vue.js"></script>                                                                
-<script type="text/javascript" src="http://anno.ub.uni-heidelberg.de/js/annotations.js"></script>                                                        
-<script type="text/javascript" src="http://anno.ub.uni-heidelberg.de/js/js.cookie-2.1.2.min.js"></script>                                                
-<link href="http://anno.ub.uni-heidelberg.de/js/bootstrap-3.2.0/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">                            
-<script type="text/javascript" src="http://anno.ub.uni-heidelberg.de/js/bootstrap-3.2.0/dist/js/bootstrap.min.js"></script>                              
-<link href="http://anno.ub.uni-heidelberg.de/js/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">                           
-<link href="http://anno.ub.uni-heidelberg.de/css/annotations.css" rel="stylesheet" type="text/css">                                                      
+```sh
+git clone git@gitlab.ub.uni-heidelberg.de:Webservices/AnnotationService.git
+cd AnnotationService
+git submodule init
 ```
 
-nur für Editor:
+## Building - Required Software
+
+You'll need nodejs/npm.
+
+For development:
+
+```sh
+make build    # npm install && webpack
+```
+
+This will bundle all the assets (JS, fonts, images, CSS) into a single JS file in the `dist` folder.
+
+To update assets continuously whenever files change:
+
+```sh
+make watch    # webpack --watch
+```
+
+To build a production version of the script, set the `NODE_ENV` environment variable to `production`, e.g.
+
+```
+NODE_ENV=production make build
+# or
+make build NODE_ENV=production
+# or
+NODE_ENV=production webpack
+```
+
+## Using - HTML Snippets
 
 ```html
-<script type="text/javascript" src="http://anno.ub.uni-heidelberg.de/js/tinymce/tinymce.min.js"></script>
+    <script src="http://anno.ub.uni-heidelberg.de/dist/ubhd-anno.js" type="text/javascript"></script> 
+```
 
-TODO: JS-Modul für SemToNoes ...
+## Using - On serv7 / ubhd3 template
+
+Just the idea, actual code is more involved.
+
+```
+var projectname = '[% sdhr.projectname %]';
+var pagename = '[% IF sdhr.phy_page_full %][% sdhr.phy_page_full %][% ELSE %]0000[% END %]';
+var digipath = '[% sdhr.path %]';
+var annoid = '[% annoid %]';
+var iiif = '[% IF meta.no_oai %]0[% ELSE %]1[% END %]';
+var img_zoomst = {/*...*/};
+var u = img_zoomst[projectname + '_' + pagename][img_zoomst[projectname + '_' + pagename].length - 1]['url'].split('/');
+var iiif_url = 'http://diglit.ub.uni-heidelberg.de/image/' + projectname + '/' + u[u.length - 1] + '/';
+displayAnnotations(
+    'annotationsblock',
+    '/'+projectname+'/'+pagename,
+    {
+        service: 'diglit',
+        lang: '[% sdhr.ui_lang %]',
+        purl: 'http://digi.ub.uni-heidelberg.de/'+digipath+'/'+projectname+'/'+pagename,
+        css: 'anno',
+        highlight: 'annohighlight',
+        login: 'http://digi.ub.uni-heidelberg.de/cgi-bin/login?sid=[% sdhr.sid %]',
+        readtoken: '[% sdhr.anno_token_read %]',
+        writetoken: '[% sdhr.anno_token_write %]',
+        edit_img_url: img_zoomst['[% sdhr.projectname %]_[% sdhr.phy_page_full %]'][0].url,
+        edit_img_width: img_zoomst['[% sdhr.projectname %]_[% sdhr.phy_page_full %]'][0].width,
+        edit_img_thumb: '/'+digipath+'/'+projectname+'/'+pagename+'/_thumb_image',
+        iiif_url: iiif_url,
+        iiif_img_width: img_zoomst[projectname + '_' + pagename][img_zoomst[projectname + '_' + pagename].length - 1]['width'],
+        iiif_img_height: img_zoomst[projectname + '_' + pagename][img_zoomst[projectname + '_' + pagename].length - 1]['height'],
+        gotopurl: annoid
+    })
 ```
 
 ```js

@@ -1,0 +1,69 @@
+"@context":
+  - "http://anno.ub.uni-heidelberg.de/context.jsonld"
+  - annodata: "http://anno.ub.uni-heidelberg.de/cgi-bin/anno.cgi"
+id: annodata:?id=UUID1
+type: oa:Annotation
+creator:
+  id: john@anno.ub.uni-heidelberg.de
+body: annodata:?id=UUID1&rev=3&body=1
+target: http://digi.ub.uni-heidelberg.de/diglit/cpg1/0026
+hasReply:
+  - id: annodata:?id=UUID2
+    type: AnnotationComment
+    creator:
+      id: mallory@anno.ub.uni-heidelberg.de
+    replyTo: annodata:?id=UUID&rev=1
+    target: annodata:?id=UUID1
+    body:
+      - annodata:?id=UUID2&rev=1&body=1
+    hasVersion:
+      id: annodata:?id=UUID2&rev=1
+      target: annodata:?id=UUID1
+      body:
+        - id: annodata:?id=UUID2&rev=1&body=1
+          type: TextualBody
+          value: "It is not about astronomy, it's about astrology!"
+      versionOf: annodata:?id=UUID2
+    hasReply:
+      - id: annodata:?id=UUID3
+        type: AnnotationComment
+        replyTo: annodata:?id=UUID2&rev=1
+        target: annodata:?id=UUID2
+        body:
+          - annodata:?id=UUID3&rev=1&body=1
+        hasVersion:
+          - id: annodata:?id=UUID3&rev=1
+            target: annodata:?id=UUID2
+            body:
+              - id: annodata:?id=UUID3&rev=1&body=1
+                type: TextualBody
+                value: "Oops, you're right, I'll fix it."
+
+hasVersion:
+  - id: annodata:?id=UUID1&rev=1
+    type: AnnotationRevision
+    body:
+      - id: annodata:?id=UUID1&rev=1&body=1
+        type: TextualBody
+        value: "This page is about astronomy"
+    target:
+      - id: http://digi.ub.uni-heidelberg.de/diglit/cpg1/0027
+    versionOf: annodata:?id=UUID1
+  - id: annodata:?id=UUID1&rev=2
+    type: AnnotationRevision
+    body:
+      - id: annodata:?id=UUID1&rev=2&body=1
+        type: TextualBody
+        value: "This page is about astrology"
+    target:
+      - id: http://digi.ub.uni-heidelberg.de/diglit/cpg1/0027
+    versionOf: annodata:?id=UUID1
+  - id: annodata:?id=UUID1&rev=3
+    type: AnnotationRevision
+    body:
+      - id: annodata:?id=UUID1&rev=3&body=1
+        type: TextualBody
+        value: "This page is about astrology"
+    target:
+      - id: http://digi.ub.uni-heidelberg.de/diglit/cpg1/0026
+    versionOf: annodata:?id=UUID1

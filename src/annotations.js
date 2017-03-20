@@ -11,10 +11,10 @@ var config     = require('./config')
 var CoordUtils = require('./coord-utils')
 
 // HTML
-var annoColTemplate      = require('../html/annoCol.vue.html')
-var versionTemplate      = require('../html/version.vue.html')
-var zoneEditTemplate     = require('../html/zoneEdit.vue.html')
-var annoCommentsTemplate = require('../html/comments.vue.html')
+var annoColTemplate      = require('../template/annoCol.vue.html')
+var versionTemplate      = require('../template/version.vue.html')
+var zoneEditTemplate     = require('../template/zoneEdit.vue.html')
+var annoCommentsTemplate = require('../template/comments.vue.html')
 
 var zoneeditdrawing;
 var zoneeditthumb;
