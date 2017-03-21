@@ -1,0 +1,5 @@
+<button class="btn btn-default btn-sm" :id="'${data.prefix}-zoneeditor-' + onClick" :title="title" v-on:click="clickHandler">
+  <span v-if="glyphicon" :class="'glyphicon glyphicon-'+glyphicon"></span>
+  <span v-else-if="fontAwesome" :class="'fa fa-'+fontAwesome"></span>
+  <img v-if="src" :src="src" :alt="alt" />
+</button>

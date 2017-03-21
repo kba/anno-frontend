@@ -1,6 +1,23 @@
 <div v-bind:class="css+'versionhead'">{{text.version_from}}: {{created_display}}</div>
+
 <h4 v-html="item.title"></h4>
+
 <div v-html="item.text"></div>
-<p v-if="item.link"><a v-bind:href="item.link" target="_blank"><span v-if="item.sourcedescription">{{item.sourcedescription}}</span><span v-else>{{item.link}}</span></a></p>
-<div class="pull-right"><button v-bind:class="'btn btn-default btn-xs '+css+'versclosebut'"><i class="fa fa-times-circle-o"></i> {{text.close}}</button></div>
+
+<p v-if="item.link">
+  <a v-bind:href="item.link" target="_blank">
+    <span v-if="item.sourcedescription">{{item.sourcedescription}}
+    </span>
+    <span v-else>{{item.link}}
+    </span>
+  </a>
+</p>
+
+<div class="pull-right">
+  <button v-bind:class="'btn btn-default btn-xs '+css+'versclosebut'">
+    <i class="fa fa-times-circle-o">
+    </i> {{text.close}}
+  </button>
+</div>
+
 <div style="clear: both;"></div>

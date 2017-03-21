@@ -13,17 +13,14 @@ var CoordUtils = require('./coord-utils')
 
 // HTML
 var annoColTemplate      = require('../template/annoCol.vue.html')
-var versionTemplate      = require('../template/version.vue.html')
-var zoneEditTemplate     = require('../template/zoneEdit.vue.html')
-
-// SemToNotes
-var {xrx, goog} = require('semtonotes-client')
+// var versionTemplate      = require('../template/version.vue.html')
 
 var zoneeditdrawing;
 var zoneeditthumb;
 var thumbTimeout;
 
 const commentsComponent = require('./vue-component/comments.vue.js')
+const ZoneEditorComponent = require('./vue-component/zone-editor.vue.js')
 
 class UBHDAnnoApp {
 
@@ -117,7 +114,15 @@ class UBHDAnnoApp {
         if (this.options.gotopurl) $('#'+this.options.gotopurl).addClass(`${prefix}PURL`)
 
         //  Zone-Editor
-        if (this.options.edit_img_url && this.options.edit_img_width) this.createZoneEditor()
+        if (this.options.edit_img_url && this.options.edit_img_width) {
+            const zoneEditorComponent = create({
+                text: this.l10n,
+                options: this.options,
+                annoservicehosturl: config.annoservicehosturl,
+                prefix: this.prefix,
+            })
+            this.createZoneEditor()
+        }
 
         //  Sortierung
         $(htmltarget+' .'+prefix+'sortdate').on('click', () => { 
@@ -396,171 +401,6 @@ class UBHDAnnoApp {
         //     $('#'+prefix+'_modal_edit').modal('toggle');
         // });
     }
-
-    /*
-     *
-     * TODO
-     *
-     *
-     * Zone Editor
-     *
-     * TODO
-     *
-     *
-     */
-    createZoneEditor() { 
-        $(`#${this.prefix}_tab_zones`).html(zoneEditTemplate);
-
-        var zoneapp = new Vue({
-            el: `#${this.prefix}_tab_zones`,
-            data: {
-                text: this.l10n,
-                options: options,
-                annoservicehosturl: config.annoservicehosturl,
-                prefix: this.prefix,
-            }
-        });
-
-        $(`#${this.prefix}_zoneeditzoomout`).on('click', () => {
-            zoneeditdrawing.getViewbox().zoomOut();
-            this.anno_navigationThumb(zoneeditthumb, zoneeditdrawing)
-        });
-        $(`#${this.prefix}_zoneeditzoomin`).on('click', () => {
-            zoneeditdrawing.getViewbox().zoomIn();
-            anno_navigationThumb(zoneeditthumb, zoneeditdrawing)
-        });
-        $(`#${this.prefix}_zoneeditfittocanvas`).on('click', () => {
-            zoneeditdrawing.getViewbox().fit(true);
-            zoneeditdrawing.getViewbox().setPosition(xrx.drawing.Orientation.NW);
-            this.anno_navigationThumb(zoneeditthumb, zoneeditdrawing)
-        });
-        $(`#${this.prefix}_zoneeditrotleft`).on('click', () => {
-            zoneeditdrawing.getViewbox().rotateLeft();
-            zoneeditthumb.getViewbox().rotateLeft();
-            this.anno_navigationThumb(zoneeditthumb, zoneeditdrawing)
-        });
-        $(`#${this.prefix}_zoneeditrotright`).on('click', () => {
-            zoneeditdrawing.getViewbox().rotateRight();
-            zoneeditthumb.getViewbox().rotateRight();
-            this.anno_navigationThumb(zoneeditthumb, zoneeditdrawing)
-        });
-        $(`#${this.prefix}_zoneeditpolygon`).on('click', () => {
-            var styleCreatable = new xrx.shape.Style();
-            styleCreatable.setFillColor(`#3B3BFF`);
-            styleCreatable.setFillOpacity(0.1);
-            styleCreatable.setStrokeWidth(1);
-            styleCreatable.setStrokeColor(`#3B3BFF`);
-            var np = new xrx.shape.Polygon(zoneeditdrawing);
-            np.setStyle(styleCreatable);
-            np.getCreatable().setStyle(styleCreatable);
-            zoneeditdrawing.setModeCreate(np.getCreatable());
-            zoneeditdrawing.draw();
-            $(`#${this.prefix}_zoneedittoolbar button`).removeClass('active');
-            $(`#${this.prefix}_zoneeditpolygon`).addClass('active');
-            $(`#${this.prefix}_zoneeditdel`).addClass('disabled');
-        });
-        $(`#${this.prefix}_zoneeditrect`).on('click', () => {
-            var styleCreatable = new xrx.shape.Style();
-            styleCreatable.setFillColor(`#3B3BFF`);
-            styleCreatable.setFillOpacity(0.1);
-            styleCreatable.setStrokeWidth(1);
-            styleCreatable.setStrokeColor(`#3B3BFF`);
-            var nr = new xrx.shape.Rect(zoneeditdrawing);
-            nr.setStyle(styleCreatable);
-            nr.getCreatable().setStyle(styleCreatable);
-            zoneeditdrawing.setModeCreate(nr.getCreatable());
-            zoneeditdrawing.draw();
-            $(`#${this.prefix}_zoneedittoolbar button`).removeClass('active');
-            $(`#${this.prefix}_zoneeditrect`).addClass('active');
-            $(`#${this.prefix}_zoneeditdel`).addClass('disabled');
-        });
-        $(`#${this.prefix}_zoneeditview`).on('click', () => {
-            zoneeditdrawing.setModeView();
-            $(`#${this.prefix}_zoneedittoolbar button`).removeClass('active');
-            $(`#${this.prefix}_zoneeditview`).addClass('active');
-            $(`#${this.prefix}_zoneeditdel`).addClass('disabled');
-        });
-        $(`#${this.prefix}_zoneeditmove`).on('click', () => {
-            zoneeditdrawing.setModeModify();
-            $(`#${this.prefix}_zoneedittoolbar button`).removeClass('active');
-            $(`#${this.prefix}_zoneeditmove`).addClass('active');
-            $(`#${this.prefix}_zoneeditdel`).removeClass('disabled');
-        });
-        $(`#${this.prefix}_zoneeditdel`).on('click', () => {
-            if (typeof(zoneeditdrawing.getSelectedShape()) == 'undefined') {
-                window.alert("Please select a shape");
-                return;
-            }
-            if (window.confirm("Delete selected shape?")) {
-                zoneeditdrawing.removeShape(zoneeditdrawing.getSelectedShape());
-            }
-        });
-
-        $(`#${this.prefix}_but_zoneedit`).on('click', () =>  {
-            $('a[href="#${this.prefix}_tab_zones"').tab('show');
-        });
-
-        //    Oeffnen Zone-Editor-Tab
-        $('a[href="#${this.prefix}_tab_zones"').on('shown.bs.tab', (e) => {
-            $(`#${this.prefix}_zoneeditcanvas canvas`).remove();
-            $(`#${this.prefix}_zoneeditthumb canvas`).remove();
-            $(`#${this.prefix}_zoneeditcanvas`).css('width', $(`#${this.prefix}_zoneedittoolbar`).innerWidth());
-            zoneeditdrawing = new xrx.drawing.Drawing(goog.dom.getElement(this.prefix+'_zoneeditcanvas'));
-            zoneeditdrawing.eventViewboxChange = (x, y) => {
-                this.anno_navigationThumb(zoneeditthumb, zoneeditdrawing)
-            }
-            if (zoneeditdrawing.getEngine().isAvailable()) {
-                zoneeditdrawing.setBackgroundImage(this.options.edit_img_url, () => {
-                    zoneeditdrawing.setModeView();
-                    zoneeditdrawing.getViewbox().fitToWidth(false);
-                    zoneeditdrawing.getViewbox().setZoomFactorMax(4);
-                    var z = $(`#${this.prefix}_field_polygon`).val();
-                    if (z.length > 0) {
-                        var p = z.split('<end>');
-                        var i;
-                        var shapes = [];
-                        for (i = 0; i < p.length; i++) {
-                            if (p[i]) {
-                                var coords = CoordUtils.coordRel2Abs(JSON.parse(`[${p[i]}]`), this.options.edit_img_width);
-                                var shape;
-                                if (CoordUtils.isRectangle(coords)) {
-                                    shape = new xrx.shape.Rect(zoneeditdrawing);
-                                }
-                                else {
-                                    shape = new xrx.shape.Polygon(zoneeditdrawing);
-                                }
-                                shape.setCoords(coords);
-                                shape.setStrokeWidth(1);
-                                shape.setStrokeColor(`#A00000`);
-                                shape.setFillColor('#A00000');
-                                shape.setFillOpacity(0.2);
-                                shape.getSelectable().setFillColor('#000000');
-                                shape.getSelectable().setFillOpacity(0.2);
-                                shape.getSelectable().setStrokeWidth(3);
-                                shapes.push(shape);
-                            }
-                        }
-                        zoneeditdrawing.getLayerShape().addShapes(shapes);
-                    }
-                    zoneeditdrawing.draw();
-                    if (this.options.edit_img_thumb) {
-                        $(`#${this.prefix}_zoneeditthumb`).show();
-                        zoneeditthumb = new xrx.drawing.Drawing(goog.dom.getElement(this.prefix+'_zoneeditthumb'));
-                        if (zoneeditthumb.getEngine().isAvailable()) {
-                            zoneeditthumb.setBackgroundImage(this.options.edit_img_thumb, function() {
-                                zoneeditthumb.setModeDisabled();
-                                zoneeditthumb.getViewbox().fit(true);
-                                zoneeditthumb.getViewbox().setPosition(xrx.drawing.Orientation.NW);
-                                zoneeditthumb.draw();
-                                this.anno_navigationThumb(zoneeditthumb, zoneeditdrawing)
-                            });
-                        }
-                    }
-                });
-            }
-        });
-    }
-
 
 
     initHTMLEditor (selector, language, content) {
@@ -927,89 +767,6 @@ class UBHDAnnoApp {
 //         }
 //     }
 
-
-    anno_navigationThumb (thumbdrawing, origdrawing) {
-        if (typeof(thumbdrawing) == 'undefined') {return}
-        if (typeof(origdrawing) == 'undefined') {return}
-        var status = Cookies.get('navThumb');
-        if (status == '0') {return}
-
-        $('#'+thumbdrawing.element_.id).fadeIn();
-        $('#'+thumbdrawing.element_.id).next('.thumbEye').eq(0).fadeIn();
-        clearTimeout(thumbTimeout);
-        thumbTimeout = setTimeout(function() {
-            $('#'+thumbdrawing.element_.id).fadeOut(1000)
-            $('#'+thumbdrawing.element_.id).next('.thumbEye').eq(0).fadeOut(1000)
-        }, 3000);
-
-        var matrix = origdrawing.getViewbox().ctmDump();
-        var trans = new goog.math.AffineTransform(matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5]);
-        var scaleX = Math.sqrt(Math.pow(trans.getScaleX(), 2)+Math.pow(trans.getShearX(), 2));
-        var scaleY = Math.sqrt(Math.pow(trans.getScaleY(), 2)+Math.pow(trans.getShearY(), 2)); /* == scaleX, wenn keine Scherung */
-        var thumbWidth = thumbdrawing.getLayerBackground().getImage().getWidth();
-        var thumbHeight = thumbdrawing.getLayerBackground().getImage().getHeight();
-        var origwidth = origdrawing.getLayerBackground().getImage().getWidth();
-        var origheight = origdrawing.getLayerBackground().getImage().getHeight();
-        var faktorX = thumbWidth/(origwidth*scaleX);
-        var faktorY = thumbHeight/(origheight*scaleY);
-
-        var bildLO = [];
-        trans.transform([0, 0], 0, bildLO, 0, 1);
-
-        var ausschnittWidth = origdrawing.getCanvas().getWidth();
-        var ausschnittHeight = origdrawing.getCanvas().getHeight();
-        var ausschnittRect = new xrx.shape.Rect(thumbdrawing);
-
-        var ausschnittRectP1 = [];
-        var ausschnittRectP2 = [];
-        var ausschnittRectP3 = [];
-        var ausschnittRectP4 = [];
-        var angle = CoordUtils.angleFromMatrix(matrix[0], matrix[1]);
-        /* Drechung 90 Grad rechts */
-        if (angle == 270) {
-            ausschnittRectP1 = [(0-bildLO[1])*faktorY, (bildLO[0]-ausschnittWidth)*faktorX];
-            ausschnittRectP2 = [(ausschnittHeight-bildLO[1])*faktorY, (bildLO[0]-ausschnittWidth)*faktorX];
-            ausschnittRectP3 = [(ausschnittHeight-bildLO[1])*faktorY, bildLO[0]*faktorX];
-            ausschnittRectP4 = [(0-bildLO[1])*faktorY, bildLO[0]*faktorX]
-        }
-        /* Drechung 180 Grad  */
-        else if (angle == 180) {
-            ausschnittRectP1 = [(bildLO[0]-ausschnittWidth)*faktorX, (bildLO[1]-ausschnittHeight)*faktorY];
-            ausschnittRectP2 = [(bildLO[0])*faktorX, (bildLO[1]-ausschnittHeight)*faktorY];
-            ausschnittRectP3 = [(bildLO[0])*faktorX, (bildLO[1])*faktorY];
-            ausschnittRectP4 = [(bildLO[0]-ausschnittWidth)*faktorX, (bildLO[1])*faktorY];
-        }
-        /* Drechung 90 Grad links */
-        else if (angle == 90) {
-            ausschnittRectP1 = [(bildLO[1]-ausschnittHeight)*faktorY, (0-bildLO[0])*faktorX];
-            ausschnittRectP2 = [(bildLO[1])*faktorY, (0-bildLO[0])*faktorX];
-            ausschnittRectP3 = [(bildLO[1])*faktorY, (ausschnittWidth-bildLO[0])*faktorX];
-            ausschnittRectP4 = [(bildLO[1]-ausschnittHeight)*faktorY, (ausschnittWidth-bildLO[0])*faktorX]
-        }
-        else {
-            /* Drehung 0 Grad */
-            ausschnittRectP1 = [(0-bildLO[0])*faktorX, (0-bildLO[1])*faktorY];
-            ausschnittRectP2 = [(ausschnittWidth-bildLO[0])*faktorX, (0-bildLO[1])*faktorY];
-            ausschnittRectP3 = [(ausschnittWidth-bildLO[0])*faktorX, (ausschnittHeight-bildLO[1])*faktorY];
-            ausschnittRectP4 = [(0-bildLO[0])*faktorX, (ausschnittHeight-bildLO[1])*faktorY];
-        }
-
-        var rect = new xrx.shape.Rect(thumbdrawing);
-        rect.setCoords([ausschnittRectP1, ausschnittRectP2, ausschnittRectP3, ausschnittRectP4]);
-        rect.setStrokeWidth(1.5);
-        var color = '#A00000';
-        if (typeof(zonecolor) == 'object' && zonecolor.length > 3) {
-            color = '#'+zonecolor[0];
-        }
-        rect.setStrokeColor(color);
-        rect.setFillColor(color);
-        rect.setFillOpacity(0.15);
-        var rects = [];
-        rects.push(rect);
-        thumbdrawing.getLayerShape().removeShapes();
-        thumbdrawing.getLayerShape().addShapes(rect);
-        thumbdrawing.draw();
-    }
 
     /*
      * CSS HELPERS

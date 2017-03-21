@@ -1,0 +1,51 @@
+<div>
+
+  <div :id="`${prefix}_zoneedittoolbar`">
+
+    <div class="btn-group" role="group" style="float: left;">
+
+      <zone-editor-button :title="text.move_fak"    on-click="view"        glyphicon="move"            />
+      <zone-editor-button :title="text.zoom_out"    on-click="zoomOut"     glyphicon="zoom-out"        />
+      <zone-editor-button :title="text.zoom_in"     on-click="zoomIn"      glyphicon="zoom-in"         />
+      <zone-editor-button :title="text.fit"         on-click="fitToCanvas" glyphicon="fullscreen"      />
+      <zone-editor-button :title="text.rotate_left" on-click="rotateLeft"  font-awesome="rotate-left"  />
+      <zone-editor-button :title="text.rotate_left" on-click="rotateRight" font-awesome="rotate-right" />
+
+    </div>
+
+    <div style="float: left; margin-left: 30px;">
+
+      <span style="font-size: 90%; color: #505050;">{{text.zones}}</span>
+
+      <div class="btn-group" role="group" style="margin-left: 5px;">
+
+        <zone-editor-button :title="text.add_polygon" on-click="addPolygon"   font-awesome="plus"      src="../../img/polygon.png" alt="polygon" />
+        <zone-editor-button :title="text.add_rect"    on-click="addRectangle" font-awesome="plus"      src="../../img/rect.png"    alt="rect"    />
+        <zone-editor-button :title="text.move_zone"   on-click="moveZone"     font-awesome="hand-o-up"     />
+
+      </div>
+
+      <div class="btn-group" role="group" style="margin-left: 5px;">
+
+        <zone-editor-button :title="text.del_zones" on-click="deleteZone" glyphicon="trash" />
+
+      </div>
+
+    </div>
+
+    <div style="clear: both;"></div>
+
+  </div>
+
+  <div style="position: relative">
+
+    <div :id="`${prefix}_zoneeditcanvas`" style="width: 300px; height: 600px;">
+    </div>
+
+    <div :id="`${prefix}_zoneeditthumb`"
+      style="position: absolute; z-index: 999; top: 2px; left: 2px; width: 120px; opacity: 0.7; height: 120px; border: 1px solid #404040; display: none;">
+    </div>
+
+  </div>
+
+</div>

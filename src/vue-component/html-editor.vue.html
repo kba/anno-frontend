@@ -1,0 +1,34 @@
+<form action="" method="get">
+    <input :id="prefix+'_field_id'"/>
+
+    <input :id="prefix+'_field_parent'"/>
+
+    <div class="form-group">
+        <input :id="prefix+'_field_title'" :placeholder="l10n.annofield_title" class="form-control" type="text" required="true">
+        <br/>
+    </div>
+
+    <div class="form-group">
+        <textarea :id="prefix+'_field_text'" v-model="anno.body.value"></textarea>
+        <tinymce :id="prefix+'_field_text'" :content="anno.body.value" @change="changeHandler" :options="tinymce_options" />
+    </div>
+    <br/>
+
+    <div class="form-group">
+        <input :id="prefix+'_field_link'" :placeholder="l10n.annofield_link" class="form-control" type="text"/>
+        <input :id="prefix+'_field_linktitle'" :placeholder="l10n.annofield_linktitle" class="form-control" type="text"/>
+        <br/>
+    </div>
+
+    <button v-if="edit_img_url && edit_img_width" :id="prefix+'_but_zoneedit'" type="button">
+        <img src="../../img/polygon.png" alt="polygon"> {{l10n.edit_zones}}
+    </button>
+
+    <input v-if="edit_img_url && edit_img_width" :id="prefix+'_field_polygon'" class="form-control"/>
+
+    <div :class="prefix+'license'">{{l10n.license}}
+    </div>
+
+    <div style="clear: both;">
+    </div>
+</form>

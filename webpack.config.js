@@ -9,19 +9,20 @@ module.exports = {
     },
     module: {
         loaders: [
-            {
-                test: require.resolve('tinymce/tinymce'),
-                loaders: [
-                    'imports-loader?this=>window',
-                    'exports-loader?window.tinymce'
-                ]
-            },
-            {
-                test: /tinymce\/(themes|plugins)\//,
-                loaders: [
-                    'imports-loader?this=>window'
-                ]
-            },
+            // {
+            //     test: require.resolve('tinymce/tinymce'),
+            //     loaders: [
+            //         'imports-loader?this=>window',
+            //         'exports-loader?window.tinymce'
+            //     ]
+            // },
+            // {
+            //     test: /tinymce\/(themes|plugins)\//,
+            //     loaders: [
+            //         'imports-loader?this=>window'
+            //     ]
+            // },
+
             // **IMPORTANT** This is needed so that each bootstrap js file required by
             // bootstrap-webpack has access to the jQuery object
             {
@@ -29,16 +30,24 @@ module.exports = {
                 loader: 'imports-loader?jQuery=jquery'
             },
             {
-                test: /\.(eot|svg|ttf|woff(2)?)(\?v=\d+\.\d+\.\d+)?/,
-                loader: 'file-loader?emitFile=false&name=[path][name].[ext]'
+                test: /\.(eot|svg|ttf|woff2)(\?v=\d+\.\d+\.\d+)?/,
+                loader: 'file-loader?emitFile=false',
+            },
+            {
+                test: /\.woff(\?v=\d+\.\d+\.\d+)?/,
+                loader: 'url-loader?name=[path][name].[ext]'
             },
             {
                 test: /\.(png|jpg)$/,
-                loader: "file-loader?emitFile=false&name=[path][name].[ext]"
+                loader: 'url-loader?limit=100000000000000&emitFile=true&name=/[path][name].[ext]',
+                // loader: "file-loader?emitFile=false&name=/[path][name].[ext]"
+                // options: {
+                    // limit: 250000,
+                // },
             },
             {
                 test: /\.vue\.html$/,
-                loader: "raw-loader",
+                loader: "html-loader",
             },
         ]
     },
