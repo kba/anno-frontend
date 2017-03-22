@@ -1,5 +1,25 @@
 # UB Heidelberg Annotationen Frontend
 
+## Structure of the application
+
+All assets are bundled into a JS file `ubhd-anno.js`
+
+Loading `ubhd-anno.js` binds a class `UBHDAnnoApp` to `window`.
+
+`UBHDAnnoApp` can be instantiated to an object `app` with a set of [config options](#config-options).
+
+`app` has a method 
+
+App is a Vue app, component structure:
+
+* `AnnoApp`
+  * `EditorModal`
+    * `ZoneEditor`
+    * `HtmlEditor`
+  * `Sidebar`
+    * `SidebarThread`
+      * `SidebarPost`
+
 ## Building - Set up Repository
 
 Clone the repository and initialize submodules.

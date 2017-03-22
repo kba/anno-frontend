@@ -1,7 +1,7 @@
-<form action="" method="get">
-    <input :id="prefix+'_field_id'"/>
+<form class="form" action="" method="get">
+    <input readonly :id="prefix+'_field_id'" :value="anno.id.replace(/^.*\//,'')"/>
 
-    <input :id="prefix+'_field_parent'"/>
+    <input readonly :id="prefix+'_field_parent'"/>
 
     <div class="form-group">
         <input :id="prefix+'_field_title'" :placeholder="l10n.annofield_title" class="form-control" type="text" required="true">
@@ -9,7 +9,7 @@
     </div>
 
     <div class="form-group">
-        <textarea :id="prefix+'_field_text'" v-model="anno.body.value"></textarea>
+        <!-- <textarea :id="prefix+'_field_text'" v-model="anno.body.value"></textarea> -->
         <tinymce :id="prefix+'_field_text'" :content="anno.body.value" @change="changeHandler" :options="tinymce_options" />
     </div>
     <br/>

@@ -1,6 +1,6 @@
 // npmjs modules
 var Vue     = require('vue')
-var $       = require('jquery')
+// var $       = require('jquery')
 var tinymce = require('tinymce')
 var Base64  = require('js-base64')
 var Cookies = require('js-cookie')

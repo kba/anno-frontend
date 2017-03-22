@@ -2,12 +2,20 @@ const Vue = require('vue')
 const VueTinymce = require('vue-tinymce').default
 Vue.use(VueTinymce)
 
-function HtmlEditorComponent(anno) {
+/* TinyMCE */
+require.context('!file?name=[path][name].[ext]&context=node_modules/tinymce!tinymce/skins', true, /.*/)
+require('tinymce/tinymce');
+require('tinymce/themes/modern/theme');
+require('tinymce/plugins/paste');
+require('tinymce/plugins/link');
+require('tinymce/plugins/image');
 
-    anno.tinymce_options = {
-        // selector: selector,
+function HtmlEditorComponent(data) {
+
+    data.tinymce_options = data.tinymce_options || {
         plugins: 'image link',
-        // language: language,
+        // selector: selector,
+        language: data.language,
         toolbar: [
             'undo redo',
             'formatselect',
@@ -15,7 +23,7 @@ function HtmlEditorComponent(anno) {
             'alignleft aligncenter alignright',
             'bullist numlist indent outdent',
             'link image',
-        ].join('|'),
+        ].join(' | '),
         menubar: false,
         statusbar: false,
         height: 400,
@@ -24,12 +32,11 @@ function HtmlEditorComponent(anno) {
 
     return Vue.component('html-editor', {
         template: require('./html-editor.vue.html'),
-        data: () => anno,
+        data: () => data,
         methods: {
             changeHandler(editor, content) {
-                console.log("STUFF CHANGED")
-                console.log(arguments)
-                console.log("STUFF CHANGED")
+                console.log(data)
+                // this.anno.body.value = content
             },
             activate() {
                 console.log("ACTIVATED!")
