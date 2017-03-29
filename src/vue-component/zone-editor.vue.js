@@ -26,6 +26,12 @@ function ZoneEditorComponent(data) {
 
     const methods = {
 
+        getSvgSelector() {
+            return this.annotation.target
+                .find(t => t.selector && t.selector.type === 'SvgSelector')
+                .selector
+        },
+
         activate(event) {
 
             this.image = new xrx.drawing.Drawing(goog.dom.getElement('ubhdannoprefix_zoneeditcanvas'))
@@ -70,31 +76,21 @@ function ZoneEditorComponent(data) {
 
         fromSVG(...args) {
             this.image.getLayerShape().removeShapes()
-            this.annotation.target
-                .filter(target => target.selector && target.selector.type === 'SvgSelector')
-                .forEach((target) => {
-                    const shapes = XrxUtils.drawFromSvg(target.selector.value, this.image)
-                    shapes.forEach(shape => {
-                        // retain a connection from shape to the target it represents
-                        shape.representsTarget = target
-                        XrxUtils.styleShapeHighlighted(shape)
-                    })
-                })
+            const shapes = XrxUtils.drawFromSvg(this.getSvgSelector().value, this.image)
+            shapes.forEach(shape => {
+                // retain a connection from shape to the SvgSelector it is part of
+                shape.svgSelector = this.getSvgSelector()
+                XrxUtils.styleShapeEditable(shape)
+            })
         },
 
         toSVG(...args) {
-            const groupByTarget = new Map()
-            this.image.getLayerShape().getShapes().forEach(shape => {
-                if (!groupByTarget.has(shape.representsTarget)) {
-                    groupByTarget.set(shape.representsTarget, [])
-                }
-                groupByTarget.get(shape.representsTarget).push(shape)
-            })
-            groupByTarget.forEach((shapes, target) => {
-                const svg = XrxUtils.svgFromShapes(shapes)
-                console.log("New SVG for", target, svg)
-                target.selector.value = svg
-            })
+            const shapes = this.image.getLayerShape().getShapes()
+                .map(shape => console.log(shape.svgSelector) || shape)
+                // .filter(shape => shape.svgSelector === this.getSvgSelector())
+            const svg = XrxUtils.svgFromShapes(shapes)
+            console.log("New SVG", svg)
+            this.getSvgSelector().value = svg
         },
 
 
@@ -129,19 +125,17 @@ function ZoneEditorComponent(data) {
             this.image.setModeModify()
         },
 
-        addPolygon(event) {
-            var newPolygon = new xrx.shape.Polygon(this.image)
-            XrxUtils.styleShapeEditable(newPolygon)
-            this.image.setModeCreate(newPolygon.getCreatable())
-            this.image.draw()
+        _addPath(pathType) {
+            var shape = new xrx.shape[pathType](this.image)
+            XrxUtils.styleShapeEditable(shape)
+            // retain a connection from shape to the SvgSelector it is part of
+            shape.svgSelector = this.getSvgSelector()
+            // this.image.getLayerShape().addShapes(shape);
+            this.image.setModeCreate(shape.getCreatable())
         },
 
-        addRectangle(event) {
-            var newRectangle = new xrx.shape.Rect(this.image)
-            XrxUtils.styleShapeEditable(newRectangle)
-            this.image.setModeCreate(newRectangle.getCreatable())
-            this.image.draw()
-        },
+        addPolygon(event) { this._addPath('Polygon') },
+        addRectangle(event) { this._addPath('Rect') },
 
         deleteZone(event) {
             if (typeof(this.image.getSelectedShape()) == 'undefined') {
