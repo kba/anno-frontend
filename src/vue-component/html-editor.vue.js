@@ -10,6 +10,9 @@ require('tinymce/plugins/paste');
 require('tinymce/plugins/link');
 require('tinymce/plugins/image');
 
+function isHtmlBody(body) { return body.type === 'TextualBody' && body.format === 'text/html' }
+
+
 function HtmlEditorComponent(data) {
 
     data.tinymce_options = data.tinymce_options || {
@@ -33,22 +36,33 @@ function HtmlEditorComponent(data) {
     return Vue.component('html-editor', {
         template: require('./html-editor.vue.html'),
         data: () => data,
-        methods: {
-            changeHandler(editor, content) {
-                console.log(data)
-                // this.anno.body.value = content
+        created() {
+            this._initialValue = this.htmlBody.value
+        },
+        computed: {
+            htmlBody() {
+                // console.log(this)
+                if (!this.annotation.body) this.annotation.body = [{ type: 'TextualBody', format: 'text/html', value: '' }]
+                var ret;
+                if (Array.isArray(this.annotation.body)) 
+                    ret = this.annotation.body.find(isHtmlBody)
+                else if (isHtmlBody(this.annotation.body)) {
+                    ret = this.annotation.body
+                } else {
+                    this.annotation.body = [this.annotation.body]
+                    const newBody = { type: 'TextualBody', format: 'text/html', value: '' }
+                    this.annotation.body.push(newBody)
+                    ret = newBody
+                }
+                return ret
             },
-            activate() {
-                console.log("ACTIVATED!")
-                // var ed = tinymce.editors;
-                // if (ed.length) {
-                    // ed[0].setContent(this.anno.body.value);
-                // }
-                // tinymce.init();
-                // Object.keys(config.tinymce_localizations).forEach(function(lang) {
-                //     tinymce.addI18n(lang, config.tinymce_localizations[lang]);
-                // });
-
+        },
+        methods: {
+            onChange(editor, content) {
+                this.htmlBody.value = content
+            },
+            initialValue() {
+                return this._initialValue;
             },
         },
     })
