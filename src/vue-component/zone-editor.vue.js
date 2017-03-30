@@ -1,4 +1,4 @@
-const {xrx} = require('semtonotes-client')
+const {xrx, goog} = require('semtonotes-client')
 const XrxUtils = require('../xrx-utils')
 const jQuery = require('jquery')
 
@@ -7,16 +7,18 @@ module.exports = {
     template: require('./zone-editor.vue.html'),
 
     components: {
-        'zone-editor-button': require('./zone-editor-button.vue')
+        'bootstrap-button': require('./zone-editor-button.vue')
     },
 
     props: {
         annotation: {type: Object, required: true},
         targetImage: {type: String, required: true},
+        l10n: {type: Object, required: true},
         targetThumbnail: {type: String},
-        l10n: {type: Object},
         canvasHeight: {type: Number, default: 640},
         canvasWidth: {type: Number, default: 480},
+        thumbHeight: {type: Number, default: 120},
+        thumbWidth: {type: Number, default: 120},
     },
 
     created() {
@@ -25,10 +27,26 @@ module.exports = {
 
     mounted() {
         console.log(this.annotation)
-        this.image = new xrx.drawing.Drawing(this.$el.querySelector('#ubhdannoprefix_zoneeditcanvas'))
+        const imageCanvasDiv = this.$el.querySelector('#ubhdannoprefix_zoneeditcanvas')
+        const thumbCanvasDiv = this.$el.querySelector('#ubhdannoprefix_zoneeditthumb')
+        imageCanvasDiv.style.width=300
+        // XXX
+        // XXX monkeypatch goog.style.getSize
+        // Otherwise, canvas size will be 0/0 since that tab page isn't currently visible
+        var orig = goog.style.getSize;
+        goog.style.getSize = (elem) => {
+            if (elem === imageCanvasDiv) return {width: this.canvasWidth, height: this.canvasHeight}
+            if (elem === thumbCanvasDiv) return {width: this.thumbWidth, height: this.thumbHeight}
+            return orig(elem)
+        }
+        imageCanvasDiv.style.display='block !important'
+        console.log(goog.style.getSize(imageCanvasDiv))
+        // var size = goog.style.getSize(this.element_);
+
+        this.image = new xrx.drawing.Drawing(imageCanvasDiv)
         if (!this.image.getEngine().isAvailable()) throw new Error("No Engine available :-( Much sadness")
         if (!this.targetThumbnail) this.targetThumbnail = this.targetImage;
-        this.thumb = new xrx.drawing.Drawing(this.$el.querySelector('#ubhdannoprefix_zoneeditthumb'))
+        this.thumb = new xrx.drawing.Drawing(thumbCanvasDiv)
         if (!this.thumb.getEngine().isAvailable()) throw new Error("No Engine available :-( Much sadness")
 
         jQuery(this.$el).on('click', '.btn-group button', function() {
@@ -36,30 +54,34 @@ module.exports = {
             jQuery(this).siblings().removeClass('active');
         });
 
+        this.thumb.setBackgroundImage(this.targetThumbnail, () => {
+            // XXX why won't it fit initially
+            this.thumb.setModeDisabled()
+            // this.thumb.handleResize()
+            this.thumb.getViewbox().setPosition(xrx.drawing.Position.NW)
+            this.thumb.getViewbox().fit(true)
+            this.showNavigationThumbnail()
+        })
+
         this.image.setBackgroundImage(this.targetImage, () => {
+            // console.log(this.image.getLayerBackground())
+            this.image.setModeView()
             this.image.getViewbox().fitToWidth(false)
+            this.thumb.getViewbox().setPosition(xrx.drawing.Position.NW)
+            this.image.getViewbox().setZoomFactorMax(4)
+
             // Draw all svg targets
             this.fromSVG()
-            this.image.getViewbox().setZoomFactorMax(4)
-            this.image.setModeView()
             this.image.draw()
 
-            if (this.thumb) {
-                // Bind to SemToNotes events
-                this.image.eventViewboxChange = () => {
-                    this.updateNavigationThumb()
-                }
-                this.image.eventShapeModify = () => {
-                    this.toSVG()
-                }
-                this.thumb.setBackgroundImage(this.targetThumbnail, () => {
-                    this.thumb.setModeDisabled()
-                    this.thumb.getViewbox().fit(true)
-                    this.thumb.getViewbox().setPosition(xrx.drawing.Orientation.NW)
-                    this.showNavigationThumbnail()
-                    this.updateNavigationThumb()
-                })
+            // Bind to SemToNotes events
+            this.image.eventViewboxChange = () => {
+                this.updateNavigationThumb()
             }
+            this.image.eventShapeModify = () => {
+                this.toSVG()
+            }
+            this.updateNavigationThumb()
         })
 
     },
@@ -80,10 +102,13 @@ module.exports = {
 
         toSVG(...args) {
             const svg = XrxUtils.svgFromShapes(this.image.getLayerShape().getShapes())
-            // console.log("New SVG", svg)
+            console.log("New SVG", svg)
             this.getSvgSelector().value = svg
+            this.image.handleResize()
+            this.thumb.handleResize()
+            this.image.draw()
+            this.thumb.draw()
         },
-
 
         zoomOut(event) {
             this.image.getViewbox().zoomOut()
@@ -94,18 +119,18 @@ module.exports = {
         },
 
         fitToCanvas(event) {
+            this.image.getViewbox().setPosition(xrx.drawing.Position.NW)
             this.image.getViewbox().fit(true)
-            this.image.getViewbox().setPosition(xrx.drawing.Orientation.NW)
         },
 
         rotateLeft(event) {
             this.image.getViewbox().rotateLeft()
-            if (this.thumb) this.thumb.getViewbox().rotateLeft()
+            this.thumb.getViewbox().rotateLeft()
         },
 
         rotateRight(event) {
             this.image.getViewbox().rotateRight()
-            if (this.thumb) this.thumb.getViewbox().rotateRight()
+            this.thumb.getViewbox().rotateRight()
         },
 
         setModeView(event) {
@@ -123,8 +148,13 @@ module.exports = {
             this.image.setModeCreate(shape.getCreatable())
         },
 
-        addPolygon(event) { this._addPath('Polygon') },
-        addRectangle(event) { this._addPath('Rect') },
+        addPolygon(event) {
+            this._addPath('Polygon')
+        },
+
+        addRectangle(event) {
+            this._addPath('Rect')
+        },
 
         deleteZone(event) {
             if (typeof(this.image.getSelectedShape()) == 'undefined') {
@@ -136,9 +166,17 @@ module.exports = {
             }
         },
 
-        updateNavigationThumb() { XrxUtils.navigationThumb(this.thumb, this.image) },
-        showNavigationThumbnail() { document.querySelector('#ubhdannoprefix_zoneeditthumb').style.display = 'inherit'; },
-        hideNavigationThumbnail() { document.querySelector('#ubhdannoprefix_zoneeditthumb').style.display = 'none'; },
+        updateNavigationThumb() {
+            XrxUtils.navigationThumb(this.thumb, this.image)
+        },
+
+        showNavigationThumbnail() {
+            document.querySelector('#ubhdannoprefix_zoneeditthumb').style.display = 'inherit';
+        },
+
+        hideNavigationThumbnail() {
+            document.querySelector('#ubhdannoprefix_zoneeditthumb').style.display = 'none';
+        },
     }
 
 }

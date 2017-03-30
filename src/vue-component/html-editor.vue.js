@@ -13,14 +13,14 @@ const Vue = require('vue')
 const VueTinymce = require('vue-tinymce').default
 Vue.use(VueTinymce)
 
-function isHtmlBody(body) { return body.type === 'TextualBody' && body.format === 'text/html' }
+            function isHtmlBody(body) { return body.type === 'TextualBody' && body.format === 'text/html' }
 
 module.exports = {
     template: require('./html-editor.vue.html'),
     props: {
         annotation: {type: Object, required: true},
+        l10n: {type: Object, required: true},
         language: {type: String, default: 'de'},
-        l10n: {type: Object},
         tinymceOptions: {
             type: Object,
             default: () => {return {
@@ -53,16 +53,23 @@ module.exports = {
     },
     computed: {
         htmlBody() {
+
             // console.log(this)
-            if (!this.annotation.body) this.annotation.body = [{ type: 'TextualBody', format: 'text/html', value: '' }]
             var ret;
-            if (Array.isArray(this.annotation.body)) 
+            const newBody = { type: 'TextualBody', format: 'text/html', value: '' }
+            if (!this.annotation.body) {
+                this.annotation.body = [newBody]
+                ret = newBody
+            } else if (Array.isArray(this.annotation.body)) {
                 ret = this.annotation.body.find(isHtmlBody)
-            else if (isHtmlBody(this.annotation.body)) {
+                if (!ret) {
+                    this.annotation.body.push(newBody)
+                    ret = newBody
+                }
+            } else if (isHtmlBody(this.annotation.body)) {
                 ret = this.annotation.body
             } else {
                 this.annotation.body = [this.annotation.body]
-                const newBody = { type: 'TextualBody', format: 'text/html', value: '' }
                 this.annotation.body.push(newBody)
                 ret = newBody
             }

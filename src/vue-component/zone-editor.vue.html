@@ -4,14 +4,14 @@
 
     <div class="btn-group" role="group" style="float: left;">
 
-      <zone-editor-button :title="l10n.to_svg"      on-click="toSVG"       font-awesome="sign-out"        />
-      <zone-editor-button :title="l10n.from_svg"    on-click="fromSVG"     font-awesome="sign-in"         />
+      <bootstrap-button :title="l10n.to_svg"      on-click="toSVG"       font-awesome="sign-out"     />
+      <bootstrap-button :title="l10n.from_svg"    on-click="fromSVG"     font-awesome="sign-in"      />
 
-      <zone-editor-button :title="l10n.zoom_out"    on-click="zoomOut"     glyphicon="zoom-out"        />
-      <zone-editor-button :title="l10n.zoom_in"     on-click="zoomIn"      glyphicon="zoom-in"         />
-      <zone-editor-button :title="l10n.fit"         on-click="fitToCanvas" glyphicon="fullscreen"      />
-      <zone-editor-button :title="l10n.rotate_left" on-click="rotateLeft"  font-awesome="rotate-left"  />
-      <zone-editor-button :title="l10n.rotate_left" on-click="rotateRight" font-awesome="rotate-right" />
+      <bootstrap-button :title="l10n.zoom_out"    on-click="zoomOut"     glyphicon="zoom-out"        />
+      <bootstrap-button :title="l10n.zoom_in"     on-click="zoomIn"      glyphicon="zoom-in"         />
+      <bootstrap-button :title="l10n.fit"         on-click="fitToCanvas" glyphicon="fullscreen"      />
+      <bootstrap-button :title="l10n.rotate_left" on-click="rotateLeft"  font-awesome="rotate-left"  />
+      <bootstrap-button :title="l10n.rotate_left" on-click="rotateRight" font-awesome="rotate-right" />
 
     </div>
 
@@ -21,16 +21,16 @@
 
       <div class="btn-group" role="group" style="margin-left: 5px;">
 
-        <zone-editor-button :title="l10n.add_polygon" on-click="addPolygon"   font-awesome="plus"      src="../../img/polygon.png" alt="polygon" />
-        <zone-editor-button :title="l10n.add_rect"    on-click="addRectangle" font-awesome="plus"      src="../../img/rect.png"    alt="rect"    />
-        <zone-editor-button :title="l10n.move_zone"   on-click="moveZone"     font-awesome="hand-o-up"     />
-        <zone-editor-button :title="l10n.move_fak"    on-click="setModeView" glyphicon="move"            />
+        <bootstrap-button :title="l10n.add_polygon" on-click="addPolygon"   font-awesome="plus"      src="../../img/polygon.png" alt="polygon" />
+        <bootstrap-button :title="l10n.add_rect"    on-click="addRectangle" font-awesome="plus"      src="../../img/rect.png"    alt="rect"    />
+        <bootstrap-button :title="l10n.move_zone"   on-click="moveZone"     font-awesome="hand-o-up" />
+        <bootstrap-button :title="l10n.move_fak"    on-click="setModeView"  glyphicon="move"         />
 
       </div>
 
       <div class="btn-group" role="group" style="margin-left: 5px;">
 
-        <zone-editor-button :title="l10n.del_zones" on-click="deleteZone" glyphicon="trash" />
+        <bootstrap-button :title="l10n.del_zones" on-click="deleteZone" glyphicon="trash" />
 
       </div>
 
@@ -42,11 +42,24 @@
 
   <div style="position: relative">
 
-    <div id="ubhdannoprefix_zoneeditcanvas" :style="`width: ` + canvasWidth + `px; height: ` + canvasHeight + `px;`">
+    <div id="ubhdannoprefix_zoneeditcanvas" :style="`
+      width: ${canvasWidth}px;
+      height: ${canvasHeight}px;
+      `">
     </div>
 
-    <div id="ubhdannoprefix_zoneeditthumb"
-      style="position: absolute; z-index: 999; top: 2px; left: 2px; width: 120px; opacity: 0.7; height: 120px; border: 1px solid #404040; display: none;">
+      <!-- display: none; -->
+    <div id="ubhdannoprefix_zoneeditthumb" :style="`
+      width: ${thumbWidth}px;
+      height: ${thumbHeight}px;
+      position: absolute;
+      z-index: 999;
+      top: 2px;
+      left: 2px;
+      opacity: 0.8;
+      border: 1px solid #404040;
+      display: none;
+    `">
     </div>
 
   </div>

@@ -1,5 +1,14 @@
 module.exports = {
-    props: ['on-click', 'glyphicon', 'title', 'font-awesome', 'src', 'alt'],
+    props: {
+        onClick: String,
+        glyphicon: String,
+        title: String,
+        fontAwesome: String,
+        src: String,
+        alt: String,
+        btnSize: {type: String, default: 'sm'},
+        btnClass: {type: String, default: 'default'},
+    },
     template: require('./zone-editor-button.vue.html'),
     methods: {
         clickHandler(event) {
