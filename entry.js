@@ -15,8 +15,9 @@ window.UBHDAnnoApp = require('./src/app.js')
 // For debugging
 window._ubhddebug = {
     Vue: require('vue'),
-    // EditorModal: require('./src/vue-component/zone-editor.vue.js'),
-    ZoneEditorComponent : require('./src/vue-component/zone-editor.vue.js'),
-    HtmlEditorComponent : require('./src/vue-component/html-editor.vue.js'),
+    xrx: require('semtonotes-client').xrx,
+    goog: require('semtonotes-client').goog,
+    ZoneEditor : require('./src/vue-component/zone-editor.vue.js'),
+    HtmlEditor : require('./src/vue-component/html-editor.vue.js'),
     config: require('./src/config.js'),
 }
