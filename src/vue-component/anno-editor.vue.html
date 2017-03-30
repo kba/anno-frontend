@@ -1,43 +1,50 @@
-<div class="panel">
+<div class="panel  panel-default">
 
-  <ul class="nav nav-tabs">
+<div class="panel-heading">
+<h2>Annotation editor</h2>
 
-    <li role="presentation" class="active">
-      <a href="#anno_tab_metadata" role="tab" area-controls="tab_metadata" data-toggle="tab">
-        HTML
-      </a>
-    </li>
+</div>
 
-    <li role="presentation">
-      <a href="#anno_tab_zones" role="tab" area-controls="tab_zones" data-toggle="tab">
-        Zonen
-      </a>
-    </li>
+  <div class="panel-body">
+    <ul class="nav nav-tabs">
 
-    <li role="presentation">
-      <a href="#anno_tab_json" role="tab" area-controls="tab_json" data-toggle="tab">
-        JSON
-      </a>
-    </li>
+      <li role="presentation" class="active">
+        <a href="#anno_tab_metadata" role="tab" area-controls="tab_metadata" data-toggle="tab">
+          HTML
+        </a>
+      </li>
 
-  </ul>
+      <li role="presentation">
+        <a href="#anno_tab_zones" role="tab" area-controls="tab_zones" data-toggle="tab">
+          Zonen
+        </a>
+      </li>
 
-  <div class="tab-content">
+      <li role="presentation">
+        <a href="#anno_tab_json" role="tab" area-controls="tab_json" data-toggle="tab">
+          JSON
+        </a>
+      </li>
 
-    <div role="tabpanel" id="anno_tab_metadata" class="tab-pane active">
-      <html-editor :annotation="annotation" :l10n="l10n"/>
+    </ul>
+
+    <div class="tab-content">
+
+      <div role="tabpanel" id="anno_tab_metadata" class="tab-pane active">
+        <html-editor :annotation="annotation" :l10n="l10n"/>
+      </div>
+
+      <div role="tabpanel" id="anno_tab_zones" class="tab-pane">
+        <zone-editor :annotation="annotation" :l10n="l10n"
+          :targetImage="targetImage"
+          :targetThumbnail="targetThumbnail"
+          />
+      </div>
+
+      <div role="tabpanel" id="anno_tab_json" class="tab-pane active">
+        <pre style="white-space: pre-wrap">{{ annotation }}</pre>
+      </div>
+
     </div>
-
-    <div role="tabpanel" id="anno_tab_zones" class="tab-pane">
-      <zone-editor :annotation="annotation" :l10n="l10n"
-        :targetImage="targetImage"
-        :targetThumbnail="targetThumbnail"
-        />
-    </div>
-
-    <div role="tabpanel" id="anno_tab_json" class="tab-pane active">
-      <pre style="white-space: pre-wrap">{{ annotation }}</pre>
-    </div>
-
   </div>
 </div>

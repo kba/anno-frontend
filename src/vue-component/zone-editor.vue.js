@@ -29,7 +29,6 @@ module.exports = {
         console.log(this.annotation)
         const imageCanvasDiv = this.$el.querySelector('#ubhdannoprefix_zoneeditcanvas')
         const thumbCanvasDiv = this.$el.querySelector('#ubhdannoprefix_zoneeditthumb')
-        imageCanvasDiv.style.width=300
         // XXX
         // XXX monkeypatch goog.style.getSize
         // Otherwise, canvas size will be 0/0 since that tab page isn't currently visible
@@ -39,9 +38,6 @@ module.exports = {
             if (elem === thumbCanvasDiv) return {width: this.thumbWidth, height: this.thumbHeight}
             return orig(elem)
         }
-        imageCanvasDiv.style.display='block !important'
-        console.log(goog.style.getSize(imageCanvasDiv))
-        // var size = goog.style.getSize(this.element_);
 
         this.image = new xrx.drawing.Drawing(imageCanvasDiv)
         if (!this.image.getEngine().isAvailable()) throw new Error("No Engine available :-( Much sadness")
@@ -104,10 +100,6 @@ module.exports = {
             const svg = XrxUtils.svgFromShapes(this.image.getLayerShape().getShapes())
             console.log("New SVG", svg)
             this.getSvgSelector().value = svg
-            this.image.handleResize()
-            this.thumb.handleResize()
-            this.image.draw()
-            this.thumb.draw()
         },
 
         zoomOut(event) {
