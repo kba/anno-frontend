@@ -1,27 +1,31 @@
 const {xrx, goog} = require('semtonotes-client')
 const CoordUtils = require('./coord-utils')
 
+function propToGetter(prop) { return 'get' + prop.substr(0,1).toUpperCase() + prop.substr(1) }
+function propToSetter(prop) { return 'set' + prop.substr(0,1).toUpperCase() + prop.substr(1) }
+
 module.exports = class XrxUtils {
 
-    static styleShapeEditable(shape) {
-        var styleCreatable = new xrx.shape.Style()
-        styleCreatable.setFillColor(`#3B3BFF`)
-        styleCreatable.setFillOpacity(0.4)
-        styleCreatable.setStrokeWidth(1)
-        styleCreatable.setStrokeColor(`#3B3BFF`)
-
-        shape.setStyle(styleCreatable)
-        shape.getCreatable().setStyle(styleCreatable)
-    }
-
-    static styleShapeHighlighted(shape) {
-        shape.setStrokeWidth(1)
-        shape.setStrokeColor(`#A00000`)
-        shape.setFillColor('#A00000')
-        shape.setFillOpacity(0.4)
-        shape.getSelectable().setFillColor('#000000')
-        shape.getSelectable().setFillOpacity(0.2)
-        shape.getSelectable().setStrokeWidth(3)
+    static applyStyle(objs, styleDef) {
+        if (!Array.isArray(objs)) objs = [objs]
+        objs.forEach(obj => {
+            if (!obj) return
+            const style = new xrx.shape.Style()
+            Object.keys(styleDef).forEach(prop => {
+                const val = styleDef[prop]
+                try {
+                    if (typeof val === 'object') {
+                        XrxUtils.applyStyle(obj[propToGetter(prop)](), val)
+                    } else {
+                        style[propToSetter(prop)](val)
+                    }
+                } catch (err) {
+                    console.log("Failed for", prop, val, obj)
+                    throw(err)
+                }
+            })
+            obj.setStyle(style)
+        })
     }
 
     static createDrawing(elem, width, height) {

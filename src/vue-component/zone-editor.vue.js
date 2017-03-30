@@ -2,6 +2,37 @@ const {xrx, goog} = require('semtonotes-client')
 const XrxUtils = require('../xrx-utils')
 const jQuery = require('jquery')
 
+const defaultStyles = {
+    default: {
+        strokeWidth: 1,
+        strokeColor: '#3B3BFF',
+        fillColor: '#3B3BFF',
+        fillOpacity: 0.4,
+        creatable: {
+            strokeWidth: 1,
+            strokeColor: '#3B3BFF',
+            fillColor: '#3B3BFF',
+            fillOpacity: 0.4,
+        },
+        selectable: {
+            strokeColor: '#ff00ff',
+            fillColor: '#ff00ff',
+        },
+    },
+    // hover: {
+    //     fillOpacity: 1,
+    // },
+    modified: {
+        strokeColor: '#ff0000',
+        fillColor: '#ffff00',
+        fillOpacity: 0.4,
+        creatable: {
+            strokeColor: '#ff0000',
+            fillColor: '#ffff00',
+        }
+    }
+}
+
 module.exports = {
 
     template: require('./zone-editor.vue.html'),
@@ -19,6 +50,7 @@ module.exports = {
         canvasWidth: {type: Number, default: 480},
         thumbHeight: {type: Number, default: 120},
         thumbWidth: {type: Number, default: 120},
+        style: {type: Object, default: () => {return defaultStyles}},
     },
 
     created() {
@@ -50,7 +82,7 @@ module.exports = {
 
         this.image.setBackgroundImage(this.targetImage, () => {
             // console.log(this.image.getLayerBackground())
-            this.image.setModeView()
+            this.image.setModeHover()
             this.image.getViewbox().fitToWidth(false)
             this.thumb.getViewbox().setPosition(xrx.drawing.Position.NW)
             this.image.getViewbox().setZoomFactorMax(4)
@@ -63,9 +95,16 @@ module.exports = {
             this.image.eventViewboxChange = () => {
                 this.updateNavigationThumb()
             }
-            this.image.eventShapeModify = () => {
+            this.image.eventShapeModify = (shape) => {
                 this.toSVG()
+                XrxUtils.applyStyle(shape, this.style.modified)
             }
+            // this.image.eventShpeHoverIn = (shape) => {
+            //     XrxUtils.applyStyle(shape, this.style.hover)
+            // }
+            // this.image.eventShapeHoverIn = (shape) => {
+            //     XrxUtils.applyStyle(shape, this.style.default)
+            // }
             this.updateNavigationThumb()
         })
 
@@ -82,7 +121,7 @@ module.exports = {
         fromSVG(...args) {
             this.image.getLayerShape().removeShapes()
             const shapes = XrxUtils.drawFromSvg(this.getSvgSelector().value, this.image)
-            shapes.forEach(shape => XrxUtils.styleShapeEditable(shape))
+            shapes.forEach(shape => XrxUtils.applyStyle(shape, this.style.default))
         },
 
         toSVG(...args) {
@@ -115,7 +154,7 @@ module.exports = {
         },
 
         setModeView(event) {
-            this.image.setModeView()
+            this.image.setModeHover()
         },
 
         moveZone(event) {
@@ -124,7 +163,8 @@ module.exports = {
 
         _addPath(pathType) {
             var shape = new xrx.shape[pathType](this.image)
-            XrxUtils.styleShapeEditable(shape)
+            XrxUtils.applyStyle(shape, this.style.modified)
+            // XrxUtils.styleShapeEditable(shape)
             // this.image.getLayerShape().addShapes(shape);
             this.image.setModeCreate(shape.getCreatable())
         },
