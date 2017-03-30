@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head><script type="text/javascript" src="../../dist/ubhd-anno.js"> </script></head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="anchor"></div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+const {Vue, config, HtmlEditor} = window._ubhddebug
+window.annotation =  {
+  id: 'https://anno.ub.uni-heidelberg.de/123',
+  body: {
+    type: 'TextualBody',
+    format: 'text/html',
+    value: 'Some <strong>bold</strong> statements here.',
+  },
+  target: {
+    source: 'http://foo.bar',
+  },
+}
+window.app = new Vue({
+  el: '#anchor',
+  data: {
+    l10n: config.localizations,
+    annotation
+  },
+  template: '<html-editor :annotation="annotation" :l10n="l10n" />',
+  components: {
+    'html-editor': HtmlEditor
+  }
+})
+</script></body></html>

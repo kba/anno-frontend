@@ -1,6 +1,4 @@
-const Vue = require('vue')
-const VueTinymce = require('vue-tinymce').default
-Vue.use(VueTinymce)
+const config = require('../config')
 
 /* TinyMCE */
 require.context('!file?name=[path][name].[ext]&context=node_modules/tinymce!tinymce/skins', true, /.*/)
@@ -10,63 +8,74 @@ require('tinymce/plugins/paste');
 require('tinymce/plugins/link');
 require('tinymce/plugins/image');
 
+/* register vue-tinymce component */
+const Vue = require('vue')
+const VueTinymce = require('vue-tinymce').default
+Vue.use(VueTinymce)
+
 function isHtmlBody(body) { return body.type === 'TextualBody' && body.format === 'text/html' }
 
-
-function HtmlEditorComponent(data) {
-
-    data.tinymce_options = data.tinymce_options || {
-        plugins: 'image link',
-        // selector: selector,
-        language: data.language,
-        toolbar: [
-            'undo redo',
-            'formatselect',
-            'bold italic underline blockquote',
-            'alignleft aligncenter alignright',
-            'bullist numlist indent outdent',
-            'link image',
-        ].join(' | '),
-        menubar: false,
-        statusbar: false,
-        height: 400,
-        width: 350,
-    }
-
-    return Vue.component('html-editor', {
-        template: require('./html-editor.vue.html'),
-        data: () => data,
-        created() {
-            this._initialValue = this.htmlBody.value
+module.exports = {
+    template: require('./html-editor.vue.html'),
+    props: {
+        annotation: {type: Object, required: true},
+        language: {type: String, default: 'de'},
+        l10n: {type: Object},
+        tinymceOptions: {
+            type: Object,
+            default: () => {return {
+                plugins: 'image link',
+                // language: data.language,
+                toolbar: [
+                    'undo redo',
+                    'formatselect',
+                    'bold italic underline blockquote',
+                    'alignleft aligncenter alignright',
+                    'bullist numlist indent outdent',
+                    'link image',
+                ].join(' | '),
+                menubar: false,
+                statusbar: false,
+                height: 400,
+                width: 350,
+            }}
         },
-        computed: {
-            htmlBody() {
-                // console.log(this)
-                if (!this.annotation.body) this.annotation.body = [{ type: 'TextualBody', format: 'text/html', value: '' }]
-                var ret;
-                if (Array.isArray(this.annotation.body)) 
-                    ret = this.annotation.body.find(isHtmlBody)
-                else if (isHtmlBody(this.annotation.body)) {
-                    ret = this.annotation.body
-                } else {
-                    this.annotation.body = [this.annotation.body]
-                    const newBody = { type: 'TextualBody', format: 'text/html', value: '' }
-                    this.annotation.body.push(newBody)
-                    ret = newBody
-                }
-                return ret
-            },
+    },
+    created() {
+        this._initialValue = this.htmlBody.value
+        this.tinymceOptions.language = this.language
+
+        // Add localizations by faking a URI since tinymce expects languages at
+        // a certain place but can be overridden with language_url
+        this.tinymceOptions.language_url = `data:text/javascript;charset=UTF-8,tinymce.addI18n('${this.language}',${
+            JSON.stringify(config.tinymce_localizations[this.language])
+        });`
+    },
+    computed: {
+        htmlBody() {
+            // console.log(this)
+            if (!this.annotation.body) this.annotation.body = [{ type: 'TextualBody', format: 'text/html', value: '' }]
+            var ret;
+            if (Array.isArray(this.annotation.body)) 
+                ret = this.annotation.body.find(isHtmlBody)
+            else if (isHtmlBody(this.annotation.body)) {
+                ret = this.annotation.body
+            } else {
+                this.annotation.body = [this.annotation.body]
+                const newBody = { type: 'TextualBody', format: 'text/html', value: '' }
+                this.annotation.body.push(newBody)
+                ret = newBody
+            }
+            return ret
         },
-        methods: {
-            onChange(editor, content) {
-                this.htmlBody.value = content
-            },
-            initialValue() {
-                return this._initialValue;
-            },
+    },
+    methods: {
+        onChange(editor, content) {
+            this.htmlBody.value = content
         },
-    })
+        initialValue() {
+            return this._initialValue;
+        },
+    },
 
 }
-
-module.exports = HtmlEditorComponent
