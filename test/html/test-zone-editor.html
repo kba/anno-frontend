@@ -13,7 +13,7 @@
 </div>
 <script type="text/javascript">
 
-const {Vue, config, HtmlEditorComponent} = window._ubhddebug
+const {Vue, config, ZoneEditor} = window._ubhddebug
 
 window.app = new Vue({
   el: '#anchor',
@@ -27,7 +27,7 @@ window.app = new Vue({
             type: "SvgSelector",
             value: `<svg xmlns="http://www.w3.org/2000/svg">
               <rect x="200" y="200" width="200" height="200"/>
-              <rect x="200" y="000" width="100" height="100"/>
+              <rect x="200" y="100" width="100" height="100"/>
             </svg>`,
           }
         },
@@ -44,7 +44,7 @@ window.app = new Vue({
     />
   `,
   components: {
-    'zone-editor': ZoneEditorComponent({})
+    'zone-editor': ZoneEditor
   }
 })
 
