@@ -13,7 +13,7 @@
 </div>
 <script type="text/javascript">
 
-const {Vue, config, ZoneEditor} = window._ubhddebug
+const {Vue, config, AnnoEditor} = window._ubhddebug
 
 window.app = new Vue({
   el: '#anchor',
@@ -39,7 +39,7 @@ window.app = new Vue({
     }
   },
   template: `
-    <zone-editor
+    <anno-editor
       :annotation="annotation"
       :l10n="l10n"
       :canvasHeight="600"
@@ -48,10 +48,11 @@ window.app = new Vue({
     />
   `,
   components: {
-    'zone-editor': ZoneEditor
+    'anno-editor': AnnoEditor
   }
 })
 
 </script>
 </body>
 </html>
+

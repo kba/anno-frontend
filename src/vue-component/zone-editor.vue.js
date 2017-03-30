@@ -23,27 +23,16 @@ module.exports = {
 
     created() {
         if (!this.targetImage) throw new Error("Must set 'targetImage'")
+        if (!this.targetThumbnail) this.targetThumbnail = this.targetImage;
     },
 
     mounted() {
         console.log(this.annotation)
-        const imageCanvasDiv = this.$el.querySelector('#ubhdannoprefix_zoneeditcanvas')
-        const thumbCanvasDiv = this.$el.querySelector('#ubhdannoprefix_zoneeditthumb')
-        // XXX
-        // XXX monkeypatch goog.style.getSize
-        // Otherwise, canvas size will be 0/0 since that tab page isn't currently visible
-        var orig = goog.style.getSize;
-        goog.style.getSize = (elem) => {
-            if (elem === imageCanvasDiv) return {width: this.canvasWidth, height: this.canvasHeight}
-            if (elem === thumbCanvasDiv) return {width: this.thumbWidth, height: this.thumbHeight}
-            return orig(elem)
-        }
+        const canvasDiv = this.$el.querySelector('#ubhdannoprefix_zoneeditcanvas')
+        this.image = XrxUtils.createDrawing(canvasDiv, this.canvasWidth, this.canvasHeight)
 
-        this.image = new xrx.drawing.Drawing(imageCanvasDiv)
-        if (!this.image.getEngine().isAvailable()) throw new Error("No Engine available :-( Much sadness")
-        if (!this.targetThumbnail) this.targetThumbnail = this.targetImage;
-        this.thumb = new xrx.drawing.Drawing(thumbCanvasDiv)
-        if (!this.thumb.getEngine().isAvailable()) throw new Error("No Engine available :-( Much sadness")
+        const thumbDiv = this.$el.querySelector('#ubhdannoprefix_zoneeditthumb')
+        this.thumb = XrxUtils.createDrawing(thumbDiv, this.thumbWidth, this.thumbHeight)
 
         jQuery(this.$el).on('click', '.btn-group button', function() {
             this.classList.add('active');

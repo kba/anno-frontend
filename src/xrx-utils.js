@@ -6,7 +6,7 @@ module.exports = class XrxUtils {
     static styleShapeEditable(shape) {
         var styleCreatable = new xrx.shape.Style()
         styleCreatable.setFillColor(`#3B3BFF`)
-        styleCreatable.setFillOpacity(0.1)
+        styleCreatable.setFillOpacity(0.4)
         styleCreatable.setStrokeWidth(1)
         styleCreatable.setStrokeColor(`#3B3BFF`)
 
@@ -18,10 +18,21 @@ module.exports = class XrxUtils {
         shape.setStrokeWidth(1)
         shape.setStrokeColor(`#A00000`)
         shape.setFillColor('#A00000')
-        shape.setFillOpacity(0.2)
+        shape.setFillOpacity(0.4)
         shape.getSelectable().setFillColor('#000000')
         shape.getSelectable().setFillOpacity(0.2)
         shape.getSelectable().setStrokeWidth(3)
+    }
+
+    static createDrawing(elem, width, height) {
+        var origGetSize = goog.style.getSize;
+        goog.style.getSize = (elem) => {
+            if (elem === elem) return {width, height}
+            return origGetSize(elem)
+        }
+        const ret = new xrx.drawing.Drawing(elem)
+        if (!ret.getEngine().isAvailable()) throw new Error("No Engine available :-( Much sadness")
+        return ret
     }
 
     static drawFromSvg(svgString, drawing) {
