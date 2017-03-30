@@ -9,7 +9,7 @@ module.exports = {
         btnSize: {type: String, default: 'sm'},
         btnClass: {type: String, default: 'default'},
     },
-    template: require('./zone-editor-button.vue.html'),
+    template: require('./bootstrap-button.vue.html'),
     methods: {
         clickHandler(event) {
             this.$parent[this.onClick](event)

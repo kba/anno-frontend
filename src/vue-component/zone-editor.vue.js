@@ -7,7 +7,7 @@ module.exports = {
     template: require('./zone-editor.vue.html'),
 
     components: {
-        'bootstrap-button': require('./zone-editor-button.vue')
+        'bootstrap-button': require('./bootstrap-button.vue')
     },
 
     props: {
