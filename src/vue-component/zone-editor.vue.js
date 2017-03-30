@@ -1,5 +1,5 @@
 const Vue = require('vue')
-const {xrx, goog} = require('semtonotes-client')
+const {xrx} = require('semtonotes-client')
 const CoordUtils = require('../coord-utils')
 const XrxUtils = require('../xrx-utils')
 const jQuery = require('jquery')
@@ -29,20 +29,26 @@ function ZoneEditorComponent(data) {
 
     return Vue.component('zone-editor', {
         template: require('./zone-editor.vue.html'),
-        data: () => data,
+        props: {
+            annotation: {type: Object, required: true},
+            targetImage: {type: String, required: true},
+            targetThumbnail: {type: String},
+            l10n: {type: Object},
+            canvasHeight: {type: Number, default: 640},
+            canvasWidth: {type: Number, default: 480},
+        },
         created() {
-            this.canvasWidth  = this.canvasWidth  || 600
-            this.canvasHeight = this.canvasHeight || 300
-            if (!this.targetImage) throw new Error("Must pass 'targetImage' option")
+            if (!this.targetImage) throw new Error("Must set 'targetImage'")
         },
         mounted() {
-            this.image = new xrx.drawing.Drawing(goog.dom.getElement('ubhdannoprefix_zoneeditcanvas'))
+            console.log(this.annotation)
+            this.image = new xrx.drawing.Drawing(this.$el.querySelector('#ubhdannoprefix_zoneeditcanvas'))
             if (!this.image.getEngine().isAvailable()) throw new Error("No Engine available :-( Much sadness")
-            ;['targetImage', 'targetThumbnail'].forEach(k => {
-                if (this[k] && typeof this[k] === 'string') this[k] = {id: this[k]}
-            })
+            // ;['targetImage', 'targetThumbnail'].forEach(k => {
+                // if (this[k] && typeof this[k] === 'string') this[k] = {id: this[k]}
+            // })
             if (!this.targetThumbnail) this.targetThumbnail = this.targetImage;
-            this.thumb = new xrx.drawing.Drawing(goog.dom.getElement('ubhdannoprefix_zoneeditthumb'))
+            this.thumb = new xrx.drawing.Drawing(this.$el.querySelector('#ubhdannoprefix_zoneeditthumb'))
             if (!this.thumb.getEngine().isAvailable()) throw new Error("No Engine available :-( Much sadness")
 
             jQuery(this.$el).on('click', '.btn-group button', function() {
@@ -50,7 +56,7 @@ function ZoneEditorComponent(data) {
                 jQuery(this).siblings().removeClass('active');
             });
 
-            this.image.setBackgroundImage(this.targetImage.id, () => {
+            this.image.setBackgroundImage(this.targetImage, () => {
                 this.image.getViewbox().fitToWidth(false)
                 // Draw all svg targets
                 this.fromSVG()
@@ -67,7 +73,7 @@ function ZoneEditorComponent(data) {
                     this.image.eventShapeModify = () => {
                         this.toSVG()
                     }
-                    this.thumb.setBackgroundImage(this.targetThumbnail.id, () => {
+                    this.thumb.setBackgroundImage(this.targetThumbnail, () => {
                         this.thumb.setModeDisabled()
                         this.thumb.getViewbox().fit(true)
                         this.thumb.getViewbox().setPosition(xrx.drawing.Orientation.NW)
