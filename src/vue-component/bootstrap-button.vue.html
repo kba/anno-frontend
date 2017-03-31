@@ -1,5 +1,6 @@
-<button :class="`btn btn-${btnClass} btn-${btnSize}`" :id="'ubhdannoprefix_zoneeditor_' + onClick" :title="title" v-on:click="clickHandler">
+<button :class="`btn btn-${btnClass} btn-${btnSize}`" :title="title" @click="$emit('click', $event)">
   <span v-if="glyphicon" :class="'glyphicon glyphicon-'+glyphicon"></span>
   <span v-else-if="fontAwesome" :class="'fa fa-'+fontAwesome"></span>
   <img v-if="src" :src="src" :alt="alt" />
+  <slot></slot>
 </button>

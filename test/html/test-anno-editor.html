@@ -15,17 +15,55 @@
 
 const {Vue, config, AnnoEditor} = window._ubhddebug
 
-window.app = new Vue({
-  el: '#anchor',
-  data: {
-    l10n: config.localizations.de,
-    annotation: {
-      body: [],
-      target: [
-        {
-          selector: {
-            type: "SvgSelector",
-            value: `<svg xmlns="http://www.w3.org/2000/svg">
+window.UBHDANNO_ENDPOINT = 'http://anno.ub.uni-heidelberg.de/cgi-bin/anno.cgi'
+window.UBHDANNO_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoia2JhIiwic2VydmljZSI6ImtiYS10ZXN0LXNlcnZpY2UiLCJ3cml0ZSI6MSwiZXhwIjozMTUzNjAwMDB9.M6OoYjbjhHoSMZqs-lGLnrgPPMNJhwLwwk3OuCXETiA'
+
+window.annoList = [
+  {
+    '@context': "http://anno.ub.uni-heidelberg.de/context.jsonld",
+    body: [
+      {
+        format: "text/html",
+        id: "http://anno.ub.uni-heidelberg.de/cgi-bin/anno.cgi?id=802168b6-873f-4194-88b2-8e6a29a1493b&body=1&rev=1",
+        type: "TextualBody",
+        value: ""
+      }
+    ],
+    created: "2017-03-31 11:22:27",
+    creator: "kba",
+    hasVersion: [
+      {
+        created: "2017-03-31 11:22:27",
+        id: "http://anno.ub.uni-heidelberg.de/cgi-bin/anno.cgi?id=802168b6-873f-4194-88b2-8e6a29a1493b&rev=1"
+      }
+    ],
+    id: "http://anno.ub.uni-heidelberg.de/cgi-bin/anno.cgi?id=802168b6-873f-4194-88b2-8e6a29a1493b&rev=1",
+    target: [
+      {
+        id: "http://anno.ub.uni-heidelberg.de/cgi-bin/anno.cgi?id=802168b6-873f-4194-88b2-8e6a29a1493b&target=1&rev=1",
+        selector: {
+          type: "SvgSelector",
+          value: '<svg xmlns="http://www.w3.org/2000/svg"> <rect x="0" y="0" width="200" height="200"/> <rect x="200" y="200" width="200" height="200"/> <rect x="400" y="400" width="200" height="200"/> <rect x="600" y="600" width="200" height="200"/> <rect x="800" y="800" width="200" height="200"/> <rect x="800" y="1000" width="224" height="24"/> </svg>'
+        },
+        source: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png"
+      }
+    ]
+  },
+  {
+    body: [
+      { motivation: 'tagging', value: 'tag0', },
+      { motivation: 'tagging', value: 'tag1', },
+      { motivation: 'tagging', value: 'tag2', },
+      { motivation: 'tagging', value: 'tag3', },
+      { motivation: 'tagging', value: 'tag4', },
+      { motivation: 'tagging', value: 'tag5', },
+    ],
+    target: [
+      {
+        source: 'http://foo',
+        selector: {
+          type: "SvgSelector",
+          value: `<svg xmlns="http://www.w3.org/2000/svg">
               <rect x="0" y="0" width="200" height="200"/>
               <rect x="200" y="200" width="200" height="200"/>
               <rect x="400" y="400" width="200" height="200"/>
@@ -33,10 +71,17 @@ window.app = new Vue({
               <rect x="800" y="800" width="200" height="200"/>
               <rect x="800" y="1000" width="224" height="24"/>
             </svg>`,
-          }
-        },
-      ],
-    }
+        }
+      },
+    ],
+  }
+]
+
+window.app = new Vue({
+  el: '#anchor',
+  data: {
+    l10n: config.localizations.de,
+    annotation: window.annoList[1],
   },
   template: `
     <anno-editor

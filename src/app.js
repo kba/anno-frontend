@@ -16,8 +16,7 @@ var annoColTemplate      = require('../template/annoCol.vue.html')
 // var versionTemplate      = require('../template/version.vue.html')
 
 var zoneeditdrawing;
-var zoneeditthumb;
-var thumbTimeout;
+// var thumbTimeout;
 
 const commentsComponent = require('./vue-component/comments.vue.js')
 const ZoneEditorComponent = require('./vue-component/zone-editor.vue.js')

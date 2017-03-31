@@ -1,50 +1,37 @@
-<div class="panel  panel-default">
-
-<div class="panel-heading">
-<h2>Annotation editor</h2>
-
-</div>
-
-  <div class="panel-body">
-    <ul class="nav nav-tabs">
-
-      <li role="presentation" class="active">
-        <a href="#anno_tab_metadata" role="tab" area-controls="tab_metadata" data-toggle="tab">
-          HTML
-        </a>
-      </li>
-
-      <li role="presentation">
-        <a href="#anno_tab_zones" role="tab" area-controls="tab_zones" data-toggle="tab">
-          Zonen
-        </a>
-      </li>
-
-      <li role="presentation">
-        <a href="#anno_tab_json" role="tab" area-controls="tab_json" data-toggle="tab">
-          JSON
-        </a>
-      </li>
-
-    </ul>
-
-    <div class="tab-content">
-
-      <div role="tabpanel" id="anno_tab_metadata" class="tab-pane active">
-        <html-editor :annotation="annotation" :l10n="l10n"/>
-      </div>
-
-      <div role="tabpanel" id="anno_tab_zones" class="tab-pane">
-        <zone-editor :annotation="annotation" :l10n="l10n"
-          :targetImage="targetImage"
-          :targetThumbnail="targetThumbnail"
-          />
-      </div>
-
-      <div role="tabpanel" id="anno_tab_json" class="tab-pane active">
-        <pre style="white-space: pre-wrap">{{ annotation }}</pre>
-      </div>
-
-    </div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h2>Annotation editor</h2>
+    <a :href="annotation.id">{{ annotation.id || 'Unsaved' }}</a>
+    <bootstrap-button :on-click="save">Save</bootstrap-button>
   </div>
+
+  <bootstrap-tabs class="panel-body">
+
+    <bootstrap-tab name="annoeditor_tab_html" title="HTML">
+      <html-editor
+        :annotation="annotation" 
+        :l10n="l10n"
+        />
+    </bootstrap-tab>
+
+    <bootstrap-tab name="annoeditor_tab_zones" title="Zonen" v-if="targetImage">
+      <zone-editor
+        :annotation="annotation"
+        :l10n="l10n"
+        :targetImage="targetImage"
+        :targetThumbnail="targetThumbnail"
+        />
+    </bootstrap-tab>
+
+    <bootstrap-tab name="annoeditor_tab_json" title="JSON">
+      <pre style="white-space: pre-wrap">{{ annotation }}</pre>
+    </bootstrap-tab>
+
+    <bootstrap-tab name="annoeditor_tab_tags" title="Schlagworte" active="true">
+      <tag-editor
+        :annotation="annotation"
+        />
+    </bootstrap-tab>
+
+  </bootstrap-tabs>
 </div>

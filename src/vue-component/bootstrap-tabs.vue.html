@@ -1,0 +1,15 @@
+<div>
+  <ul class="nav nav-tabs">
+    <li role="presentation"
+      v-for="tab in tablist"
+      :class="{'active':tab.active}"
+      >
+      <a :href="'#' + tab.name" :aria-controls="tab.name" role="tab" data-toggle="tab">
+        {{tab.title}}
+      </a>
+    </li>
+  </ul>
+  <div class="tab-content">
+    <slot></slot>
+  </div>
+</div>

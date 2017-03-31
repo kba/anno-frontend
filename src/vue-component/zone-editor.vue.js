@@ -33,6 +33,16 @@ const defaultStyles = {
     }
 }
 
+function createSvgTarget(ctx) {
+    return {
+        source: ctx.targetImage,
+        selector: {
+            type: 'SvgSelector',
+            value: '',
+        }
+    }
+}
+
 module.exports = {
 
     template: require('./zone-editor.vue.html'),
@@ -66,6 +76,7 @@ module.exports = {
         const thumbDiv = this.$el.querySelector('#ubhdannoprefix_zoneeditthumb')
         this.thumb = XrxUtils.createDrawing(thumbDiv, this.thumbWidth, this.thumbHeight)
 
+        // Keep only one button active
         jQuery(this.$el).on('click', '.btn-group button', function() {
             this.classList.add('active');
             jQuery(this).siblings().removeClass('active');
@@ -112,22 +123,31 @@ module.exports = {
 
     methods: {
 
-        getSvgSelector() {
-            return this.annotation.target
+        getSvgTarget() {
+            if (!this.annotation.target) this.annotation.target = []
+            if (!Array.isArray(this.annotation.target)) {
+                this.annotation.target = [this.annotation.target]
+            }
+            var svgTarget = this.annotation.target
                 .find(t => t.selector && t.selector.type === 'SvgSelector')
-                .selector
+            if (!svgTarget) {
+                svgTarget = createSvgTarget(this)
+                this.annotation.target.push(svgTarget)
+            }
+            if (!svgTarget.source) svgTarget.source = this.targetImage
+            return svgTarget
         },
 
         fromSVG(...args) {
             this.image.getLayerShape().removeShapes()
-            const shapes = XrxUtils.drawFromSvg(this.getSvgSelector().value, this.image)
+            const shapes = XrxUtils.drawFromSvg(this.getSvgTarget().selector.value, this.image)
             shapes.forEach(shape => XrxUtils.applyStyle(shape, this.style.default))
         },
 
         toSVG(...args) {
             const svg = XrxUtils.svgFromShapes(this.image.getLayerShape().getShapes())
             console.log("New SVG", svg)
-            this.getSvgSelector().value = svg
+            this.getSvgTarget().selector.value = svg
         },
 
         zoomOut(event) {

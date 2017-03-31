@@ -1,14 +1,9 @@
 <form class="form" action="" method="get">
-    <input readonly id="ubhdannoprefix_field_id" :value="annotation"/>
 
-    <input readonly id="ubhdannoprefix_field_parent"/>
-
+  <br/>
     <div class="form-group">
         <input id="ubhdannoprefix_field_title" :placeholder="l10n.annofield_title" v-model="htmlBody.title" class="form-control" type="text" required="true">
         <br/>
-    </div>
-
-    <div class="form-group">
         <tinymce id="ubhdannoprefix_field_text" :content="initialValue()" @change="onChange" :options="tinymceOptions" />
     </div>
     <br/>
@@ -25,8 +20,8 @@
 
     <!-- <input v-if="edit_img_url && edit_img_width" id="ubhdannoprefix_field_polygon" class="form-control"/> -->
 
-    <div class="ubhdannoprefixlicense">{{l10n.license}}</div>
+    <select v-model="annotation.rights">
+      <option :name="l10n.license">{{l10n.license}}</option>
+    </select>
 
-    <div style="clear: both;">
-    </div>
 </form>

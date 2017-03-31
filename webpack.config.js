@@ -10,19 +10,19 @@ module.exports = {
     module: {
         loaders: [
             // {
-            //     test: require.resolve('tinymce/tinymce'),
-            //     loaders: [
-            //         'imports-loader?this=>window',
-            //         'exports-loader?window.tinymce'
-            //     ]
+            //     test: /\.vue$/,
+            //     loader: 'vue-loader',
+            //     options: {
+            //         loaders: {
+            //             // Since sass-loader (weirdly) has SCSS as its default parse mode, we map
+            //             // the "scss" and "sass" values for the lang attribute to the right configs here.
+            //             // other preprocessors should work out of the box, no loader config like this necessary.
+            //             'scss': 'vue-style-loader!css-loader!sass-loader',
+            //             'sass': 'vue-style-loader!css-loader!sass-loader?indentedSyntax'
+            //         }
+            //         // other vue-loader options go here
+            //     }
             // },
-            // {
-            //     test: /tinymce\/(themes|plugins)\//,
-            //     loaders: [
-            //         'imports-loader?this=>window'
-            //     ]
-            // },
-
             // **IMPORTANT** This is needed so that each bootstrap js file required by
             // bootstrap-webpack has access to the jQuery object
             {
@@ -30,11 +30,11 @@ module.exports = {
                 loader: 'imports-loader?jQuery=jquery'
             },
             {
-                test: /\.(eot|svg|ttf|woff2)(\?v=\d+\.\d+\.\d+)?/,
+                test: /\.(eot|svg|ttf)(\?v=\d+\.\d+\.\d+)?/,
                 loader: 'file-loader?emitFile=false',
             },
             {
-                test: /\.woff(\?v=\d+\.\d+\.\d+)?/,
+                test: /\.woff2?(\?v=\d+\.\d+\.\d+)?/,
                 loader: 'url-loader?name=[path][name].[ext]'
             },
             {
@@ -59,6 +59,21 @@ module.exports = {
     plugins: [
         // This will replace the string (!) process.env.NODE_ENV in the source
         // code with the value of the NODE_ENV env var, hence nested quotes.
-        new webpack.DefinePlugin({ 'process.env': { NODE_ENV: `"${process.env.NODE_ENV}"` }})
+        new webpack.DefinePlugin({ 'process.env': {
+            NODE_ENV: `"${process.env.NODE_ENV}"`,
+            UBHDANNO_TOKEN: "'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicnQxMjZAdW5pLWhlaWRlbGJlcmcuZGUiLCJzZXJ2aWNlIjoiZGlnbGl0Iiwid3JpdGUiOjEsImV4cCI6MzE1MzYwMDAwfQ.h7WZ_gmWNv-uCjoobLCiHH_voinj8dddnjMBZsmCJ8o'"
+        }})
     ]
-};
+}
+if (process.env.NODE_ENV === 'production') {
+  module.exports.devtool = '#source-map'
+  // http://vue-loader.vuejs.org/en/workflow/production.html
+  module.exports.plugins = (module.exports.plugins || []).concat([
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true,
+      compress: {
+        warnings: false
+      }
+    })
+  ])
+}
