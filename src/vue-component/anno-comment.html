@@ -1,0 +1,124 @@
+<div :id="annotation.id" class="panel panel-default">
+
+  <div class="panel-heading"
+    data-toggle="collapse"
+    :href="`#coll_${slug}`"
+    aria-expanded="true"
+    :aria-controls="`coll_${slug}`"
+    :id="`ubhdanno_head_${slug}`"
+    role="tab">
+    <h4 class="panel-title">
+      <a role="button">
+        <span class="glyphicon glyphicon-chevron-right if-collapsed"></span>
+        <span class="glyphicon glyphicon-chevron-down if-not-collapsed"></span>
+        {{ annotation.title }}
+      </a>
+    </h4>
+  </div>
+
+  <div
+    :id="`coll_${slug}`"
+    class="panel-collapse collapse in"
+    role="tabpanel"
+    :aria-labbelledby="`ubhdanno_head_${slug}`">
+
+    <div class="panel-body">
+
+      <!-- <div :id="`old_version_${slug}`" class="well old_version"></div> -->
+
+      <div class="media" style="height: auto;">
+
+        <div class="media-body">
+
+          <div v-if="annotation.creator">
+            <bootstrap-button btnSize="xs" glyphicon="user">
+              {{annotation.creator}} {{annotation.modified}}
+            </bootstrap-button>
+            <bootstrap-button btnSize="xs" glyphicon="link"
+              data-toggle="popover"
+              :data-content="`${purl}/${annotation.clean_svname}`">
+            </button>
+          </div>
+          <br>
+
+          <div v-html="htmlTextualBody.value"></div>
+          <div class="tags">
+            <span class="label label-default" v-for="tagBody in tagBodies">
+              <span class="glyphicon glyphicon-tag"></span> {{ tagBody.value }}
+            </span>
+          </div>
+          <div class="tags">
+              <a :href="semtagBody.id" v-for="semtagBody in semtagBodies">
+                <span class="label label-primary">
+                  <span class="fa fa-cube"></span> {{ semtagBody.label }}
+                </span>
+              </a>
+          </div>
+
+          <!-- <div v-if="!options.no_oai" v-bind:class="prefix+'iiiflink'"> -->
+          <!--   <template v-if="item.iiif_url"> -->
+          <!--     <button class="btn-link" onclick="anno_toggle_iiif($(this));"> -->
+          <!--       <span class="fa fa-caret-right"> -->
+          <!--       </span> Bildausschnitt (IIIF-Image) -->
+          <!--     </button> -->
+
+          <!--     <div> -->
+          <!--       <a v-bind:href="item.iiif_url" target="_blank">{{item.iiif_url}} -->
+          <!--       </a> -->
+          <!--     </div> -->
+          <!--   </template> -->
+          <!-- </div> -->
+
+        </div>
+      </div>
+
+      <!-- navigation -->
+
+      <div class="btn-toolbar pull-right" role="toolbar" style="margin-top: 10px;">
+
+        <div class="btn-group btn-group-xs pull-right" role="group">
+          <!-- <button v-if="item.editable" class="btn btn-default editbut"> -->
+            <!--   <i class="fa fa-pencil"></i> &nbsp; {{ l10n.edit }} -->
+            <!-- </button> -->
+          <!-- <button v-if="item.commentable" class="btn btn-default commentbut"> -->
+            <!--   <i class="fa fa-reply"></i> &nbsp; {{ text.comment }} -->
+            <!-- </button> -->
+
+          <template v-if="annotation.hasVersion.length > 0">
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              {{l10n.previous}}
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu pull-right versions">
+              <li v-for="version in annotation.hasVersion">
+                <a class="small" :data-versionid="version.idshort">
+                  <span class="glyphicon glyphicon-time">
+                    {{ version.modified }}
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </template>
+
+        </div>
+      </div>
+
+      <div style="clear: both; margin-bottom: 2px;"></div>
+
+      <!-- <template v-if="item.hasChildren"> -->
+
+      <!--   <div> -->
+
+      <!--     <div class="separator"> -->
+      <!--       <span v-if="item.hasComment">{{ l10n.comments }}</span> -->
+      <!--     </div> -->
+      <!--   </div> -->
+
+      <!--   [>               <] -->
+      <!--   [> anno-comments <] -->
+      <!--   [>               <] -->
+      <!--   [> <anno-comments v-bind:anno="item" v-bind:options="options" v-bind:prefix="prefix"></anno-comments> <] -->
+      <!-- </template> -->
+    </div>
+  </div>
+</div>

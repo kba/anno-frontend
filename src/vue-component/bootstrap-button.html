@@ -1,4 +1,13 @@
-<button :class="`btn btn-${btnClass} btn-${btnSize}`" :title="title" @click="$emit('click', $event)">
+<a v-if="elem === 'a'"
+  role="button"
+  :class="`btn btn-${btnClass} btn-${btnSize}`" :title="title" @click="$emit('click', $event)">
+  <span v-if="glyphicon" :class="'glyphicon glyphicon-'+glyphicon"></span>
+  <span v-else-if="fontAwesome" :class="'fa fa-'+fontAwesome"></span>
+  <img v-if="src" :src="src" :alt="alt" />
+  <slot></slot>
+</a>
+<button  v-else
+  :class="`btn btn-${btnClass} btn-${btnSize}`" :title="title" @click="$emit('click', $event)">
   <span v-if="glyphicon" :class="'glyphicon glyphicon-'+glyphicon"></span>
   <span v-else-if="fontAwesome" :class="'fa fa-'+fontAwesome"></span>
   <img v-if="src" :src="src" :alt="alt" />

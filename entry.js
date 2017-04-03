@@ -15,8 +15,9 @@ window._ubhddebug = {
     Vue: window.Vue,
     xrx: require('semtonotes-client').xrx,
     goog: require('semtonotes-client').goog,
-    AnnoEditor : require('./src/vue-component/anno-editor.js'),
-    ZoneEditor : require('./src/vue-component/zone-editor.js'),
-    HtmlEditor : require('./src/vue-component/html-editor.js'),
-    config: require('./src/config.js'),
+    AnnoEditor : require('./src/vue-component/anno-editor'),
+    ZoneEditor : require('./src/vue-component/zone-editor'),
+    HtmlEditor : require('./src/vue-component/html-editor'),
+    AnnoComment : require('./src/vue-component/anno-comment'),
+    config: require('./src/config'),
 }

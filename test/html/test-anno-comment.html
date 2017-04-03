@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head><script type="text/javascript" src="../../dist/ubhd-anno.js"> </script></head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="anchor"></div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+const {Vue, config, AnnoComment} = window._ubhddebug
+
+window.annotations = [
+  {
+    id: 'https://anno.ub.uni-heidelberg.de/123',
+    creator: 'john',
+    title: 'Test annotation &c',
+    body: [
+      {
+        type: 'TextualBody',
+        format: 'text/html',
+        value: 'Some <strong>bold</strong> statements here.',
+      },
+      {
+        type: 'TextualBody',
+        motivation: 'tagging',
+        value: '#nuffsaid',
+      },
+      {
+        motivation: 'linking',
+        label: 'Metavariables',
+        id: 'http://gnd.info/12345',
+      }
+    ],
+    target: 'http://foo.bar',
+    modified: "2017-03-22 22:00:00",
+    hasVersion: [
+      {
+        id: 'https://anno.ub.uni-heidelberg.de/123-rev1',
+        modified: "2017-03-01 10:00:00",
+      },
+      {
+        id: 'https://anno.ub.uni-heidelberg.de/123-rev2',
+        modified: "2017-03-11 11:00:00",
+      },
+      {
+        id: 'https://anno.ub.uni-heidelberg.de/123-rev3',
+        modified: "2017-03-22 22:00:00",
+      }
+    ],
+    hasReply: [
+      {
+        id: 'https://anno.ub.uni-heidelberg.de/456',
+        body: {
+          type: 'TextualBody',
+          format: 'text/html',
+          value: 'Too strong, actually',
+        },
+        target: {
+          id: 'https://anno.ub.uni-heidelberg.de/123'
+        }
+      }
+    ]
+  }
+]
+
+window.app = new Vue({
+  el: '#anchor',
+  data: {
+    l10n: config.localizations,
+    annotation: window.annotations[0],
+  },
+  template: `<anno-comment
+      :initialAnnotation="annotation"
+      :l10n="l10n"
+      purl="https://purl/foo/3000"
+/>
+  `,
+  components: {
+    'anno-comment': AnnoComment
+  }
+})
+</script></body></html>

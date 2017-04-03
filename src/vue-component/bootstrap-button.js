@@ -9,6 +9,7 @@ module.exports = {
         clickTarget: {type: Object},
         btnSize:     {type: String, default: 'sm'},
         btnClass:    {type: String, default: 'default'},
+        elem:        {String: String, default: 'button'},
     },
     template: require('./bootstrap-button.html'),
 }
