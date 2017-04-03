@@ -1,20 +1,21 @@
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h2>Annotation editor</h2>
-    <a :href="annotation.id">{{ annotation.id || 'Unsaved' }}</a>
-    <bootstrap-button @click="save">Save</bootstrap-button>
+    <h2>{{ l10n.annoeditor }}</h2>
+    <a v-if="annotation.id" :href="annotation.id">{{ annotation.id }}</a>
+    <a v-else>{{ l10n.unsaved }}</a>
+    <bootstrap-button @click="save">{{ l10n.save }}</bootstrap-button>
   </div>
 
   <bootstrap-tabs class="panel-body">
 
-    <bootstrap-tab name="annoeditor_tab_html" title="HTML">
+    <bootstrap-tab name="annoeditor_tab_html" :title="l10n.metadata">
       <html-editor
         :annotation="annotation" 
         :l10n="l10n"
         />
     </bootstrap-tab>
 
-    <bootstrap-tab name="annoeditor_tab_zones" title="Zonen" v-if="targetImage">
+    <bootstrap-tab name="annoeditor_tab_zones" :title="l10n.zones" v-if="targetImage">
       <zone-editor
         :annotation="annotation"
         :l10n="l10n"

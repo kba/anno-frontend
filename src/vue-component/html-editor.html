@@ -8,18 +8,6 @@
     </div>
     <br/>
 
-    <div class="form-group">
-        <input id="ubhdannoprefix_field_link" :placeholder="l10n.annofield_link" class="form-control" type="text"/>
-        <input id="ubhdannoprefix_field_linktitle" :placeholder="l10n.annofield_linktitle" class="form-control" type="text"/>
-        <br/>
-    </div>
-
-    <!-- <button v-if="edit_img_url && edit_img_width" id="ubhdannoprefix_but_zoneedit" type="button"> -->
-    <!--     <img src="../../img/polygon.png" alt="polygon"> {{l10n.edit_zones}} -->
-    <!-- </button> -->
-
-    <!-- <input v-if="edit_img_url && edit_img_width" id="ubhdannoprefix_field_polygon" class="form-control"/> -->
-
     <select v-model="annotation.rights">
       <option :name="l10n.license">{{l10n.license}}</option>
     </select>

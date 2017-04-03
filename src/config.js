@@ -31,12 +31,7 @@ C.fields = {
 };
 
 C.texts = [
-    'tag',
-    'semtag',
-    'add_tag',
-    'add_semtag',
-    'delete_tag',
-    'delete_semtag',
+
     'annofield_link',
     'annofield_linktitle',
     'annofield_title',
@@ -69,6 +64,16 @@ C.texts = [
     'sorttitle',
     'version_from',
     'zones',
+
+    'tag',
+    'semtag',
+    'add_tag',
+    'add_semtag',
+    'delete_tag',
+    'delete_semtag',
+
+    'unsaved',
+    'annoeditor',
 ]
 
 C.localizations = {
@@ -114,6 +119,10 @@ C.localizations = {
         'tag':                 'Einfaches Schlagwort',
         'semtags':             'Semantische Schlagworte',
         'tags':                'Einfache Schlagworte',
+
+        'unsaved':             'Nicht gespeichert',
+        'annoeditor':          'Annotations-Editor',
+
     },
     'en':                      {
         'Anmelden':            'Login',
@@ -158,6 +167,9 @@ C.localizations = {
         'add_tag':             'Add Simple Tag',
         'delete_semtag':       'Delete Semantic Tag',
         'delete_tag':          'Delete Simple Tag',
+
+        'unsaved':             'Unsaved',
+        'annoeditor':          'Annotation editor',
     }
 };
 
