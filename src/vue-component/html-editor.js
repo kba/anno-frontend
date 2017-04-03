@@ -13,10 +13,10 @@ const Vue = require('vue')
 const VueTinymce = require('vue-tinymce').default
 Vue.use(VueTinymce)
 
-            function isHtmlBody(body) { return body.type === 'TextualBody' && body.format === 'text/html' }
+function isHtmlBody(body) { return body.type === 'TextualBody' && body.format === 'text/html' }
 
 module.exports = {
-    template: require('./html-editor.vue.html'),
+    template: require('./html-editor.html'),
     props: {
         annotation: {type: Object, required: true},
         l10n: {type: Object, required: true},

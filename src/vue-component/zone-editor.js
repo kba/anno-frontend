@@ -45,10 +45,10 @@ function createSvgTarget(ctx) {
 
 module.exports = {
 
-    template: require('./zone-editor.vue.html'),
+    template: require('./zone-editor.html'),
 
     components: {
-        'bootstrap-button': require('./bootstrap-button.vue')
+        'bootstrap-button': require('./bootstrap-button')
     },
 
     props: {

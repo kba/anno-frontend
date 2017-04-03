@@ -10,5 +10,5 @@ module.exports = {
         btnSize:     {type: String, default: 'sm'},
         btnClass:    {type: String, default: 'default'},
     },
-    template: require('./bootstrap-button.vue.html'),
+    template: require('./bootstrap-button.html'),
 }

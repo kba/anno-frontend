@@ -1,5 +1,5 @@
 module.exports = {
-    template: require('./bootstrap-tabs.vue.html'),
+    template: require('./bootstrap-tabs.html'),
     data() {
         return {
             tablist: []

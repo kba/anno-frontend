@@ -1,5 +1,5 @@
 module.exports = {
-    template: require('./tags-editor.vue.html'),
+    template: require('./tags-editor.html'),
     props: {
         annotation: {type: Object, required: true},
         l10n: {type: Object, required: true},
@@ -14,7 +14,7 @@ module.exports = {
         },
     },
     components: {
-        'bootstrap-button': require('./bootstrap-button.vue')
+        'bootstrap-button': require('./bootstrap-button')
     },
     methods: {
         add() {

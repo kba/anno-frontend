@@ -1,8 +1,8 @@
 const bonanza = require('bonanza');
 
 module.exports = {
-    template: require('./semtags-editor.vue.html'),
-    style: require('./semtags-editor.vue.css'),
+    template: require('./semtags-editor.html'),
+    style: require('./semtags-editor.css'),
     props: {
         annotation: {type: Object, required: true},
         l10n: {type: Object, required: true},
@@ -19,7 +19,7 @@ module.exports = {
         },
     },
     components: {
-        'bootstrap-button': require('./bootstrap-button.vue')
+        'bootstrap-button': require('./bootstrap-button')
     },
     updated() {
         this.ensureCompletion()

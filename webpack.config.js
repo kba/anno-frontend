@@ -46,12 +46,11 @@ module.exports = {
                 // },
             },
             {
-                test: /\.vue\.html$/,
+                test: /vue-component\/.*?\.html$/,
                 loader: "html-loader",
             },
             {
-                test: /\.css$/,
-                exclude: /font-awesome/,
+                test: /vue-component\/.*?\.css$/,
                 loader: "style-loader!css-loader",
             },
         ]

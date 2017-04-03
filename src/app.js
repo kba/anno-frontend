@@ -12,14 +12,14 @@ var CoordUtils = require('./coord-utils')
 
 
 // HTML
-var annoColTemplate      = require('../template/annoCol.vue.html')
-// var versionTemplate      = require('../template/version.vue.html')
+// var annoColTemplate      = require('../template/annoCol.html')
+// var versionTemplate      = require('../template/version.html')
 
 var zoneeditdrawing;
 // var thumbTimeout;
 
-const commentsComponent = require('./vue-component/comments.vue.js')
-const ZoneEditorComponent = require('./vue-component/zone-editor.vue.js')
+const commentsComponent = require('./vue-component/comments.js')
+const ZoneEditorComponent = require('./vue-component/zone-editor.js')
 
 class UBHDAnnoApp {
 
@@ -70,7 +70,8 @@ class UBHDAnnoApp {
         const annotations = [];
 
         var htmltarget = `#${this.options.htmlid}`;
-        $(htmltarget).html(`<div id="ubhdannoApp">${annoColTemplate}</div>`);
+        // TODO XXX
+        // $(htmltarget).html(`<div id="ubhdannoApp">${annoColTemplate}</div>`);
 
         var app = new Vue({
             el: '#ubhdannoApp',

@@ -1,5 +1,5 @@
 module.exports = {
-    template: require('./bootstrap-tab.vue.html'),
+    template: require('./bootstrap-tab.html'),
     props: {
         title:  {type: String, required: true},
         active: {type: [Boolean,String], default:false},
