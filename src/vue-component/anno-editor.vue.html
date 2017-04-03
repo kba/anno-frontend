@@ -2,7 +2,7 @@
   <div class="panel-heading">
     <h2>Annotation editor</h2>
     <a :href="annotation.id">{{ annotation.id || 'Unsaved' }}</a>
-    <bootstrap-button :on-click="save">Save</bootstrap-button>
+    <bootstrap-button @click="save">Save</bootstrap-button>
   </div>
 
   <bootstrap-tabs class="panel-body">
@@ -23,14 +23,22 @@
         />
     </bootstrap-tab>
 
-    <bootstrap-tab name="annoeditor_tab_json" title="JSON">
-      <pre style="white-space: pre-wrap">{{ annotation }}</pre>
+    <bootstrap-tab name="annoeditor_tab_tags" :title="l10n.tags">
+      <tags-editor
+        :annotation="annotation"
+        :l10n="l10n"
+        />
     </bootstrap-tab>
 
-    <bootstrap-tab name="annoeditor_tab_tags" title="Schlagworte" active="true">
-      <tag-editor
+    <bootstrap-tab name="annoeditor_tab_semtags" :title="l10n.semtags" active="true">
+      <semtags-editor
         :annotation="annotation"
+        :l10n="l10n"
         />
+    </bootstrap-tab>
+
+    <bootstrap-tab name="annoeditor_tab_json" title="Debug">
+      <pre style="white-space: pre-wrap">{{ annotation }}</pre>
     </bootstrap-tab>
 
   </bootstrap-tabs>

@@ -30,11 +30,6 @@
   background-color: #ffeeaa;
 }
 
-#annodropdownMenuS {
-  background: url(../img/polygon.png) no-repeat 2px 2px;
-  padding-left: 22px;
-}
-
 #anno_zoneedittoolbar {
   margin-bottom: 4px;
   background-color: #D0D0D0;
@@ -46,3 +41,4 @@
 #anno_annotations h4 {
   font-size: 13px;
 }
+

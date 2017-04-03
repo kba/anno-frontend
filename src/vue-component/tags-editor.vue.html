@@ -1,0 +1,23 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    {{ l10n.tags }}
+    <bootstrap-button @click="add">{{ l10n.add_tag }}</bootstrap-button>
+  </div>
+  <div class="panel-body">
+    <div class="row" v-for="(body, bodyIndex) in bodies">
+      <div class="col-md-3">
+        <input class="form-control" v-model="body.value"/>
+      </div>
+      <div class="col-md-3">
+        <select class="form-control" v-model="body.motivation">
+          <option>tagging</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <bootstrap-button btnSize="xs" btnClass="danger" @click="remove(body)">
+          {{ l10n.delete_tag }}
+        </bootstrap-button>
+      </div>
+    </ol>
+  </div>
+</div>

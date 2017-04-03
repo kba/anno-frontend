@@ -7,13 +7,15 @@ module.exports = {
         l10n: {type: Object, required: true},
     },
     template: require('./anno-editor.vue.html'),
+    style: require('./anno-editor.vue.css'),
     components: {
         'bootstrap-button': require('./bootstrap-button.vue.js'),
         'bootstrap-tabs':   require('./bootstrap-tabs.vue.js'),
         'bootstrap-tab':    require('./bootstrap-tab.vue.js'),
         'zone-editor':      require('./zone-editor.vue.js'),
         'html-editor':      require('./html-editor.vue.js'),
-        'tag-editor':       require('./tag-editor.vue.js'),
+        'tags-editor':      require('./tags-editor.vue.js'),
+        'semtags-editor':   require('./semtags-editor.vue.js'),
     },
     mounted() {
         this.client = AnnoClient.instance
