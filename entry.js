@@ -7,10 +7,9 @@ require('style-loader!css-loader!font-awesome/css/font-awesome.css');
 // Code
 window.UBHDAnnoApp = require('./src/app.js')
 
-// XXX
-// For debugging
-window.Vue = require('vue')
+if (!window.Vue) window.Vue = require('vue')
 window.Vue.config.devtools = true
+require('./src/vue-component')(window.Vue)
 window._ubhddebug = {
     Vue: window.Vue,
     xrx: require('semtonotes-client').xrx,
@@ -18,6 +17,6 @@ window._ubhddebug = {
     AnnoEditor : require('./src/vue-component/anno-editor'),
     ZoneEditor : require('./src/vue-component/zone-editor'),
     HtmlEditor : require('./src/vue-component/html-editor'),
-    AnnoComment : require('./src/vue-component/anno-comment'),
+    AnnoViewer : require('./src/vue-component/anno-viewer'),
     config: require('./src/config'),
 }

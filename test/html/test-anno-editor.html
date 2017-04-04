@@ -14,11 +14,6 @@
 </div>
 <script type="text/javascript">
 
-const {Vue, config, AnnoEditor} = window._ubhddebug
-
-window.UBHDANNO_ENDPOINT = 'http://anno.ub.uni-heidelberg.de/cgi-bin/anno.cgi'
-window.UBHDANNO_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoia2JhIiwic2VydmljZSI6ImtiYS10ZXN0LXNlcnZpY2UiLCJ3cml0ZSI6MSwiZXhwIjozMTUzNjAwMDB9.M6OoYjbjhHoSMZqs-lGLnrgPPMNJhwLwwk3OuCXETiA'
-
 window.annoList = [
   {
     '@context': "http://anno.ub.uni-heidelberg.de/context.jsonld",
@@ -78,11 +73,14 @@ window.annoList = [
   }
 ]
 
+window.UBHDANNO_ENDPOINT = 'http://anno.ub.uni-heidelberg.de/cgi-bin/anno.cgi'
+window.UBHDANNO_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoia2JhIiwic2VydmljZSI6ImtiYS10ZXN0LXNlcnZpY2UiLCJ3cml0ZSI6MSwiZXhwIjozMTUzNjAwMDB9.M6OoYjbjhHoSMZqs-lGLnrgPPMNJhwLwwk3OuCXETiA'
+
 window.app = new Vue({
   el: '#anchor',
   data: {
-    l10n: config.localizations.de,
-    annotation: window.annoList[1],
+    l10n: _ubhddebug.config.localizations.de,
+    annotation: annoList[1],
   },
   template: `
     <anno-editor
@@ -93,9 +91,6 @@ window.app = new Vue({
       targetThumbnail="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/200px-Ghostscript_Tiger.svg.png"
     />
   `,
-  components: {
-    'anno-editor': AnnoEditor
-  }
 })
 
 </script>

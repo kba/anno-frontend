@@ -13,12 +13,10 @@
 </div>
 <script type="text/javascript">
 
-const {Vue, config, ZoneEditor} = window._ubhddebug
-
 window.app = new Vue({
   el: '#anchor',
   data: {
-    l10n: config.localizations.de,
+    l10n: _ubhddebug.config.localizations.de,
     annotation: {
       body: [],
       target: [
@@ -47,9 +45,6 @@ window.app = new Vue({
       targetThumbnail="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/200px-Ghostscript_Tiger.svg.png"
     />
   `,
-  components: {
-    'zone-editor': ZoneEditor
-  }
 })
 
 </script>

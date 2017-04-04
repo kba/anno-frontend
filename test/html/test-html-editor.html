@@ -10,7 +10,6 @@
         </div>
     </div>
 <script type="text/javascript">
-const {Vue, config, HtmlEditor} = window._ubhddebug
 window.annotation =  {
   id: 'https://anno.ub.uni-heidelberg.de/123',
   body: {
@@ -25,12 +24,9 @@ window.annotation =  {
 window.app = new Vue({
   el: '#anchor',
   data: {
-    l10n: config.localizations,
+    l10n: _ubhddebug.config.localizations,
     annotation
   },
   template: '<html-editor :annotation="annotation" :l10n="l10n" />',
-  components: {
-    'html-editor': HtmlEditor
-  }
 })
 </script></body></html>

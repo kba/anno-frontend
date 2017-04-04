@@ -10,7 +10,7 @@
         </div>
     </div>
 <script type="text/javascript">
-const {Vue, config, AnnoComment} = window._ubhddebug
+//const {Vue, config, AnnoComment} = window._ubhddebug
 
 window.annotations = [
   {
@@ -74,7 +74,7 @@ window.annotations = [
 window.app = new Vue({
   el: '#anchor',
   data: {
-    l10n: config.localizations.en,
+    l10n: _ubhddebug.config.localizations.en,
     annotation: window.annotations[0],
   },
   template: `<anno-viewer
@@ -83,8 +83,5 @@ window.app = new Vue({
       purl="https://purl/foo/3000"
 />
   `,
-  components: {
-    'anno-viewer': AnnoComment
-  }
 })
 </script></body></html>
