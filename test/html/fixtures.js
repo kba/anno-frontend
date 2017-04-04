@@ -89,7 +89,7 @@ window.annotations = [
   },
 
   {
-    id: 'https://anno.ub.uni-heidelberg.de/fnwejkwenfwekj',
+    id: null,
     creator: 'john',
     title: 'Anno mit Anwo 2',
     body: [
@@ -109,7 +109,7 @@ window.annotations = [
         id: 'http://gnd.info/12345',
       }
     ],
-    target: 'http://foo.bar',
+    target: {source: 'http://foo.bar' },
     modified: "2017-03-22 22:00:00",
     hasVersion: [
       {
