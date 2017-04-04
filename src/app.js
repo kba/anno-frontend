@@ -18,8 +18,8 @@ var CoordUtils = require('./coord-utils')
 var zoneeditdrawing;
 // var thumbTimeout;
 
-const commentsComponent = require('./vue-component/comments.js')
-const ZoneEditorComponent = require('./vue-component/zone-editor.js')
+const commentsComponent = require('./components/comments.js')
+const ZoneEditorComponent = require('./components/zone-editor.js')
 
 class UBHDAnnoApp {
 
