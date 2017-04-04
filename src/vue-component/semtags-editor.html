@@ -4,7 +4,7 @@
     <bootstrap-button @click="add">{{ l10n.add_semtag }}</bootstrap-button>
   </div>
   <div class="panel-body">
-      <div class="row" v-for="(body, bodyIndex) in bodies">
+      <div class="row" v-for="(body, bodyIndex) in semanticTagBodies">
         <div class="col-md-3">
           <input 
             :data-body-index="bodyIndex"

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head><script type="text/javascript" src="../../dist/ubhd-anno.js"> </script></head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="anchor"></div>
+            </div>
+        </div>
+    </div>
+<script src="./fixtures.js"></script>
+<script type="text/javascript">
+
+storeTemplate = _ubhddebug.store.annotation
+storeTemplate.state = window.annotations[3]
+const store = new Vuex.Store(storeTemplate)
+const l10n = _ubhddebug.config.localizations.de
+window.app = new Vue({
+  el: '#anchor',
+  store,
+  data: { l10n },
+  template: '<semtags-editor :l10n="l10n" />',
+})
+</script></body></html>

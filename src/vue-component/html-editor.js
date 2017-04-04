@@ -61,10 +61,5 @@ module.exports = {
             set (rights) { this.$store.commit('setRights', rights) }
         },
     },
-    // methods: {
-    //     onChange(editor, content) {
-    //         this.value = content
-    //     },
-    // },
 
 }

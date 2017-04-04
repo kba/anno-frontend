@@ -1,34 +1,17 @@
 module.exports = {
     template: require('./tags-editor.html'),
     props: {
-        annotation: {type: Object, required: true},
         l10n: {type: Object, required: true},
     },
     computed: {
-        bodies() {
-            if (!Array.isArray(this.annotation.body)) {
-                this.annotation.body = !this.annotation.body ? [] : [this.annotation.body]
-            }
-            return this.annotation.body.filter(body =>
-                body.motivation === 'tagging')
-        },
-    },
-    components: {
-        'bootstrap-button': require('./bootstrap-button')
+        simpleTagBodies() { return this.$store.getters.simpleTagBodies },
     },
     methods: {
         add() {
-            console.log("Add simple tag")
-            if (!Array.isArray(this.annotation.body)) {
-                this.annotation.body = !this.annotation.body ? [] : [this.annotation.body]
-            }
-            const newBody = {type: 'TextualBody', motivation: 'tagging', value: ''}
-            this.annotation.body.push(newBody)
+            this.$store.commit('addSimpleTag')
         },
-        remove(toDelete) {
-            console.log("Delete simple tag", toDelete)
-            const toDeleteIndex = this.annotation.body.indexOf(toDelete)
-            this.annotation.body.splice(toDeleteIndex, 1)
+        remove(body) {
+            this.$store.commit('removeBody', body)
         },
     }
 }
