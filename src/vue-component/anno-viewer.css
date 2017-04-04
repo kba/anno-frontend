@@ -4,3 +4,6 @@
 [data-toggle="collapse"]:not(.collapsed) .if-collapsed {
   display: none;
 }
+.current-version {
+    background: red !important;
+}

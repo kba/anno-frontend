@@ -39,13 +39,16 @@ window.annotations = [
     hasVersion: [
       {
         id: 'https://anno.ub.uni-heidelberg.de/123-rev1',
+        title: 'Tset anontatio',
         modified: "2017-03-01 10:00:00",
       },
       {
+        title: 'Tset annotatio',
         id: 'https://anno.ub.uni-heidelberg.de/123-rev2',
         modified: "2017-03-11 11:00:00",
       },
       {
+        title: 'Test annotation',
         id: 'https://anno.ub.uni-heidelberg.de/123-rev3',
         modified: "2017-03-22 22:00:00",
       }
@@ -53,6 +56,8 @@ window.annotations = [
     hasReply: [
       {
         id: 'https://anno.ub.uni-heidelberg.de/456',
+        creator: 'mike',
+        title: 'Disagreement',
         body: {
           type: 'TextualBody',
           format: 'text/html',
@@ -69,17 +74,17 @@ window.annotations = [
 window.app = new Vue({
   el: '#anchor',
   data: {
-    l10n: config.localizations,
+    l10n: config.localizations.en,
     annotation: window.annotations[0],
   },
-  template: `<anno-comment
+  template: `<anno-viewer
       :initialAnnotation="annotation"
       :l10n="l10n"
       purl="https://purl/foo/3000"
 />
   `,
   components: {
-    'anno-comment': AnnoComment
+    'anno-viewer': AnnoComment
   }
 })
 </script></body></html>

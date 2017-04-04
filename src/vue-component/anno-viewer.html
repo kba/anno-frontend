@@ -1,6 +1,7 @@
 <div :id="annotation.id" class="panel panel-default">
 
-  <div class="panel-heading"
+  <div v-if="!asReply"
+    class="panel-heading"
     data-toggle="collapse"
     :href="`#coll_${slug}`"
     aria-expanded="true"
@@ -14,6 +15,13 @@
         {{ annotation.title }}
       </a>
     </h4>
+  </div>
+  <div v-else
+    class="panel-heading"
+    aria-expanded="true"
+    :id="`ubhdanno_head_${slug}`">
+    <span class="small">{{ annotation.title }}</span>
+    <!-- <h5 class="panel-title"> {{ annotation.title }} </h5> -->
   </div>
 
   <div
@@ -32,21 +40,25 @@
 
           <div v-if="annotation.creator">
             <bootstrap-button btnSize="xs" glyphicon="user">
-              {{annotation.creator}} {{annotation.modified}}
+              {{ annotation.creator }} {{ dateformat(annotation.created || annotation.modified) }}
             </bootstrap-button>
-            <bootstrap-button btnSize="xs" glyphicon="link"
+            <bootstrap-button btnSize="xs" glyphicon="link" elem="a"
+              :title="l10n.purl"
               data-toggle="popover"
-              :data-content="`${purl}/${annotation.clean_svname}`">
+              :data-content="annotation.id">
             </button>
           </div>
           <br>
 
           <div v-html="htmlTextualBody.value"></div>
+          <br/>
+
           <div class="tags">
             <span class="label label-default" v-for="tagBody in tagBodies">
               <span class="glyphicon glyphicon-tag"></span> {{ tagBody.value }}
             </span>
           </div>
+
           <div class="tags">
               <a :href="semtagBody.id" v-for="semtagBody in semtagBodies">
                 <span class="label label-primary">
@@ -84,16 +96,18 @@
             <!--   <i class="fa fa-reply"></i> &nbsp; {{ text.comment }} -->
             <!-- </button> -->
 
-          <template v-if="annotation.hasVersion.length > 0">
+          <template v-if="numberOf('hasVersion') > 0">
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
               {{l10n.previous}}
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu pull-right versions">
-              <li v-for="version in annotation.hasVersion">
-                <a class="small" :data-versionid="version.idshort">
+              <li v-for="version in annotation.hasVersion" :class="version.id === annotation.id ? 'current-version' : ''">
+                <a class="small"
+                  @click="setToVersion(version)"
+                  >
                   <span class="glyphicon glyphicon-time">
-                    {{ version.modified }}
+                    {{ dateformat(version.modified) }}
                   </span>
                 </a>
               </li>
@@ -105,20 +119,17 @@
 
       <div style="clear: both; margin-bottom: 2px;"></div>
 
-      <!-- <template v-if="item.hasChildren"> -->
+      <template v-if="numberOf('hasReply') > 0">
 
-      <!--   <div> -->
+        <anno-viewer
+          v-for="reply in annotation.hasReply"
+          as-reply
+          :initialAnnotation="reply"
+          :l10n="l10n"
+          purl="https://purl/foo/3000"
+        />
 
-      <!--     <div class="separator"> -->
-      <!--       <span v-if="item.hasComment">{{ l10n.comments }}</span> -->
-      <!--     </div> -->
-      <!--   </div> -->
-
-      <!--   [>               <] -->
-      <!--   [> anno-comments <] -->
-      <!--   [>               <] -->
-      <!--   [> <anno-comments v-bind:anno="item" v-bind:options="options" v-bind:prefix="prefix"></anno-comments> <] -->
-      <!-- </template> -->
+      </template>
     </div>
   </div>
 </div>

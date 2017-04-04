@@ -1,27 +1,22 @@
+const $ = require('jquery')
+const _dateformat = require('dateformat')
+
 module.exports = {
+    // necessary for nesting
+    name: 'anno-viewer',
     props: {
         initialAnnotation: {type: Object, required: true},
         l10n: {type: Object, required: true},
         purl: {type: String, required: true},
+        // Controls whether comment is collapsible or not
+        asReply: {type: Boolean, default: false},
     },
-    template: require('./anno-comment.html'),
-    style: require('./anno-comment.css'),
+    template: require('./anno-viewer.html'),
+    style: require('./anno-viewer.css'),
     components: {
         'bootstrap-button': require('./bootstrap-button'),
     },
     computed: {
-        // TODO this is create-or-get we just need list
-        // htmlTextualBody() {
-        //     if (!this.annotation.body) this.annotation.body = {type: 'TextualBody', format: 'text/html', value: ''}
-        //     if (!Array.isArray(this.annotation.body)) this.annotation.body = [this.annotation.body]
-        //     var ret = this.annotation.body
-        //         .find(body => body.type === 'TextualBody' && body.format === 'text/html')
-        //     if (!ret) {
-        //         ret = {type: 'TextualBody', format: 'text/html', value: ''}
-        //         this.annotation.body.push(ret)
-        //     }
-        //     return ret
-        // },
         htmlTextualBody() {
             var ret = {}
             if (Array.isArray(this.annotation.body))
@@ -55,11 +50,30 @@ module.exports = {
     },
     data() {
         return {
-            annotation: this.initialAnnotation
+            annotation: this.initialAnnotation,
+            currentVersion: this.initialAnnotation,
         }
     },
     mounted() {
+        $('[data-toggle="popover"]', this.$el).popover(); 
     },
     methods: {
+        dateformat(date) {
+            if (!date) return ''
+            return _dateformat(date, 'dd.mm.yyyy hh:MM:ss')
+        },
+        numberOf(k) {
+            return Array.isArray(this.annotation[k]) ? this.annotation[k].length
+                : this.annotation[k] ? 1
+                : 0
+        },
+        setToVersion(version) {
+            for (let prop in version) {
+                if (['hasVersion', 'hasReply'].indexOf(prop) !== -1) {
+                    continue;
+                }
+                this.annotation[prop] = version[prop]
+            }
+        }
     },
 }
