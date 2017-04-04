@@ -33,16 +33,6 @@ const defaultStyles = {
     }
 }
 
-function createSvgTarget(ctx) {
-    return {
-        source: ctx.targetImage,
-        selector: {
-            type: 'SvgSelector',
-            value: '',
-        }
-    }
-}
-
 module.exports = {
 
     template: require('./zone-editor.html'),
@@ -52,7 +42,6 @@ module.exports = {
     },
 
     props: {
-        annotation: {type: Object, required: true},
         targetImage: {type: String, required: true},
         l10n: {type: Object, required: true},
         targetThumbnail: {type: String},
@@ -69,7 +58,6 @@ module.exports = {
     },
 
     mounted() {
-        console.log(this.annotation)
         const canvasDiv = this.$el.querySelector('#ubhdannoprefix_zoneeditcanvas')
         this.image = XrxUtils.createDrawing(canvasDiv, this.canvasWidth, this.canvasHeight)
 
@@ -123,24 +111,13 @@ module.exports = {
 
     methods: {
 
-        getSvgTarget() {
-            if (!this.annotation.target) this.annotation.target = []
-            if (!Array.isArray(this.annotation.target)) {
-                this.annotation.target = [this.annotation.target]
-            }
-            var svgTarget = this.annotation.target
-                .find(t => t.selector && t.selector.type === 'SvgSelector')
-            if (!svgTarget) {
-                svgTarget = createSvgTarget(this)
-                this.annotation.target.push(svgTarget)
-            }
-            if (!svgTarget.source) svgTarget.source = this.targetImage
-            return svgTarget
-        },
-
         fromSVG(...args) {
             this.image.getLayerShape().removeShapes()
-            const shapes = XrxUtils.drawFromSvg(this.getSvgTarget().selector.value, this.image)
+            if (!this.$store.getters.svgTarget) 
+                this.$store.commit('createSvgTarget', this.targetImage)
+            const svgTarget = this.$store.getters.svgTarget
+            console.log(svgTarget)
+            const shapes = XrxUtils.drawFromSvg(svgTarget.selector.value, this.image)
             shapes.forEach(shape => XrxUtils.applyStyle(shape, this.style.default))
         },
 
