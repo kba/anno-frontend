@@ -5,14 +5,14 @@
 
       <div class="btn-group" role="group" style="float: left;">
 
-        <bootstrap-button :title="l10n.to_svg"      :on-click="toSVG"       font-awesome="sign-out"     />
-        <bootstrap-button :title="l10n.from_svg"    :on-click="fromSVG"     font-awesome="sign-in"      />
+        <bootstrap-button :title="l10n.from_svg"    @click="fromSVG"     font-awesome="sign-in"      />
+        <bootstrap-button :title="l10n.to_svg"      @click="toSVG"       font-awesome="sign-out"     />
 
-        <bootstrap-button :title="l10n.zoom_out"    :on-click="zoomOut"     glyphicon="zoom-out"        />
-        <bootstrap-button :title="l10n.zoom_in"     :on-click="zoomIn"      glyphicon="zoom-in"         />
-        <bootstrap-button :title="l10n.fit"         :on-click="fitToCanvas" glyphicon="fullscreen"      />
-        <bootstrap-button :title="l10n.rotate_left" :on-click="rotateLeft"  font-awesome="rotate-left"  />
-        <bootstrap-button :title="l10n.rotate_left" :on-click="rotateRight" font-awesome="rotate-right" />
+        <bootstrap-button :title="l10n.zoom_out"    @click="zoomOut"     glyphicon="zoom-out"        />
+        <bootstrap-button :title="l10n.zoom_in"     @click="zoomIn"      glyphicon="zoom-in"         />
+        <bootstrap-button :title="l10n.fit"         @click="fitToCanvas" glyphicon="fullscreen"      />
+        <bootstrap-button :title="l10n.rotate_left" @click="rotateLeft"  font-awesome="rotate-left"  />
+        <bootstrap-button :title="l10n.rotate_left" @click="rotateRight" font-awesome="rotate-right" />
 
       </div>
 
@@ -22,16 +22,16 @@
 
         <div class="btn-group" role="group" style="margin-left: 5px;">
 
-          <bootstrap-button :title="l10n.add_polygon" :on-click="addPolygon"   font-awesome="plus"      src="../../img/polygon.png" alt="polygon" />
-          <bootstrap-button :title="l10n.add_rect"    :on-click="addRectangle" font-awesome="plus"      src="../../img/rect.png"    alt="rect"    />
-          <bootstrap-button :title="l10n.move_zone"   :on-click="moveZone"     font-awesome="hand-o-up" />
-          <bootstrap-button :title="l10n.move_fak"    :on-click="setModeView"  glyphicon="move"         />
+          <bootstrap-button :title="l10n.add_polygon" @click="addPolygon"   font-awesome="plus"      src="../../img/polygon.png" alt="polygon" />
+          <bootstrap-button :title="l10n.add_rect"    @click="addRectangle" font-awesome="plus"      src="../../img/rect.png"    alt="rect"    />
+          <bootstrap-button :title="l10n.move_zone"   @click="moveZone"     font-awesome="hand-o-up" />
+          <bootstrap-button :title="l10n.move_fak"    @click="setModeView"  glyphicon="move"         />
 
         </div>
 
         <div class="btn-group" role="group" style="margin-left: 5px;">
 
-          <bootstrap-button :title="l10n.del_zones" :on-click="deleteZone" glyphicon="trash" />
+          <bootstrap-button :title="l10n.del_zones" @click="deleteZone" glyphicon="trash" />
 
         </div>
 

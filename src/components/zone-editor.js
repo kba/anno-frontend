@@ -123,8 +123,8 @@ module.exports = {
 
         toSVG(...args) {
             const svg = XrxUtils.svgFromShapes(this.image.getLayerShape().getShapes())
-            console.log("New SVG", svg)
-            this.getSvgTarget().selector.value = svg
+            // console.log("New SVG", svg)
+            this.$store.commit('setSvgSelector', svg)
         },
 
         zoomOut(event) {
