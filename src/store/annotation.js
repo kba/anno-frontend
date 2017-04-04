@@ -11,6 +11,7 @@ function ensureArray(state, k) {
 
 function add(state, k, newBody) {
     state[k].push(newBody)
+    return newBody
 }
 
 function isSimpleTagBody(body) { return body && body.motivation === 'tagging' }
@@ -27,48 +28,84 @@ function semanticTagBodies(state) {
     else if (isSemanticTagBody(state.body)) return [state.body]
 }
 
+//
+// SvgSelector / Zoning
+//
+function isSvgTarget(t) { return t && t.selector && t.selector.type === 'SvgSelector' }
+
+function svgTarget(state) {
+    if (Array.isArray(state.target)) return state.target.find(isSvgTarget)
+    else if (isSvgTarget(state.target)) return state.target
+}
+
+function createSvgTarget(state, source) {
+    ensureArray(state, 'target')
+    return add(state, 'target', {source, selector: {type: 'SvgSelector', value: ''}})
+}
+
+
+function setTitle(state, title) { state.title = title }
+
+function setRights(state, v) { state.rights = v }
+
+function addSimpleTag(state, v) {
+    ensureArray(state, 'body')
+    add(state, 'body', {type: 'TextualBody', motivation: 'tagging', value: ''})
+}
+
+function addSemanticTag(state, v) {
+    ensureArray(state, 'body')
+    add(state, 'body', {motivation: 'linking', id: ''})
+}
+
+function removeBody(state, v) {
+    if (Array.isArray(state.body)) {
+        var vIndex = state.body.indexOf(v)
+        state.body.splice(vIndex, 1)
+    } else if (state.body === v) {
+        state.body = []
+    }
+}
+
+function setHtmlBodyContent(state, v) { 
+    var body = firstHtmlBody(state)
+    if (!body) {
+        body = {type: 'TextualBody', format: 'text/html', value: ''}
+        ensureArray(state, 'body')
+        add(state, 'body', body)
+    }
+    body.value = v
+}
+
+const state = {
+    id: '',
+    title: '',
+    body: [],
+    target: [],
+    rights: '',
+}
+
+const getters = {
+    firstHtmlBody,
+    simpleTagBodies,
+    semanticTagBodies,
+    svgTarget,
+}
+
+const mutations = {
+    add,
+    ensureArray,
+    setTitle,
+    setRights,
+    addSimpleTag,
+    addSemanticTag,
+    removeBody,
+    setHtmlBodyContent,
+    createSvgTarget,
+}
+
 module.exports = {
-    state: {
-        id: '',
-        title: '',
-        body: [],
-        target: [],
-        rights: '',
-    },
-    getters: {
-        firstHtmlBody,
-        simpleTagBodies,
-        semanticTagBodies,
-    },
-    mutations: {
-        add,
-        ensureArray,
-        setTitle(state, title) { state.title = title },
-        setRights(state, v) { state.rights = v },
-        addSimpleTag(state, v) {
-            ensureArray(state, 'body')
-            add(state, 'body', {type: 'TextualBody', motivation: 'tagging', value: ''})
-        },
-        addSemanticTag(state, v) {
-            ensureArray(state, 'body')
-            add(state, 'body', {motivation: 'linking', id: ''})
-        },
-        removeBody(state, v) {
-            if (Array.isArray(state.body)) {
-                var vIndex = state.body.indexOf(v)
-                state.body.splice(vIndex, 1)
-            } else if (state.body === v) {
-                state.body = []
-            }
-        },
-        setHtmlBodyContent(state, v) { 
-            var body = firstHtmlBody(state)
-            if (!body) {
-                body = {type: 'TextualBody', format: 'text/html', value: ''}
-                ensureArray(state, 'body')
-                add(state, 'body', body)
-            }
-            body.value = v
-        },
-    },
+    state,
+    getters,
+    mutations,
 }
