@@ -34,6 +34,7 @@
     "tinymce": "^4.5.0",
     "vue": "2.1.10",
     "vue-template-compiler": "^2.1.10",
+    "vuex": "^2.2.1",
     "webpack-dev-server": "^1.16.2"
   },
   "devDependencies": {

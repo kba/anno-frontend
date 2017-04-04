@@ -7,11 +7,23 @@ require('style-loader!css-loader!font-awesome/css/font-awesome.css');
 // Code
 window.UBHDAnnoApp = require('./src/app.js')
 
-if (!window.Vue) window.Vue = require('vue')
+window.Vue = require('vue')
+window.Vuex = require('vuex')
+
+// Add vuex store
+// window.Vue.use(window.Vuex)
+
+// Enable devtools
 window.Vue.config.devtools = true
+
+// Register all components
 require('./src/vue-component')(window.Vue)
+
 window._ubhddebug = {
     Vue: window.Vue,
+    store: {
+        annotation: require('./src/store/annotation')
+    },
     xrx: require('semtonotes-client').xrx,
     goog: require('semtonotes-client').goog,
     AnnoEditor : require('./src/vue-component/anno-editor'),

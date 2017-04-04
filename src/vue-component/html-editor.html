@@ -2,13 +2,13 @@
 
   <br/>
     <div class="form-group">
-        <input id="ubhdannoprefix_field_title" :placeholder="l10n.annofield_title" v-model="htmlBody.title" class="form-control" type="text" required="true">
+        <input id="ubhdannoprefix_field_title" :placeholder="l10n.annofield_title" v-model="title" class="form-control" type="text" required="true">
         <br/>
-        <tinymce id="ubhdannoprefix_field_text" :content="initialValue()" @change="onChange" :options="tinymceOptions" />
+        <tinymce id="ubhdannoprefix_field_text" v-model="value" :options="tinymceOptions" />
     </div>
     <br/>
 
-    <select v-model="annotation.rights">
+    <select v-model="rights">
       <option :name="l10n.license">{{l10n.license}}</option>
     </select>
 

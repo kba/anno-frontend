@@ -13,12 +13,9 @@ const Vue = require('vue')
 const VueTinymce = require('vue-tinymce').default
 Vue.use(VueTinymce)
 
-function isHtmlBody(body) { return body.type === 'TextualBody' && body.format === 'text/html' }
-
 module.exports = {
     template: require('./html-editor.html'),
     props: {
-        annotation: {type: Object, required: true},
         l10n: {type: Object, required: true},
         language: {type: String, default: 'de'},
         tinymceOptions: {
@@ -42,7 +39,6 @@ module.exports = {
         },
     },
     created() {
-        this._initialValue = this.htmlBody.value
         this.tinymceOptions.language = this.language
 
         // Add localizations by faking a URI since tinymce expects languages at
@@ -52,37 +48,23 @@ module.exports = {
         });`
     },
     computed: {
-        htmlBody() {
-
-            // console.log(this)
-            var ret;
-            const newBody = { type: 'TextualBody', format: 'text/html', value: '' }
-            if (!this.annotation.body) {
-                this.annotation.body = [newBody]
-                ret = newBody
-            } else if (Array.isArray(this.annotation.body)) {
-                ret = this.annotation.body.find(isHtmlBody)
-                if (!ret) {
-                    this.annotation.body.push(newBody)
-                    ret = newBody
-                }
-            } else if (isHtmlBody(this.annotation.body)) {
-                ret = this.annotation.body
-            } else {
-                this.annotation.body = [this.annotation.body]
-                this.annotation.body.push(newBody)
-                ret = newBody
-            }
-            return ret
+        value: {
+            get () { return this.$store.getters.firstHtmlBody ? this.$store.getters.firstHtmlBody.value : '' },
+            set (content) { this.$store.commit('setHtmlBodyContent', content) },
+        },
+        title: {
+            get () { return this.$store.title },
+            set (title) { this.$store.commit('setTitle', title) }
+        },
+        rights: {
+            get () { return this.$store.rights },
+            set (rights) { this.$store.commit('setRights', rights) }
         },
     },
-    methods: {
-        onChange(editor, content) {
-            this.htmlBody.value = content
-        },
-        initialValue() {
-            return this._initialValue;
-        },
-    },
+    // methods: {
+    //     onChange(editor, content) {
+    //         this.value = content
+    //     },
+    // },
 
 }
