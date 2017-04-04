@@ -31,7 +31,9 @@ module.exports = class XrxUtils {
     static createDrawing(elem, width, height) {
         var origGetSize = goog.style.getSize;
         goog.style.getSize = (elem) => {
-            if (elem === elem) return {width, height}
+            const origWH = origGetSize(elem)
+            if (elem === elem && (origWH.width <= 0 || origWH.height <= 0))
+                return {width, height}
             return origGetSize(elem)
         }
         const ret = new xrx.drawing.Drawing(elem)
