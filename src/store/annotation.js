@@ -81,6 +81,10 @@ function setHtmlBodyContent(state, v) {
     body.value = v
 }
 
+function replace(state, newState) {
+    Object.assign(state, newState)
+}
+
 const state = {
     id: '',
     title: '',
@@ -107,6 +111,7 @@ const mutations = {
     setHtmlBodyContent,
     createSvgTarget,
     setSvgSelector,
+    replace,
 }
 
 module.exports = {
