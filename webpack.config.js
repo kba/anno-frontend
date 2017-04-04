@@ -46,11 +46,11 @@ module.exports = {
                 // },
             },
             {
-                test: /vue-component\/.*?\.html$/,
+                test: /components\/.*?\.html$/,
                 loader: "html-loader",
             },
             {
-                test: /vue-component\/.*?\.css$/,
+                test: /components\/.*?\.css$/,
                 loader: "style-loader!css-loader",
             },
         ]

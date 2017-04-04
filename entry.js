@@ -17,7 +17,7 @@ window.Vuex = require('vuex')
 window.Vue.config.devtools = true
 
 // Register all components
-require('./src/vue-component')(window.Vue)
+require('./src/components')(window.Vue)
 
 window._ubhddebug = {
     Vue: window.Vue,
@@ -26,9 +26,9 @@ window._ubhddebug = {
     },
     xrx: require('semtonotes-client').xrx,
     goog: require('semtonotes-client').goog,
-    AnnoEditor : require('./src/vue-component/anno-editor'),
-    ZoneEditor : require('./src/vue-component/zone-editor'),
-    HtmlEditor : require('./src/vue-component/html-editor'),
-    AnnoViewer : require('./src/vue-component/anno-viewer'),
+    AnnoEditor : require('./src/components/anno-editor'),
+    ZoneEditor : require('./src/components/zone-editor'),
+    HtmlEditor : require('./src/components/html-editor'),
+    AnnoViewer : require('./src/components/anno-viewer'),
     config: require('./src/config'),
 }
