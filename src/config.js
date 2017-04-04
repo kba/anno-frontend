@@ -100,7 +100,7 @@ C.localizations = {
         'purl':                'Annotation: Persistente URL',
         'reply':               'Antworten',
         'save':                'Speichern',
-        'showref':             'Bildbezüge anzeigen',
+        'showref':             'Bildbez\u00fcge anzeigen',
         'showrefalways':       'Immer',
         'showrefdefault':      'Standard',
         'showrefnever':        'Nie',

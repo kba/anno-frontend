@@ -50,7 +50,7 @@
           </div>
           <br>
 
-          <div v-html="htmlTextualBody.value"></div>
+          <div v-if="htmlTextualBody" v-html="htmlTextualBody.value"></div>
           <br/>
 
           <div class="tags">
