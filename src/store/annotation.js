@@ -43,6 +43,10 @@ function createSvgTarget(state, source) {
     return add(state, 'target', {source, selector: {type: 'SvgSelector', value: ''}})
 }
 
+function setSvgSelector(state, svg) {
+    svgTarget(state).selector.value = svg
+}
+
 
 function setTitle(state, title) { state.title = title }
 
@@ -102,6 +106,7 @@ const mutations = {
     removeBody,
     setHtmlBodyContent,
     createSvgTarget,
+    setSvgSelector,
 }
 
 module.exports = {
