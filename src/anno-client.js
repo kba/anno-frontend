@@ -44,10 +44,17 @@ module.exports = class AnnoClient {
     }
 
     create(anno) {
+        anno = JSON.parse(JSON.stringify(anno))
+        delete anno.creator
+        delete anno.modified
+        delete anno.title
+        delete anno.hasReply
+        delete anno.hasVersion
         return this._client.post(this._qs(), anno)
     }
 
     revise(anno) {
+        anno = JSON.parse(JSON.stringify(anno))
         delete anno.creator
         delete anno.created
         delete anno.modified
@@ -56,6 +63,12 @@ module.exports = class AnnoClient {
     }
 
     createOrRevise(anno) {
+        anno = JSON.parse(JSON.stringify(anno))
+        delete anno.creator
+        delete anno.modified
+        delete anno.title
+        delete anno.hasReply
+        delete anno.hasVersion
         return this[anno.id ? 'revise' : 'create'](anno)
     }
 
