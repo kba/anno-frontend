@@ -1,7 +1,7 @@
 <div class="panel panel-default">
   <div class="panel-heading">
     <h2>{{ l10n.annoeditor }}</h2>
-    <a v-if="annotation.id" :href="annotation.id">{{ annotation.id }}</a>
+    <a v-if="id" :href="id">{{ id }}</a>
     <a v-else>{{ l10n.unsaved }}</a>
     <bootstrap-button @click="save">{{ l10n.save }}</bootstrap-button>
   </div>
@@ -10,14 +10,12 @@
 
     <bootstrap-tab name="annoeditor_tab_html" :title="l10n.metadata">
       <html-editor
-        :annotation="annotation" 
         :l10n="l10n"
         />
     </bootstrap-tab>
 
     <bootstrap-tab name="annoeditor_tab_zones" :title="l10n.zones" v-if="targetImage">
       <zone-editor
-        :annotation="annotation"
         :l10n="l10n"
         :targetImage="targetImage"
         :targetThumbnail="targetThumbnail"
@@ -26,20 +24,18 @@
 
     <bootstrap-tab name="annoeditor_tab_tags" :title="l10n.tags">
       <tags-editor
-        :annotation="annotation"
         :l10n="l10n"
         />
     </bootstrap-tab>
 
     <bootstrap-tab name="annoeditor_tab_semtags" :title="l10n.semtags" active="true">
       <semtags-editor
-        :annotation="annotation"
         :l10n="l10n"
         />
     </bootstrap-tab>
 
     <bootstrap-tab name="annoeditor_tab_json" title="Debug">
-      <pre style="white-space: pre-wrap">{{ annotation }}</pre>
+      <pre style="white-space: pre-wrap">{{ stateDump }}</pre>
     </bootstrap-tab>
 
   </bootstrap-tabs>
