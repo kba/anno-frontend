@@ -3,33 +3,6 @@ var C = module.exports = {}
 C.annoservicehosturl = process.env.annoservicehosturl || 'http://anno.ub.uni-heidelberg.de'
 C.annoserviceurl     = process.env.annoserviceurl     || C.annoservicehosturl + '/cgi-bin/anno.cgi';
 
-// TODO probably deletd
-C.typeList = {
-    "dc:description-ger":   "text",
-    "dc:identifier":        "identifier",
-    "dc:title":             "title",
-    "foaf:account":         "account",
-    "foaf:name":            "user_name",
-    "jcr:lastModified":     "jcr_modified",
-    "jcr:uuid":             "uuid",
-    "dc:source":            "link",
-    "dc:sourceDescription": "sourcedescription",
-    "jcr:versionHistory":   "versioned",
-    "dc:type":              "type",
-    "svg:polygon":          'svg_polygon',
-    "user_rights":          'user_rights'
-};
-
-// TODO probably deletd
-C.fields = {
-  'id':        'clean_svname',
-  'title':     'title',
-  'text':      'test',
-  'link':      'link',
-  'linktitle': 'sourcedescription',
-  'polygon':   'svg_polygon',
-};
-
 C.texts = [
 
     'annofield_link',
