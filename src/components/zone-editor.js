@@ -39,10 +39,6 @@ module.exports = {
 
     template: require('./zone-editor.html'),
 
-    components: {
-        'bootstrap-button': require('./bootstrap-button')
-    },
-
     props: {
         targetImage: {type: String, required: true},
         targetThumbnail: {type: String},
