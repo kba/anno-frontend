@@ -26,8 +26,11 @@
       />
   </bootstrap-tab>
 
-  <bootstrap-tab name="annoeditor_tab_json" title="Debug">
-    <pre style="white-space: pre-wrap">{{ stateDump }}</pre>
+  <bootstrap-tab name="annoeditor_tab_preview" title="Preview">
+    <anno-viewer
+      :annotation="$store.state.annotation"
+      purl="https://purl/foo/3000"
+      />
   </bootstrap-tab>
 
 </bootstrap-tabs>
