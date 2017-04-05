@@ -76,7 +76,8 @@ module.exports = class XrxUtils {
      * Generate SVG from shapes
      */
     static svgFromShapes(shapes) {
-        if (shapes.length === 0) throw new Error("Must pass at least one shape to svgFromShape")
+        if (shapes.length === 0)
+            console.warn("Should pass at least one shape to svgFromShape or SVG will be empty")
         const svg = ['<?xml version="1.0" encoding="UTF-8" ?>']
         svg.push([
             `<svg xmlns="http://www.w3.org/2000/svg" version="1.1"`,
