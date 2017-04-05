@@ -3,6 +3,7 @@ var webpack = require('webpack')
 module.exports = {
     entry: "./entry.js",
     devtool: 'source-map',
+    node: { fs: 'empty' },
     output: {
         path: __dirname + "/dist",
         filename: "ubhd-anno.js"
