@@ -1,4 +1,7 @@
 const AnnoClient = require('../anno-client')
+const eventBus = require('../event-bus')
+const tinymce = require('tinymce')
+
 module.exports = {
     props: {
         targetImage: {type: String, required: true},
@@ -9,17 +12,17 @@ module.exports = {
     style: require('./anno-editor.css'),
     mounted() {
         this.client = AnnoClient.instance
+        eventBus.$on('replaced', () => {
+            const textarea = tinymce.get('ubhdannoprefix_field_text')
+            if (textarea) textarea.setContent(this.$store.getters.firstHtmlBody.value)
+        })
+    },
+    beforeUpdate() {
     },
     computed: {
-        id() { return this.$store.state.id },
+        id() { return this.$store.state.annotation.id },
         stateDump() { return this.$store.state },
     },
     methods: {
-        save() {
-            console.log("Save called")
-            this.client.createOrRevise(this.$store.state)
-                .then(resp => this.$store.commit('replace', resp.data))
-                .catch(err => console.log("ERROR", err))
-        }
     },
 }

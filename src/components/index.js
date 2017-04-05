@@ -10,11 +10,12 @@ const component = {
     'anno-viewer':      require('./anno-viewer'),
 
     // editing
-    'anno-editor':      require('./anno-editor'),
-    'html-editor':      require('./html-editor'),
-    'semtags-editor':   require('./semtags-editor'),
-    'tags-editor':      require('./tags-editor'),
-    'zone-editor':      require('./zone-editor'),
+    'anno-editor-modal': require('./anno-editor-modal'),
+    'anno-editor':       require('./anno-editor'),
+    'html-editor':       require('./html-editor'),
+    'semtags-editor':    require('./semtags-editor'),
+    'tags-editor':       require('./tags-editor'),
+    'zone-editor':       require('./zone-editor'),
 
 }
 

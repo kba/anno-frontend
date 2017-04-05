@@ -53,11 +53,11 @@ module.exports = {
             set (content) { this.$store.dispatch('setHtmlBodyContent', content) },
         },
         title: {
-            get () { return this.$store.title },
+            get () { return this.$store.state.annotation.title },
             set (value) { this.$store.commit('SET_ANNO_PROP', {prop: 'title', value}) }
         },
         rights: {
-            get () { return this.$store.rights },
+            get () { return this.$store.state.annotation.rights },
             set (value) { this.$store.commit('SET_ANNO_PROP', {prop: 'rights', value}) }
         },
     },

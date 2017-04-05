@@ -68,7 +68,7 @@ window.annotations = [
         }
       }
     ]
-  }
+  },
 ]
 
 window.app = new Vue({
@@ -78,7 +78,7 @@ window.app = new Vue({
     annotation: window.annotations[0],
   },
   template: `<anno-viewer
-      :initialAnnotation="annotation"
+      :annotation="annotation"
       :l10n="l10n"
       purl="https://purl/foo/3000"
 />

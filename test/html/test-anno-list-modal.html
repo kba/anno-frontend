@@ -24,10 +24,18 @@ window.app = new Vue({
   data: {
     l10n: _ubhddebug.config.localizations.en,
   },
-  template: `<anno-list
-      :l10n="l10n"
-      purl="https://purl/foo/3000"
+  template: `
+  <div>
+<anno-list
+    :l10n="l10n"
+    purl="https://purl/foo/3000"
 />
+<anno-editor-modal
+    :l10n="l10n"
+    targetImage="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png"
+    targetThumbnail="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/200px-Ghostscript_Tiger.svg.png"
+/>
+</div>
   `,
 })
 

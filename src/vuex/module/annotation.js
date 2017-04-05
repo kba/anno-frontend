@@ -1,49 +1,7 @@
-//
-// Helpers to deal with annotation properties being arrays/objects/strings
-//
-
-function ensureArray(state, k) {
-    if (!Array.isArray(state[k]))
-        state[k] = state[k] === undefined ? [] : [state[k]]
-}
-
-function add(state, k, v) {
-    state[k].push(v)
-}
-
-function remove(state, k, v) {
-    if (Array.isArray(state[k])) {
-        var vIndex = state[k].indexOf(v)
-        state[k].splice(vIndex, 1)
-    } else if (state.body === v) {
-        state[k] = []
-    }
-}
-
-
-//
-// Type checking / filtering
-//
-
-function filter(needle, match) {
-    if (Array.isArray(needle)) return needle.filter(match)
-    else if (match(needle)) return [needle]
-}
-
-function find(needle, match) {
-    if (Array.isArray(needle)) return needle.find(match)
-    else if (match(needle)) return needle
-}
-
-function isHtmlBody(body) { return body && body.type === 'TextualBody' && body.format === 'text/html' }
-
-function isSimpleTagBody(body) { return body && body.motivation === 'tagging' }
-
-function isSemanticTagBody(body) { return body && (
-    body.motivation === 'linking' || body.motivation === 'identifying' || body.motivation === 'classifying')
-}
-
-function isSvgTarget(t) { return t && t.selector && t.selector.type === 'SvgSelector' }
+const {
+    ensureArray, add, remove,
+    firstHtmlBody, simpleTagBodies, semanticTagBodies, svgTarget,
+} = require('../../anno-utils.js')
 
 //
 // initial state
@@ -62,23 +20,10 @@ const state = {
 //
 
 const getters = {
-
-    firstHtmlBody(state) {
-        return find(state.body, isHtmlBody)
-    },
-
-    simpleTagBodies(state) {
-        return filter(state.body, isSimpleTagBody)
-    },
-
-    semanticTagBodies(state) {
-        return filter(state.body, isSemanticTagBody)
-    },
-
-    svgTarget(state) {
-        return find(state.target, isSvgTarget)
-    },
-
+    firstHtmlBody,
+    simpleTagBodies,
+    semanticTagBodies,
+    svgTarget,
 }
 
 //

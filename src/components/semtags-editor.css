@@ -7,6 +7,7 @@
   position: absolute;
   background-color: #fff;
   visibility: visible;
+  z-index: 1000;
 }
 
 .bz-container.bz-hide {

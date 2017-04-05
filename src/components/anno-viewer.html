@@ -1,4 +1,4 @@
-<div :id="annotation.id" class="panel panel-default">
+<div :id="id" class="panel panel-default">
 
   <div v-if="!asReply"
     class="panel-heading"
@@ -45,22 +45,22 @@
             <bootstrap-button btnSize="xs" glyphicon="link" elem="a"
               :title="l10n.purl"
               data-toggle="popover"
-              :data-content="annotation.id">
+              :data-content="id">
             </button>
           </div>
           <br>
 
-          <div v-if="htmlTextualBody" v-html="htmlTextualBody.value"></div>
+          <div v-if="firstHtmlBody" v-html="firstHtmlBody.value"></div>
           <br/>
 
           <div class="tags">
-            <span class="label label-default" v-for="tagBody in tagBodies">
+            <span class="label label-default" v-for="tagBody in simpleTagBodies">
               <span class="glyphicon glyphicon-tag"></span> {{ tagBody.value }}
             </span>
           </div>
 
           <div class="tags">
-              <a :href="semtagBody.id" v-for="semtagBody in semtagBodies">
+              <a :href="semtagBody.id" v-for="semtagBody in semanticTagBodies">
                 <span class="label label-primary">
                   <span class="fa fa-cube"></span> {{ semtagBody.label }}
                 </span>
@@ -89,12 +89,12 @@
       <div class="btn-toolbar pull-right" role="toolbar" style="margin-top: 10px;">
 
         <div class="btn-group btn-group-xs pull-right" role="group">
-          <!-- <button v-if="item.editable" class="btn btn-default editbut"> -->
-            <!--   <i class="fa fa-pencil"></i> &nbsp; {{ l10n.edit }} -->
-            <!-- </button> -->
-          <!-- <button v-if="item.commentable" class="btn btn-default commentbut"> -->
-            <!--   <i class="fa fa-reply"></i> &nbsp; {{ text.comment }} -->
-            <!-- </button> -->
+          <bootstrap-button btnClass="default editbut" @click="edit" font-awesome="pencil" v-if="acl.editable">
+            {{ l10n.edit }}
+          </bootstrap-button>
+          <button v-if="acl.commentable" class="btn btn-default commentbut">
+              <i class="fa fa-reply"></i> &nbsp; {{ l10n.comment }}
+            </button>
 
           <template v-if="numberOf('hasVersion') > 0">
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -102,7 +102,7 @@
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu pull-right versions">
-              <li v-for="version in annotation.hasVersion" :class="version.id === annotation.id ? 'current-version' : ''">
+              <li v-for="version in annotation.hasVersion" :class="version.id === id ? 'current-version' : ''">
                 <a class="small"
                   @click="setToVersion(version)"
                   >
@@ -124,7 +124,7 @@
         <anno-viewer
           v-for="reply in annotation.hasReply"
           as-reply
-          :initialAnnotation="reply"
+          :annotation="reply"
           :l10n="l10n"
           purl="https://purl/foo/3000"
         />

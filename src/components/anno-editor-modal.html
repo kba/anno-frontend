@@ -1,0 +1,23 @@
+<div class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4>{{ l10n.annoeditor }}</h4>
+        <a v-if="id" :href="id">{{ id }}</a>
+        <a v-else>{{ l10n.unsaved }}</a>
+      </div>
+      <div class="modal-body">
+        <anno-editor
+          :l10n="l10n"
+          :targetImage="targetImage"
+          :targetThumbnail="targetThumbnail"
+        />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <bootstrap-button btnClass="primary" @click="save">{{ l10n.save }}</bootstrap-button>
+      </div>
+    </div>
+  </div>
+</div>

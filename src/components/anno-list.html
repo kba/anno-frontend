@@ -53,8 +53,8 @@
       <div style="clear: both;"> </div>
     </div>
     <div class="panel-group">
-      <anno-viewer v-for="annotation in annotations"
-        :initialAnnotation="annotation"
+      <anno-viewer v-for="annotation in list"
+        :annotation="annotation"
         :l10n="l10n"
         :purl="purl"
         :asReply=false
