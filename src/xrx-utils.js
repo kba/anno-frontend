@@ -78,9 +78,11 @@ module.exports = class XrxUtils {
     static svgFromShapes(shapes) {
         if (shapes.length === 0) throw new Error("Must pass at least one shape to svgFromShape")
         const svg = ['<?xml version="1.0" encoding="UTF-8" ?>']
-        svg.push(`<svg xmlns="http://www.w3.org/2000/svg" version="1.1"`
-            +`width="${shapes[0].getDrawing().getLayerBackground().getImage().getWidth()}"`
-            +`height="${shapes[0].getDrawing().getLayerBackground().getImage().getHeight()}">`)
+        svg.push([
+            `<svg xmlns="http://www.w3.org/2000/svg" version="1.1"`,
+            `width="${shapes[0].getDrawing().getLayerBackground().getImage().getWidth()}"`,
+            `height="${shapes[0].getDrawing().getLayerBackground().getImage().getHeight()}">`,
+        ].join(' '))
         // console.log(shapes)
         for (let shape of shapes) {
             const coords = shape.getCoords()
