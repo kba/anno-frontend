@@ -113,18 +113,17 @@ module.exports = {
 
         fromSVG(...args) {
             this.image.getLayerShape().removeShapes()
-            if (!this.$store.getters.svgTarget) 
-                this.$store.commit('createSvgTarget', this.targetImage)
-            const svgTarget = this.$store.getters.svgTarget
-            console.log(svgTarget)
-            const shapes = XrxUtils.drawFromSvg(svgTarget.selector.value, this.image)
-            shapes.forEach(shape => XrxUtils.applyStyle(shape, this.style.default))
+            if (this.$store.getters.svgTarget) {
+                const shapes = XrxUtils.drawFromSvg(this.$store.getters.svgTarget.selector.value, this.image)
+                shapes.forEach(shape => XrxUtils.applyStyle(shape, this.style.default))
+            }
         },
 
         toSVG(...args) {
             const svg = XrxUtils.svgFromShapes(this.image.getLayerShape().getShapes())
+            // console.log("targetImage", this.targetImage)
             // console.log("New SVG", svg)
-            this.$store.commit('setSvgSelector', svg)
+            this.$store.dispatch('setSvgSelector', {svg, source: this.targetImage})
         },
 
         zoomOut(event) {
