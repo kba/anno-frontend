@@ -50,15 +50,15 @@ module.exports = {
     computed: {
         value: {
             get () { return this.$store.getters.firstHtmlBody ? this.$store.getters.firstHtmlBody.value : '' },
-            set (content) { this.$store.commit('setHtmlBodyContent', content) },
+            set (content) { this.$store.dispatch('setHtmlBodyContent', content) },
         },
         title: {
             get () { return this.$store.title },
-            set (title) { this.$store.commit('setTitle', title) }
+            set (value) { this.$store.commit('SET_ANNO_PROP', {prop: 'title', value}) }
         },
         rights: {
             get () { return this.$store.rights },
-            set (rights) { this.$store.commit('setRights', rights) }
+            set (value) { this.$store.commit('SET_ANNO_PROP', {prop: 'rights', value}) }
         },
     },
 

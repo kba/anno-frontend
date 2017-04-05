@@ -5,7 +5,7 @@ require('bootstrap-webpack!./bootstrap.config.js');
 require('style-loader!css-loader!font-awesome/css/font-awesome.css');
 
 // Code
-window.UBHDAnnoApp = require('./src/app.js')
+// window.UBHDAnnoApp = require('./src/app.js')
 
 window.Vue = require('vue')
 window.Vuex = require('vuex')
@@ -21,9 +21,7 @@ require('./src/components')(window.Vue)
 
 window._ubhddebug = {
     Vue: window.Vue,
-    store: {
-        annotation: require('./src/store/annotation')
-    },
+    store: require('./src/vuex/store'),
     xrx: require('semtonotes-client').xrx,
     goog: require('semtonotes-client').goog,
     AnnoEditor : require('./src/components/anno-editor'),

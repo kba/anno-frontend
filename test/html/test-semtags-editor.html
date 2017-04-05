@@ -12,9 +12,7 @@
 <script src="./fixtures.js"></script>
 <script type="text/javascript">
 
-storeTemplate = _ubhddebug.store.annotation
-storeTemplate.state = window.annotations[3]
-const store = new Vuex.Store(storeTemplate)
+const store = _ubhddebug.store
 const l10n = _ubhddebug.config.localizations.de
 window.app = new Vue({
   el: '#anchor',
@@ -22,4 +20,5 @@ window.app = new Vue({
   data: { l10n },
   template: '<semtags-editor :l10n="l10n" />',
 })
+setTimeout(() => store.dispatch('replaceAnnotation', window.annotations[3]), 1000)
 </script></body></html>

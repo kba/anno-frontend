@@ -12,8 +12,7 @@
 <script src="./fixtures.js"></script>
 <script type="text/javascript">
 
-_ubhddebug.store.annotation.state = window.annotations[3]
-const store = new Vuex.Store(_ubhddebug.store.annotation)
+const store = _ubhddebug.store
 const l10n = _ubhddebug.config.localizations.de
 window.app = new Vue({
   el: '#anchor',
@@ -21,4 +20,5 @@ window.app = new Vue({
   data: { l10n },
   template: '<tags-editor :l10n="l10n" />',
 })
+store.dispatch('replaceAnnotation', window.annotations[3])
 </script></body></html>

@@ -4,14 +4,10 @@ module.exports = {
         l10n: {type: Object, required: true},
     },
     computed: {
-        simpleTagBodies() { return this.$store.getters.simpleTagBodies },
+        simpleTagBodies() { return this.$store.getters.simpleTagBodis },
     },
     methods: {
-        add() {
-            this.$store.commit('addSimpleTag')
-        },
-        remove(body) {
-            this.$store.commit('removeBody', body)
-        },
+        addSimpleTag() { this.$store.dispatch('addSimpleTag') },
+        removeBody(body) { this.$store.dispatch('removeBody', body) },
     }
 }

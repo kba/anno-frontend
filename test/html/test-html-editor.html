@@ -9,14 +9,15 @@
             </div>
         </div>
     </div>
+<script src="./fixtures.js"></script>
 <script type="text/javascript">
-
+const store = _ubhddebug.store
+const l10n = _ubhddebug.config.localizations.de
 window.app = new Vue({
   el: '#anchor',
-  store: new Vuex.Store(_ubhddebug.store.annotation),
-  data: {
-    l10n: _ubhddebug.config.localizations,
-  },
+  store,
+  data: { l10n },
   template: '<html-editor :l10n="l10n" />',
 })
+store.dispatch('replaceAnnotation', window.annotations[3])
 </script></body></html>

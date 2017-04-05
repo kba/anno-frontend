@@ -1,7 +1,7 @@
 <div class="panel panel-default">
   <div class="panel-heading">
     {{ l10n.semtags }}
-    <bootstrap-button @click="add">{{ l10n.add_semtag }}</bootstrap-button>
+    <bootstrap-button @click="addSemanticTag">{{ l10n.add_semtag }}</bootstrap-button>
   </div>
   <div class="panel-body">
       <div class="row" v-for="(body, bodyIndex) in semanticTagBodies">
@@ -35,7 +35,7 @@
           </select>
         </div>
         <div class="col-md-3">
-          <bootstrap-button btnSize="xs" btnClass="danger" @click="remove(body)">
+          <bootstrap-button btnSize="xs" btnClass="danger" @click="removeBody(body)">
             {{ l10n.delete_semtag }}
           </bootstrap-button>
         </div>

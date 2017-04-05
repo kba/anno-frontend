@@ -14,8 +14,7 @@
 <script src="./fixtures.js"></script>
 <script type="text/javascript">
 
-_ubhddebug.store.annotation.state = window.annotations[1]
-const store = new Vuex.Store(_ubhddebug.store.annotation)
+const store = _ubhddebug.store
 const l10n = _ubhddebug.config.localizations.de
 window.app = new Vue({
   el: '#anchor',
