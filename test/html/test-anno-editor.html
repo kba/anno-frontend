@@ -20,12 +20,10 @@ window.UBHDANNO_ENDPOINT = 'http://anno.ub.uni-heidelberg.de/cgi-bin/anno.cgi'
 window.UBHDANNO_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoia2JhIiwic2VydmljZSI6ImtiYS10ZXN0LXNlcnZpY2UiLCJ3cml0ZSI6MSwiZXhwIjozMTUzNjAwMDB9.M6OoYjbjhHoSMZqs-lGLnrgPPMNJhwLwwk3OuCXETiA'
 
 const store = _ubhddebug.store
-const l10n = _ubhddebug.config.localizations.de
 
 window.app = new Vue({
   el: '#anchor',
   store,
-  data: { l10n },
   template: `
     <anno-editor
       :l10n="l10n"

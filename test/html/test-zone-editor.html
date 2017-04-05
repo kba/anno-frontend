@@ -15,14 +15,11 @@
 <script type="text/javascript">
 
 const store = _ubhddebug.store
-const l10n = _ubhddebug.config.localizations.de
 window.app = new Vue({
   el: '#anchor',
   store,
-  data: { l10n },
   template: `
     <zone-editor
-      :l10n="l10n"
       :canvasHeight="600"
       targetImage="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png"
       targetThumbnail="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/200px-Ghostscript_Tiger.svg.png"

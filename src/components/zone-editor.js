@@ -35,6 +35,8 @@ const defaultStyles = {
 
 module.exports = {
 
+    mixins: [require('./l10n-mixin')],
+
     template: require('./zone-editor.html'),
 
     components: {
@@ -43,7 +45,6 @@ module.exports = {
 
     props: {
         targetImage: {type: String, required: true},
-        l10n: {type: Object, required: true},
         targetThumbnail: {type: String},
         canvasHeight: {type: Number, default: 640},
         canvasWidth: {type: Number, default: 480},

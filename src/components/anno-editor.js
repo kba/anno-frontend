@@ -3,10 +3,10 @@ const eventBus = require('../event-bus')
 const tinymce = require('tinymce')
 
 module.exports = {
+    mixins: [require('./l10n-mixin')],
     props: {
         targetImage: {type: String, required: true},
         targetThumbnail: {type: String},
-        l10n: {type: Object, required: true},
     },
     template: require('./anno-editor.html'),
     style: require('./anno-editor.css'),

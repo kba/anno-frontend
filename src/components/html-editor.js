@@ -1,4 +1,5 @@
 const config = require('../config')
+const l10nMixin = require('./l10n-mixin')
 
 /* TinyMCE */
 require.context('!file?name=[path][name].[ext]&context=node_modules/tinymce!tinymce/skins', true, /.*/)
@@ -14,9 +15,9 @@ const VueTinymce = require('vue-tinymce').default
 Vue.use(VueTinymce)
 
 module.exports = {
+    mixins: [require('./l10n-mixin')],
     template: require('./html-editor.html'),
     props: {
-        l10n: {type: Object, required: true},
         language: {type: String, default: 'de'},
         tinymceOptions: {
             type: Object,
@@ -39,6 +40,7 @@ module.exports = {
         },
     },
     created() {
+        console.log(this)
         this.tinymceOptions.language = this.language
 
         // Add localizations by faking a URI since tinymce expects languages at

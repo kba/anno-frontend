@@ -1,10 +1,8 @@
 module.exports = {
+    mixins: [require('./l10n-mixin')],
     template: require('./tags-editor.html'),
-    props: {
-        l10n: {type: Object, required: true},
-    },
     computed: {
-        simpleTagBodies() { return this.$store.getters.simpleTagBodis },
+        simpleTagBodies() { return this.$store.getters.simpleTagBodies },
     },
     methods: {
         addSimpleTag() { this.$store.dispatch('addSimpleTag') },

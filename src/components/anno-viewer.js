@@ -8,10 +8,10 @@ const {
 } = require('../anno-utils.js')
 
 module.exports = {
+    mixins: [require('./l10n-mixin')],
     // necessary for nesting
     name: 'anno-viewer',
     props: {
-        l10n: {type: Object, required: true},
         acl: {type: Object, default: () => { return {editable: true, commentable: true }}},
         purl: {type: String, required: true},
         annotation: {type: Object, required: true},

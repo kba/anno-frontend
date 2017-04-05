@@ -7,7 +7,7 @@ const annotationList = require('./module/annotationList')
 module.exports = new Vuex.Store({
     state: {
         current: -1,
-        annotation: 3000,
+        language: 'de',
     },
     modules: {
         annotation,

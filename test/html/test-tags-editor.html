@@ -13,12 +13,10 @@
 <script type="text/javascript">
 
 const store = _ubhddebug.store
-const l10n = _ubhddebug.config.localizations.de
 window.app = new Vue({
   el: '#anchor',
   store,
-  data: { l10n },
-  template: '<tags-editor :l10n="l10n" />',
+  template: '<tags-editor/>',
 })
 store.dispatch('replaceAnnotation', window.annotations[3])
 </script></body></html>

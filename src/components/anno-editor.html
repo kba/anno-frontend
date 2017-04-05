@@ -1,29 +1,22 @@
 <bootstrap-tabs class="panel-body">
 
   <bootstrap-tab name="annoeditor_tab_html" :title="l10n.metadata">
-    <html-editor
-      :l10n="l10n"
-      />
+    <html-editor/>
   </bootstrap-tab>
 
   <bootstrap-tab name="annoeditor_tab_zones" :title="l10n.zones" v-if="targetImage">
     <zone-editor
-      :l10n="l10n"
       :targetImage="targetImage"
       :targetThumbnail="targetThumbnail"
       />
   </bootstrap-tab>
 
   <bootstrap-tab name="annoeditor_tab_tags" :title="l10n.tags">
-    <tags-editor
-      :l10n="l10n"
-      />
+    <tags-editor/>
   </bootstrap-tab>
 
   <bootstrap-tab name="annoeditor_tab_semtags" :title="l10n.semtags" active="true">
-    <semtags-editor
-      :l10n="l10n"
-      />
+    <semtags-editor/>
   </bootstrap-tab>
 
   <bootstrap-tab name="annoeditor_tab_preview" title="Preview">

@@ -1,11 +1,9 @@
 const bonanza = require('bonanza');
 
 module.exports = {
+    mixins: [require('./l10n-mixin')],
     template: require('./semtags-editor.html'),
     style:    require('./semtags-editor.css'),
-    props: {
-        l10n: {type: Object, required: true},
-    },
     updated() {
         this.ensureCompletion()
     },

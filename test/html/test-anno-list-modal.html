@@ -21,17 +21,10 @@ const store = _ubhddebug.store
 window.app = new Vue({
   el: '#anchor',
   store,
-  data: {
-    l10n: _ubhddebug.config.localizations.en,
-  },
   template: `
   <div>
-<anno-list
-    :l10n="l10n"
-    purl="https://purl/foo/3000"
-/>
+<anno-list purl="https://purl/foo/3000" />
 <anno-editor-modal
-    :l10n="l10n"
     targetImage="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png"
     targetThumbnail="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/200px-Ghostscript_Tiger.svg.png"
 />
