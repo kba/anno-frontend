@@ -8,7 +8,8 @@ function ensureArray(state, k) {
 }
 
 function add(state, k, v) {
-    state[k].push(v)
+    if (state[k] === undefined || state[k] === null) state[k] = v
+    else state[k].push(v)
 }
 
 function remove(state, k, v) {
@@ -78,6 +79,25 @@ function setToVersion(curState, newState) {
     console.log(newState)
 }
 
+//
+// collectIds from a list
+//
+
+function collectIds(list) {
+    function _collectIds(list, ret) {
+        list.forEach(obj => {
+            if (!obj) return;
+            else if (obj.id) ret.push(obj.id)
+            else if (typeof obj === 'object')
+                Object.keys(obj).forEach(k => _collectIds([obj[k]], ret))
+        })
+        return ret
+    }
+    const ret = []
+    _collectIds(list, ret)
+    return ret
+}
+
 
 module.exports = {
 
@@ -100,5 +120,7 @@ module.exports = {
     svgTarget,
 
     setToVersion,
+
+    collectIds,
 
 }
