@@ -43,7 +43,7 @@
               {{ annotation.creator }} {{ dateformat(annotation.created || annotation.modified) }}
             </bootstrap-button>
             <bootstrap-button btnSize="xs" glyphicon="link" elem="a"
-              :title="l10n.purl"
+              :title="l10n('purl')"
               data-toggle="popover"
               :data-content="id">
             </button>
@@ -90,15 +90,15 @@
 
         <div class="btn-group btn-group-xs pull-right" role="group">
           <bootstrap-button btnClass="default editbut" @click="edit" font-awesome="pencil" v-if="acl.editable">
-            {{ l10n.edit }}
+            {{ l10n('edit') }}
           </bootstrap-button>
           <button v-if="acl.commentable" class="btn btn-default commentbut">
-              <i class="fa fa-reply"></i> &nbsp; {{ l10n.comment }}
+              <i class="fa fa-reply"></i> &nbsp; {{ l10n('comment') }}
             </button>
 
           <template v-if="numberOf('hasVersion') > 0">
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-              {{l10n.previous}}
+              {{l10n('previous')}}
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu pull-right versions">

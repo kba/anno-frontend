@@ -1,20 +1,20 @@
 <div class="anno-list">
   <div class="btn-group pull-right hidden-print" role="group">
-    <button v-if="options.writetoken" class="btn btn-default btn-xs ubhdanno_new">{{l10n.new}}</button>
-    <a v-if="options.login && !options.readtoken" :href="options.login" class="btn btn-default btn-xs">{{l10n.login}}</a>
+    <button v-if="options.writetoken" class="btn btn-default btn-xs ubhdanno_new">{{l10n('new')}}</button>
+    <a v-if="options.login && !options.readtoken" :href="options.login" class="btn btn-default btn-xs">{{l10n('login')}}</a>
 
-    <button v-if="allCollapsed" class="btn btn-default btn-xs" @click="collapseAll('show')">{{l10n.open_all}}</button>
-    <button v-else class="btn btn-default btn-xs" @click="collapseAll('hide')">{{l10n.close_all}}</button>
+    <button v-if="allCollapsed" class="btn btn-default btn-xs" @click="collapseAll('show')">{{l10n('open_all')}}</button>
+    <button v-else class="btn btn-default btn-xs" @click="collapseAll('hide')">{{l10n('close_all')}}</button>
 
-    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{l10n.sort}}
+    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{l10n('sort')}}
       <span class="caret"></span>
     </button>
     <ul class="dropdown-menu small" role="menu">
-      <li><a @click="sort('date')" class="small">{{ l10n.sortdate }}
+      <li><a @click="sort('date')" class="small">{{ l10n('sortdate') }}
           <span v-if="sortedBy == 'date'" class="glyphicon glyphicon-ok"></span></a></li>
-      <li><a @click="sort('datereverse')" class="small">{{ l10n.sortdatereverse }}
+      <li><a @click="sort('datereverse')" class="small">{{ l10n('sortdatereverse') }}
           <span v-if="sortedBy == 'datereverse'" class="glyphicon glyphicon-ok"></span></a></li>
-      <li><a @click="sort('title')" class="small">{{ l10n.sorttitle }}
+      <li><a @click="sort('title')" class="small">{{ l10n('sorttitle') }}
           <span v-if="sortedBy == 'title'" class="glyphicon glyphicon-ok"></span></a></li>
     </ul>
   </div>
@@ -25,25 +25,25 @@
     <div class="hidden-print ubhdanno_showrefopt">
 
       <div class="dropdown pull-right">
-        <button type="button" class="btn btn-default btn-xs dropdown-toggle" v-bind:id="'ubhdanno_dropdownMenuS'" data-toggle="dropdown" aria-expanded="false">{{l10n.showref}}:
-          <span class="ubhdanno_showrefstatus_0 ubhdanno_showrefstatus">{{l10n.showrefdefault}}</span>
-          <span class="ubhdanno_showrefstatus_1 ubhdanno_showrefstatus">{{l10n.showrefalways}}</span>
-          <span class="ubhdanno_showrefstatus_2 ubhdanno_showrefstatus">{{l10n.showrefnever}}</span>
+        <button type="button" class="btn btn-default btn-xs dropdown-toggle" v-bind:id="'ubhdanno_dropdownMenuS'" data-toggle="dropdown" aria-expanded="false">{{l10n('showref')}}:
+          <span class="ubhdanno_showrefstatus_0 ubhdanno_showrefstatus">{{l10n('showrefdefault')}}</span>
+          <span class="ubhdanno_showrefstatus_1 ubhdanno_showrefstatus">{{l10n('showrefalways')}}</span>
+          <span class="ubhdanno_showrefstatus_2 ubhdanno_showrefstatus">{{l10n('showrefnever')}}</span>
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu small" role="menu" v-bind:aria-labelledby="'ubhdanno_dropdownMenuS'">
           <li>
-            <a class="small" data-anno-showref="0">{{l10n.showrefdefault}}&nbsp;
+            <a class="small" data-anno-showref="0">{{l10n('showrefdefault')}}&nbsp;
               <span class="glyphicon glyphicon-ok ubhdanno_showrefstatus_0 ubhdanno_showrefstatus" aria-hidden="true"></span>
             </a>
           </li>
           <li>
-            <a class="small" data-anno-showref="1">{{l10n.showrefalways}}&nbsp;
+            <a class="small" data-anno-showref="1">{{l10n('showrefalways')}}&nbsp;
               <span class="glyphicon glyphicon-ok ubhdanno_showrefstatus_1 ubhdanno_showrefstatus" aria-hidden="true"></span>
             </a>
           </li>
           <li>
-            <a class="small" data-anno-showref="2">{{l10n.showrefnever}}&nbsp;
+            <a class="small" data-anno-showref="2">{{l10n('showrefnever')}}&nbsp;
               <span class="glyphicon glyphicon-ok ubhdanno_showrefstatus_2 ubhdanno_showrefstatus" aria-hidden="true"></span>
             </a>
           </li>

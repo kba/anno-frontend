@@ -1,6 +1,6 @@
 <div class="panel panel-default">
   <div class="panel-heading">
-    <input id="ubhdannoprefix_field_title" :placeholder="l10n.annofield_title" v-model="title"
+    <input id="ubhdannoprefix_field_title" :placeholder="l10n('annofield_title')" v-model="title"
       class="form-control" type="text" required="true">
   </div>
   <div class="panel-body">
@@ -11,7 +11,7 @@
     </div>
 
     <select v-model="rights">
-      <option :name="l10n.license">{{l10n.license}}</option>
+      <option :name="l10n('license')">{{l10n.license}}</option>
     </select>
 
 </form>
