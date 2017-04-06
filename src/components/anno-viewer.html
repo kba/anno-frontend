@@ -89,11 +89,11 @@
       <div class="btn-toolbar pull-right" role="toolbar" style="margin-top: 10px;">
 
         <div class="btn-group btn-group-xs pull-right" role="group">
-          <bootstrap-button btnClass="default editbut" @click="edit" font-awesome="pencil" v-if="$auth('edit', id)">
+          <bootstrap-button btnClass="default editbut" @click="revise" font-awesome="pencil" v-if="$auth('revise', id)">
             {{ l10n('edit') }}
           </bootstrap-button>
-          <bootstrap-button btnClass="default commentbut" @click="comment" font-awesome="reply" v-if="$auth('comment', id)">
-              {{ l10n('comment') }}
+          <bootstrap-button btnClass="default commentbut" @click="comment" font-awesome="reply" v-if="$auth('create', id)">
+            {{ l10n('comment') }}
           </bootstrap-button>
 
           <template v-if="numberOf('hasVersion') > 0">
@@ -125,7 +125,6 @@
           v-for="reply in annotation.hasReply"
           as-reply
           :annotation="reply"
-          purl="https://purl/foo/3000"
         />
 
       </template>

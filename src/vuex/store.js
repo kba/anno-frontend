@@ -21,5 +21,13 @@ module.exports = new Vuex.Store({
         annotation,
         annotationList,
     },
+    mutations: {
+
+        CHANGE_ACL(state, rules) {
+            state.acl = state.acl || {}
+            Object.assign(state.acl, rules)
+        }
+
+    }
     // strict: true
 })

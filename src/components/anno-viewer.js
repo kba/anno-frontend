@@ -15,7 +15,6 @@ module.exports = {
     // necessary for nesting
     name: 'anno-viewer',
     props: {
-        purl: {type: String, required: true},
         annotation: {type: Object, required: true},
         // Controls whether comment is collapsible or not
         asReply: {type: Boolean, default: false},
@@ -30,7 +29,6 @@ module.exports = {
         $('[data-toggle="popover"]', this.$el).popover(); 
         $(".panel-collapse", this.$el).on("hide.bs.collapse", () => $('[data-toggle="collapse"]', this.$el).addClass('collapsed'))
         $(".panel-collapse", this.$el).on("show.bs.collapse", () => $('[data-toggle="collapse"]', this.$el).removeClass('collapsed'))
-        eventBus.$on('edit', (...args) => console.log(...args))
     },
     computed: {
         firstHtmlBody()     { return firstHtmlBody(this.annotation) },
@@ -48,8 +46,10 @@ module.exports = {
         }
     },
     methods: {
+        revise()    { return eventBus.$emit('revise', this.annotation) },
+        comment()   { return eventBus.$emit('comment', this.annotation) },
+
         dateformat(date) { return date ? _dateformat(date, 'dd.mm.yyyy hh:MM:ss') : '' },
-        edit() { return eventBus.$emit('edit', this.annotation) },
         collapse(collapseState) { $(".collapse", this.$el).collapse(collapseState) },
         numberOf(k) { return numberOf(this.annotation, k) },
         setToVersion(newState) {
