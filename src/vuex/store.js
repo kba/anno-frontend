@@ -1,3 +1,4 @@
+const config = require('../config')
 const Vue = require('vue')
 const Vuex = require('vuex')
 
@@ -7,7 +8,7 @@ const annotationList = require('./module/annotationList')
 module.exports = new Vuex.Store({
     state: {
         current: -1,
-        language: 'de',
+        language: config.defaultLang,
     },
     modules: {
         annotation,

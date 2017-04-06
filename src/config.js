@@ -96,7 +96,7 @@ C.localizations = {
         'unsaved':             'Nicht gespeichert',
         'annoeditor':          'Annotations-Editor',
 
-        "Preview":                 "Vorschau",
+        "preview":             'Vorschau',
 
     },
     'en':                      {
@@ -145,6 +145,8 @@ C.localizations = {
 
         'unsaved':             'Unsaved',
         'annoeditor':          'Annotation editor',
+
+        "preview":             'Preview',
     }
 };
 

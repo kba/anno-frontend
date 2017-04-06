@@ -23,6 +23,4 @@ module.exports = {
         id() { return this.$store.state.annotation.id },
         stateDump() { return this.$store.state },
     },
-    methods: {
-    },
 }

@@ -1,17 +1,18 @@
-const config = require('../config')
+const {langcode, defaultlang, localizations} = require('../config')
 
 function l10n(lang, text) {
-    lang = config.langcode[lang] ? config.langcode[lang] : config.defaultlang;
-    return config.langcode[lang] && config.localizations[lang][text] !== undefined
-        ? config.localizations[lang][text]
-        : (config.langcode[config.defaultlang] && config.localizations[config.defaultlang][text] !== undefined)
-            ? config.localizations[config.defaultlang][text]
+    lang = langcode[lang] ? langcode[lang] : defaultlang;
+    return langcode[lang] && localizations[lang][text] !== undefined
+        ? localizations[lang][text]
+        : (langcode[defaultlang] && localizations[defaultlang][text] !== undefined)
+            ? localizations[defaultlang][text]
             : text;
 }
+
 module.exports = {
 
-    beforeMount() {
-        this.l10n = (text) => l10n(this.$store.state.language, text)
+    methods: {
+        l10n(text) { return l10n(this.$store.state.language, text) }
     },
 
 }
