@@ -8,11 +8,13 @@ const {
 } = require('../anno-utils.js')
 
 module.exports = {
-    mixins: [require('../mixin/l10n')],
+    mixins: [
+        require('../mixin/l10n'),
+        require('../mixin/acl'),
+    ],
     // necessary for nesting
     name: 'anno-viewer',
     props: {
-        acl: {type: Object, default: () => { return {editable: true, commentable: true }}},
         purl: {type: String, required: true},
         annotation: {type: Object, required: true},
         // Controls whether comment is collapsible or not

@@ -9,6 +9,13 @@ module.exports = new Vuex.Store({
     state: {
         current: -1,
         language: config.defaultLang,
+        writetoken: "YES",
+        acl: {
+            'https://anno.ub.uni-heidelberg.de/456': {
+                edit: true,
+                comment: false,
+            },
+        },
     },
     modules: {
         annotation,
