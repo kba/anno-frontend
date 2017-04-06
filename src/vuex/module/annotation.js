@@ -96,6 +96,10 @@ const mutations = {
         state.title = title
     },
 
+    SET_RIGHTS(state, rights) {
+        state.rights = rights
+    },
+
     REMOVE_TARGET(state, v) {
         remove(state, 'target', v)
     },
@@ -123,11 +127,6 @@ const mutations = {
     SET_SEMTAG_PROP(state, {n, prop, value}) {
         getters.semanticTagBodies(state)[n][prop] = value
     },
-
-    SET_ANNO_PROP(state, {prop, value}) {
-        state[prop] = value
-    }
-
 
 }
 

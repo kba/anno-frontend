@@ -56,11 +56,11 @@ module.exports = {
         },
         title: {
             get () { return this.$store.state.annotation.title },
-            set (value) { this.$store.commit('SET_ANNO_PROP', {prop: 'title', value}) }
+            set (value) { this.$store.commit('SET_TITLE', value) }
         },
         rights: {
             get () { return this.$store.state.annotation.rights },
-            set (value) { this.$store.commit('SET_ANNO_PROP', {prop: 'rights', value}) }
+            set (value) { this.$store.commit('SET_RIGHTS', value) }
         },
     },
 
