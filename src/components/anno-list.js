@@ -1,6 +1,6 @@
 const AnnoClient = require('../anno-client')
 module.exports = {
-    mixins: [require('./l10n-mixin')],
+    mixins: [require('../mixin/l10n')],
     props: {
         purl:                {type: String, required: true},
         initialAllCollapsed: {type: Boolean, default: false},

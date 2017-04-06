@@ -8,7 +8,7 @@ const {
 } = require('../anno-utils.js')
 
 module.exports = {
-    mixins: [require('./l10n-mixin')],
+    mixins: [require('../mixin/l10n')],
     // necessary for nesting
     name: 'anno-viewer',
     props: {

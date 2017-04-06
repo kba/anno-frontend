@@ -35,7 +35,7 @@ const defaultStyles = {
 
 module.exports = {
 
-    mixins: [require('./l10n-mixin')],
+    mixins: [require('../mixin/l10n')],
 
     template: require('./zone-editor.html'),
 

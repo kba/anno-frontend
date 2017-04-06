@@ -2,7 +2,7 @@ const $ = require('jquery')
 const eventBus = require('../event-bus')
 
 module.exports = {
-    mixins: [require('./l10n-mixin')],
+    mixins: [require('../mixin/l10n')],
     props: {
         targetImage: {type: String, required: true},
         targetThumbnail: {type: String},

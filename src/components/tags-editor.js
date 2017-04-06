@@ -1,5 +1,5 @@
 module.exports = {
-    mixins: [require('./l10n-mixin')],
+    mixins: [require('../mixin/l10n')],
     template: require('./tags-editor.html'),
     computed: {
         simpleTagBodies() { return this.$store.getters.simpleTagBodies },

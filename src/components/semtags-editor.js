@@ -1,7 +1,7 @@
 const bonanza = require('bonanza');
 
 module.exports = {
-    mixins: [require('./l10n-mixin')],
+    mixins: [require('../mixin/l10n')],
     template: require('./semtags-editor.html'),
     style:    require('./semtags-editor.css'),
     updated() {
