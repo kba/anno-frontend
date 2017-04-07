@@ -21,15 +21,20 @@ window.UBHDANNO_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoia2JhIiwic2VydmljZSI6Im
 
 const store = _ubhddebug.store
 
+Object.assign(store.state, {
+  targetImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png",
+  targetThumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/200px-Ghostscript_Tiger.svg.png",
+  canvasHeight: 400,
+  canvasWidth: 400,
+  thumbHeight: 100,
+  thumbWidth: 100,
+})
+
 window.app = new Vue({
   el: '#anchor',
   store,
   template: `
-    <anno-editor
-      :canvasHeight="600"
-      targetImage="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png"
-      targetThumbnail="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/200px-Ghostscript_Tiger.svg.png"
-    />
+    <anno-editor />
   `,
 })
 store.dispatch('replaceAnnotation', window.annotations[3])
