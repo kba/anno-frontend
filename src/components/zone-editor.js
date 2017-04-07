@@ -11,8 +11,8 @@ module.exports = {
     props: {
         targetImage: {type: String, required: true},
         targetThumbnail: {type: String},
-        canvasHeight: {type: Number, default: 640},
-        canvasWidth: {type: Number, default: 480},
+        canvasHeight: {type: Number, default: 400},
+        canvasWidth: {type: Number, default: 300},
         thumbHeight: {type: Number, default: 120},
         thumbWidth: {type: Number, default: 120},
         style: {type: Object, default: () => {return defaultStyles}},

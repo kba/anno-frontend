@@ -97,6 +97,7 @@ C.localizations = {
         'confirm_delete':      'Sind sie sicher dass Sie die Annotation l\u00f6schen wollen?',
 
         'unsaved':             'Nicht gespeichert',
+        'discard':             'Verwerfen',
         'annoeditor':          'Annotations-Editor',
 
         "preview":             'Vorschau',
@@ -150,6 +151,7 @@ C.localizations = {
         'confirm_delete':      'Are you sure you want to delete this annotation?',
 
         'unsaved':             'Unsaved',
+        'discard':             'Discard',
         'annoeditor':          'Annotation editor',
 
         "preview":             'Preview',

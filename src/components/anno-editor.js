@@ -12,12 +12,15 @@ module.exports = {
         // TODO Move these to store maybe??
         eventBus.$on('create', (annotation) => {
             this.mode = 'create'
-            this.$store.dispatch('replaceAnnotation', {target: this.targetSource})
+            this.$store.commit('RESET_ANNOTATION')
+            this.$store.commit('ADD_TARGET', {target: annotation.id})
+            this.$store.commit('SET_REPLY_TO', annotation.id)
             eventBus.$emit('open-editor')
         })
         eventBus.$on('comment', (annotation) => {
             this.mode = 'comment'
-            this.$store.dispatch('replaceAnnotation', {target: annotation.id, replyTo: annotation.id})
+            this.$store.commit('ADD_TARGET', {target: annotation.id})
+            this.$store.commit('SET_REPLY_TO', annotation.id)
             eventBus.$emit('open-editor')
         })
         eventBus.$on('revise', (annotation) => {
@@ -33,6 +36,11 @@ module.exports = {
                     eventBus.$emit('removed', annotation)
                 })
             }
+        })
+
+        eventBus.$on('discard', () => {
+            this.$store.commit('RESET_ANNOTATION')
+            eventBus.$emit('close-editor')
         })
         eventBus.$on('save', () => {
             this.save()

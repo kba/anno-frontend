@@ -128,6 +128,19 @@ const mutations = {
         getters.semanticTagBodies(state)[n][prop] = value
     },
 
+    ADD_TARGET(state, v) {
+        ensureArray(state, 'target')
+        add(state, 'target', v)
+    },
+
+    RESET_ANNOTATION(state) {
+        state = null
+    },
+
+    SET_REPLY_TO(state, v) {
+        state.replyTo = v
+    }
+
 }
 
 module.exports = {
