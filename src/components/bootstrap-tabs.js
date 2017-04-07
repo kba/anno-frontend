@@ -6,6 +6,11 @@ module.exports = {
             tablist: []
         }
     },
+    methods: {
+        clickHandler(ev) {
+            this.$emit('shown.bs.tab', ev)
+        }
+    },
     mounted() {
         this.$children.forEach( c => {
             this.tablist.push({

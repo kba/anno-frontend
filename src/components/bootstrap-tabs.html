@@ -4,7 +4,7 @@
       v-for="tab in tablist"
       :class="{'active':tab.active}"
       >
-      <a :href="'#' + tab.name" :aria-controls="tab.name" role="tab" data-toggle="tab">
+      <a :href="'#' + tab.name" :aria-controls="tab.name" role="tab" data-toggle="tab" @click='clickHandler'>
         {{tab.title}}
       </a>
     </li>
