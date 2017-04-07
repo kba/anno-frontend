@@ -29,10 +29,10 @@ module.exports = function displayAnnotations(options={}) {
         api.aclCheck(allids, (err, perms) => {
             if (err) throw err
             store.commit('CHANGE_ACL', perms)
-            const app = new Vue({
+            window.app = new Vue({
                 store,
                 el: options.el,
-                template: `<anno-list/>`,
+                template: `<anno-list ref='anno-list'/>`,
             })
         })
     })
