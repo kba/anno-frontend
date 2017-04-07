@@ -2,37 +2,6 @@ const {xrx, goog} = require('semtonotes-client')
 const XrxUtils = require('../xrx-utils')
 const jQuery = require('jquery')
 
-const defaultStyles = {
-    default: {
-        strokeWidth: 1,
-        strokeColor: '#3B3BFF',
-        fillColor: '#3B3BFF',
-        fillOpacity: 0.4,
-        creatable: {
-            strokeWidth: 1,
-            strokeColor: '#3B3BFF',
-            fillColor: '#3B3BFF',
-            fillOpacity: 0.4,
-        },
-        selectable: {
-            strokeColor: '#ff00ff',
-            fillColor: '#ff00ff',
-        },
-    },
-    // hover: {
-    //     fillOpacity: 1,
-    // },
-    modified: {
-        strokeColor: '#ff0000',
-        fillColor: '#ffff00',
-        fillOpacity: 0.4,
-        creatable: {
-            strokeColor: '#ff0000',
-            fillColor: '#ffff00',
-        }
-    }
-}
-
 module.exports = {
 
     mixins: [require('../mixin/l10n')],
@@ -49,17 +18,9 @@ module.exports = {
         style: {type: Object, default: () => {return defaultStyles}},
     },
 
-    created() {
-        if (!this.targetImage) throw new Error("Must set 'targetImage'")
-        if (!this.targetThumbnail) this.targetThumbnail = this.targetImage;
-    },
-
     mounted() {
-        const canvasDiv = this.$el.querySelector('#ubhdannoprefix_zoneeditcanvas')
-        this.image = XrxUtils.createDrawing(canvasDiv, this.canvasWidth, this.canvasHeight)
-
-        const thumbDiv = this.$el.querySelector('#ubhdannoprefix_zoneeditthumb')
-        this.thumb = XrxUtils.createDrawing(thumbDiv, this.thumbWidth, this.thumbHeight)
+        this.initCanvas()
+        this.initThumb()
 
         // Keep only one button active
         jQuery(this.$el).on('click', '.btn-group button', function() {
@@ -67,46 +28,59 @@ module.exports = {
             jQuery(this).siblings().removeClass('active');
         });
 
-        this.thumb.setBackgroundImage(this.targetThumbnail, () => {
-            // XXX why won't it fit initially
-            this.thumb.setModeDisabled()
-            // this.thumb.handleResize()
-            this.thumb.getViewbox().setPosition(xrx.drawing.Position.NW)
-            this.thumb.getViewbox().fit(true)
-            this.showNavigationThumbnail()
-        })
-
-        this.image.setBackgroundImage(this.targetImage, () => {
-            // console.log(this.image.getLayerBackground())
-            this.image.setModeHover()
-            this.image.getViewbox().fitToWidth(false)
-            this.thumb.getViewbox().setPosition(xrx.drawing.Position.NW)
-            this.image.getViewbox().setZoomFactorMax(4)
-
-            // Draw all svg targets
-            this.fromSVG()
-            this.image.draw()
-
-            // Bind to SemToNotes events
-            this.image.eventViewboxChange = () => {
-                this.updateNavigationThumb()
-            }
-            this.image.eventShapeModify = (shape) => {
-                this.toSVG()
-                XrxUtils.applyStyle(shape, this.style.modified)
-            }
-            // this.image.eventShpeHoverIn = (shape) => {
-            //     XrxUtils.applyStyle(shape, this.style.hover)
-            // }
-            // this.image.eventShapeHoverIn = (shape) => {
-            //     XrxUtils.applyStyle(shape, this.style.default)
-            // }
-            this.updateNavigationThumb()
-        })
-
     },
 
     methods: {
+
+        initCanvas() {
+            this.canvasDiv = this.$el.querySelector('div.zone-edit-canvas')
+            this.image = XrxUtils.createDrawing(this.canvasDiv, this.canvasWidth, this.canvasHeight)
+
+            this.image.setBackgroundImage(this.targetImage, () => {
+                // console.log(this.image.getLayerBackground())
+                this.image.setModeHover()
+                this.image.getViewbox().fitToWidth(false)
+                this.thumb.getViewbox().setPosition(xrx.drawing.Position.NW)
+                this.image.getViewbox().setZoomFactorMax(4)
+
+                // Draw all svg targets
+                this.fromSVG()
+                this.image.draw()
+
+                // Bind to SemToNotes events
+                this.image.eventViewboxChange = () => {
+                    this.updateNavigationThumb()
+                }
+                this.image.eventShapeModify = (shape) => {
+                    this.toSVG()
+                    XrxUtils.applyStyle(shape, this.style.modified)
+                }
+                // this.image.eventShpeHoverIn = (shape) => {
+                //     XrxUtils.applyStyle(shape, this.style.hover)
+                // }
+                // this.image.eventShapeHoverIn = (shape) => {
+                //     XrxUtils.applyStyle(shape, this.style.default)
+                // }
+                this.updateNavigationThumb()
+                // this.image.handleResize()
+            })
+        },
+
+        initThumb() {
+            this.thumbDiv = this.$el.querySelector('div.zone-edit-thumb')
+            this.thumb = XrxUtils.createDrawing(this.thumbDiv, this.thumbWidth, this.thumbHeight)
+
+            this.thumb.setBackgroundImage(this.targetThumbnail, () => {
+                // XXX why won't it fit initially
+                // this.thumb.setModeDisabled()
+                this.image.getViewbox().fitToWidth(true)
+                this.thumb.getViewbox().fit(true)
+                this.thumb.getViewbox().setPosition(xrx.drawing.Position.NW)
+                // this.thumb.handleResize()
+                this.showNavigationThumbnail()
+            })
+
+        },
 
         fromSVG(...args) {
             this.image.getLayerShape().removeShapes()
@@ -191,12 +165,44 @@ module.exports = {
         },
 
         showNavigationThumbnail() {
-            document.querySelector('#ubhdannoprefix_zoneeditthumb').style.display = 'inherit';
+            this.thumbDiv.style.display = 'inherit';
         },
 
         hideNavigationThumbnail() {
-            document.querySelector('#ubhdannoprefix_zoneeditthumb').style.display = 'none';
+            this.thumbDiv.style.display = 'none';
         },
     }
 
+}
+
+
+const defaultStyles = {
+    default: {
+        strokeWidth: 1,
+        strokeColor: '#3B3BFF',
+        fillColor: '#3B3BFF',
+        fillOpacity: 0.4,
+        creatable: {
+            strokeWidth: 1,
+            strokeColor: '#3B3BFF',
+            fillColor: '#3B3BFF',
+            fillOpacity: 0.4,
+        },
+        selectable: {
+            strokeColor: '#ff00ff',
+            fillColor: '#ff00ff',
+        },
+    },
+    // hover: {
+    //     fillOpacity: 1,
+    // },
+    modified: {
+        strokeColor: '#ff0000',
+        fillColor: '#ffff00',
+        fillOpacity: 0.4,
+        creatable: {
+            strokeColor: '#ff0000',
+            fillColor: '#ffff00',
+        }
+    }
 }
