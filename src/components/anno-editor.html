@@ -1,6 +1,6 @@
 <bootstrap-tabs class="panel-body" ref='tablist'>
 
-  <bootstrap-tab name="annoeditor_tab_html" :title="l10n('metadata')">
+  <bootstrap-tab name="annoeditor_tab_html" :title="l10n('metadata')" :active="true">
     <html-editor/>
   </bootstrap-tab>
 
@@ -20,7 +20,7 @@
     <tags-editor/>
   </bootstrap-tab>
 
-  <bootstrap-tab name="annoeditor_tab_semtags" :title="l10n('semtags')" active="true">
+  <bootstrap-tab name="annoeditor_tab_semtags" :title="l10n('semtags')">
     <semtags-editor/>
   </bootstrap-tab>
 
