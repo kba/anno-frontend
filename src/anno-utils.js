@@ -67,17 +67,17 @@ function svgTarget(state) {
     return find(state.target, isSvgTarget)
 }
 
-function setToVersion(curState, newState) {
-    // Object.keys(curState).forEach(k => {
-    //     if (k === 'hasReply' || k === 'hasVersion') return
-    //     curState[k] = null
-    // })
-    Object.keys(newState).forEach(k => {
-        if (k === 'hasReply' || k === 'hasVersion') return
-        curState[k] = newState[k]
-    })
-    console.log(newState)
-}
+// function setToVersion(curState, newState) {
+//     // Object.keys(curState).forEach(k => {
+//     //     if (k === 'hasReply' || k === 'hasVersion') return
+//     //     curState[k] = null
+//     // })
+//     Object.keys(newState).forEach(k => {
+//         if (k === 'hasReply' || k === 'hasVersion') return
+//         curState[k] = newState[k]
+//     })
+//     console.log(newState)
+// }
 
 //
 // collectIds from a list
@@ -87,18 +87,20 @@ function setToVersion(curState, newState) {
 function collectIds(list) {
     function _collectIds(list, _ret) {
         list.forEach(obj => {
-            if (!obj) {
-                return;
-             } if (obj.id) {
-                _ret.push(obj.id)
-             } else if (typeof obj === 'object') {
-                Object.keys(obj).forEach(k => _collectIds([obj[k]], _ret))
+            if (!obj) return;
+            if (obj.id) _ret.push(obj.id)
+            if (typeof obj === 'object') {
+                Object.keys(obj).forEach(k => {
+                    if (Array.isArray(obj[k])) _collectIds(obj[k], _ret)
+                    else _collectIds([obj[k]], _ret)
+                })
              }
         })
         return ret
     }
     const ret = []
     _collectIds(list, ret)
+    console.log(ret)
     return ret
 }
 
@@ -123,7 +125,7 @@ module.exports = {
     semanticTagBodies,
     svgTarget,
 
-    setToVersion,
+    // setToVersion,
 
     collectIds,
 
