@@ -54,7 +54,8 @@ module.exports = {
         collapse(collapseState) { $(".collapse", this.$el).collapse(collapseState) },
         numberOf(k) { return numberOf(this.annotation, k) },
         setToVersion(newState) {
-            setToVersion(this.annotation, newState)
+            this.$store.commit('RESET_ANNOTATION')
+            this.$store.commit('REPLACE_ANNOTATION', newState)
         }
     },
 }

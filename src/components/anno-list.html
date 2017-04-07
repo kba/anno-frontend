@@ -68,7 +68,7 @@
     <!-- </div> -->
 
     <div class="panel-group">
-      <anno-viewer v-for="annotation in list"
+      <anno-viewer v-for="annotation in list" v-if="! annotation.__deleted"
         :annotation="annotation"
         :asReply=false
         >
