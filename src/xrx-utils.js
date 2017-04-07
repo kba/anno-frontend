@@ -30,11 +30,11 @@ module.exports = class XrxUtils {
 
     static createDrawing(elem, width, height) {
         var origGetSize = goog.style.getSize;
-        goog.style.getSize = (elem) => {
-            const origWH = origGetSize(elem)
-            if (elem === elem && (origWH.width <= 0 || origWH.height <= 0))
+        goog.style.getSize = (origElem) => {
+            const origWH = origGetSize(origElem)
+            if (elem === origElem && (origWH.width <= 0 || origWH.height <= 0))
                 return {width, height}
-            return origGetSize(elem)
+            return origWH
         }
         const ret = new xrx.drawing.Drawing(elem)
         if (!ret.getEngine().isAvailable()) throw new Error("No Engine available :-( Much sadness")
