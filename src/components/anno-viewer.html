@@ -96,7 +96,7 @@
             {{ l10n('comment') }}
           </bootstrap-button>
           <bootstrap-button btnClass="danger" @click="remove" v-if="$auth('remove', id)">
-            {{ l10n('delete') }}
+            {{ l10n('delete_anno') }}
           </bootstrap-button>
 
           <template v-if="numberOf('hasVersion') > 0">

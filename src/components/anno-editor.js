@@ -26,7 +26,7 @@ module.exports = {
             eventBus.$emit('open-editor')
         })
         eventBus.$on('remove', (annotation) => {
-            if(window.confirm("You sure you wanna go through with this?")) {
+            if(window.confirm(this.l10n("confirm_delete"))) {
                 this.api.remove(annotation.id, (err) => {
                     if (err) throw err
                     console.info(`Deleted ${annotation}`)

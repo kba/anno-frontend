@@ -89,9 +89,12 @@ C.localizations = {
         'delete_semtag':       'Semantisches Tag l\u00f6schen',
         'delete_tag':          'Einfaches Tag l\u00f6schen',
         'semtag':              'Semantisches Schlagwort',
-        'tag':                 'Einfaches Schlagwort',
         'semtags':             'Semantische Schlagworte',
+        'tag':                 'Einfaches Schlagwort',
         'tags':                'Einfache Schlagworte',
+
+        'delete_anno':         'Annotation l\u00f6schen',
+        'confirm_delete':      'Sind sie sicher dass Sie die Annotation l\u00f6schen wollen?',
 
         'unsaved':             'Nicht gespeichert',
         'annoeditor':          'Annotations-Editor',
@@ -134,14 +137,17 @@ C.localizations = {
         'version_from':        'Version vom',
         'zones':               'Zones',
 
-        'semtag':              'Semantic Tag',
-        'tag':                 'Simple Tag',
-        'semtags':             'Semantic Tags',
-        'tags':                'Simple Tags',
         'add_semtag':          'Add Semantic Tag',
         'add_tag':             'Add Simple Tag',
         'delete_semtag':       'Delete Semantic Tag',
         'delete_tag':          'Delete Simple Tag',
+        'semtag':              'Semantic Tag',
+        'semtags':             'Semantic Tags',
+        'tag':                 'Simple Tag',
+        'tags':                'Simple Tags',
+
+        'delete_anno':         'Delete Annotation',
+        'confirm_delete':      'Are you sure you want to delete this annotation?',
 
         'unsaved':             'Unsaved',
         'annoeditor':          'Annotation editor',
