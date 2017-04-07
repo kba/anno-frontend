@@ -41,9 +41,27 @@ class AnnoApi {
         // this.annoStore.search(query, {}, cb)
     }
 
-    create(anno, cb)      { return this.annoStore.create(anno, cb) }
-    comment(id, anno, cb) { return this.annoStore.reply(id, anno, cb) }
-    revise(id, anno, cb)  { return this.annoStore.revise(id, anno, cb) }
-    remove(id, cb)        { return this.annoStore.delete(id, cb) }
+    create(anno, cb) {
+        anno = JSON.parse(JSON.stringify(anno))
+        delete anno.hasVersion
+        delete anno.versionOf
+        delete anno.hasReply
+        delete anno.replyTo
+        return this.annoStore.create(anno, cb)
+    }
+    comment(id, anno, cb) {
+        return this.annoStore.reply(id, anno, cb) 
+    }
+    revise(id, anno, cb)  {
+        anno = JSON.parse(JSON.stringify(anno))
+        delete anno.hasVersion
+        delete anno.versionOf
+        delete anno.hasReply
+        delete anno.replyTo
+        return this.annoStore.revise(id, anno, cb) 
+    }
+    remove(id, cb) {
+        return this.annoStore.delete(id, cb)
+    }
 
 }
