@@ -11,8 +11,8 @@ const sorters = {
         return -1 * (!(a||b) ? 0 : !a ? -1 : !b ? +1 : a < b ? +1 : a > b ? -1 : 0)
     },
     title(a, b)       {
-        a = a.title.toLowerCase() || ''
-        b = b.title.toLowerCase() || ''
+        a = a.title ? a.title.toLowerCase() : ''
+        b = b.title ? b.title.toLowerCase() : ''
         return !a ? +1 : !b ? -1 : a < b ? -1 : a > b ? + 1 : 0
     },
 }
