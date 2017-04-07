@@ -1,6 +1,4 @@
 const Vue = require('vue')
-const {collectIds} = require('./anno-utils')
-const annoApiFactory = require('./api/annoApi')
 
 module.exports = function displayAnnotations(options={}) {
 
@@ -17,24 +15,14 @@ module.exports = function displayAnnotations(options={}) {
     Object.keys(options).forEach(k => {
         store.state[k] = options[k]
     })
-    const api = annoApiFactory(options)
-
-    api.search({'target.source': options.targetSource}, (err, list) => {
-        if (err) throw err
-        store.commit('REPLACE_LIST', list)
-
-        const allids = collectIds(list)
-        allids.push(options.targetSource)
-
-        api.aclCheck(allids, (err, perms) => {
-            if (err) throw err
-            store.commit('CHANGE_ACL', perms)
+    store.dispatch('fetchList')
+        .then(() => {
             window.app = new Vue({
                 store,
                 el: options.el,
                 template: `<anno-list ref='anno-list'/>`,
             })
         })
-    })
+        .catch(err => { throw err })
 
 }

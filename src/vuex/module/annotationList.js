@@ -11,8 +11,8 @@ const sorters = {
         return -1 * (!(a||b) ? 0 : !a ? -1 : !b ? +1 : a < b ? +1 : a > b ? -1 : 0)
     },
     title(a, b)       {
-        a = a.title || ''
-        b = b.title || ''
+        a = a.title.toLowerCase() || ''
+        b = b.title.toLowerCase() || ''
         return !a ? +1 : !b ? -1 : a < b ? -1 : a > b ? + 1 : 0
     },
 }
@@ -56,6 +56,10 @@ module.exports = {
 
         REPLACE_LIST(state, list) {
             state.list = list
-        }
+        },
+
+        ADD_TO_LIST(state, v) {
+            state.list.push(v)
+        },
     }
 }

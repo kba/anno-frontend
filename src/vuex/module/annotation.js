@@ -3,17 +3,18 @@ const {
     firstHtmlBody, simpleTagBodies, semanticTagBodies, svgTarget,
 } = require('../../anno-utils.js')
 
-//
-// initial state
-//
-
-const state = {
+function initialState() {return {
     id: '',
     title: '',
     body: [],
     target: [],
-    rights: '',
-}
+}}
+
+//
+// initial state
+//
+
+const state = initialState()
 
 //
 // getters
@@ -109,11 +110,11 @@ const mutations = {
     },
 
     REPLACE_ANNOTATION(state, newState) {
-        // Object.assign(state, newState)
-        Object.keys(state).forEach(k => {
-            if (newState[k]) state[k] = newState[k]
-            else state[k] = null
-        })
+        Object.assign(state, newState)
+        // Object.keys(state).forEach(k => {
+        //     if (newState[k]) state[k] = newState[k]
+        //     else state[k] = null
+        // })
     },
 
     ADD_HTML_BODY(state, body={type: 'TextualBody', format: 'text/html', value: ''}) {
@@ -134,12 +135,17 @@ const mutations = {
     },
 
     RESET_ANNOTATION(state) {
-        state = null
+        Object.assign(state, initialState())
     },
 
     SET_REPLY_TO(state, v) {
         state.replyTo = v
-    }
+    },
+
+    ADD_MOTIVATION(state, v) {
+        ensureArray(state, 'motivation')
+        add(state, 'motivation', v)
+    },
 
 }
 
