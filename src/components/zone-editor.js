@@ -1,6 +1,7 @@
 const {xrx, goog} = require('semtonotes-client')
 const XrxUtils = require('../xrx-utils')
 const jQuery = require('jquery')
+const eventBus = require('../event-bus')
 
 module.exports = {
 
@@ -19,8 +20,18 @@ module.exports = {
     },
 
     mounted() {
-        this.initCanvas()
-        this.initThumb()
+
+        eventBus.$on('open-editor', () => {
+            this.initCanvas(() => {
+                this.initThumb(() => {
+                    this.fromSVG()
+                    // this.image.draw()
+                    this.updateNavigationThumb()
+                    this.showNavigationThumbnail()
+                })
+            })
+        })
+
 
         // Keep only one button active
         jQuery(this.$el).on('click', '.btn-group button', function() {
@@ -32,7 +43,7 @@ module.exports = {
 
     methods: {
 
-        initCanvas() {
+        initCanvas(cb) {
             this.canvasDiv = this.$el.querySelector('div.zone-edit-canvas')
             this.image = XrxUtils.createDrawing(this.canvasDiv, this.canvasWidth, this.canvasHeight)
 
@@ -40,12 +51,7 @@ module.exports = {
                 // console.log(this.image.getLayerBackground())
                 this.image.setModeHover()
                 this.image.getViewbox().fitToWidth(false)
-                this.thumb.getViewbox().setPosition(xrx.drawing.Position.NW)
                 this.image.getViewbox().setZoomFactorMax(4)
-
-                // Draw all svg targets
-                this.fromSVG()
-                this.image.draw()
 
                 // Bind to SemToNotes events
                 this.image.eventViewboxChange = () => {
@@ -61,12 +67,13 @@ module.exports = {
                 // this.image.eventShapeHoverIn = (shape) => {
                 //     XrxUtils.applyStyle(shape, this.style.default)
                 // }
-                this.updateNavigationThumb()
                 // this.image.handleResize()
+
+                cb()
             })
         },
 
-        initThumb() {
+        initThumb(cb) {
             this.thumbDiv = this.$el.querySelector('div.zone-edit-thumb')
             this.thumb = XrxUtils.createDrawing(this.thumbDiv, this.thumbWidth, this.thumbHeight)
 
@@ -77,7 +84,8 @@ module.exports = {
                 this.thumb.getViewbox().fit(true)
                 this.thumb.getViewbox().setPosition(xrx.drawing.Position.NW)
                 // this.thumb.handleResize()
-                this.showNavigationThumbnail()
+
+                cb()
             })
 
         },
