@@ -57,6 +57,7 @@ class AnnoApi {
         delete anno.hasVersion
         delete anno.versionOf
         delete anno.hasReply
+        delete anno.via
         delete anno.replyTo
         return this.annoStore.revise(id, anno, cb) 
     }
