@@ -95,6 +95,9 @@
           <bootstrap-button btnClass="default commentbut" @click="comment" font-awesome="reply" v-if="$auth('create', id)">
             {{ l10n('comment') }}
           </bootstrap-button>
+          <bootstrap-button btnClass="danger" @click="remove" v-if="$auth('remove', id)">
+            {{ l10n('delete') }}
+          </bootstrap-button>
 
           <template v-if="numberOf('hasVersion') > 0">
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">

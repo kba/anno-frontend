@@ -10,7 +10,7 @@ const {
 module.exports = {
     mixins: [
         require('../mixin/l10n'),
-        require('../mixin/acl'),
+        require('../mixin/auth'),
     ],
     // necessary for nesting
     name: 'anno-viewer',
@@ -46,8 +46,9 @@ module.exports = {
         }
     },
     methods: {
-        revise()    { return eventBus.$emit('revise', this.annotation) },
-        comment()   { return eventBus.$emit('comment', this.annotation) },
+        revise()  { return eventBus.$emit('revise', this.annotation) },
+        comment() { return eventBus.$emit('comment', this.annotation) },
+        remove()  { return eventBus.$emit('remove', this.annotation) },
 
         dateformat(date) { return date ? _dateformat(date, 'dd.mm.yyyy hh:MM:ss') : '' },
         collapse(collapseState) { $(".collapse", this.$el).collapse(collapseState) },

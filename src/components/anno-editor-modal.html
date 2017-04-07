@@ -4,15 +4,31 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4>{{ l10n('annoeditor') }}</h4>
-        <a v-if="id" :href="id">{{ id }}</a>
-        <a v-else>{{ l10n('unsaved') }}</a>
+        <div class="pull-left">
+          <a v-if="id" :href="id">{{ id }}</a>
+          <a v-else>{{ l10n('unsaved') }}</a>
+        </div>
+        <div class="pull-right">
+          <bootstrap-button btnClass="primary" @click="save">
+            {{ l10n('save') }}
+          </bootstrap-button>
+          <bootstrap-button btnClass="danger" @click="remove" v-if="$auth('remove', id)">
+            {{ l10n('delete') }}
+          </bootstrap-button>
+        </div>
+        <div style="clear: both;"></div>
       </div>
       <div class="modal-body">
         <anno-editor ref='editor'/>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <bootstrap-button btnClass="primary" @click="save">{{ l10n('save') }}</bootstrap-button>
+        <bootstrap-button btnClass="primary" @click="save">
+          {{ l10n('save') }}
+        </bootstrap-button>
+        <bootstrap-button btnClass="danger" @click="remove" v-if="$auth('remove', id)">
+          {{ l10n('delete') }}
+        </bootstrap-button>
       </div>
     </div>
   </div>

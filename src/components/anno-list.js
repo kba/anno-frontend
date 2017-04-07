@@ -3,7 +3,7 @@ const eventBus = require('../event-bus')
 module.exports = {
     mixins: [
         require('../mixin/l10n'),
-        require('../mixin/acl'),
+        require('../mixin/auth'),
         require('../mixin/api'),
     ],
     props: {

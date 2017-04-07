@@ -9,6 +9,7 @@ module.exports = {
     template: require('./anno-editor.html'),
     style: require('./anno-editor.css'),
     created() {
+        // TODO Move these to store maybe??
         eventBus.$on('create', (annotation) => {
             this.mode = 'create'
             this.$store.dispatch('replaceAnnotation', {target: this.targetSource})
@@ -23,6 +24,15 @@ module.exports = {
             this.mode = 'revise'
             this.$store.dispatch('replaceAnnotation', annotation)
             eventBus.$emit('open-editor')
+        })
+        eventBus.$on('remove', (annotation) => {
+            if(window.confirm("You sure you wanna go through with this?")) {
+                this.api.remove(annotation.id, (err) => {
+                    if (err) throw err
+                    console.info(`Deleted ${annotation}`)
+                    eventBus.$emit('removed', annotation)
+                })
+            }
         })
         eventBus.$on('save', () => {
             this.save()

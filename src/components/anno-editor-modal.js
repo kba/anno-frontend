@@ -2,7 +2,10 @@ const $ = require('jquery')
 const eventBus = require('../event-bus')
 
 module.exports = {
-    mixins: [require('../mixin/l10n')],
+    mixins: [
+        require('../mixin/l10n'),
+        require('../mixin/auth'),
+    ],
     template: require('./anno-editor-modal.html'),
     computed: {
         id() { return this.$store.state.annotation.id },
@@ -12,6 +15,7 @@ module.exports = {
     },
     methods: {
         save() { eventBus.$emit('save') },
+        remove() { eventBus.$emit('remove', this.id) },
         show() { $(this.$el).modal('show') },
     },
 }

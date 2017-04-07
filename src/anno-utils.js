@@ -83,13 +83,17 @@ function setToVersion(curState, newState) {
 // collectIds from a list
 //
 
+// TODO recursively for replies
 function collectIds(list) {
-    function _collectIds(list, ret) {
+    function _collectIds(list, _ret) {
         list.forEach(obj => {
-            if (!obj) return;
-            else if (obj.id) ret.push(obj.id)
-            else if (typeof obj === 'object')
-                Object.keys(obj).forEach(k => _collectIds([obj[k]], ret))
+            if (!obj) {
+                return;
+             } if (obj.id) {
+                _ret.push(obj.id)
+             } else if (typeof obj === 'object') {
+                Object.keys(obj).forEach(k => _collectIds([obj[k]], _ret))
+             }
         })
         return ret
     }

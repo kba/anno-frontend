@@ -16,13 +16,15 @@ class AnnoApi {
         this.annoStore.use(httpHeadersMiddleware())
     }
 
+    // TODO remote
     aclCheck(uris, cb) {
         const perms = {}
         uris.forEach(uri => {
             perms[uri] = {
+                read:   true,
                 revise: true,
                 create: true,
-                delete: true,
+                remove: true,
             }
         })
         return cb(null, perms)
@@ -35,21 +37,13 @@ class AnnoApi {
             delete query['target.source']
         }
         // XXX HACK HACK  this will return al results for debugging
-        // this.annoStore.search(query, cb)
-        console.log('fewfwefwefwe')
-        this.annoStore.search(query, {}, cb)
+        this.annoStore.search({}, cb)
+        // this.annoStore.search(query, {}, cb)
     }
 
     create(anno, cb)      { return this.annoStore.create(anno, cb) }
     comment(id, anno, cb) { return this.annoStore.reply(id, anno, cb) }
     revise(id, anno, cb)  { return this.annoStore.revise(id, anno, cb) }
-
-    fakeLogin() {
-        // commit('CHANGE_ACL', {[window.location.href]: {
-        //     edit: true,
-        //     create: true,
-        //     comment: true,
-        // }})
-    }
+    remove(id, cb)        { return this.annoStore.delete(id, cb) }
 
 }
