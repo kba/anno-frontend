@@ -1,4 +1,4 @@
-<bootstrap-tabs class="panel-body">
+<bootstrap-tabs class="panel-body" ref='tablist'>
 
   <bootstrap-tab name="annoeditor_tab_html" :title="l10n('metadata')">
     <html-editor/>
@@ -6,8 +6,13 @@
 
   <bootstrap-tab name="annoeditor_tab_zones" :title="l10n('zones')" v-if="targetImage">
     <zone-editor
-      :targetImage="targetImage"
-      :targetThumbnail="targetThumbnail"
+      ref='zone-editor'
+      :canvasWidth="$store.state.canvasWidth"
+      :canvasHeight="$store.state.canvasHeight"
+      :thumbWidth="$store.state.thumbWidth"
+      :thumbHeight="$store.state.thumbHeight"
+      :targetImage="$store.state.targetImage"
+      :targetThumbnail="$store.state.targetThumbnail"
       />
   </bootstrap-tab>
 
