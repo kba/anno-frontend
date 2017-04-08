@@ -19,6 +19,7 @@ module.exports = {
         // Controls whether comment is collapsible or not
         asReply: {type: Boolean, default: false},
         collapseInitially: {type: Boolean},
+        dateFormat: {type: String, default: 'dd.mm.yyyy hh:MM:ss'},
     },
     template: require('./anno-viewer.html'),
     style:    require('./anno-viewer.css'),
@@ -27,8 +28,10 @@ module.exports = {
     // },
     mounted() {
         $('[data-toggle="popover"]', this.$el).popover(); 
-        $(".panel-collapse", this.$el).on("hide.bs.collapse", () => $('[data-toggle="collapse"]', this.$el).addClass('collapsed'))
-        $(".panel-collapse", this.$el).on("show.bs.collapse", () => $('[data-toggle="collapse"]', this.$el).removeClass('collapsed'))
+        $(".panel-collapse", this.$el).on("hide.bs.collapse", () =>
+            $('[data-toggle="collapse"]', this.$el).addClass('collapsed'))
+        $(".panel-collapse", this.$el).on("show.bs.collapse", () =>
+            $('[data-toggle="collapse"]', this.$el).removeClass('collapsed'))
     },
     computed: {
         firstHtmlBody()     { return firstHtmlBody(this.annotation) },
@@ -50,7 +53,7 @@ module.exports = {
         comment() { return eventBus.$emit('comment', this.annotation) },
         remove()  { return eventBus.$emit('remove', this.annotation) },
 
-        dateformat(date) { return date ? _dateformat(date, 'dd.mm.yyyy hh:MM:ss') : '' },
+        dateformat(date) { return date ? _dateformat(date, this.dateFormat) : '' },
         collapse(collapseState) { $(".collapse", this.$el).collapse(collapseState) },
         numberOf(k) { return numberOf(this.annotation, k) },
         setToVersion(newState) {
