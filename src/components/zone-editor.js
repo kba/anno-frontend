@@ -1,4 +1,3 @@
-const {xrx} = require('semtonotes-client')
 const XrxUtils = require('semtonotes-utils')
 const jQuery = require('jquery')
 const eventBus = require('../event-bus')
@@ -89,7 +88,7 @@ module.exports = {
                 // this.thumb.setModeDisabled()
                 this.image.getViewbox().fitToWidth(true)
                 this.thumb.getViewbox().fit(true)
-                this.thumb.getViewbox().setPosition(xrx.drawing.Position.NW)
+                this.thumb.getViewbox().setPosition('NW')
                 // this.thumb.handleResize()
 
                 cb()
@@ -126,7 +125,7 @@ module.exports = {
         },
 
         fitToCanvas(event) {
-            this.image.getViewbox().setPosition(xrx.drawing.Position.NW)
+            this.image.getViewbox().setPosition('NW')
             this.image.getViewbox().fit(true)
         },
 
@@ -149,10 +148,8 @@ module.exports = {
         },
 
         _addPath(pathType) {
-            var shape = new xrx.shape[pathType](this.image)
+            var shape = XrxUtils.createShape(pathType, this.image)
             XrxUtils.applyStyle(shape, this.style.modified)
-            // XrxUtils.styleShapeEditable(shape)
-            // this.image.getLayerShape().addShapes(shape);
             this.image.setModeCreate(shape.getCreatable())
         },
 
