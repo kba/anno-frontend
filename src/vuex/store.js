@@ -1,7 +1,7 @@
 const config = require('../config')
 const Vue = require('vue')
 const Vuex = require('vuex')
-const {collectIds} = require('../anno-utils')
+const {collectIds} = require('@kba/anno-util')
 const annoApiFactory = require('../api/annoApi')
 
 const annotation = require('./module/annotation')

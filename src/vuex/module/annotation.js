@@ -1,7 +1,7 @@
 const {
     ensureArray, add, remove,
     firstHtmlBody, simpleTagBodies, semanticTagBodies, svgTarget,
-} = require('../../anno-utils.js')
+} = require('@kba/anno-util')
 
 function initialState() {return {
     id: '',

@@ -1,5 +1,5 @@
-const {xrx, goog} = require('semtonotes-client')
-const XrxUtils = require('../xrx-utils')
+const {xrx} = require('semtonotes-client')
+const XrxUtils = require('semtonotes-utils')
 const jQuery = require('jquery')
 const eventBus = require('../event-bus')
 

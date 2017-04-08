@@ -5,7 +5,7 @@ const {
     numberOf,
     firstHtmlBody, simpleTagBodies, semanticTagBodies, svgTarget,
     setToVersion,
-} = require('../anno-utils.js')
+} = require('@kba/anno-util')
 
 module.exports = {
     mixins: [
