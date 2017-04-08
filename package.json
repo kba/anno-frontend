@@ -5,7 +5,8 @@
   "description": "Frontend for UB Heidelberg's annotation service",
   "main": "index.js",
   "scripts": {
-    "test": "tap -Rspec test/*.test.js"
+    "test": "tap -Rspec test/*.test.js",
+    "prepublish": "webpack"
   },
   "repository": {
     "type": "git",
@@ -35,7 +36,10 @@
     "vue": "2.1.10",
     "vue-template-compiler": "^2.1.10",
     "vuex": "^2.2.1",
-    "webpack-dev-server": "^1.16.2"
+    "webpack-dev-server": "^1.16.2",
+    "@kba/anno-util": "^0.0.1",
+    "@kba/anno-store-http": "^0.0.1",
+    "@kba/anno-mw-httpheaders": "^0.0.1"
   },
   "devDependencies": {
     "css-loader": "^0.26.1",

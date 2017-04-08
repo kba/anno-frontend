@@ -4,3 +4,4 @@
 doc/context.json
 dist/swagger-ui
 node_modules
+*.log
