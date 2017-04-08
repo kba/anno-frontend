@@ -19,6 +19,7 @@ module.exports = {
     template: require('./html-editor.html'),
     props: {
         language: {type: String, default: 'de'},
+        editorId: {type: String, required: true},
         tinymceOptions: {
             type: Object,
             default: () => {return {

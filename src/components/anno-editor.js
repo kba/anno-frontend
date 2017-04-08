@@ -6,6 +6,9 @@ module.exports = {
         require('../mixin/l10n'),
         require('../mixin/api'),
     ],
+    props: {
+        editorId: {type: String, default: 'ubhdannoprefix_field_text'},
+    },
     template: require('./anno-editor.html'),
     style: require('./anno-editor.css'),
     created() {
@@ -19,7 +22,7 @@ module.exports = {
     },
     mounted() {
         eventBus.$on('open-editor', () => {
-            const textarea = tinymce.get('ubhdannoprefix_field_text')
+            const textarea = tinymce.get(this.editorId)
             const textBody = this.$store.getters.firstHtmlBody
             if (textarea && textBody) textarea.setContent(textBody.value)
         })
