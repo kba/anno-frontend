@@ -17,19 +17,15 @@ module.exports = {
         thumbHeight: {type: Number, default: 120},
         thumbWidth: {type: Number, default: 120},
         style: {type: Object, default: () => {return defaultStyles}},
+        autoLoad: {type: Boolean, default: false},
     },
 
     mounted() {
 
+        if (this.autoLoad) this.init()
+
         eventBus.$on('open-editor', () => {
-            this.initCanvas(() => {
-                this.initThumb(() => {
-                    this.fromSVG()
-                    // this.image.draw()
-                    this.updateNavigationThumb()
-                    this.showNavigationThumbnail()
-                })
-            })
+            this.init()
         })
 
 
@@ -42,6 +38,17 @@ module.exports = {
     },
 
     methods: {
+
+        init() {
+            this.initCanvas(() => {
+                this.initThumb(() => {
+                    this.fromSVG()
+                    // this.image.draw()
+                    this.updateNavigationThumb()
+                    this.showNavigationThumbnail()
+                })
+            })
+        },
 
         initCanvas(cb) {
             this.canvasDiv = this.$el.querySelector('div.zone-edit-canvas')
