@@ -15,7 +15,7 @@ const store = _ubhddebug.store
 window.app = new Vue({
   el: '#anchor',
   store,
-  template: '<html-editor/>',
+  template: '<html-editor editorId="foobar"/>',
 })
 store.dispatch('replaceAnnotation', window.annotations[3])
 </script></body></html>
