@@ -16,18 +16,8 @@ class AnnoApi {
         this.annoStore.use(httpHeadersMiddleware())
     }
 
-    // TODO remote
     aclCheck(uris, cb) {
-        const perms = {}
-        uris.forEach(uri => {
-            perms[uri] = {
-                read:   true,
-                revise: true,
-                create: true,
-                remove: true,
-            }
-        })
-        return cb(null, perms)
+        this.annoStore.aclCheck(uris, cb)
     }
 
     search(query, cb) {
