@@ -17,7 +17,7 @@ module.exports = new Vuex.Store({
         loginEndpoint: 'http://localhost:3000/auth/login?from=',
         logoutEndpoint: 'http://localhost:3000/auth/logout',
         token: null,
-        acl: {},
+        acl: null,
     },
     modules: {
         annotation,
@@ -96,8 +96,8 @@ module.exports = new Vuex.Store({
             })
         },
 
-        login({state}) {
-            this.$store.dispatch('fetchToken').catch(err => {
+        login({state, dispatch}) {
+            dispatch('fetchToken').catch(err => {
                 if (err === "NO_TOKEN")
                     window.location.replace(state.loginEndpoint + encodeURIComponent(window.location.href))
             })
