@@ -10,7 +10,6 @@ const annotationList = require('./module/annotationList')
 module.exports = new Vuex.Store({
     strict: true,
     state: {
-        current: -1,
         language: config.defaultLang,
         writetoken: "YES",
         acl: {},

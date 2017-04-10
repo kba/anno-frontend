@@ -20,7 +20,6 @@ const sorters = {
 module.exports = {
     state: {
         list: [],
-        current: {},
         sortedBy: 'title',
         allCollaped: 'false',
     },
