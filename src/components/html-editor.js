@@ -1,14 +1,6 @@
 const config = require('../config')
 const l10nMixin = require('../mixin/l10n')
 
-/* TinyMCE */
-require.context('!file?name=[path][name].[ext]&context=node_modules/tinymce!tinymce/skins', true, /.*/)
-require('tinymce/tinymce');
-require('tinymce/themes/modern/theme');
-require('tinymce/plugins/paste');
-require('tinymce/plugins/link');
-require('tinymce/plugins/image');
-
 /* register vue-tinymce component */
 const Vue = require('vue')
 const VueTinymce = require('vue-tinymce').default
