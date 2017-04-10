@@ -4,6 +4,7 @@ const Vue = require('vue')
 const Vuex = require('vuex')
 const {collectIds} = require('@kba/anno-util')
 const apiFactory = require('../api')
+const jwtDecode = require('jwt-decode')
 
 const annotation = require('./module/annotation')
 const annotationList = require('./module/annotationList')
@@ -14,6 +15,7 @@ module.exports = new Vuex.Store({
         language: config.defaultLang,
         tokenEndpoint: 'http://localhost:3000/auth/token',
         loginEndpoint: 'http://localhost:3000/auth/login?from=',
+        logoutEndpoint: 'http://localhost:3000/auth/logout',
         token: null,
         acl: {},
     },
@@ -45,41 +47,51 @@ module.exports = new Vuex.Store({
             state.token = null
         },
 
+        EMPTY_ACL(state) {
+            state.acl = null
+        }
+
     },
 
     actions: {
 
-        fetchToken({state, commit}) {
+        fetchToken({state, commit, dispatch}) {
             return new Promise((resolve, reject) => {
-            axios.get(state.tokenEndpoint, {maxRedirects: 0})
-                .then(resp => {
-                    console.log(resp)
-                    const token = resp.headers['X-Token']
-                    if (token) {
+                axios.get(state.tokenEndpoint, {
+                    // maxRedirects: 0, // does not work in the browser
+                    withCredentials: 1, // without it, xhr won't set cookies for CORS
+                }).then(resp => {
+                    const token = resp.data
+                    try {
+                        jwtDecode(token)
                         commit('SET_TOKEN', token)
-                        resolve(token)
-                    } else {
-                        reject("No token")
+                        dispatch('fetchList')
+                        resolve()
+                    } catch (err) {
+                        reject("NO_TOKEN")
                     }
-                })
-                .catch(reject)
+                }).catch(reject)
             })
         },
 
-        fetchList({state, commit, getters}) {
-            const api = apiFactory(state)
+        fetchAcl({state, commit, getters}) {
+            return new Promise((resolve, reject) => {
+                console.log("ACL check")
+                apiFactory(state).aclCheck(getters.allIds, (err, perms) => {
+                    if (err) reject(err)
+                    commit('CHANGE_ACL', perms)
+                    resolve()
+                })
+            })
+        },
 
+        fetchList({state, commit, dispatch}) {
             return new Promise((resolve, reject) => {
                 console.log("Search")
-                api.search({'$target': state.targetSource}, (err, list) => {
+                apiFactory(state).search({'$target': state.targetSource}, (err, list) => {
                     if (err) reject(err)
                     commit('REPLACE_LIST', list)
-                    console.log("ACL check")
-                    api.aclCheck(getters.allIds, (err, perms) => {
-                        if (err) reject(err)
-                        commit('CHANGE_ACL', perms)
-                        resolve()
-                    })
+                    dispatch('fetchAcl')
                 })
             })
         }
