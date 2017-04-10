@@ -1,12 +1,12 @@
-<div :id="id" class="panel panel-default">
+<div :id="`${prefix}-${slug}`" class="panel panel-default">
 
   <div v-if="!asReply"
     class="panel-heading"
     data-toggle="collapse"
-    :href="`#coll_${slug}`"
+    :id="`${prefix}-${slug}-viewer`"
+    :href="`#${prefix}-${slug}-collapse`"
+    :aria-controls="`#${prefix}-${slug}-collapse`"
     aria-expanded="true"
-    :aria-controls="`coll_${slug}`"
-    :id="`ubhdanno_head_${slug}`"
     role="tab">
     <h4 class="panel-title">
       <a role="button">
@@ -19,16 +19,16 @@
   <div v-else
     class="panel-heading"
     aria-expanded="true"
-    :id="`ubhdanno_head_${slug}`">
+    :id="`${prefix}-head-${slug}`">
     <span class="small">{{ annotation.title }}</span>
     <!-- <h5 class="panel-title"> {{ annotation.title }} </h5> -->
   </div>
 
   <div
-    :id="`coll_${slug}`"
+    :id="`${prefix}-${slug}-collapse`"
     class="panel-collapse collapse in"
     role="tabpanel"
-    :aria-labbelledby="`ubhdanno_head_${slug}`">
+    :aria-labbelledby="`${prefix}-${slug}-head`">
 
     <div class="panel-body">
 
@@ -92,7 +92,7 @@
           <bootstrap-button btnClass="default editbut" @click="revise" font-awesome="pencil" v-if="$auth('revise', id)">
             {{ l10n('edit') }}
           </bootstrap-button>
-          <bootstrap-button btnClass="default commentbut" @click="comment" font-awesome="reply" v-if="$auth('create', id)">
+          <bootstrap-button btnClass="default commentbut" @click="reply" font-awesome="reply" v-if="$auth('create', id)">
             {{ l10n('comment') }}
           </bootstrap-button>
           <bootstrap-button btnClass="danger" @click="remove" v-if="$auth('remove', id)">
@@ -104,7 +104,7 @@
               {{ l10n('previous') }}
               <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu pull-right versions">
+            <ul :class="`${prefix} dropdown-menu pull-right versions`">
               <li v-for="version in annotation.hasVersion" :class="version.id === id ? 'current-version' : ''">
                 <a class="small"
                   @click="setToVersion(version)"

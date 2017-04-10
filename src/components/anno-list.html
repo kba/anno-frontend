@@ -1,4 +1,4 @@
-<div class="anno-list">
+<div :class="`${prefix}-anno-list`">
   <div class="btn-group pull-right hidden-print" role="group">
 
     <template v-if="$auth('create', targetSource)">
@@ -22,6 +22,7 @@
     <bootstrap-button btnClass="default dropdown-toggle" btnSize="xs" data-toggle="dropdown">
       {{l10n('sort')}} <span class="caret"></span>
     </bootstrap-button>
+
     <ul class="dropdown-menu small" role="menu">
       <li><a @click="sort('date')" class="small">{{ l10n('sortdate') }}
           <span v-if="sortedBy == 'date'" class="glyphicon glyphicon-ok"></span></a></li>
@@ -68,7 +69,7 @@
     <!-- </div> -->
 
     <div class="panel-group">
-      <anno-viewer v-for="annotation in list" v-if="! annotation.__deleted"
+      <anno-viewer v-for="annotation in list"
         :annotation="annotation"
         :asReply=false
         >

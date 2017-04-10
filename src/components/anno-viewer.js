@@ -11,6 +11,7 @@ module.exports = {
     mixins: [
         require('../mixin/l10n'),
         require('../mixin/auth'),
+        require('../mixin/prefix'),
     ],
     // necessary for nesting
     name: 'anno-viewer',
@@ -50,7 +51,7 @@ module.exports = {
     },
     methods: {
         revise()  { return eventBus.$emit('revise', this.annotation) },
-        comment() { return eventBus.$emit('comment', this.annotation) },
+        reply() { return eventBus.$emit('reply', this.annotation) },
         remove()  { return eventBus.$emit('remove', this.annotation) },
 
         dateformat(date) { return date ? _dateformat(date, this.dateFormat) : '' },

@@ -1,7 +1,7 @@
 <div class="panel panel-default">
 
   <div class="panel-heading">
-    <div id="ubhdannoprefix_zoneedittoolbar">
+    <div :id="`${prefix}-zone-editor-toolbar`">
 
       <div class="btn-group" role="group" style="float: left;">
 
@@ -22,10 +22,10 @@
 
         <div class="btn-group" role="group" style="margin-left: 5px;">
 
-          <bootstrap-button :title="l10n('add_polygon')" @click="addPolygon"   font-awesome="plus"      src="../../img/polygon.png" alt="polygon" />
-          <bootstrap-button :title="l10n('add_rect')"    @click="addRectangle" font-awesome="plus"      src="../../img/rect.png"    alt="rect"    />
-          <bootstrap-button :title="l10n('move_zone')"   @click="moveZone"     font-awesome="hand-o-up" />
-          <bootstrap-button :title="l10n('move_fak')"    @click="setModeView"  glyphicon="move"         />
+          <bootstrap-button :title="l10n('add_polygon')" @click="addPolygon" font-awesome="plus" src="../../img/polygon.png" alt="polygon" />
+          <bootstrap-button :title="l10n('add_rect')" @click="addRectangle" font-awesome="plus" src="../../img/rect.png" alt="rect" />
+          <bootstrap-button :title="l10n('move_zone')" @click="moveZone" font-awesome="hand-o-up" />
+          <bootstrap-button :title="l10n('move_fak')" @click="setModeView" glyphicon="move" />
 
         </div>
 
@@ -45,14 +45,14 @@
   <div class="panel-body">
     <div style="position: relative">
 
-      <div class="zone-edit-canvas" :style="`
+      <div :class="`${prefix}-zone-editor-canvas`" :style="`
         width: ${canvasWidth}px;
         height: ${canvasHeight}px;
         `">
       </div>
 
       <!-- display: none; -->
-      <div class="zone-edit-thumb" :style="`
+      <div :class="`${prefix}-zone-editor-thumb`" :style="`
         width: ${thumbWidth}px;
         height: ${thumbHeight}px;
         position: absolute;

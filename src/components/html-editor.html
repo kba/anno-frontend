@@ -7,7 +7,7 @@
 <form class="form" action="" method="get">
 
     <div class="form-group">
-        <tinymce id="ubhdannoprefix_field_text" v-model="value" :options="tinymceOptions" />
+      <tinymce :id="`${prefix}-tinymce`" v-model="value" :options="tinymceOptions" />
     </div>
 
     <select v-model="rights">

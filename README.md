@@ -1,26 +1,38 @@
 # UB Heidelberg Annotationen Frontend
 
-## Structure of the application
+<!-- BEGIN-MARKDOWN-TOC -->
+* [Demo](#demo)
+	* [Standalone](#standalone)
+	* [Integration in DWork](#integration-in-dwork)
+* [Setup](#setup)
+	* [Clone repository](#clone-repository)
+	* [Required Software](#required-software)
+	* [Build](#build)
+* [API](#api)
+	* [`displayAnnotations(options)`](#displayannotationsoptions)
+* [Mixins](#mixins)
+	* [`$auth(cond, id`](#authcond-id)
+* [OLD](#old)
+	* [Structure of the application](#structure-of-the-application)
+* [Using - HTML Snippets](#using---html-snippets)
+* [Using - On serv7 / ubhd3 template](#using---on-serv7--ubhd3-template)
 
-All assets are bundled into a JS file `ubhd-anno.js`
+<!-- END-MARKDOWN-TOC -->
 
-Loading `ubhd-anno.js` binds a class `UBHDAnnoApp` to `window`.
+## Demo
 
-`UBHDAnnoApp` can be instantiated to an object `app` with a set of [config options](#config-options).
+### Standalone
 
-`app` has a method 
+http://anno.ub.uni-heidelberg.de/demo.html
 
-App is a Vue app, component structure:
+### Integration in DWork
 
-* `AnnoApp`
-  * `EditorModal`
-    * `ZoneEditor`
-    * `HtmlEditor`
-  * `Sidebar`
-    * `SidebarThread`
-      * `SidebarPost`
+http://digi.ub.uni-heidelberg.de/diglit/annotationen_test/0002?template=ubhd3
 
-## Building - Set up Repository
+
+## Setup
+
+### Clone repository
 
 Clone the repository and initialize submodules.
 
@@ -30,9 +42,11 @@ cd AnnotationService
 git submodule init
 ```
 
-## Building - Required Software
+### Required Software
 
 You'll need nodejs/npm.
+
+### Build
 
 For development:
 
@@ -57,6 +71,64 @@ make build NODE_ENV=production
 # or
 NODE_ENV=production webpack
 ```
+
+## API
+
+<!-- BEGIN-RENDER ./src/display-annotations.js -->
+### `displayAnnotations(options)`
+- takes the initial state of the Vue store
+- dispatches a `fetchList` action to retrieve all anotations that match
+  `{$target:options.targetSource}` and the resp. permissions
+- starts a Vue App with a single <anno-sidebar>
+```
+@param Object options
+@param DOMElement options.el Element to hold the annotation sidebar/modal
+@param String language Language for l10n. Currently: `en`/`eng` or `de`/`deu` (Default)
+@param String targetSource The target of the annotation. Defaults to `window.location.href`
+@param String targetImage The image if any, to annotate on this page
+@param String targetThumbnail Thumbnail view of the image. Defaults to `options.targetImage`
+@param Object annotationList Options for the list display
+@param String annotationList.sortedBy     Sort key: `date`, `datereverse` or `title`
+@param String annotationList.allCollapsed Collapse (`true`) or expand (`false`) all annotations
+```
+
+<!-- END-RENDER -->
+
+
+## Mixins
+
+<!-- BEGIN-RENDER ./src/mixin/auth.js -->
+### `$auth(cond, [id]`
+Check authorization of user against `$store.state.acl`
+- `$auth(<cond>)` should be read as: "Has the current user the role `<cond>`"?
+- `$auth(<cond>, <url>)` should be read as "Is the current user
+  authorized to apply action `<cond>` on `<url>`"
+
+<!-- END-RENDER -->
+
+
+
+## OLD
+
+### Structure of the application
+
+All assets are bundled into a JS file `ubhd-anno.js`
+
+Loading `ubhd-anno.js` binds a class `UBHDAnnoApp` to `window`.
+
+`UBHDAnnoApp` can be instantiated to an object `app` with a set of [config options](#config-options).
+
+`app` has a method 
+
+App is a Vue app, component structure:
+
+* `AnnoApp`
+  * `EditorModal`
+    * `ZoneEditor`
+    * `HtmlEditor`
+  * `Sidebar`
+    * `SidebarThread`
+      * `SidebarPost`
 
 ## Using - HTML Snippets
 
@@ -123,35 +195,3 @@ displayAnnotations(htmlid, annotarget, options)
  * `login`: URL für Login-Button in Annotationenanzeige
  * `readtoken`: Read-Token für Annotationenservice
  * `writetoken`: Write-Token für Annotationenservice
-
-<!-- BEGIN-RENDER ./src/display-annotations.js -->
-
-### `displayAnnotations(options)`
-
-- takes the initial state of the Vue store
-- dispatches a `fetchList` action to retrieve all anotations that match
-  `{$target:options.targetSource}` and the resp. permissions
-- starts a Vue App with a single `<anno-sidebar>`
-
-```js
-@param Object options
-@param DOMElement options.el Element to hold the annotation sidebar/modal
-@param String targetSource The target of the annotation. Defaults to `window.location.href`
-@param String targetImage The image if any, to annotate on this page
-@param String targetThumbnail Thumbnail view of the image. Defaults to `options.targetImage`
-@param Object annotationList Options for the list display
-@param String annotationList.sortedBy     Sort key: `date`, `datereverse` or `title`
-@param String annotationList.allCollapsed Collapse (`true`) or expand (`false`) all annotations
-```
-
-<!-- END-RENDER -->
-
-
-## Demo
-
-### Standalone
-http://anno.ub.uni-heidelberg.de/demo.html
-
-### Integration in DWork
-
-http://digi.ub.uni-heidelberg.de/diglit/annotationen_test/0002?template=ubhd3

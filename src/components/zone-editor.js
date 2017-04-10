@@ -4,10 +4,12 @@ const eventBus = require('../event-bus')
 
 module.exports = {
 
-    mixins: [require('../mixin/l10n')],
-
+    mixins: [
+        require('../mixin/l10n'),
+        require('../mixin/prefix'),
+    ],
     template: require('./zone-editor.html'),
-
+    style:    require('./zone-editor.css'),
     props: {
         targetImage: {type: String, required: true},
         targetThumbnail: {type: String},
@@ -50,7 +52,7 @@ module.exports = {
         },
 
         initCanvas(cb) {
-            this.canvasDiv = this.$el.querySelector('div.zone-edit-canvas')
+            this.canvasDiv = this.$el.querySelector(`div.${this.prefix}-zone-editor-canvas`)
             this.image = XrxUtils.createDrawing(this.canvasDiv, this.canvasWidth, this.canvasHeight)
 
             this.image.setBackgroundImage(this.targetImage, () => {
@@ -80,7 +82,7 @@ module.exports = {
         },
 
         initThumb(cb) {
-            this.thumbDiv = this.$el.querySelector('div.zone-edit-thumb')
+            this.thumbDiv = this.$el.querySelector(`div.${this.prefix}-zone-editor-thumb`)
             this.thumb = XrxUtils.createDrawing(this.thumbDiv, this.thumbWidth, this.thumbHeight)
 
             this.thumb.setBackgroundImage(this.targetThumbnail, () => {

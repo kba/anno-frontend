@@ -5,6 +5,7 @@ module.exports = {
         require('../mixin/l10n'),
         require('../mixin/auth'),
         require('../mixin/api'),
+        require('../mixin/prefix'),
     ],
     props: {
         collapseInitially: {type: Boolean, default: false},
@@ -23,7 +24,6 @@ module.exports = {
         sortedBy() { return this.$store.state.annotationList.sortedBy },
         list() { return this.$store.state.annotationList.list },
         targetSource() { return this.$store.state.targetSource },
-        prefix() { return this.$store.state.prefix }
     },
     methods: {
         login() {

@@ -5,6 +5,7 @@ module.exports = {
     mixins: [
         require('../mixin/l10n'),
         require('../mixin/auth'),
+        require('../mixin/prefix'),
     ],
     template: require('./anno-editor-modal.html'),
     computed: {

@@ -1,20 +1,23 @@
 const eventBus = require('../event-bus')
 const tinymce = require('tinymce')
+const css = require('./anno-editor.css')
+console.log(css)
 
 module.exports = {
     mixins: [
         require('../mixin/l10n'),
         require('../mixin/api'),
+        require('../mixin/prefix'),
     ],
     props: {
-        editorId: {type: String, default: 'ubhdannoprefix_field_text'},
+        editorId: {type: String, default: 'anno-editor'},
     },
     template: require('./anno-editor.html'),
-    style: require('./anno-editor.css'),
+    style: css,
     created() {
         // TODO Move these to store maybe??
         eventBus.$on('create', this.create)
-        eventBus.$on('comment', this.comment)
+        eventBus.$on('reply', this.reply)
         eventBus.$on('revise', this.revise)
         eventBus.$on('remove', this.remove)
         eventBus.$on('discard', this.discard)
@@ -48,7 +51,7 @@ module.exports = {
             }
 
                  if (this.mode === 'create')  this.api.create(anno, cb)
-            else if (this.mode === 'comment') this.api.comment(anno.replyTo, anno, cb)
+            else if (this.mode === 'reply') this.api.reply(anno.replyTo, anno, cb)
             else if (this.mode === 'revise')  this.api.revise(anno.id, anno, cb)
         },
 
@@ -59,7 +62,7 @@ module.exports = {
 
         remove(annotation) {
             if(window.confirm(this.l10n("confirm_delete"))) {
-                this.api.remove(annotation.id, (err) => {
+                this.api.delete(annotation.id, (err) => {
                     if (err) {
                         console.error(err)
                     } else {
@@ -78,8 +81,8 @@ module.exports = {
             eventBus.$emit('open-editor')
         },
 
-        comment(annotation) {
-            this.mode = 'comment'
+        reply(annotation) {
+            this.mode = 'reply'
             this.$store.commit('RESET_ANNOTATION')
             this.$store.commit('ADD_TARGET', annotation.id)
             this.$store.commit('ADD_MOTIVATION', 'replying')

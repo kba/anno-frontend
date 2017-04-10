@@ -1,4 +1,15 @@
 module.exports = {
+    /**
+     * ### `$auth(cond, [id]`
+     *
+     * Check authorization of user against `$store.state.acl`
+     *
+     * - `$auth(<cond>)` should be read as: "Has the current user the role `<cond>`"?
+     *
+     * - `$auth(<cond>, <url>)` should be read as "Is the current user
+     *   authorized to apply action `<cond>` on `<url>`"
+     *
+     */
     methods: {
         $auth(cond, id, x) {
             const acl = this.$store.state.acl

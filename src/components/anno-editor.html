@@ -1,10 +1,10 @@
 <bootstrap-tabs class="panel-body" ref='tablist'>
 
-  <bootstrap-tab name="annoeditor_tab_html" :title="l10n('metadata')" :active="true">
-    <html-editor/>
+  <bootstrap-tab :name="`${prefix}-${editorId}-tab-metadata`" :title="l10n('metadata')" :active="true">
+    <html-editor editor-id="${prefix}-${editorId}-html-editor" />
   </bootstrap-tab>
 
-  <bootstrap-tab name="annoeditor_tab_zones" :title="l10n('zones')" v-if="targetImage">
+  <bootstrap-tab :name="`${prefix}-${editorId}-tab-zones`" :title="l10n('zones')" v-if="targetImage">
     <zone-editor
       ref='zone-editor'
       :canvasWidth="$store.state.canvasWidth"
@@ -16,15 +16,15 @@
       />
   </bootstrap-tab>
 
-  <bootstrap-tab name="annoeditor_tab_tags" :title="l10n('tags')">
+  <bootstrap-tab :name="`${prefix}-${editorId}-tab-tags`" :title="l10n('tags')">
     <tags-editor/>
   </bootstrap-tab>
 
-  <bootstrap-tab name="annoeditor_tab_semtags" :title="l10n('semtags')">
+  <bootstrap-tab :name="`${prefix}-${editorId}-tab-semtags`" :title="l10n('semtags')">
     <semtags-editor/>
   </bootstrap-tab>
 
-  <bootstrap-tab name="annoeditor_tab_preview" :title="l10n('Preview')">
+  <bootstrap-tab :name="`${prefix}-${editorId}-tab-preview`" :title="l10n('Preview')">
     <anno-viewer
       :annotation="$store.state.annotation"
       purl="https://purl/foo/3000"

@@ -7,7 +7,10 @@ const VueTinymce = require('vue-tinymce').default
 Vue.use(VueTinymce)
 
 module.exports = {
-    mixins: [require('../mixin/l10n')],
+    mixins: [
+        require('../mixin/l10n'),
+        require('../mixin/prefix'),
+    ],
     template: require('./html-editor.html'),
     props: {
         language: {type: String, default: 'de'},
