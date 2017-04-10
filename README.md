@@ -124,6 +124,28 @@ displayAnnotations(htmlid, annotarget, options)
  * `readtoken`: Read-Token für Annotationenservice
  * `writetoken`: Write-Token für Annotationenservice
 
+<!-- BEGIN-RENDER ./src/display-annotations.js -->
+
+### `displayAnnotations(options)`
+
+- takes the initial state of the Vue store
+- dispatches a `fetchList` action to retrieve all anotations that match
+  `{$target:options.targetSource}` and the resp. permissions
+- starts a Vue App with a single `<anno-sidebar>`
+
+```js
+@param Object options
+@param DOMElement options.el Element to hold the annotation sidebar/modal
+@param String targetSource The target of the annotation. Defaults to `window.location.href`
+@param String targetImage The image if any, to annotate on this page
+@param String targetThumbnail Thumbnail view of the image. Defaults to `options.targetImage`
+@param Object annotationList Options for the list display
+@param String annotationList.sortedBy     Sort key: `date`, `datereverse` or `title`
+@param String annotationList.allCollapsed Collapse (`true`) or expand (`false`) all annotations
+```
+
+<!-- END-RENDER -->
+
 
 ## Demo
 
