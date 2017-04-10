@@ -55,3 +55,6 @@ dist: src
 
 node_modules: package.json
 	$(NPM) install
+
+serve-samples:
+	python2 -mSimpleHTTPServer 3001
