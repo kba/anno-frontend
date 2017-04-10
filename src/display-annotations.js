@@ -4,6 +4,9 @@ const Vue = require('vue')
  * ### `displayAnnotations(options)`
  *
  * - takes the initial state of the Vue store
+ * - dispatches a `fetchToken` action to retrieve the token from localStorage
+ *   or via HTTP GET to `tokenEndpoint` or fail and force login if clicked, not
+ *   otherwise
  * - dispatches a `fetchList` action to retrieve all anotations that match
  *   `{$target:options.targetSource}` and the resp. permissions
  * - starts a Vue App with a single <anno-sidebar>
@@ -18,6 +21,7 @@ const Vue = require('vue')
  * @param Object annotationList Options for the list display
  * @param String annotationList.sortedBy     Sort key: `date`, `datereverse` or `title`
  * @param String annotationList.allCollapsed Collapse (`true`) or expand (`false`) all annotations
+ * @param Object tokenEndpoint URL of the endpoint providing the JSON Webtoken
  * ```
  */
 
@@ -25,7 +29,10 @@ module.exports = function displayAnnotations(options={}) {
 
     options.targetSource = options.targetSource || window.location.href
 
+    // Set the prefix for IDs
     if (!options.prefix) options.prefix = `anno-${Date.now()}`
+
+    // Create a container element if none was given
     if (!options.el) {
         const containerDiv = document.createElement('div')
         containerDiv.setAttribute('id', `${options.prefix}-container`)
@@ -37,8 +44,15 @@ module.exports = function displayAnnotations(options={}) {
     }
     console.log(options.el)
 
+    // Set up the store
     const store = require('./vuex/store')
+
+    // Set the store options
+    // NOTE This will break reactivity if the properties are unknown so make sure
+    // you define defaults, even null or empty strings
     Object.keys(options).forEach(k => store.state[k] = options[k])
+
+    store.dispatch('fetchToken').catch(err => { throw err })
     store.dispatch('fetchList').catch(err => { throw err })
     window.app = new Vue({
         store,

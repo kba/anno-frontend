@@ -1,4 +1,5 @@
 const config = require('../config')
+const axios = require('axios')
 const Vue = require('vue')
 const Vuex = require('vuex')
 const {collectIds} = require('@kba/anno-util')
@@ -11,7 +12,9 @@ module.exports = new Vuex.Store({
     strict: true,
     state: {
         language: config.defaultLang,
-        writetoken: "YES",
+        tokenEndpoint: 'http://localhost:3000/auth/token',
+        loginEndpoint: 'http://localhost:3000/auth/login?from=',
+        token: null,
         acl: {},
     },
     modules: {
@@ -34,9 +37,34 @@ module.exports = new Vuex.Store({
             Object.assign(state.acl, rules)
         },
 
+        SET_TOKEN(state, token) {
+            state.token = token
+        },
+
+        DELETE_TOKEN(state, token) {
+            state.token = null
+        },
+
     },
 
     actions: {
+
+        fetchToken({state, commit}) {
+            return new Promise((resolve, reject) => {
+            axios.get(state.tokenEndpoint, {maxRedirects: 0})
+                .then(resp => {
+                    console.log(resp)
+                    const token = resp.headers['X-Token']
+                    if (token) {
+                        commit('SET_TOKEN', token)
+                        resolve(token)
+                    } else {
+                        reject("No token")
+                    }
+                })
+                .catch(reject)
+            })
+        },
 
         fetchList({state, commit, getters}) {
             const api = apiFactory(state)

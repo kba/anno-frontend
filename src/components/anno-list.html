@@ -1,16 +1,17 @@
 <div :class="`${prefix}-anno-list`">
   <div class="btn-group pull-right hidden-print" role="group">
 
-    <template v-if="$auth('create', targetSource)">
-      <bootstrap-button btnClass="default ubhdanno_new" btnSize="xs" @click="create">
+    <bootstrap-button btnSize="xs" @click="login" v-if="token">
+      {{ l10n('logout') }}
+    </bootstrap-button>
+    <bootstrap-button btnSize="xs" @click="login" v-else>
+      {{ l10n('login') }}
+    </bootstrap-button>
+
+    <bootstrap-button btnClass="default ubhdanno_new" btnSize="xs" @click="create"
+      v-if="$auth('create', targetSource)">
         {{ l10n('new') }}
-      </bootstrap-button>
-    </template>
-    <template v-else>
-      <bootstrap-button btnSize="xs" @click="login">
-        {{ l10n('login') }}
-      </bootstrap-button>
-    </template>
+    </bootstrap-button>
 
     <bootstrap-button btnClass="default" btnSize="xs" @click="collapseAll('show')" v-if="collapsed">
       {{ l10n('open_all') }}

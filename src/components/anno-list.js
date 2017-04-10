@@ -24,11 +24,19 @@ module.exports = {
         sortedBy() { return this.$store.state.annotationList.sortedBy },
         list() { return this.$store.state.annotationList.list },
         targetSource() { return this.$store.state.targetSource },
+        token() { return this.$store.state.token },
     },
     methods: {
         login() {
-            console.warn("FAKE LOGIN")
-            // this.$store.state.acl = {}
+            this.$store.dispatch('fetchToken')
+                .catch(err => {
+                    if (err === "No token") {
+                        window.location.replace(this.$store.state.loginEndpoint + window.location.href)
+                    }
+                })
+        },
+        logout() {
+            this.$store.commit('DELETE_TOKEN')
         },
         create()   { return eventBus.$emit('create', this.targetSource) },
 
