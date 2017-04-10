@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "tap -Rspec test/*.test.js",
-    "prepublish": "webpack"
+    "XX prepublish": "webpack"
   },
   "repository": {
     "type": "git",

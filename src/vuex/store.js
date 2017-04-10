@@ -43,9 +43,11 @@ module.exports = new Vuex.Store({
             const api = annoApiFactory(state)
 
             return new Promise((resolve, reject) => {
+                console.log("Search")
                 api.search({'$target': state.targetSource}, (err, list) => {
                     if (err)  reject(err)
                     commit('REPLACE_LIST', list)
+                    console.log("ACL check")
                     api.aclCheck(getters.allIds, (err, perms) => {
                         if (err) reject(err)
                         commit('CHANGE_ACL', perms)
