@@ -1,7 +1,7 @@
 <div :class="`${prefix}-anno-list`">
   <div class="btn-group pull-right hidden-print" role="group">
 
-    <bootstrap-button btnSize="xs" @click="login" v-if="token">
+    <bootstrap-button btnSize="xs" @click="logout" v-if="token">
       {{ l10n('logout') }}
     </bootstrap-button>
     <bootstrap-button btnSize="xs" @click="login" v-else>
