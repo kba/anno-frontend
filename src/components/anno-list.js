@@ -28,15 +28,10 @@ module.exports = {
     },
     methods: {
         login() {
-            this.$store.dispatch('fetchToken').catch(err => {
-                if (err === "NO_TOKEN")
-                    window.location.replace(
-                        this.$store.state.loginEndpoint + encodeURIComponent(window.location.href))
-            })
+            this.$store.dispatch('login')
         },
         logout() {
-            this.$store.commit('DELETE_TOKEN')
-            this.$store.commit('EMPTY_ACL')
+            this.$store.dispatch('logout')
         },
         create()   { return eventBus.$emit('create', this.targetSource) },
 

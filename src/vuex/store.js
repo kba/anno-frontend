@@ -94,6 +94,22 @@ module.exports = new Vuex.Store({
                     dispatch('fetchAcl')
                 })
             })
-        }
+        },
+
+        login({state}) {
+            this.$store.dispatch('fetchToken').catch(err => {
+                if (err === "NO_TOKEN")
+                    window.location.replace(state.loginEndpoint + encodeURIComponent(window.location.href))
+            })
+        },
+
+        logout({state, commit}) {
+            if (state.logoutEndpoint) {
+                axios.get(state.logoutEndpoint)
+            }
+            commit('DELETE_TOKEN')
+            commit('EMPTY_ACL')
+        },
+
     },
 })
