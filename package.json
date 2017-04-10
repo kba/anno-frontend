@@ -15,6 +15,9 @@
   "author": "my,jb,kba",
   "license": "MIT",
   "dependencies": {
+    "@kba/anno-mw-httpheaders": "^0.0.1",
+    "@kba/anno-store-http": "^0.0.1",
+    "@kba/anno-util": "^0.0.1",
     "axios": "^0.15.3",
     "babel-core": "^6.23.1",
     "babel-loader": "^6.3.2",
@@ -32,14 +35,12 @@
     "querystring": "^0.2.0",
     "raw-loader": "^0.5.1",
     "semtonotes-client": "0.0.3",
+    "semtonotes-utils": "0.0.2",
     "tinymce": "^4.5.0",
     "vue": "2.1.10",
     "vue-template-compiler": "^2.1.10",
     "vuex": "^2.2.1",
-    "webpack-dev-server": "^1.16.2",
-    "@kba/anno-util": "^0.0.1",
-    "@kba/anno-store-http": "^0.0.1",
-    "@kba/anno-mw-httpheaders": "^0.0.1"
+    "webpack-dev-server": "^1.16.2"
   },
   "devDependencies": {
     "css-loader": "^0.26.1",
