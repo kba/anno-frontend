@@ -20,6 +20,7 @@ C.texts = [
     'headline',
     'license',
     'login',
+    'logout',
     'metadata',
     'new',
     'open_all',
@@ -66,6 +67,7 @@ C.localizations = {
         'headline':            'Annotationen',
         'license':             'Annotation wird unter CC0-Lizenz (Public Domain) veröffentlicht.',
         'login':               'Anmelden',
+        'logout':              'Abmelden',
         'metadata':            'Metadaten',
         'new':                 'Neue Annotation',
         'open_all':            'Alle öffnen',
@@ -104,7 +106,6 @@ C.localizations = {
 
     },
     'en':                      {
-        'Anmelden':            'Login',
         'Annotationen':        'Annotations',
         'Neue Annotation':     'New annotation',
         'annofield_link':      'Link (URL)',
@@ -119,6 +120,8 @@ C.localizations = {
         'edit':                'Edit',
         'edit_headline':       'Annotation Editor',
         'edit_zones':          'Edit zones',
+        'login':               'Log in',
+        'logout':              'Log out',
         'license':             'Annotation is published under CC0 license (Public Domain)',
         'license_comment':     'Comment is published under CC0 license (Public Domain)',
         'metadata':            'Metadata',
