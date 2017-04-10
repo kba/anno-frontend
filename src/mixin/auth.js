@@ -4,21 +4,17 @@ module.exports = {
      *
      * Check authorization of user against `$store.state.acl`
      *
-     * - `$auth(<cond>)` should be read as: "Has the current user the role `<cond>`"?
-     *
      * - `$auth(<cond>, <url>)` should be read as "Is the current user
      *   authorized to apply action `<cond>` on `<url>`"
      *
      */
     methods: {
-        $auth(cond, id, x) {
+        $auth(cond, id) {
             const acl = this.$store.state.acl
-            if (cond === 'logged-in') {
-                return !! acl
-            } else if (cond.match(/^(?:create|read|revise|remove)$/)) {
+            if (cond.match(/^(?:create|read|revise|remove)$/)) {
                 // console.log("Auth check", cond, id)
                 if (id === undefined) {
-                    throw new Error(`Undefined id. Cannot check ${cond}`, x)
+                    throw new Error(`Undefined id. Cannot check ${cond}`)
                 }
                 if (!acl) {
                     // console.warn("Not logged in")
