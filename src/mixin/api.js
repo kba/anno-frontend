@@ -1,7 +1,7 @@
-const annoApiFactory = require('../api/annoApi.js')
+const apiFactory = require('../api')
 
 module.exports = {
     computed: {
-        api() { return annoApiFactory(this.$store.state) }
+        api() { return apiFactory(this.$store.state) }
     }
 }
