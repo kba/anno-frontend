@@ -21,29 +21,29 @@ const Vue = require('vue')
  * ```
  */
 
-module.exports = function displayAnnotations(el, options={}) {
+module.exports = function displayAnnotations(options={}) {
 
     options.targetSource = options.targetSource || window.location.href
 
-    ;[
-        'el',
-    ].forEach(prop => {
-        if (!(prop in options))
-            throw new Error(`displayAnnotations requires prop '${prop}'`)
-    })
+    if (!options.prefix) options.prefix = `anno-${Date.now()}`
+    if (!options.el) {
+        const containerDiv = document.createElement('div')
+        containerDiv.setAttribute('id', `${options.prefix}-container`)
+        const appDiv = document.createElement('div')
+        appDiv.setAttribute('id', `${options.prefix}-app`)
+        containerDiv.appendChild(appDiv)
+        document.querySelector('body').appendChild(containerDiv)
+        options.el = appDiv
+    }
+    console.log(options.el)
 
     const store = require('./vuex/store')
-    Object.keys(options).forEach(k => {
-        store.state[k] = options[k]
+    Object.keys(options).forEach(k => store.state[k] = options[k])
+    store.dispatch('fetchList').catch(err => { throw err })
+    window.app = new Vue({
+        store,
+        el: options.el,
+        template: `<anno-list ref='anno-list'/>`,
     })
-    store.dispatch('fetchList')
-        .then(() => {
-            window.app = new Vue({
-                store,
-                el: options.el,
-                template: `<anno-list ref='anno-list'/>`,
-            })
-        })
-        .catch(err => { throw err })
 
 }
