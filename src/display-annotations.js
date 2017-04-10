@@ -22,6 +22,8 @@ const Vue = require('vue')
  * @param String annotationList.sortedBy     Sort key: `date`, `datereverse` or `title`
  * @param String annotationList.allCollapsed Collapse (`true`) or expand (`false`) all annotations
  * @param Object tokenEndpoint URL of the endpoint providing the JSON Webtoken
+ * @param Object loginEndpoint URL of the login mask
+ * @param Object logoutEndpoint URL that logs the user out
  * ```
  */
 
@@ -54,6 +56,7 @@ module.exports = function displayAnnotations(options={}) {
 
     store.dispatch('fetchToken').catch(err => { throw err })
     store.dispatch('fetchList').catch(err => { throw err })
+    store.dispatch('fetchAcl').catch(err => { throw err })
     window.app = new Vue({
         store,
         el: options.el,
