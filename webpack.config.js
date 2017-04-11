@@ -43,8 +43,8 @@ module.exports = {
                 loader: "html-loader?attrs=img:src bootstrap-button:src",
             },
             {
-                test: /components\/.*?\.css$/,
-                loader: "style-loader!css-loader",
+                test: /components\/.*?\.s?css$/,
+                loader: "style-loader!css-loader!scss-loader",
             },
         ]
     },

@@ -2,7 +2,7 @@ var webpack = require('webpack')
 
 module.exports = {
     entry: "./entry.prod.js",
-    // devtool: 'source-map',
+    devtool: 'source-map',
     node: { fs: 'empty' },
     // target: 'node',
     output: {
@@ -27,7 +27,10 @@ module.exports = {
         loaders: [
             {test: /png$/i, loader: "file-loader"},
             {test: /components\/.*?\.html$/, loader: "html-loader?attrs=img:src bootstrap-button:src" },
-            {test: /components\/.*?\.css$/, loader: "style-loader!css-loader" },
+            {
+                test: /components\/.*?\.s?css$/,
+                loader: "style-loader!css-loader?sourcemap=true!sass-loader?sourcemap-=true"
+            },
         ]
     },
     plugins: [
