@@ -1,19 +1,15 @@
-<div :id="`${prefix}-${slug}`" :class="`panel panel-default ${highlighted ? 'highlight' : ''}`"
+<div :id="`${prefix}-${slug}`" :class="`panel panel-default anno-viewer ${highlighted ? 'highlight' : ''}`"
   v-on:mouseover="mouseenter"
   v-on:mouseleave="mouseleave">
 
   <div v-if="!asReply"
     class="panel-heading"
-    data-toggle="collapse"
-    :id="`${prefix}-${slug}-viewer`"
-    :href="`#${prefix}-${slug}-collapse`"
-    :aria-controls="`#${prefix}-${slug}-collapse`"
-    aria-expanded="true"
-    role="tab">
+    @click="collapse('toggle')"
+    >
     <h4 class="panel-title">
       <a role="button">
-        <span class="glyphicon glyphicon-chevron-right if-collapsed"></span>
-        <span class="glyphicon glyphicon-chevron-down if-not-collapsed"></span>
+        <span class="glyphicon glyphicon-chevron-right" v-show="collapsed"></span>
+        <span class="glyphicon glyphicon-chevron-down" v-show="!collapsed"></span>
         {{ annotation.title }}
       </a>
     </h4>
@@ -21,118 +17,112 @@
   <div v-else
     class="panel-heading"
     aria-expanded="true"
-    :id="`${prefix}-head-${slug}`">
+    @click="collapse('toggle')"
+    >
     <span class="small">{{ annotation.title }}</span>
     <!-- <h5 class="panel-title"> {{ annotation.title }} </h5> -->
   </div>
 
-  <div
-    :id="`${prefix}-${slug}-collapse`"
-    class="panel-collapse collapse in"
-    role="tabpanel"
-    :aria-labbelledby="`${prefix}-${slug}-head`">
+  <div class="panel-body" role="tabpanel" v-show="!collapsed">
 
-    <div class="panel-body">
+    <!-- <div :id="`old_version_${slug}`" class="well old_version"></div> -->
 
-      <!-- <div :id="`old_version_${slug}`" class="well old_version"></div> -->
+    <div class="media" style="height: auto;">
 
-      <div class="media" style="height: auto;">
+      <div class="media-body">
 
-        <div class="media-body">
+        <div v-if="annotation.creator">
+          <bootstrap-button btnSize="xs" glyphicon="user">
+            {{ annotation.creator }} {{ dateformat(annotation.created || annotation.modified) }}
+          </bootstrap-button>
+          <bootstrap-button btnSize="xs" glyphicon="link" elem="a"
+            :title="l10n('purl')"
+            data-toggle="popover"
+            :data-content="id">
+          </button>
+        </div>
+        <br>
 
-          <div v-if="annotation.creator">
-            <bootstrap-button btnSize="xs" glyphicon="user">
-              {{ annotation.creator }} {{ dateformat(annotation.created || annotation.modified) }}
-            </bootstrap-button>
-            <bootstrap-button btnSize="xs" glyphicon="link" elem="a"
-              :title="l10n('purl')"
-              data-toggle="popover"
-              :data-content="id">
-            </button>
-          </div>
-          <br>
+        <div v-if="firstHtmlBody" v-html="firstHtmlBody.value"></div>
+        <br/>
 
-          <div v-if="firstHtmlBody" v-html="firstHtmlBody.value"></div>
-          <br/>
+        <div class="tags">
+          <span class="label label-default" v-for="tagBody in simpleTagBodies">
+            <span class="glyphicon glyphicon-tag"></span> {{ tagBody.value }}
+          </span>
+        </div>
 
-          <div class="tags">
-            <span class="label label-default" v-for="tagBody in simpleTagBodies">
-              <span class="glyphicon glyphicon-tag"></span> {{ tagBody.value }}
+        <div class="tags">
+          <a :href="semtagBody.id" v-for="semtagBody in semanticTagBodies">
+            <span class="label label-primary">
+              <span class="fa fa-cube"></span> {{ semtagBody.label }}
             </span>
-          </div>
+          </a>
+        </div>
 
-          <div class="tags">
-              <a :href="semtagBody.id" v-for="semtagBody in semanticTagBodies">
-                <span class="label label-primary">
-                  <span class="fa fa-cube"></span> {{ semtagBody.label }}
-                </span>
-              </a>
-          </div>
-
-          <!-- <div v-if="!options.no_oai" v-bind:class="prefix+'iiiflink'"> -->
+        <!-- <div v-if="!options.no_oai" v-bind:class="prefix+'iiiflink'"> -->
           <!--   <template v-if="item.iiif_url"> -->
-          <!--     <button class="btn-link" onclick="anno_toggle_iiif($(this));"> -->
-          <!--       <span class="fa fa-caret-right"> -->
-          <!--       </span> Bildausschnitt (IIIF-Image) -->
-          <!--     </button> -->
+            <!--     <button class="btn-link" onclick="anno_toggle_iiif($(this));"> -->
+              <!--       <span class="fa fa-caret-right"> -->
+                <!--       </span> Bildausschnitt (IIIF-Image) -->
+              <!--     </button> -->
 
-          <!--     <div> -->
-          <!--       <a v-bind:href="item.iiif_url" target="_blank">{{item.iiif_url}} -->
-          <!--       </a> -->
-          <!--     </div> -->
-          <!--   </template> -->
+            <!--     <div> -->
+              <!--       <a v-bind:href="item.iiif_url" target="_blank">{{item.iiif_url}} -->
+                <!--       </a> -->
+              <!--     </div> -->
+            <!--   </template> -->
           <!-- </div> -->
 
-        </div>
       </div>
+    </div>
 
-      <!-- navigation -->
+    <!-- navigation -->
 
-      <div class="btn-toolbar pull-right" role="toolbar" style="margin-top: 10px;">
+    <div class="btn-toolbar pull-right" role="toolbar" style="margin-top: 10px;">
 
-        <div class="btn-group btn-group-xs pull-right" role="group">
-          <bootstrap-button btnClass="default editbut" @click="revise" font-awesome="pencil" v-if="$auth('revise', id)">
-            {{ l10n('edit') }}
-          </bootstrap-button>
-          <bootstrap-button btnClass="default commentbut" @click="reply" font-awesome="reply" v-if="$auth('create', id)">
-            {{ l10n('comment') }}
-          </bootstrap-button>
-          <bootstrap-button btnClass="danger" @click="remove" v-if="$auth('remove', id)">
-            {{ l10n('delete_anno') }}
-          </bootstrap-button>
+      <div class="btn-group btn-group-xs pull-right" role="group">
+        <bootstrap-button btnClass="default editbut" @click="revise" font-awesome="pencil" v-if="$auth('revise', id)">
+          {{ l10n('edit') }}
+        </bootstrap-button>
+        <bootstrap-button btnClass="default commentbut" @click="reply" font-awesome="reply" v-if="$auth('create', id)">
+          {{ l10n('comment') }}
+        </bootstrap-button>
+        <bootstrap-button btnClass="danger" @click="remove" v-if="$auth('remove', id)">
+          {{ l10n('delete_anno') }}
+        </bootstrap-button>
 
-          <template v-if="numberOf('hasVersion') > 0">
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-              {{ l10n('previous') }}
-              <span class="caret"></span>
-            </button>
-            <ul :class="`${prefix} dropdown-menu pull-right versions`">
-              <li v-for="version in annotation.hasVersion" :class="version.id === id ? 'current-version' : ''">
-                <a class="small"
-                  @click="setToVersion(version)"
-                  >
-                  <span class="glyphicon glyphicon-time">
-                    {{ dateformat(version.created) }}
-                  </span>
-                </a>
-              </li>
-            </ul>
-          </template>
+        <template v-if="numberOf('hasVersion') > 0">
+          <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            {{ l10n('previous') }}
+            <span class="caret"></span>
+          </button>
+          <ul :class="`${prefix} dropdown-menu pull-right versions`">
+            <li v-for="version in annotation.hasVersion" :class="version.id === id ? 'current-version' : ''">
+              <a class="small"
+                @click="setToVersion(version)"
+                >
+                <span class="glyphicon glyphicon-time">
+                  {{ dateformat(version.created) }}
+                </span>
+              </a>
+            </li>
+          </ul>
+        </template>
 
-        </div>
       </div>
+    </div>
 
-      <div style="clear: both; margin-bottom: 2px;"></div>
+    <div style="clear: both; margin-bottom: 2px;"></div>
 
-      <template v-if="numberOf('hasReply') > 0">
+    <template v-if="numberOf('hasReply') > 0">
 
-        <anno-viewer
-          v-for="reply in annotation.hasReply"
-          as-reply
-          :annotation="reply"
+      <anno-viewer
+        v-for="reply in annotation.hasReply"
+        as-reply
+        :annotation="reply"
         />
 
       </template>
     </div>
-  </div>
 </div>

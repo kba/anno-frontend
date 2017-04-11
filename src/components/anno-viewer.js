@@ -28,12 +28,6 @@ module.exports = {
         console.log($('[data-toggle="popover"]', this.$el))
         $('[data-toggle="popover"]', this.$el).popover(); 
 
-        // Toggle classes for the chevron changing according to collapse state
-        $(".panel-collapse", this.$el).on("hide.bs.collapse", () =>
-            $('[data-toggle="collapse"]', this.$el).addClass('collapsed'))
-        $(".panel-collapse", this.$el).on("show.bs.collapse", () =>
-            $('[data-toggle="collapse"]', this.$el).removeClass('collapsed'))
-
         // React to highlighting events
         ;['start', 'stop', 'toggle'].forEach(state => {
             const method = `${state}Highlighting`
@@ -54,6 +48,7 @@ module.exports = {
         return {
             currentVersion: this.initialAnnotation,
             highlighted: false,
+            collapsed: this.collapseInitially,
         }
     },
     methods: {
@@ -68,7 +63,9 @@ module.exports = {
         toggleHighlighting() { this.highlighted = ! this.highlighted },
 
         dateformat(date) { return date ? _dateformat(date, this.dateFormat) : '' },
-        collapse(collapseState) { $(".collapse", this.$el).collapse(collapseState) },
+        collapse(collapseState) {
+            this.collapsed = collapseState === 'toggle' ? ! this.collapsed : collapseState === 'hide'
+        },
         numberOf(k) { return numberOf(this.annotation, k) },
         setToVersion(newState) {
             this.$store.commit('RESET_ANNOTATION')

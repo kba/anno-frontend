@@ -1,18 +1,22 @@
-[data-toggle="collapse"].collapsed .if-not-collapsed {
-    display: none;
-}
-[data-toggle="collapse"]:not(.collapsed) .if-collapsed {
-    display: none;
-}
+.anno-viewer {
 
-.current-version {
-    background: red;
-}
+    .panel-heading {
+        padding: 2px 0;
 
-.dropdown-menu a {
-    cursor: pointer;
-}
+        .panel-title {
+            font-size: 1em;
+        }
+    }
 
-.highlight {
-    background: green;
+    .current-version {
+        background: red;
+    }
+
+    .dropdown-menu a {
+        cursor: pointer;
+    }
+
+    .highlight {
+        background: green;
+    }
 }
