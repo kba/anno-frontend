@@ -1,7 +1,7 @@
 PATH := ./node_modules/.bin:$(PATH)
 NODE_ENV = development
 DEPLOY_SERVER = serv7
-DEPLOY_PATH = /usr/local/AnnotationService/htdocs/dist
+DEPLOY_PATH = /usr/local/AnnotationService/htdocs/dist2
 
 NPM = npm
 RM = rm -rf
@@ -47,10 +47,10 @@ test:
 .PHONY: deploy
 deploy: dist
 	ssh $(DEPLOY_SERVER) mkdir -p $(DEPLOY_PATH)
-	scp dist/* $(DEPLOY_SERVER):$(DEPLOY_PATH)
+	scp -r dist/* $(DEPLOY_SERVER):$(DEPLOY_PATH)
 	
 dist: src
-	webpack
+	NODE_ENV='production' webpack
 	cp demo.html dist/index.html
 
 node_modules: package.json
