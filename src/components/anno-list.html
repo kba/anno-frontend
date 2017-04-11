@@ -1,39 +1,38 @@
 <div :class="`${prefix}-anno-list`">
-  <div class="btn-group pull-right hidden-print" role="group">
+  <bootstrap-button btnSize="xs" @click="logout" v-if="token">
+    {{ l10n('logout') }}
+  </bootstrap-button>
+  <bootstrap-button btnSize="xs" @click="login" v-else>
+    {{ l10n('login') }}
+  </bootstrap-button>
 
-    <bootstrap-button btnSize="xs" @click="logout" v-if="token">
-      {{ l10n('logout') }}
-    </bootstrap-button>
-    <bootstrap-button btnSize="xs" @click="login" v-else>
-      {{ l10n('login') }}
-    </bootstrap-button>
+  <div class="btn-group btn-group-vertical pull-right hidden-print" role="group">
 
-    <bootstrap-button btnClass="default ubhdanno_new" btnSize="xs" @click="create"
-      v-if="$auth('create', targetSource)">
+    <bootstrap-button btnClass="success" btnSize="xs" @click="create" v-if="$auth('create', targetSource)">
         {{ l10n('new') }}
     </bootstrap-button>
 
-    <bootstrap-button btnClass="default" btnSize="xs" @click="collapseAll('show')" v-if="collapsed">
+    <bootstrap-button btnClass="default" btnSize="xs" @click="collapseAll('show')"
+      v-if="collapsed && numberOfAnnotations > 0">
       {{ l10n('open_all') }}
     </bootstrap-button>
-    <bootstrap-button btnClass="default" btnSize="xs" @click="collapseAll('hide')" v-else>
+    <bootstrap-button btnClass="default" btnSize="xs" @click="collapseAll('hide')"
+      v-if="!collapsed && numberOfAnnotations > 0">
       {{ l10n('close_all') }}
     </bootstrap-button>
 
-    <span class="dropdown">
-      <bootstrap-button btnClass="default dropdown-toggle" btnSize="xs" data-toggle="dropdown">
-        {{l10n('sort')}} <span class="caret"></span>
-      </bootstrap-button>
+    <bootstrap-button btnClass="default dropdown-toggle" btnSize="xs" data-toggle="dropdown">
+      {{l10n('sort')}} <span class="caret"></span>
+    </bootstrap-button>
 
-      <ul class="dropdown-menu dropdown-menu-small small" role="menu">
-        <li><a @click="sort('date')" class="small">{{ l10n('sortdate') }}
-            <span v-if="sortedBy == 'date'" class="glyphicon glyphicon-ok"></span></a></li>
-        <li><a @click="sort('datereverse')" class="small">{{ l10n('sortdatereverse') }}
-            <span v-if="sortedBy == 'datereverse'" class="glyphicon glyphicon-ok"></span></a></li>
-        <li><a @click="sort('title')" class="small">{{ l10n('sorttitle') }}
-            <span v-if="sortedBy == 'title'" class="glyphicon glyphicon-ok"></span></a></li>
-      </ul>
-    </span>
+    <ul class="dropdown-menu dropdown-menu-small small" role="menu">
+      <li><a @click="sort('date')" class="small">{{ l10n('sortdate') }}
+          <span v-if="sortedBy == 'date'" class="glyphicon glyphicon-ok"></span></a></li>
+      <li><a @click="sort('datereverse')" class="small">{{ l10n('sortdatereverse') }}
+          <span v-if="sortedBy == 'datereverse'" class="glyphicon glyphicon-ok"></span></a></li>
+      <li><a @click="sort('title')" class="small">{{ l10n('sorttitle') }}
+          <span v-if="sortedBy == 'title'" class="glyphicon glyphicon-ok"></span></a></li>
+    </ul>
 
   </div>
 

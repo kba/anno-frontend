@@ -24,6 +24,7 @@ module.exports = {
         list() { return this.$store.state.annotationList.list },
         targetSource() { return this.$store.state.targetSource },
         token() { return this.$store.state.token },
+        numberOfAnnotations() { return this.$store.getters.numberOfAnnotations },
     },
     methods: {
         login() {
