@@ -13,8 +13,7 @@ module.exports = {
         require('../mixin/auth'),
         require('../mixin/prefix'),
     ],
-    // necessary for nesting
-    name: 'anno-viewer',
+    name: 'anno-viewer', // necessary for nesting
     props: {
         annotation: {type: Object, required: true},
         // Controls whether comment is collapsible or not
@@ -24,15 +23,22 @@ module.exports = {
     },
     template: require('./anno-viewer.html'),
     style:    require('./anno-viewer.css'),
-    // beforeMount() {
-    //     this.annotation = this.$store.state.annotationList[this.listIndex]
-    // },
     mounted() {
+
+        // Show popover with persistent URL
         $('[data-toggle="popover"]', this.$el).popover(); 
+
+        // Toggle classes for the chevron changing according to collapse state
         $(".panel-collapse", this.$el).on("hide.bs.collapse", () =>
             $('[data-toggle="collapse"]', this.$el).addClass('collapsed'))
         $(".panel-collapse", this.$el).on("show.bs.collapse", () =>
             $('[data-toggle="collapse"]', this.$el).removeClass('collapsed'))
+
+        // React to highlighting events
+        ;['start', 'stop', 'toggle'].forEach(state => {
+            const method = `${state}Highlighting`
+            eventBus.$on(method, (id) => { if (id == this.id) this[method]() })
+        })
     },
     computed: {
         firstHtmlBody()     { return firstHtmlBody(this.annotation) },
@@ -47,23 +53,19 @@ module.exports = {
     data() {
         return {
             currentVersion: this.initialAnnotation,
-            highlightClass: '',
+            highlighted: false,
         }
     },
     methods: {
         revise()  { return eventBus.$emit('revise', this.annotation) },
         reply() { return eventBus.$emit('reply', this.annotation) },
         remove()  { return eventBus.$emit('remove', this.annotation) },
-        mouseenter() {
-            this.startHighlighting()
-            return eventBus.$emit("mouseenter", this.id)
-        },
-        mouseleave() {
-            this.stopHighlighting()
-            return eventBus.$emit("mouseleave", this.id)
-        },
-        startHighlighting() { this.highlightClass = 'highlight' },
-        stopHighlighting() { this.highlightClass = '' },
+        mouseenter() { return eventBus.$emit("startHighlighting", this.id) },
+        mouseleave() { return eventBus.$emit("stopHighlighting", this.id) },
+
+        startHighlighting() { this.highlighted = true },
+        stopHighlighting() { this.highlighted = false },
+        toggleHighlighting() { this.highlighted = ! this.highlighted },
 
         dateformat(date) { return date ? _dateformat(date, this.dateFormat) : '' },
         collapse(collapseState) { $(".collapse", this.$el).collapse(collapseState) },
