@@ -15,7 +15,7 @@ module.exports = {
         collapsed: this.collapseInitially
     }},
     template: require('./anno-list.html'),
-    // style: require('./anno-list.css'),
+    style: require('./anno-list.scss'),
     mounted() {
         this.sort()
     },
