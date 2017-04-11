@@ -9,6 +9,8 @@ const jwtDecode = require('jwt-decode')
 const annotation = require('./module/annotation')
 const annotationList = require('./module/annotationList')
 
+function isExpired(token) { return (token.exp < Date.now() / 1000) }
+
 module.exports = new Vuex.Store({
     strict: true,
     state: {
@@ -41,6 +43,7 @@ module.exports = new Vuex.Store({
 
         SET_TOKEN(state, token) {
             state.token = token
+            window.localStorage.setItem('anno-token', token);
         },
 
         DELETE_TOKEN(state, token) {
@@ -57,6 +60,15 @@ module.exports = new Vuex.Store({
 
         fetchToken({state, commit, dispatch}) {
             return new Promise((resolve, reject) => {
+                var token = window.localStorage.getItem('anno-token');
+                if (token) {
+                    if (isExpired(token)) {
+                        commit('DELETE_TOKEN')
+                    } else {
+                        commit('SET_TOKEN', token)
+                        return resolve()
+                    }
+                }
                 axios.get(state.tokenEndpoint, {
                     // maxRedirects: 0, // does not work in the browser
                     withCredentials: 1, // without it, xhr won't set cookies for CORS
