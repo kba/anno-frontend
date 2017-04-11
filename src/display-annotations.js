@@ -10,21 +10,18 @@ const Vue = require('vue')
  * - dispatches a `fetchList` action to retrieve all anotations that match
  *   `{$target:options.targetSource}` and the resp. permissions
  * - starts a Vue App with a single <anno-sidebar>
- *
- * ```
- * @param Object options
- * @param DOMElement options.el Element to hold the annotation sidebar/modal
- * @param String language Language for l10n. Currently: `en`/`eng` or `de`/`deu` (Default)
- * @param String targetSource The target of the annotation. Defaults to `window.location.href`
- * @param String targetImage The image if any, to annotate on this page
- * @param String targetThumbnail Thumbnail view of the image. Defaults to `options.targetImage`
- * @param Object annotationList Options for the list display
- * @param String annotationList.sortedBy     Sort key: `date`, `datereverse` or `title`
- * @param String annotationList.allCollapsed Collapse (`true`) or expand (`false`) all annotations
- * @param Object tokenEndpoint URL of the endpoint providing the JSON Webtoken
- * @param Object loginEndpoint URL of the login mask
- * @param Object logoutEndpoint URL that logs the user out
- * ```
+ * ---
+ * - `el`: Element to hold the annotation sidebar/modal
+ * - `language`: Language for l10n. Currently: `en`/`eng` or `de`/`deu` (Default)
+ * - `targetSource`: The target of the annotation. Defaults to `window.location.href`
+ * - `targetImage`: The image if any, to annotate on this page
+ * - `targetThumbnail`: Thumbnail view of the image. Defaults to `options.targetImage`
+ * - `annotationList`: Options for the list display
+ *   - `sortedBy`:     Sort key: `date`, `datereverse` or `title`
+ *   - `allCollapsed`: Collapse (`true`) or expand (`false`) all annotations
+ * - `tokenEndpoint`: URL of the endpoint providing the JSON Webtoken
+ * - `loginEndpoint`: URL of the login mask
+ * - `logoutEndpoint`: URL that logs the user out
  */
 
 module.exports = function displayAnnotations(options={}) {

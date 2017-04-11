@@ -11,7 +11,7 @@
 * [API](#api)
 	* [`displayAnnotations(options)`](#displayannotationsoptions)
 * [Mixins](#mixins)
-	* [`$auth(cond, id`](#authcond-id)
+	* [`$auth(cond, [id])`](#authcond--id-)
 * [OLD](#old)
 	* [Structure of the application](#structure-of-the-application)
 * [Using - HTML Snippets](#using---html-snippets)
@@ -77,20 +77,24 @@ NODE_ENV=production webpack
 <!-- BEGIN-RENDER ./src/display-annotations.js -->
 ### `displayAnnotations(options)`
 - takes the initial state of the Vue store
+- dispatches a `fetchToken` action to retrieve the token from localStorage
+  or via HTTP GET to `tokenEndpoint` or fail and force login if clicked, not
+  otherwise
 - dispatches a `fetchList` action to retrieve all anotations that match
   `{$target:options.targetSource}` and the resp. permissions
 - starts a Vue App with a single <anno-sidebar>
-```
-@param Object options
-@param DOMElement options.el Element to hold the annotation sidebar/modal
-@param String language Language for l10n. Currently: `en`/`eng` or `de`/`deu` (Default)
-@param String targetSource The target of the annotation. Defaults to `window.location.href`
-@param String targetImage The image if any, to annotate on this page
-@param String targetThumbnail Thumbnail view of the image. Defaults to `options.targetImage`
-@param Object annotationList Options for the list display
-@param String annotationList.sortedBy     Sort key: `date`, `datereverse` or `title`
-@param String annotationList.allCollapsed Collapse (`true`) or expand (`false`) all annotations
-```
+---
+- `el`: Element to hold the annotation sidebar/modal
+- `language`: Language for l10n. Currently: `en`/`eng` or `de`/`deu` (Default)
+- `targetSource`: The target of the annotation. Defaults to `window.location.href`
+- `targetImage`: The image if any, to annotate on this page
+- `targetThumbnail`: Thumbnail view of the image. Defaults to `options.targetImage`
+- `annotationList`: Options for the list display
+  - `sortedBy`:     Sort key: `date`, `datereverse` or `title`
+  - `allCollapsed`: Collapse (`true`) or expand (`false`) all annotations
+- `tokenEndpoint`: URL of the endpoint providing the JSON Webtoken
+- `loginEndpoint`: URL of the login mask
+- `logoutEndpoint`: URL that logs the user out
 
 <!-- END-RENDER -->
 
@@ -98,9 +102,8 @@ NODE_ENV=production webpack
 ## Mixins
 
 <!-- BEGIN-RENDER ./src/mixin/auth.js -->
-### `$auth(cond, [id]`
+### `$auth(cond, [id])`
 Check authorization of user against `$store.state.acl`
-- `$auth(<cond>)` should be read as: "Has the current user the role `<cond>`"?
 - `$auth(<cond>, <url>)` should be read as "Is the current user
   authorized to apply action `<cond>` on `<url>`"
 

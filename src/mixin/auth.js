@@ -1,6 +1,6 @@
 module.exports = {
     /**
-     * ### `$auth(cond, [id]`
+     * ### `$auth(cond, [id])`
      *
      * Check authorization of user against `$store.state.acl`
      *
