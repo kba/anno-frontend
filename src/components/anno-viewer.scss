@@ -1,18 +1,18 @@
 [data-toggle="collapse"].collapsed .if-not-collapsed {
-  display: none;
+    display: none;
 }
 [data-toggle="collapse"]:not(.collapsed) .if-collapsed {
-  display: none;
+    display: none;
 }
 
 .current-version {
-    background: red !important;
+    background: red;
 }
 
 .dropdown-menu a {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .highlight {
-  background: green !important;
+    background: green;
 }

@@ -21,7 +21,7 @@ module.exports = {
         dateFormat: {type: String, default: 'dd.mm.yyyy hh:MM:ss'},
     },
     template: require('./anno-viewer.html'),
-    style:    require('./anno-viewer.css'),
+    style:    require('./anno-viewer.scss'),
     mounted() {
 
         // Show popover with persistent URL
