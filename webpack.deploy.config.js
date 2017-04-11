@@ -8,7 +8,7 @@ module.exports = {
     output: {
         path: __dirname + "/dist",
         filename: "ubhd-anno.prod.js",
-        publicPath: 'http://anno.ub.uni-heidelberg.de/dist/',
+        publicPath: 'http://anno.ub.uni-heidelberg.de/dist2/',
     },
     externals: {
         jquery: "$",

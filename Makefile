@@ -1,6 +1,6 @@
 PATH := ./node_modules/.bin:$(PATH)
 NODE_ENV = development
-DEPLOY_SERVER = serv7
+DEPLOY_SERVER = kba@serv7
 DEPLOY_PATH = /usr/local/AnnotationService/htdocs/dist2
 
 NPM = npm
