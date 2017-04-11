@@ -23,6 +23,9 @@ module.exports = {
         sortedBy: 'title',
         allCollaped: 'false',
     },
+    getters: {
+        numberOfAnnotations(state) { return state.list.length },
+    },
     actions: {
 
         sort({commit, state}, sortBy) {
