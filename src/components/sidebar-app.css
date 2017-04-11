@@ -39,6 +39,8 @@
 
 .anno-sidebar {
     width: 30vw;
+    background: white;
     position: absolute;
+    top: 0;
     right: 0;
 }
