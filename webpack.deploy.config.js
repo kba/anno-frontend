@@ -26,7 +26,7 @@ module.exports = {
     module: {
         loaders: [
             {test: /png$/i, loader: "file-loader"},
-            {test: /components\/.*?\.html$/, loader: "html-loader" },
+            {test: /components\/.*?\.html$/, loader: "html-loader?attrs=img:src bootstrap-button:src" },
             {test: /components\/.*?\.css$/, loader: "style-loader!css-loader" },
         ]
     },

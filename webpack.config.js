@@ -36,11 +36,11 @@ module.exports = {
             {
                 test: /\.(png|jpg)$/,
                 // loader: 'url-loader?limit=100000000000000&emitFile=true&name=/[path][name].[ext]',
-                loader: "file-loader?emitFile=true&name=/[path][name].[ext]"
+                loader: "url-loader"
             },
             {
                 test: /components\/.*?\.html$/,
-                loader: "html-loader",
+                loader: "html-loader?attrs=img:src bootstrap-button:src",
             },
             {
                 test: /components\/.*?\.css$/,
