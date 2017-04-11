@@ -1,0 +1,37 @@
+.anno-sidebar {
+  background: white;
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  &.open {
+    width: 30vw;
+    border: 2px dotted black;
+  }
+
+  .anno-sidebar-toggle {
+    float: right;
+    padding-left: 0.5em;
+    right: 0;
+    width: 2em;
+    color: #a0a0a0;
+    background-color: #eaeaea;
+    z-index: 99;
+    overflow: hidden;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+
+    &:hover {
+      color: black;
+    }
+  }
+
+  .no-annotations {
+    margin: 0 auto;
+    background: #fee;
+
+    & > div {
+      width: 50%;
+    }
+  }
+}
+

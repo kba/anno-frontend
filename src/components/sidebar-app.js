@@ -5,17 +5,13 @@ module.exports = {
         require('../mixin/prefix'),
         require('../mixin/l10n'),
     ],
-    style: require('./sidebar-app.css'),
+    style: require('./sidebar-app.scss'),
     template: require('./sidebar-app.html'),
     data() { return {
         collapsed: false,
     }},
-    mounted() {
-
-        // Toggle classes for the chevron changing according to collapse state
-        // $(".panel-collapse", this.$el).on("hide.bs.collapse", this.handleHide)
-        // $(".panel-collapse", this.$el).on("show.bs.collapse", this.handleShow)
-
+    computed: {
+        numberOfAnnotations() { return this.$store.getters.numberOfAnnotations },
     },
     methods: {
 
