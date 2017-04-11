@@ -12,13 +12,9 @@
   .anno-sidebar-toggle {
     float: right;
     padding-left: 0.5em;
-    right: 0;
     width: 2em;
     color: #a0a0a0;
     background-color: #eaeaea;
-    z-index: 99;
-    overflow: hidden;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.05);
 
     &:hover {
       color: black;
@@ -26,11 +22,12 @@
   }
 
   .no-annotations {
-    margin: 0 auto;
     background: #fee;
 
     & > div {
       width: 50%;
+      margin: 0 auto;
+      padding: 1em 0;
     }
   }
 }
