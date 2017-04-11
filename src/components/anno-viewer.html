@@ -41,10 +41,8 @@
             :data-content="id">
           </button>
         </div>
-        <br>
 
         <div v-if="firstHtmlBody" v-html="firstHtmlBody.value"></div>
-        <br/>
 
         <div class="tags">
           <span class="label label-default" v-for="tagBody in simpleTagBodies">
@@ -92,7 +90,8 @@
           {{ l10n('delete_anno') }}
         </bootstrap-button>
 
-        <template v-if="numberOf('hasVersion') > 0">
+        <br>
+        <template v-if="numberOf('hasVersion') > 1">
           <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
             {{ l10n('previous') }}
             <span class="caret"></span>
