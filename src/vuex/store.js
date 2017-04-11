@@ -11,7 +11,7 @@ const annotationList = require('./module/annotationList')
 
 function isExpired(token) { return (token.exp < Date.now() / 1000) }
 
-module.exports = new Vuex.Store({
+module.exports = {
     strict: process.env.NODE_ENV != 'production',
     state: {
         language: config.defaultLang,
@@ -19,6 +19,7 @@ module.exports = new Vuex.Store({
         tokenEndpoint: 'http://localhost:3000/auth/token',
         loginEndpoint: 'http://localhost:3000/auth/login?from=',
         logoutEndpoint: 'http://localhost:3000/auth/logout',
+        targetImage: null,
         targetThumbnail: null,
         token: null,
         acl: null,
@@ -126,4 +127,4 @@ module.exports = new Vuex.Store({
         },
 
     },
-})
+}

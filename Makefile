@@ -49,9 +49,9 @@ deploy: dist
 	ssh $(DEPLOY_SERVER) mkdir -p $(DEPLOY_PATH)
 	scp -r dist/* $(DEPLOY_SERVER):$(DEPLOY_PATH)
 	
+.PHONY: dist
 dist: src
-	NODE_ENV='production' webpack
-	cp demo.html dist/index.html
+	NODE_ENV='production' webpack --config webpack.deploy.config.js
 
 node_modules: package.json
 	$(NPM) install

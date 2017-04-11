@@ -1,4 +1,5 @@
 const Vue = require('vue')
+const Vuex = require('vuex')
 
 /**
  * ### `displayAnnotations(options)`
@@ -22,6 +23,7 @@ const Vue = require('vue')
  * - `annotationList`: Options for the list display
  *   - `sortedBy`:     Sort key: `date`, `datereverse` or `title`
  *   - `allCollapsed`: Collapse (`true`) or expand (`false`) all annotations
+ * - `annoEndpoint`: URL of the Open Annotation Protocol server
  * - `tokenEndpoint`: URL of the endpoint providing the JSON Webtoken
  * - `loginEndpoint`: URL of the login mask
  * - `logoutEndpoint`: URL that logs the user out
@@ -53,12 +55,15 @@ module.exports = function displayAnnotations(options={}) {
     }
 
     // Set up the store
-    const store = require('./vuex/store')
+    const storeProps = require('./vuex/store')
+    Object.assign(storeProps.state, options)
+    const store = new Vuex.Store(storeProps)
 
     // Set the store options
     // NOTE This will break reactivity if the properties are unknown so make sure
     // you define defaults, even null or empty strings
-    Object.keys(options).forEach(k => store.state[k] = options[k])
+    // Object.keys(options).forEach(k => store.state[k] = options[k])
+    console.log(store.state.annoEndpoint)
 
     store.dispatch('fetchToken').catch(err => { throw err })
     store.dispatch('fetchList').then(() =>

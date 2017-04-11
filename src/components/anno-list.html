@@ -20,18 +20,20 @@
       {{ l10n('close_all') }}
     </bootstrap-button>
 
-    <bootstrap-button btnClass="default dropdown-toggle" btnSize="xs" data-toggle="dropdown">
-      {{l10n('sort')}} <span class="caret"></span>
-    </bootstrap-button>
+    <span class="dropdown">
+      <bootstrap-button btnClass="default dropdown-toggle" btnSize="xs" data-toggle="dropdown">
+        {{l10n('sort')}} <span class="caret"></span>
+      </bootstrap-button>
 
-    <ul class="dropdown-menu small" role="menu">
-      <li><a @click="sort('date')" class="small">{{ l10n('sortdate') }}
-          <span v-if="sortedBy == 'date'" class="glyphicon glyphicon-ok"></span></a></li>
-      <li><a @click="sort('datereverse')" class="small">{{ l10n('sortdatereverse') }}
-          <span v-if="sortedBy == 'datereverse'" class="glyphicon glyphicon-ok"></span></a></li>
-      <li><a @click="sort('title')" class="small">{{ l10n('sorttitle') }}
-          <span v-if="sortedBy == 'title'" class="glyphicon glyphicon-ok"></span></a></li>
-    </ul>
+      <ul class="dropdown-menu dropdown-menu-small small" role="menu">
+        <li><a @click="sort('date')" class="small">{{ l10n('sortdate') }}
+            <span v-if="sortedBy == 'date'" class="glyphicon glyphicon-ok"></span></a></li>
+        <li><a @click="sort('datereverse')" class="small">{{ l10n('sortdatereverse') }}
+            <span v-if="sortedBy == 'datereverse'" class="glyphicon glyphicon-ok"></span></a></li>
+        <li><a @click="sort('title')" class="small">{{ l10n('sorttitle') }}
+            <span v-if="sortedBy == 'title'" class="glyphicon glyphicon-ok"></span></a></li>
+      </ul>
+    </span>
 
   </div>
 

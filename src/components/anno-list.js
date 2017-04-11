@@ -1,4 +1,4 @@
-
+const $ = require('jquery')
 module.exports = {
     mixins: [
         require('../mixin/l10n'),
@@ -35,7 +35,6 @@ module.exports = {
         create() {
             this.$root.$emit('create', this.targetSource)
         },
-
         collapseAll(state) {
             this.$children.forEach(annoViewer =>
                 annoViewer.collapse && annoViewer.collapse(state)

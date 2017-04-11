@@ -10,25 +10,20 @@ module.exports = {
     },
     module: {
         loaders: [
-            // {
-            //     test: /\.vue$/,
-            //     loader: 'vue-loader',
-            //     options: {
-            //         loaders: {
-            //             // Since sass-loader (weirdly) has SCSS as its default parse mode, we map
-            //             // the "scss" and "sass" values for the lang attribute to the right configs here.
-            //             // other preprocessors should work out of the box, no loader config like this necessary.
-            //             'scss': 'vue-style-loader!css-loader!sass-loader',
-            //             'sass': 'vue-style-loader!css-loader!sass-loader?indentedSyntax'
-            //         }
-            //         // other vue-loader options go here
-            //     }
-            // },
             // **IMPORTANT** This is needed so that each bootstrap js file required by
             // bootstrap-webpack has access to the jQuery object
             {
-                test: /bootstrap\/js\//,
+                test: /bootstrap\/js/,
                 loader: 'imports-loader?jQuery=jquery'
+            },
+            {
+                test: /bootstrap.config.js$/,
+                loader: 'bootstrap-webpack',
+            },
+            {
+                test: /font-awesome.css$/,
+                loader: 'style-loader!css-loader',
+
             },
             {
                 test: /\.(eot|svg|ttf)(\?v=\d+\.\d+\.\d+)?/,
@@ -40,11 +35,8 @@ module.exports = {
             },
             {
                 test: /\.(png|jpg)$/,
-                loader: 'url-loader?limit=100000000000000&emitFile=true&name=/[path][name].[ext]',
-                // loader: "file-loader?emitFile=false&name=/[path][name].[ext]"
-                // options: {
-                    // limit: 250000,
-                // },
+                // loader: 'url-loader?limit=100000000000000&emitFile=true&name=/[path][name].[ext]',
+                loader: "file-loader?emitFile=true&name=/[path][name].[ext]"
             },
             {
                 test: /components\/.*?\.html$/,

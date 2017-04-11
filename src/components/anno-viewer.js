@@ -25,6 +25,7 @@ module.exports = {
     mounted() {
 
         // Show popover with persistent URL
+        console.log($('[data-toggle="popover"]', this.$el))
         $('[data-toggle="popover"]', this.$el).popover(); 
 
         // Toggle classes for the chevron changing according to collapse state

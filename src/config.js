@@ -1,54 +1,6 @@
 var C = module.exports = {}
 
-C.annoservicehosturl = process.env.annoservicehosturl || 'http://anno.ub.uni-heidelberg.de'
-C.annoserviceurl     = process.env.annoserviceurl     || C.annoservicehosturl + '/cgi-bin/anno.cgi';
-
-C.texts = [
-
-    'annofield_link',
-    'annofield_linktitle',
-    'annofield_title',
-    'cancel',
-    'close',
-    'close_all',
-    'comment',
-    'comments',
-    'commenttarget',
-    'edit',
-    'edit_headline',
-    'edit_zones',
-    'headline',
-    'license',
-    'login',
-    'logout',
-    'metadata',
-    'new',
-    'open_all',
-    'previous',
-    'purl',
-    'reply',
-    'save',
-    'showref',
-    'showrefalways',
-    'showrefdefault',
-    'showrefnever',
-    'sort',
-    'sortdate',
-    'sortdatereverse',
-    'sorttitle',
-    'version_from',
-    'zones',
-
-    'tag',
-    'semtag',
-    'add_tag',
-    'add_semtag',
-    'delete_tag',
-    'delete_semtag',
-
-    'unsaved',
-    'annoeditor',
-]
+C.defaultlang = 'de';
 
 C.localizations = {
     'de':                      {
@@ -106,7 +58,6 @@ C.localizations = {
 
     },
     'en':                      {
-        'Neue Annotation':     'New annotation',
         'annofield_link':      'Link (URL)',
         'annofield_linktitle': 'Link title',
         'annofield_title':     'Title (required)',
@@ -124,6 +75,7 @@ C.localizations = {
         'license':             'Annotation is published under CC0 license (Public Domain)',
         'license_comment':     'Comment is published under CC0 license (Public Domain)',
         'metadata':            'Metadata',
+        'new':                 'New Annotation',
         'open_all':            'Open all',
         'previous':            'Previous versions',
         'purl':                'Annotation: Persistent URL',
@@ -388,5 +340,3 @@ C.langcode = {
    'de':  'de',
    'ger': 'de',
 };
-
-C.defaultlang = 'de';
