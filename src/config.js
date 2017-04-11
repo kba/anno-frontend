@@ -64,7 +64,7 @@ C.localizations = {
         'edit':                'Editieren',
         'edit_headline':       'Annotationen-Editor',
         'edit_zones':          'Zonen editieren',
-        'headline':            'Annotationen',
+        'Annotations':         'Annotationen',
         'license':             'Annotation wird unter CC0-Lizenz (Public Domain) veröffentlicht.',
         'login':               'Anmelden',
         'logout':              'Abmelden',
@@ -106,7 +106,6 @@ C.localizations = {
 
     },
     'en':                      {
-        'Annotationen':        'Annotations',
         'Neue Annotation':     'New annotation',
         'annofield_link':      'Link (URL)',
         'annofield_linktitle': 'Link title',
