@@ -1,6 +1,5 @@
 const XrxUtils = require('semtonotes-utils')
 const jQuery = require('jquery')
-const eventBus = require('../event-bus')
 
 module.exports = {
 
@@ -25,7 +24,7 @@ module.exports = {
 
         if (this.autoLoad) this.init()
 
-        eventBus.$on('open-editor', () => {
+        this.$root.$on('open-editor', () => {
             this.init()
         })
 

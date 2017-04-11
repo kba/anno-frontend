@@ -1,5 +1,4 @@
 const $ = require('jquery')
-const eventBus = require('../event-bus')
 
 module.exports = {
     mixins: [
@@ -13,13 +12,13 @@ module.exports = {
         editor() { return this.$refs['editor'] },
     },
     created() {
-        eventBus.$on('open-editor', () => this.show())
-        eventBus.$on('close-editor', () => this.hide())
+        this.$root.$on('open-editor', () => this.show())
+        this.$root.$on('close-editor', () => this.hide())
     },
     methods: {
-        save() { eventBus.$emit('save') },
-        remove() { eventBus.$emit('remove', this.id) },
-        discard() { eventBus.$emit('discard') },
+        save() { this.$root.$emit('save') },
+        remove() { this.$root.$emit('remove', this.id) },
+        discard() { this.$root.$emit('discard') },
 
         show() { $(this.$el).modal('show') },
         hide() { $(this.$el).modal('hide') },

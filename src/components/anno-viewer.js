@@ -1,6 +1,5 @@
 const $ = require('jquery')
 const _dateformat = require('dateformat')
-const eventBus = require('../event-bus')
 const {
     numberOf,
     firstHtmlBody, simpleTagBodies, semanticTagBodies, svgTarget,
@@ -37,7 +36,7 @@ module.exports = {
         // React to highlighting events
         ;['start', 'stop', 'toggle'].forEach(state => {
             const method = `${state}Highlighting`
-            eventBus.$on(method, (id) => { if (id == this.id) this[method]() })
+            this.$root.$on(method, (id) => { if (id == this.id) this[method]() })
         })
     },
     computed: {
@@ -57,11 +56,11 @@ module.exports = {
         }
     },
     methods: {
-        revise()  { return eventBus.$emit('revise', this.annotation) },
-        reply() { return eventBus.$emit('reply', this.annotation) },
-        remove()  { return eventBus.$emit('remove', this.annotation) },
-        mouseenter() { return eventBus.$emit("startHighlighting", this.id) },
-        mouseleave() { return eventBus.$emit("stopHighlighting", this.id) },
+        revise()     { return this.$root.$emit('revise', this.annotation) },
+        reply()      { return this.$root.$emit('reply', this.annotation) },
+        remove()     { return this.$root.$emit('remove', this.annotation) },
+        mouseenter() { return this.$root.$emit("startHighlighting", this.id) },
+        mouseleave() { return this.$root.$emit("stopHighlighting", this.id) },
 
         startHighlighting() { this.highlighted = true },
         stopHighlighting() { this.highlighted = false },
