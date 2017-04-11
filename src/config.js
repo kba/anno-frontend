@@ -48,7 +48,7 @@ C.localizations = {
         'tag':                 'Einfaches Schlagwort',
         'tags':                'Einfache Schlagworte',
 
-        'delete_anno':         'Annotation l\u00f6schen',
+        'delete_anno':         'L\u00f6schen',
         'confirm_delete':      'Sind sie sicher dass Sie die Annotation l\u00f6schen wollen?',
 
         'unsaved':             'Nicht gespeichert',
@@ -103,7 +103,7 @@ C.localizations = {
         'tag':                 'Simple Tag',
         'tags':                'Simple Tags',
 
-        'delete_anno':         'Delete Annotation',
+        'delete_anno':         'Delete',
         'confirm_delete':      'Are you sure you want to delete this annotation?',
 
         'unsaved':             'Unsaved',
