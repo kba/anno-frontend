@@ -13,3 +13,6 @@
   cursor: pointer;
 }
 
+.highlight {
+  background: green !important;
+}

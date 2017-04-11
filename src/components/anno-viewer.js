@@ -19,7 +19,7 @@ module.exports = {
         annotation: {type: Object, required: true},
         // Controls whether comment is collapsible or not
         asReply: {type: Boolean, default: false},
-        collapseInitially: {type: Boolean},
+        collapseInitially: {type: Boolean, default: false},
         dateFormat: {type: String, default: 'dd.mm.yyyy hh:MM:ss'},
     },
     template: require('./anno-viewer.html'),
@@ -47,12 +47,23 @@ module.exports = {
     data() {
         return {
             currentVersion: this.initialAnnotation,
+            highlightClass: '',
         }
     },
     methods: {
         revise()  { return eventBus.$emit('revise', this.annotation) },
         reply() { return eventBus.$emit('reply', this.annotation) },
         remove()  { return eventBus.$emit('remove', this.annotation) },
+        mouseenter() {
+            this.startHighlighting()
+            return eventBus.$emit("mouseenter", this.id)
+        },
+        mouseleave() {
+            this.stopHighlighting()
+            return eventBus.$emit("mouseleave", this.id)
+        },
+        startHighlighting() { this.highlightClass = 'highlight' },
+        stopHighlighting() { this.highlightClass = '' },
 
         dateformat(date) { return date ? _dateformat(date, this.dateFormat) : '' },
         collapse(collapseState) { $(".collapse", this.$el).collapse(collapseState) },

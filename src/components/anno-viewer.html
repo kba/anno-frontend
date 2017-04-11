@@ -1,4 +1,4 @@
-<div :id="`${prefix}-${slug}`" class="panel panel-default">
+<div :id="`${prefix}-${slug}`" :class="`panel panel-default ${highlightClass}`" v-on:mouseover="mouseenter" v-on:mouseleave="mouseleave">
 
   <div v-if="!asReply"
     class="panel-heading"
