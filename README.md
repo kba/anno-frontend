@@ -10,8 +10,10 @@
 	* [Build](#build)
 * [API](#api)
 	* [`displayAnnotations(options)`](#displayannotationsoptions)
+		* [Options](#options)
+		* [Events](#events)
 * [Mixins](#mixins)
-	* [`$auth(cond, [id])`](#authcond--id-)
+	* [`$auth(cond, id)`](#authcond-id)
 * [OLD](#old)
 	* [Structure of the application](#structure-of-the-application)
 * [Using - HTML Snippets](#using---html-snippets)
@@ -76,14 +78,15 @@ NODE_ENV=production webpack
 
 <!-- BEGIN-RENDER ./src/display-annotations.js -->
 ### `displayAnnotations(options)`
-- takes the initial state of the Vue store
-- dispatches a `fetchToken` action to retrieve the token from localStorage
+1) takes the initial state of the Vue store
+2) dispatches a `fetchToken` action to retrieve the token from localStorage
   or via HTTP GET to `tokenEndpoint` or fail and force login if clicked, not
   otherwise
-- dispatches a `fetchList` action to retrieve all anotations that match
-  `{$target:options.targetSource}` and the resp. permissions
-- starts a Vue App with a single <anno-sidebar>
----
+3) dispatches a `fetchList` action to retrieve all anotations that match
+  `{$target:options.targetSource}`
+4) dispatches a `fetchAcl` action to retrieve the resp. permissions
+5) starts a Vue App with a single <anno-list in a toggleable sidebar>
+#### Options
 - `el`: Element to hold the annotation sidebar/modal
 - `language`: Language for l10n. Currently: `en`/`eng` or `de`/`deu` (Default)
 - `targetSource`: The target of the annotation. Defaults to `window.location.href`
@@ -92,9 +95,19 @@ NODE_ENV=production webpack
 - `annotationList`: Options for the list display
   - `sortedBy`:     Sort key: `date`, `datereverse` or `title`
   - `allCollapsed`: Collapse (`true`) or expand (`false`) all annotations
+- `token`: Function or token. The literal token. Don't use this option
+  without SSL/TLS encryption. Function must be synchronous.
 - `tokenEndpoint`: URL of the endpoint providing the JSON Webtoken
-- `loginEndpoint`: URL of the login mask
-- `logoutEndpoint`: URL that logs the user out
+- `annoEndpoint`: URL of the Open Annotation Protocol server
+- `loginEndpoint`: Function or URL of the login mask
+- `logoutEndpoint`: Function or URL that logs the user out
+- `isLoggedIn`: Function or boolean to designate whether the is already
+  logged in. No login button will be shown in that case
+#### Events
+- `startHighlighting(annoId)`: $emit this to highlight the annotation
+- `stopHighlighting(annoId)`: $emit this to un-highlight the annotation 
+- `mouseover(annoId)`: $on this to catch when an annotation is hovered in the list
+- `mouseleave(annoId)`: $on this to catch when an annotation is un-hovered in the list
 
 <!-- END-RENDER -->
 
