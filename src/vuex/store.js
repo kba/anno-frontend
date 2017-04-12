@@ -51,6 +51,7 @@ module.exports = {
 
         DELETE_TOKEN(state, token) {
             state.token = null
+            window.localStorage.removeItem('anno-token');
         },
 
         EMPTY_ACL(state) {
@@ -114,16 +115,16 @@ module.exports = {
         login({state, dispatch}) {
             dispatch('fetchToken').catch(err => {
                 if (err === "NO_TOKEN")
-                    window.location.replace(state.loginEndpoint + encodeURIComponent(window.location.href))
+                    window.location.replace(state.loginEndpoint)
             })
         },
 
         logout({state, commit}) {
-            if (state.logoutEndpoint) {
-                axios.get(state.logoutEndpoint)
-            }
             commit('DELETE_TOKEN')
             commit('EMPTY_ACL')
+            if (state.logoutEndpoint) {
+                window.location.replace(state.logoutEndpoint)
+            }
         },
 
     },
