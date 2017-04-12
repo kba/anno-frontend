@@ -6,12 +6,14 @@ const Vuex = require('vuex')
  *
  * 1) takes the initial state of the Vue store
  * 2) dispatches a `fetchToken` action to retrieve the token from localStorage
- *   or via HTTP GET to `tokenEndpoint` or fail and force login if clicked, not
- *   otherwise
+ *    or via HTTP GET to `tokenEndpoint` or fail and force login if clicked, not
+ *    otherwise
  * 3) dispatches a `fetchList` action to retrieve all anotations that match
- *   `{$target:options.targetSource}`
+ *    `{$target:options.targetSource}`
  * 4) dispatches a `fetchAcl` action to retrieve the resp. permissions
- * 5) starts a Vue App with a single <anno-list in a toggleable sidebar>
+ * 5) starts a Vue App with a single [`<sidebar-app>`](#sidebar-app)
+ * 6) Returns the Vue.App on which listeners can be added `$on` and which can
+ *    emit events with `$emit`
  *
  * #### Options
  *

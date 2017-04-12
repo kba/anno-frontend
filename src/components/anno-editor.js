@@ -2,6 +2,24 @@ const tinymce = require('tinymce')
 const css = require('./anno-editor.css')
 console.log(css)
 
+/*
+ * ### anno-editor
+ *
+ * The editor has three modes: `create`, `reply` and `revise` that represent
+ * the function of the anno-store to be used on `save`
+ *
+ * Properties:
+ *
+ * - `editorId`: Identifier for the tinymce-editor (which requires a unique id
+ *   attribute). Default: `anno-editor`
+ *
+ * Events:
+ *
+ * - `close-editor`: The editor was closed
+ * - `removed(id)`: Annotation `id` was removed
+ *
+ */
+
 module.exports = {
     mixins: [
         require('../mixin/l10n'),

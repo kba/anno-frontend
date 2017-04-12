@@ -1,3 +1,13 @@
+/**
+ * ### bootstrap-button
+ *
+ * A bootstrap button
+ *
+ * #### Properties
+ *
+ * ....
+ *
+ */
 module.exports = {
     mixins: [require('../mixin/l10n')],
     props: {

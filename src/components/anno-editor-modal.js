@@ -1,5 +1,14 @@
 const $ = require('jquery')
 
+/*
+ * ### anno-editor-modal
+ *
+ * A bootstrap modal that holds a singleton [anno-editor](#anno-editor).
+ *
+ * Events: Same as in [anno-editor](#anno-editor)
+ *
+ */
+
 module.exports = {
     mixins: [
         require('../mixin/l10n'),

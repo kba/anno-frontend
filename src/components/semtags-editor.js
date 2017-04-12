@@ -1,5 +1,12 @@
 const bonanza = require('bonanza');
 
+/*
+ * ### semtags-editor
+ *
+ * Editor for *semantic* tags, i.e. link-label tuples with autocompletion.
+ *
+ */
+
 module.exports = {
     mixins: [
         require('../mixin/l10n'),

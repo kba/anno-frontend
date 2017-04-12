@@ -1,6 +1,30 @@
 const XrxUtils = require('semtonotes-utils')
 const jQuery = require('jquery')
 
+/**
+ * ### zone-editor
+ *
+ * Editor for creating zones as SVG on the `targetImage`.
+ *
+ * #### Props:
+ *
+ * - `autoLoad`: Whether the SemToNotes canvas should be initialized
+ *   immediately after mounting. Defaults to false, since the image can change
+ * - **`targetImage`**: Image to annotate
+ * - `targetThumbnail`: Smaller version of the image for navigation, defaults
+ *   to `targetImage`
+ * - `canvasHeight`: Height of the canvas. Default: `400`.
+ * - `canvasWidth`: Width of the canvas. Default: `300`.
+ * - `thumbHeight`: Height of the navigation thumbnail. Default: `120`.
+ * - `thumbWidth`: Width of the navigation thumbnail. Default: `120`.
+ * - `style`: Style to apply to shapes. See semtonotes-utils#applyStyle TODO
+ *
+ * #### Methods
+ *
+ * - `init(cb)`: Initialize the canvasses
+ *
+ */
+
 module.exports = {
 
     mixins: [

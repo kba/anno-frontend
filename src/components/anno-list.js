@@ -1,4 +1,18 @@
-const $ = require('jquery')
+/*
+ * ### anno-list
+ *
+ * List of [anno-viewer](#anno-viewer) components.
+ *
+ * #### Props
+ *
+ * - `collapseInitially`: Whether all annotations should be collapsed or not
+ *
+ * #### Events
+ *
+ * - `create`: A new annotation on `targetSource` shall be created
+ *
+ */
+
 module.exports = {
     mixins: [
         require('../mixin/l10n'),

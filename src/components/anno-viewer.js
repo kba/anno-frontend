@@ -6,6 +6,31 @@ const {
     setToVersion,
 } = require('@kba/anno-util')
 
+/**
+ * ### anno-viewer
+ *
+ * Show an annotation as a bootstrap panel.
+ *
+ * #### Props
+ *
+ * - **`annotation`**: The annotation this viewer shows
+ * - `asReply`: Whether the annotation should be displayed as a reply (no
+ *   colapsing, smaller etc.)
+ * - `collapseInitially`: Whether the anntotation should be collapsed after
+ *   first render
+ * - dateFormat: Format of date stamps. Default: `dd.mm.yyyy hh:MM:ss`
+ *
+ * #### Events
+ *
+ * - `revise`: This annotation should be opened in an editor for revision
+ * - `reply`: A new annotation as a reply to this annotation should be opened in an editor
+ * - `remove`: This annotation should be removed from the store
+ * - `startHighlighting`: Start highlighting this annotation
+ * - `stopHighlighting`: Stop highlighting this annotation
+ * - `mouseenter`: The mouse cursor is now on this annotation
+ * - `mouseleave`: The mouse cursor has left this annotation
+ */
+
 module.exports = {
     mixins: [
         require('../mixin/l10n'),

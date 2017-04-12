@@ -6,6 +6,18 @@ const Vue = require('vue')
 const VueTinymce = require('vue-tinymce').default
 Vue.use(VueTinymce)
 
+/**
+ * ### html-editor
+ *
+ * Editor for the `text/html` `TextualBody` body of an annotation.
+ *
+ * #### Props
+ *
+ * - `language`: Language of the tinymce UI. Default: `de`
+ * - **`editorId`**: HTML id of the tinymce editor. Required.
+ * - `tinymceOptions`: Options passed to the tinymce constructor.
+ */
+
 module.exports = {
     mixins: [
         require('../mixin/l10n'),

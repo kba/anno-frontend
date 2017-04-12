@@ -1,3 +1,9 @@
+/**
+ * ### tags-editor
+ *
+ * Editor for the simple text-value-only tags of an annotation.
+ *
+ */
 module.exports = {
     mixins: [
         require('../mixin/l10n'),
