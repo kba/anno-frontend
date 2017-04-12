@@ -20,7 +20,8 @@
         cursor: pointer;
     }
 
-    .highlight {
-        background: green;
+    &.highlight > .panel-heading {
+        background: #990000 !important;
+        color: white;
     }
 }
