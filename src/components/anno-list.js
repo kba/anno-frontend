@@ -24,15 +24,14 @@ module.exports = {
         list() { return this.$store.state.annotationList.list },
         targetSource() { return this.$store.state.targetSource },
         token() { return this.$store.state.token },
+        isLoggedIn() { return this.$store.state.isLoggedIn },
+        logoutEndpoint() { return this.$store.state.logoutEndpoint },
+        loginEndpoint() { return this.$store.state.loginEndpoint },
         numberOfAnnotations() { return this.$store.getters.numberOfAnnotations },
     },
     methods: {
-        login() {
-            this.$store.dispatch('login')
-        },
-        logout() {
-            this.$store.dispatch('logout')
-        },
+        login() { this.$store.dispatch('login') },
+        logout() { this.$store.dispatch('logout') },
         create() {
             this.$root.$emit('create', this.targetSource)
         },
