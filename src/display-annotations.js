@@ -23,10 +23,16 @@ const Vuex = require('vuex')
  * - `annotationList`: Options for the list display
  *   - `sortedBy`:     Sort key: `date`, `datereverse` or `title`
  *   - `allCollapsed`: Collapse (`true`) or expand (`false`) all annotations
- * - `annoEndpoint`: URL of the Open Annotation Protocol server
+ *
+ * - `token`: Function or token. The literal token. Don't use this option
+ *   without SSL/TLS encryption. Function must be synchronous.
  * - `tokenEndpoint`: URL of the endpoint providing the JSON Webtoken
- * - `loginEndpoint`: URL of the login mask
- * - `logoutEndpoint`: URL that logs the user out
+ * - `annoEndpoint`: URL of the Open Annotation Protocol server
+ *
+ * - `loginEndpoint`: Function or URL of the login mask
+ * - `logoutEndpoint`: Function or URL that logs the user out
+ * - `isLoggedIn`: Function or boolean to designate whether the is already
+ *   logged in. No login button will be shown in that case
  *
  * #### Events
  *
@@ -53,6 +59,11 @@ module.exports = function displayAnnotations(options={}) {
         document.querySelector('body').appendChild(containerDiv)
         options.el = appDiv
     }
+    ;['token', 'isLoggedIn', 'loginEndpoint', 'logoutEndpoint'].forEach(fn => {
+        if (typeof options[fn] === 'function') {
+            options[fn] = options[fn]()
+        }
+    })
 
     // Set up the store
     const storeProps = require('./vuex/store')
