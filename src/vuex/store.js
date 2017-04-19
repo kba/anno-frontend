@@ -103,11 +103,12 @@ module.exports = {
 
         fetchList({state, commit, dispatch}) {
             return new Promise((resolve, reject) => {
-                console.log("Search")
-                apiFactory(state).search({'$target': state.targetSource}, (err, list) => {
+                const query = {'$target': state.targetSource}
+                console.log("Search", query)
+                apiFactory(state).search(query, (err, list) => {
                     if (err) return reject(err)
                     commit('REPLACE_LIST', list)
-                    dispatch('fetchAcl')
+                    resolve(dispatch('fetchAcl'))
                 })
             })
         },

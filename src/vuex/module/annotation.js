@@ -46,7 +46,7 @@ const actions = {
 
     setSvgSelector({commit, state}, {svg, source}) {
         if (!svgSelectorResource.first(state)) {
-            commit('ADD_SVG_TARGET', source)
+            commit('ADD_SVG_TARGET', {source})
         }
         commit('SET_SVG_SELECTOR', svg)
     },
@@ -90,7 +90,7 @@ const mutations = {
         add(state, 'body', Object.assign(body, semanticTagBody.create()))
     },
 
-    ADD_SVG_TARGET(state, target) {
+    ADD_SVG_TARGET(state, target={}) {
         ensureArray(state, 'target')
         add(state, 'target', Object.assign(target, svgSelectorResource.create()))
     },

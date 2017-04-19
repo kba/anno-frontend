@@ -24,10 +24,7 @@ module.exports = {
         allCollaped: 'false',
     },
     getters: {
-        numberOfAnnotations(state) {
-            console.log(state)
-            return state.list.length
-        },
+        numberOfAnnotations(state) { return state.list.length },
     },
     actions: {
 
