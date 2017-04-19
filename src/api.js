@@ -8,6 +8,6 @@ module.exports = (state) => {
             Authorization: `Bearer ${state.token}`,
         }),
     })
-    console.log(annoStore)
+    // console.log(annoStore)
     return annoStore
 }
