@@ -40,6 +40,8 @@ const eventBus = require('./event-bus')
  *
  * #### Events
  *
+ * Either listen/emit via app.eventBus or provide listeners as `events` option
+ *
  * - `startHighlighting(annoId)`: $emit this to highlight the annotation
  * - `stopHighlighting(annoId)`: $emit this to un-highlight the annotation 
  * - `mouseover(annoId)`: $on this to catch when an annotation is hovered in the list
@@ -66,16 +68,20 @@ module.exports = function displayAnnotations(options={}) {
         options.el = appDiv
     }
 
+    // Event listeners
+    const eventListeners = options.events ? options.events : {}
+    Object.keys(eventListeners).forEach(event => {
+        console.log(`Binding "${event}" event on`, eventBus, 'to', eventListeners[event])
+        eventBus.$on(event, (...args) => eventListeners[event](...args))
+    })
+    delete options.events
+
     // These options can also be functions to be called to produce the value now
     ;['token', 'isLoggedIn', 'loginEndpoint', 'logoutEndpoint'].forEach(fn => {
         if (typeof options[fn] === 'function') {
             options[fn] = options[fn]()
         }
     })
-
-    // remember callbacks
-    const {onLoad, onError} = options
-    delete options.onLoad
 
     // Set up the store
     // NOTE This will break reactivity if the properties are unknown so make sure
@@ -94,11 +100,10 @@ module.exports = function displayAnnotations(options={}) {
             el: options.el
         }, require('./components/sidebar-app.js')))
 
-    /* globals annoap */
+    annoapp.eventBus = eventBus
+
     annoapp.$store.dispatch('fetchToken')
         .then(annoapp.$store.dispatch('fetchList'))
-        .catch(err => { if (onError) onError(err) })
-
-    annoapp.eventBus = eventBus
+        .catch(err => annoapp.eventBus.$emit('error', err))
     return annoapp
 }
