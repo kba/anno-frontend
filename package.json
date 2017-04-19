@@ -15,7 +15,6 @@
   "author": "my,jb,kba",
   "license": "MIT",
   "dependencies": {
-    "@kba/anno-mw-httpheaders": "^0.0.1",
     "@kba/anno-store-http": "^0.0.1",
     "@kba/anno-util": "^0.0.1",
     "@kba/anno-queries": "^0.0.1",
@@ -36,8 +35,7 @@
     "jwt-decode": "^2.2.0",
     "querystring": "^0.2.0",
     "raw-loader": "^0.5.1",
-    "semtonotes-client": "0.0.3",
-    "semtonotes-utils": "0.0.2",
+    "semtonotes-utils": "0.1.0",
     "tinymce": "^4.5.0",
     "vue": "2.1.10",
     "vue-template-compiler": "^2.1.10",
