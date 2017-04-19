@@ -62,8 +62,9 @@
    `{$target:options.targetSource}`
 4) dispatches a `fetchAcl` action to retrieve the resp. permissions
 5) starts a Vue App with a single [`<sidebar-app>`](#sidebar-app)
-6) Returns the Vue.App on which listeners can be added `$on` and which can
-   emit events with `$emit`
+6) Returns the Vue.App which should be kept around (e.g. as window.annoapp)
+   and on whose `eventBus` listeners can be added `$on` and which can emit
+   events with `$emit`
 #### Options
 - `el`: Element to hold the annotation sidebar/modal
 - `language`: Language for l10n. Currently: `en`/`eng` or `de`/`deu` (Default)
@@ -82,10 +83,12 @@
 - `isLoggedIn`: Function or boolean to designate whether the is already
   logged in. No login button will be shown in that case
 #### Events
+Either listen/emit via app.eventBus or provide listeners as `events` option
 - `startHighlighting(annoId)`: $emit this to highlight the annotation
 - `stopHighlighting(annoId)`: $emit this to un-highlight the annotation 
 - `mouseover(annoId)`: $on this to catch when an annotation is hovered in the list
 - `mouseleave(annoId)`: $on this to catch when an annotation is un-hovered in the list
+- `fetched(annotationList)`: List of annotations has been fetched from the server
 
 <!-- END-RENDER -->
 

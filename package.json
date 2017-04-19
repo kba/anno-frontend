@@ -15,9 +15,9 @@
   "author": "my,jb,kba",
   "license": "MIT",
   "dependencies": {
+    "@kba/anno-queries": "^0.0.1",
     "@kba/anno-store-http": "^0.0.1",
     "@kba/anno-util": "^0.0.1",
-    "@kba/anno-queries": "^0.0.1",
     "axios": "^0.15.3",
     "babel-core": "^6.23.1",
     "babel-loader": "^6.3.2",
