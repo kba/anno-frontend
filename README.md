@@ -92,14 +92,64 @@ Either listen/emit via app.eventBus or provide listeners as `events` option
 
 <!-- END-RENDER -->
 
+### Structure of the application
 
+All assets are bundled into a JS file `ubhd-anno.js`
 
+Loading `ubhd-anno.js` binds a class `UBHDAnnoApp` to `window`.
 
+`UBHDAnnoApp` can be instantiated to an object `app` with a set of [config options](#config-options).
 
+`app` has a method 
 
+App is a Vue app, component structure:
 
+* `Sidebar`
+  * `AnnoList`
+    * ... `AnnoViewer`
+  * `AnnoEditorModal`
+    * `AnnoEditor`
+      * `HtmlEditor`
+      * `ZoneEditor`
+      * `TagsEditor`
+      * `SemtagsEditor`
+      * `Preview`
 
+### Integration into serv7
 
+```js
+$(function() {
+  const base = `http://digi.ub.uni-heidelberg.de`
+  const targetImage = img_zoomst[`${projectname}_${pagename}`][0].url
+  const targetSource = `${base}/${digipath}/${projectname}/${pagename}`
+  const targetThumbnail = `${targetSource}/_thumb_image`
+  window.annoapp = displayAnnotations({
+
+    // Metadata
+    targetSource,
+    targetImage,
+    targetThumbnail,
+
+    // Language
+    language: lang,
+
+    // Determine login & such
+    annoEndpoint:  'http://serv42.ub.uni-heidelberg.de/kba/anno',
+    tokenEndpoint: 'https://digi.ub.uni-heidelberg.de/cgi-bin/token',
+    loginEndpoint:  document.querySelector('a#login') ? document.querySelector('a#login').href : null,
+    logoutEndpoint: null,
+    isLoggedIn:     !! document.querySelector('span#user').innerHTML.match(/(Abmelden|Logout)</),
+
+    events: {
+      fetched(list)  { window.drawAllPolygons(list)     },
+      mouseenter(id) { window.drawAllPolygons(null, id) },
+      mouseleave(id) { window.drawAllPolygons()         },
+      error(err)     { console.error(err)               },
+    }
+
+  })
+})
+```
 
 ## Development
 
@@ -309,90 +359,3 @@ Sets `this.prefix` to the prefix defined globally.
 
 <!-- END-RENDER -->
 
-## OLD
-
-### Structure of the application
-
-All assets are bundled into a JS file `ubhd-anno.js`
-
-Loading `ubhd-anno.js` binds a class `UBHDAnnoApp` to `window`.
-
-`UBHDAnnoApp` can be instantiated to an object `app` with a set of [config options](#config-options).
-
-`app` has a method 
-
-App is a Vue app, component structure:
-
-* `AnnoApp`
-  * `EditorModal`
-    * `ZoneEditor`
-    * `HtmlEditor`
-  * `Sidebar`
-    * `SidebarThread`
-      * `SidebarPost`
-
-## Using - HTML Snippets
-
-```html
-    <script src="http://anno.ub.uni-heidelberg.de/dist/ubhd-anno.js" type="text/javascript"></script> 
-```
-
-## Using - On serv7 / ubhd3 template
-
-Just the idea, actual code is more involved.
-
-```
-var projectname = '[% sdhr.projectname %]';
-var pagename = '[% IF sdhr.phy_page_full %][% sdhr.phy_page_full %][% ELSE %]0000[% END %]';
-var digipath = '[% sdhr.path %]';
-var annoid = '[% annoid %]';
-var iiif = '[% IF meta.no_oai %]0[% ELSE %]1[% END %]';
-var img_zoomst = {/*...*/};
-var u = img_zoomst[projectname + '_' + pagename][img_zoomst[projectname + '_' + pagename].length - 1]['url'].split('/');
-var iiif_url = 'http://diglit.ub.uni-heidelberg.de/image/' + projectname + '/' + u[u.length - 1] + '/';
-displayAnnotations(
-    'annotationsblock',
-    '/'+projectname+'/'+pagename,
-    {
-        service: 'diglit',
-        lang: '[% sdhr.ui_lang %]',
-        purl: 'http://digi.ub.uni-heidelberg.de/'+digipath+'/'+projectname+'/'+pagename,
-        css: 'anno',
-        highlight: 'annohighlight',
-        login: 'http://digi.ub.uni-heidelberg.de/cgi-bin/login?sid=[% sdhr.sid %]',
-        readtoken: '[% sdhr.anno_token_read %]',
-        writetoken: '[% sdhr.anno_token_write %]',
-        edit_img_url: img_zoomst['[% sdhr.projectname %]_[% sdhr.phy_page_full %]'][0].url,
-        edit_img_width: img_zoomst['[% sdhr.projectname %]_[% sdhr.phy_page_full %]'][0].width,
-        edit_img_thumb: '/'+digipath+'/'+projectname+'/'+pagename+'/_thumb_image',
-        iiif_url: iiif_url,
-        iiif_img_width: img_zoomst[projectname + '_' + pagename][img_zoomst[projectname + '_' + pagename].length - 1]['width'],
-        iiif_img_height: img_zoomst[projectname + '_' + pagename][img_zoomst[projectname + '_' + pagename].length - 1]['height'],
-        gotopurl: annoid
-    })
-```
-
-```js
-displayAnnotations(htmlid, annotarget, options)
-```
-
-* htmlid: ID des HTML-Elements, in dem die Liste der Annotationen ausgegeben werden soll
-* target: ID des Annotationen-Targets, für das die zugehörigen Annotationen ausgegeben werden soll
-* options:
- * `service`: Dienst, für den die Annotationen verwaltet werden (z.B. "diglit", zukünftig mit zu target)
- * `css`: Präfix für verwendete CSS-Klassen und IDs
- * `sort`: Sortierung: date, datereverse, title
- * `lang`: Sprache: de, en
- * `no_oai`: Keine Ausgabe von IIIF-URLs (ggf. umbenennen)
- * `edit_img_url`: Editor: URL zu Image, für das Polygone erstellt werden
- * `edit_img_width`: Editor: Breite des Images, für das Zonen erstellt werden, in Pixel
- * `edit_img_thumb`: Editor: URL zu Thumb-Image (Orientierungsthumb im Editor)
- * `highlight`: Callback Funktion für das Highlighting der Zonen
- * `iiif_url`: URL-Anfang für die IIIF-URL (Zonenausschnitt)
- * `iiif_img_width`: TODO: raus aus Optionen, muss automatisch ermittelt werden (Zones)
- * `iiif_img_height`: TODO: raus aus Optionen, muss automatisch ermittelt werden (Zones)
- * `gotopurl`: ID der Annotation, die hervorgehoben werden soll, weil der Dienst über die persistente URL der Annotatione aufgerufen wurde
- * `purl`: URL-Anfang für die persistenten URLs zu der Annotationen
- * `login`: URL für Login-Button in Annotationenanzeige
- * `readtoken`: Read-Token für Annotationenservice
- * `writetoken`: Write-Token für Annotationenservice
