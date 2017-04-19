@@ -5,6 +5,7 @@ const Vuex = require('vuex')
 const {collectIds} = require('@kba/anno-util')
 const apiFactory = require('../api')
 const jwtDecode = require('jwt-decode')
+const eventBus = require('../event-bus')
 
 const annotation = require('./module/annotation')
 const annotationList = require('./module/annotationList')
@@ -108,6 +109,7 @@ module.exports = {
                 apiFactory(state).search(query, (err, list) => {
                     if (err) return reject(err)
                     commit('REPLACE_LIST', list)
+                    eventBus.$emit('fetched', list)
                     resolve(dispatch('fetchAcl'))
                 })
             })
