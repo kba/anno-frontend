@@ -16,7 +16,7 @@ module.exports = {
         bootstrap: 'bootstrap',
         // vue: 'vue',
         // vuex: 'vuex',
-        // 'semtonotes-utils': 'XrxUtils',
+        'semtonotes-utils': 'XrxUtils',
     },
     resolve: {
         alias: {

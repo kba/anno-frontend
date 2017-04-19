@@ -2,8 +2,6 @@ const $ = require('jquery')
 const _dateformat = require('dateformat')
 const {
     numberOf,
-    firstHtmlBody, simpleTagBodies, semanticTagBodies, svgTarget,
-    setToVersion,
 } = require('@kba/anno-util')
 
 /**
@@ -59,9 +57,9 @@ module.exports = {
         })
     },
     computed: {
-        firstHtmlBody()     { return firstHtmlBody(this.annotation) },
-        simpleTagBodies()   { return simpleTagBodies(this.annotation) },
-        semanticTagBodies() { return semanticTagBodies(this.annotation) },
+        firstHtmlBody()     { return this.$store.getters.firstHtmlBody },
+        simpleTagBodies()   { return this.$store.getters.simpleTagBodies },
+        semanticTagBodies() { return this.$store.getters.semanticTagBodies },
         id() { return this.annotation.id },
         slug() {
             if (!this.annotation.id) return 'unsaved-annotation-' + Date.now()

@@ -42,6 +42,7 @@ const Vuex = require('vuex')
  * - `stopHighlighting(annoId)`: $emit this to un-highlight the annotation 
  * - `mouseover(annoId)`: $on this to catch when an annotation is hovered in the list
  * - `mouseleave(annoId)`: $on this to catch when an annotation is un-hovered in the list
+ * - `fetched(annotationList)`: List of annotations has been fetched from the server
  *
  */
 module.exports = function displayAnnotations(options={}) {
@@ -76,12 +77,13 @@ module.exports = function displayAnnotations(options={}) {
     // NOTE This will break reactivity if the properties are unknown so make sure
     // you define defaults, even null or empty strings
     // Object.keys(options).forEach(k => store.state[k] = options[k])
-    console.log(store.state.annoEndpoint)
+    // console.log(store.state.annoEndpoint)
+    // console.log(store.state.annotationList.list)
 
     store.dispatch('fetchToken').catch(err => { throw err })
-    store.dispatch('fetchList').then(() =>
-            store.dispatch('fetchAcl').catch(err => { throw err })
-        ).catch(err => { throw err })
+    store.dispatch('fetchList')
+        .then(store.dispatch('fetchAcl'))
+        .catch(err => { throw err })
 
     window.annoapp = new Vue(Object.assign({
             store,

@@ -31,7 +31,7 @@ module.exports = {
     getters: {
 
         allIds(state) {
-            const ret = collectIds(state.annotationList.list || [])
+            const ret = collectIds(state.annotationList.list)
             ret.push(state.targetSource)
             return ret
         },
@@ -105,7 +105,7 @@ module.exports = {
             return new Promise((resolve, reject) => {
                 console.log("Search")
                 apiFactory(state).search({'$target': state.targetSource}, (err, list) => {
-                    if (err) reject(err)
+                    if (err) return reject(err)
                     commit('REPLACE_LIST', list)
                     dispatch('fetchAcl')
                 })

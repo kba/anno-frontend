@@ -7,7 +7,7 @@ module.exports = (state) => {
         BASE_URL: state.annoEndpoint,
         HTTPHEADERS: `Authorization: Bearer ${state.token}`,
     })
-    console.log(annoStore)
+    // console.log(annoStore)
     annoStore.use(httpHeadersMiddleware())
     return annoStore
 }

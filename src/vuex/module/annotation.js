@@ -1,7 +1,12 @@
 const {
     ensureArray, add, remove,
-    firstHtmlBody, simpleTagBodies, semanticTagBodies, svgTarget,
 } = require('@kba/anno-util')
+const {
+    textualHtmlBody,
+    simpleTagBody,
+    semanticTagBody,
+    svgSelectorResource
+} = require('@kba/anno-queries')
 
 function initialState() {return {
     id: '',
@@ -21,10 +26,10 @@ const state = initialState()
 //
 
 const getters = {
-    firstHtmlBody,
-    simpleTagBodies,
-    semanticTagBodies,
-    svgTarget,
+    firstHtmlBody(a)     { return textualHtmlBody.first(a)     },
+    simpleTagBodies(a)   { return simpleTagBody.all(a)         },
+    semanticTagBodies(a) { return semanticTagBody.all(a)       },
+    svgTarget(a)         { return svgSelectorResource.first(a) },
 }
 
 //
@@ -34,13 +39,13 @@ const getters = {
 const actions = {
 
     setHtmlBodyContent({commit, state}, v) {
-        if (!getters.firstHtmlBody(state))
+        if (!textualHtmlBody.first(state))
             commit('ADD_HTML_BODY')
         commit('SET_HTML_BODY', v)
     },
 
     setSvgSelector({commit, state}, {svg, source}) {
-        if (!getters.svgTarget(state)) {
+        if (!svgSelectorResource.first(state)) {
             commit('ADD_SVG_TARGET', source)
         }
         commit('SET_SVG_SELECTOR', svg)
@@ -74,23 +79,24 @@ const actions = {
 
 const mutations = {
 
-    ADD_TAG_BODY(state, body={type: 'TextualBody', motivation: 'tagging', value: ''}) {
+    ADD_TAG_BODY(state, body={}) {
         ensureArray(state, 'body')
         add(state, 'body', body)
+        add(state, 'body', Object.assign(body, textualHtmlBody.create()))
     },
 
-    ADD_SEMTAG_BODY(state, body={motivation: 'linking', id: ''}) {
+    ADD_SEMTAG_BODY(state, body={}) {
         ensureArray(state, 'body')
-        add(state, 'body', body)
+        add(state, 'body', Object.assign(body, semanticTagBody.create()))
     },
 
-    ADD_SVG_TARGET(state, source) {
+    ADD_SVG_TARGET(state, target) {
         ensureArray(state, 'target')
-        add(state, 'target', {source, selector: {type: 'SvgSelector', value: ''}})
+        add(state, 'target', Object.assign(target, svgSelectorResource.create()))
     },
 
     SET_SVG_SELECTOR(state, svg) {
-        getters.svgTarget(state).selector.value = svg
+        svgSelectorResource.find(state).selector.value = svg
     },
 
     SET_TITLE(state, title) {
@@ -122,11 +128,11 @@ const mutations = {
     },
 
     SET_HTML_BODY(state, v) {
-        getters.firstHtmlBody(state).value = v
+        textualHtmlBody.first(state).value = v
     },
 
     SET_SEMTAG_PROP(state, {n, prop, value}) {
-        getters.semanticTagBodies(state)[n][prop] = value
+        semanticTagBody.all(state)[n][prop] = value
     },
 
     ADD_TARGET(state, v) {
