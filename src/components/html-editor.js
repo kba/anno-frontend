@@ -48,6 +48,7 @@ module.exports = {
         },
     },
     created() {
+        console.log(this)
         this.tinymceOptions.language = this.language
 
         // Add localizations by faking a URI since tinymce expects languages at

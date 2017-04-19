@@ -12,6 +12,7 @@
  * - `create`: A new annotation on `targetSource` shall be created
  *
  */
+const eventBus = require('../event-bus')
 
 module.exports = {
     mixins: [
@@ -46,13 +47,10 @@ module.exports = {
     methods: {
         login() { this.$store.dispatch('login') },
         logout() { this.$store.dispatch('logout') },
-        create() {
-            this.$root.$emit('create', this.targetSource)
-        },
+        create()   { return eventBus.$emit('create', this.targetSource) },
+
         collapseAll(state) {
-            this.$children.forEach(annoViewer =>
-                annoViewer.collapse && annoViewer.collapse(state)
-            )
+            this.$children.forEach(annoViewer => annoViewer.collapse && annoViewer.collapse(state))
             this.collapsed = ! this.collapsed
         },
         sort(...args) {

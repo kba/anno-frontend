@@ -1,5 +1,6 @@
 const XrxUtils = require('semtonotes-utils')
 const jQuery = require('jquery')
+const eventBus = require('../event-bus')
 
 /**
  * ### zone-editor
@@ -48,7 +49,7 @@ module.exports = {
 
         if (this.autoLoad) this.init()
 
-        this.$root.$on('open-editor', () => {
+        eventBus.$on('open-editor', () => {
             this.init()
         })
 

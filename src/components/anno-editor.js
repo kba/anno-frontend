@@ -1,3 +1,4 @@
+const eventBus = require('../event-bus')
 const tinymce = require('tinymce')
 const css = require('./anno-editor.css')
 console.log(css)
@@ -33,15 +34,15 @@ module.exports = {
     style: css,
     created() {
         // TODO Move these to store maybe??
-        this.$root.$on('create', this.create)
-        this.$root.$on('reply', this.reply)
-        this.$root.$on('revise', this.revise)
-        this.$root.$on('remove', this.remove)
-        this.$root.$on('discard', this.discard)
-        this.$root.$on('save', this.save)
+        eventBus.$on('create', this.create)
+        eventBus.$on('reply', this.reply)
+        eventBus.$on('revise', this.revise)
+        eventBus.$on('remove', this.remove)
+        eventBus.$on('discard', this.discard)
+        eventBus.$on('save', this.save)
     },
     mounted() {
-        this.$root.$on('open-editor', () => {
+        eventBus.$on('open-editor', () => {
             const textarea = tinymce.get(this.editorId)
             const textBody = this.$store.getters.firstHtmlBody
             if (textarea && textBody) textarea.setContent(textBody.value)
@@ -64,7 +65,7 @@ module.exports = {
                 }
                 this.$store.commit('RESET_ANNOTATION')
                 this.$store.dispatch('fetchList')
-                this.$root.$emit('close-editor')
+                eventBus.$emit('close-editor')
             }
 
                  if (this.mode === 'create')  this.api.create(anno, cb)
@@ -74,7 +75,7 @@ module.exports = {
 
         discard() {
             this.$store.commit('RESET_ANNOTATION')
-            this.$root.$emit('close-editor')
+            eventBus.$emit('close-editor')
         },
 
         remove(annotation) {
@@ -84,7 +85,7 @@ module.exports = {
                         console.error(err)
                     } else {
                         console.log('removed', annotation)
-                        this.$root.$emit('removed', annotation)
+                        eventBus.$emit('removed', annotation)
                         this.$store.dispatch('fetchList')
                     }
                 })
@@ -95,7 +96,7 @@ module.exports = {
             this.mode = 'create'
             this.$store.commit('RESET_ANNOTATION')
             this.$store.commit('ADD_TARGET', this.targetSource)
-            this.$root.$emit('open-editor')
+            eventBus.$emit('open-editor')
         },
 
         reply(annotation) {
@@ -104,14 +105,14 @@ module.exports = {
             this.$store.commit('ADD_TARGET', annotation.id)
             this.$store.commit('ADD_MOTIVATION', 'replying')
             this.$store.commit('SET_REPLY_TO', annotation.id)
-            this.$root.$emit('open-editor')
+            eventBus.$emit('open-editor')
         },
 
         revise(annotation) {
             this.mode = 'revise'
             this.$store.commit('RESET_ANNOTATION')
             this.$store.dispatch('replaceAnnotation', annotation)
-            this.$root.$emit('open-editor')
+            eventBus.$emit('open-editor')
         },
     }
 }

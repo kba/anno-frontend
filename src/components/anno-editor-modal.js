@@ -1,4 +1,5 @@
 const $ = require('jquery')
+const eventBus = require('../event-bus')
 
 /*
  * ### anno-editor-modal
@@ -21,13 +22,13 @@ module.exports = {
         editor() { return this.$refs['editor'] },
     },
     created() {
-        this.$root.$on('open-editor', () => this.show())
-        this.$root.$on('close-editor', () => this.hide())
+        eventBus.$on('open-editor', () => this.show())
+        eventBus.$on('close-editor', () => this.hide())
     },
     methods: {
-        save() { this.$root.$emit('save') },
-        remove() { this.$root.$emit('remove', this.id) },
-        discard() { this.$root.$emit('discard') },
+        save() { eventBus.$emit('save') },
+        remove() { eventBus.$emit('remove', this.id) },
+        discard() { eventBus.$emit('discard') },
 
         show() { $(this.$el).modal('show') },
         hide() { $(this.$el).modal('hide') },
