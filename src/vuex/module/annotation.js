@@ -96,7 +96,7 @@ const mutations = {
     },
 
     SET_SVG_SELECTOR(state, svg) {
-        svgSelectorResource.find(state).selector.value = svg
+        svgSelectorResource.first(state).selector.value = svg
     },
 
     SET_TITLE(state, title) {
