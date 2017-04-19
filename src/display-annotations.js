@@ -50,7 +50,8 @@ module.exports = function displayAnnotations(options={}) {
     options.targetSource = options.targetSource || window.location.href
 
     // Set the prefix for IDs
-    if (!options.prefix) options.prefix = `anno-${Date.now()}`
+    if (!options.prefix)
+        options.prefix = `anno-${Date.now()}`
 
     // Create a container element if none was given
     if (!options.el) {
@@ -62,33 +63,39 @@ module.exports = function displayAnnotations(options={}) {
         document.querySelector('body').appendChild(containerDiv)
         options.el = appDiv
     }
+
+    // These options can also be functions to be called to produce the value now
     ;['token', 'isLoggedIn', 'loginEndpoint', 'logoutEndpoint'].forEach(fn => {
         if (typeof options[fn] === 'function') {
             options[fn] = options[fn]()
         }
     })
 
+    // remember callbacks
+    const {onLoad, onError} = options
+    delete options.onLoad
+
     // Set up the store
+    // NOTE This will break reactivity if the properties are unknown so make sure
     const storeProps = require('./vuex/store')
     Object.assign(storeProps.state, options)
     const store = new Vuex.Store(storeProps)
 
     // Set the store options
-    // NOTE This will break reactivity if the properties are unknown so make sure
     // you define defaults, even null or empty strings
     // Object.keys(options).forEach(k => store.state[k] = options[k])
     // console.log(store.state.annoEndpoint)
     // console.log(store.state.annotationList.list)
 
-    store.dispatch('fetchToken').catch(err => { throw err })
-    store.dispatch('fetchList')
-        .then(store.dispatch('fetchAcl'))
-        .catch(err => { throw err })
-
-    window.annoapp = new Vue(Object.assign({
+    const annoapp = new Vue(Object.assign({
             store,
             el: options.el
         }, require('./components/sidebar-app.js')))
-    return window.annoapp
 
+    /* globals annoap */
+    annoapp.$store.dispatch('fetchToken')
+        .then(annoapp.$store.dispatch('fetchList'))
+        .catch(err => { if (onError) onError(err) })
+
+    return annoapp
 }
