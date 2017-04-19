@@ -75,14 +75,20 @@ module.exports = {
         }
     },
     methods: {
-        revise()  { return eventBus.$emit('revise', this.annotation) },
-        reply() { return eventBus.$emit('reply', this.annotation) },
-        remove()  { return eventBus.$emit('remove', this.annotation) },
-        mouseenter() { return eventBus.$emit("startHighlighting", this.id) },
-        mouseleave() { return eventBus.$emit("stopHighlighting", this.id) },
+        revise()     { return eventBus.$emit('revise', this.annotation) },
+        reply()      { return eventBus.$emit('reply', this.annotation) },
+        remove()     { return eventBus.$emit('remove', this.annotation) },
+        mouseenter() {
+            this.startHighlighting()
+            eventBus.$emit("mouseenter", this.id)
+        },
+        mouseleave() {
+            this.stopHighlighting()
+            eventBus.$emit("mouseleave", this.id)
+        },
 
-        startHighlighting() { this.highlighted = true },
-        stopHighlighting() { this.highlighted = false },
+        startHighlighting()  { this.highlighted = true },
+        stopHighlighting()   { this.highlighted = false },
         toggleHighlighting() { this.highlighted = ! this.highlighted },
 
         dateformat(date) { return date ? _dateformat(date, this.dateFormat) : '' },

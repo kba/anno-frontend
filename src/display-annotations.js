@@ -1,5 +1,6 @@
 const Vue = require('vue')
 const Vuex = require('vuex')
+const eventBus = require('./event-bus')
 
 /**
  * ### `displayAnnotations(options)`
@@ -12,8 +13,9 @@ const Vuex = require('vuex')
  *    `{$target:options.targetSource}`
  * 4) dispatches a `fetchAcl` action to retrieve the resp. permissions
  * 5) starts a Vue App with a single [`<sidebar-app>`](#sidebar-app)
- * 6) Returns the Vue.App on which listeners can be added `$on` and which can
- *    emit events with `$emit`
+ * 6) Returns the Vue.App which should be kept around (e.g. as window.annoapp)
+ *    and on whose `eventBus` listeners can be added `$on` and which can emit
+ *    events with `$emit`
  *
  * #### Options
  *
@@ -97,5 +99,6 @@ module.exports = function displayAnnotations(options={}) {
         .then(annoapp.$store.dispatch('fetchList'))
         .catch(err => { if (onError) onError(err) })
 
+    annoapp.eventBus = eventBus
     return annoapp
 }

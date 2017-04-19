@@ -1,6 +1,6 @@
 <div :id="`${prefix}-${slug}`" :class="`panel panel-default anno-viewer ${highlighted ? 'highlight' : ''}`"
-  v-on:mouseover="mouseenter"
-  v-on:mouseleave="mouseleave">
+  v-on:mouseover.prevent="mouseenter"
+  v-on:mouseleave.prevent="mouseleave">
 
   <div v-if="!asReply"
     class="panel-heading"
