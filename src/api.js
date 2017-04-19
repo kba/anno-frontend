@@ -1,13 +1,13 @@
 const AnnoStoreHttp = require('@kba/anno-store-http')
-const httpHeadersMiddleware = require('@kba/anno-mw-httpheaders')
 
 module.exports = (state) => {
+    // console.log("Anno Endpoint", state.annoEndpoint)
     const annoStore = new AnnoStoreHttp({
-        STORE: '@kba/anno-store-http',
         BASE_URL: state.annoEndpoint,
-        HTTPHEADERS: `Authorization: Bearer ${state.token}`,
+        HTTP_HEADERS: JSON.stringify({
+            Authorization: `Bearer ${state.token}`,
+        }),
     })
-    // console.log(annoStore)
-    annoStore.use(httpHeadersMiddleware())
+    console.log(annoStore)
     return annoStore
 }
