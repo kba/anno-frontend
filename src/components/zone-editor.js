@@ -124,8 +124,9 @@ module.exports = {
         fromSVG(...args) {
             this.image.getLayerShape().removeShapes()
             if (this.$store.getters.svgTarget) {
-                const shapes = XrxUtils.drawFromSvg(this.$store.getters.svgTarget.selector.value, this.image)
-                shapes.forEach(shape => XrxUtils.applyStyle(shape, this.style.default))
+                const shapeGroup = XrxUtils.shapesFromSvg(this.$store.getters.svgTarget.selector.value, this.image)
+                XrxUtils.applyStyle(shapeGroup, this.style.default)
+                this.image.getLayerShape().addShapes(shapeGroup.getChildren())
             }
         },
 
