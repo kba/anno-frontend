@@ -111,7 +111,7 @@ module.exports = {
         revise(annotation) {
             this.mode = 'revise'
             this.$store.commit('RESET_ANNOTATION')
-            this.$store.dispatch('replaceAnnotation', annotation)
+            this.$store.commit('REPLACE_ANNOTATION', annotation)
             eventBus.$emit('open-editor')
         },
     }

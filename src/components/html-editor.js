@@ -60,7 +60,7 @@ module.exports = {
     computed: {
         value: {
             get () { return this.$store.getters.firstHtmlBody ? this.$store.getters.firstHtmlBody.value : '' },
-            set (content) { this.$store.dispatch('setHtmlBodyContent', content) },
+            set (content) { this.$store.commit('SET_HTML_BODY_VALUE', content) },
         },
         title: {
             get () { return this.$store.state.annotation.title },

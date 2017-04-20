@@ -21,8 +21,8 @@ module.exports = {
         semanticTagBodies() { return this.$store.getters.semanticTagBodies },
     },
     methods: {
-        addSemanticTag() { this.$store.dispatch('addSemanticTag') },
-        removeBody(body) { this.$store.dispatch('removeBody', body) },
+        addSemanticTag() { this.$store.commit('ADD_SEMTAG_BODY') },
+        removeBody(body) { this.$store.commit('REMOVE_BODY', body) },
         ensureCompletion() {
             ;['id', 'label'].forEach(prop => {
                 Array.from(this.$el.querySelectorAll(`input.semtags-${prop}`))

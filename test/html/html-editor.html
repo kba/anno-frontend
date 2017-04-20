@@ -17,5 +17,5 @@ window.app = new Vue({
   store,
   template: '<html-editor editorId="foobar"/>',
 })
-store.dispatch('replaceAnnotation', window.annotations[3])
+store.commit('REPLACE_ANNOTATION', window.annotations[3])
 </script></body></html>

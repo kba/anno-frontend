@@ -38,38 +38,32 @@ const getters = {
 
 const actions = {
 
-    setHtmlBodyContent({commit, state}, v) {
-        if (!textualHtmlBody.first(state))
-            commit('ADD_HTML_BODY')
-        commit('SET_HTML_BODY', v)
-    },
+    // setSvgSelector({commit, state}, {svg, source}) {
+    //     if (!svgSelectorResource.first(state)) {
+    //         commit('ADD_SVG_TARGET', {source})
+    //     }
+    //     commit('SET_SVG_SELECTOR', svg)
+    // },
 
-    setSvgSelector({commit, state}, {svg, source}) {
-        if (!svgSelectorResource.first(state)) {
-            commit('ADD_SVG_TARGET', {source})
-        }
-        commit('SET_SVG_SELECTOR', svg)
-    },
+    // addSimpleTag({commit, state}, v) {
+    //     commit('ADD_TAG_BODY')
+    // },
 
-    addSimpleTag({commit, state}, v) {
-        commit('ADD_TAG_BODY')
-    },
+    // addSemanticTag({commit, state}, v) {
+    //     commit('ADD_SEMTAG_BODY')
+    // },
 
-    addSemanticTag({commit, state}, v) {
-        commit('ADD_SEMTAG_BODY')
-    },
+    // replaceAnnotation({commit, state}, newState) {
+    //     commit('REPLACE_ANNOTATION', newState)
+    // },
 
-    replaceAnnotation({commit, state}, newState) {
-        commit('REPLACE_ANNOTATION', newState)
-    },
+    // removeBody({commit, state}, v) {
+    //     commit('REMOVE_BODY', v)
+    // },
 
-    removeBody({commit, state}, v) {
-        commit('REMOVE_BODY', v)
-    },
-
-    removeTarget({commit, state}, v) {
-        commit('REMOVE_TARGET', v)
-    },
+    // removeTarget({commit, state}, v) {
+    //     commit('REMOVE_TARGET', v)
+    // },
 
 }
 
@@ -79,15 +73,14 @@ const actions = {
 
 const mutations = {
 
-    ADD_TAG_BODY(state, body={}) {
+    ADD_TAG_BODY(state, v) {
         ensureArray(state, 'body')
-        add(state, 'body', body)
-        add(state, 'body', Object.assign(body, textualHtmlBody.create()))
+        add(state, 'body', simpleTagBody.create(v))
     },
 
-    ADD_SEMTAG_BODY(state, body={}) {
+    ADD_SEMTAG_BODY(state, v) {
         ensureArray(state, 'body')
-        add(state, 'body', Object.assign(body, semanticTagBody.create()))
+        add(state, 'body', semanticTagBody.create(v))
     },
 
     ADD_SVG_TARGET(state, target={}) {
@@ -95,7 +88,15 @@ const mutations = {
         add(state, 'target', Object.assign(target, svgSelectorResource.create()))
     },
 
-    SET_SVG_SELECTOR(state, svg) {
+    SET_HTML_BODY_VALUE(state, v) {
+        if (!textualHtmlBody.first(state))
+            add(state, 'body', textualHtmlBody.create())
+        textualHtmlBody.first(state).value = v
+    },
+
+    SET_SVG_SELECTOR(state, {svg, source}) {
+        if (!svgSelectorResource.first(state))
+            add(state, 'target', svgSelectorResource.create({source}))
         svgSelectorResource.first(state).selector.value = svg
     },
 
@@ -123,14 +124,6 @@ const mutations = {
         // })
     },
 
-    ADD_HTML_BODY(state, body={type: 'TextualBody', format: 'text/html', value: ''}) {
-        add(state, 'body', body)
-    },
-
-    SET_HTML_BODY(state, v) {
-        textualHtmlBody.first(state).value = v
-    },
-
     SET_SEMTAG_PROP(state, {n, prop, value}) {
         semanticTagBody.all(state)[n][prop] = value
     },
@@ -141,6 +134,7 @@ const mutations = {
     },
 
     RESET_ANNOTATION(state) {
+        Object.keys(state).forEach(k => state[k] = null)
         Object.assign(state, initialState())
     },
 
