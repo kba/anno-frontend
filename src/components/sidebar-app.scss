@@ -1,31 +1,32 @@
 .anno-sidebar {
-  background: white;
-  position: absolute;
-  top: 0;
-  right: 0;
+  &.standalone {
+    background: white;
+    position: absolute;
+    top: 0;
+    right: 0;
 
-  &.open {
-    width: 30vw;
-    border-left:   1px solid black;
-    border-bottom: 1px solid black;
-    border-top:    1px solid black;
-  }
+    &.open {
+      width: 30vw;
+      border-left:   1px solid black;
+      border-bottom: 1px solid black;
+      border-top:    1px solid black;
+    }
 
-  .anno-sidebar-toggle {
-    float: right;
-    padding-left: 0.5em;
-    width: 2em;
-    color: #a0a0a0;
-    background-color: #eaeaea;
+    .anno-sidebar-toggle {
+      float: right;
+      padding-left: 0.5em;
+      width: 2em;
+      color: #a0a0a0;
+      background-color: #eaeaea;
 
-    &:hover {
-      color: black;
+      &:hover {
+        color: black;
+      }
     }
   }
 
   .no-annotations {
     background: #fee;
-
     & > div {
       width: 50%;
       margin: 0 auto;
