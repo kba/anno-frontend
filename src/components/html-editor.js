@@ -1,24 +1,17 @@
 const config = require('../config')
-const l10nMixin = require('../mixin/l10n')
-const {
-    textualHtmlBody,
-} = require('@kba/anno-queries')
 
-/* register vue-tinymce component */
-const Vue = require('vue')
-const VueTinymce = require('vue-tinymce').default
-Vue.use(VueTinymce)
+const quill = require('quill/dist/quill.js')
+require('style-loader!css-loader!quill/dist/quill.snow.css')
+
+const { textualHtmlBody } = require('@kba/anno-queries')
+
+const eventBus = require('../event-bus')
 
 /**
  * ### html-editor
  *
  * Editor for the `text/html` `TextualBody` body of an annotation.
  *
- * #### Props
- *
- * - `language`: Language of the tinymce UI. Default: `de`
- * - **`editorId`**: HTML id of the tinymce editor. Required.
- * - `tinymceOptions`: Options passed to the tinymce constructor.
  */
 
 module.exports = {
@@ -27,42 +20,31 @@ module.exports = {
         require('../mixin/prefix'),
     ],
     template: require('./html-editor.html'),
-    props: {
-        language: {type: String, default: 'de'},
-        editorId: {type: String, required: true},
-        tinymceOptions: {
-            type: Object,
-            default: () => {return {
-                plugins: 'image link',
-                // language: data.language,
-                toolbar: [
-                    'undo redo',
-                    'formatselect',
-                    'bold italic underline blockquote',
-                    // 'alignleft aligncenter alignright',
-                    'bullist numlist indent outdent',
-                    'link image',
-                ].join(' | '),
-                menubar: false,
-                statusbar: false,
-                height: 300,
-                width: '100%',
-            }}
-        },
-    },
-    created() {
-        console.log(this)
-        this.tinymceOptions.language = this.language
-
-        // Add localizations by faking a URI since tinymce expects languages at
-        // a certain place but can be overridden with language_url
-        this.tinymceOptions.language_url = `data:text/javascript;charset=UTF-8,tinymce.addI18n('${this.language}',${
-            JSON.stringify(config.tinymce_localizations[this.language])
-        });`
+    mounted() {
+        this.quill = new quill(this.$refs.editor, {
+            modules: {
+                toolbar: {
+                    container: this.$refs.toolbar,
+                    handlers: {
+                        undo() { this.quill.history.undo() },
+                        redo() { this.quill.history.redo() },
+                    }
+                }
+            },
+            placeholder: 'Compose an epic...',
+            theme: 'snow',
+        });
+        this.quill.on('text-change', (delta, oldDelta, source) => {
+            console.log(this.$refs.editor)
+            var html = this.$refs.editor.children[0].innerHTML
+            if (html === '<p><br></p>') html = ''
+            this.value = html
+        })
+        eventBus.$on('open-editor', () => this.quill.pasteHTML(this.value))
     },
     computed: {
         value: {
-            get () { return (textualHtmlBody.first(this.$store.state.annotation) || {value: '<p>MEP</p>'}).value },
+            get () { return (textualHtmlBody.first(this.$store.state.annotation) || {value: ''}).value },
             set (content) { this.$store.commit('SET_HTML_BODY_VALUE', content) },
         },
         title: {

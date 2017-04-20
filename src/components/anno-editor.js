@@ -1,5 +1,4 @@
 const eventBus      = require('../event-bus')
-const tinymce       = require('tinymce')
 
 /*
  * ### anno-editor
@@ -8,9 +7,6 @@ const tinymce       = require('tinymce')
  * the function of the anno-store to be used on `save`
  *
  * Properties:
- *
- * - `editorId`: Identifier for the tinymce-editor (which requires a unique id
- *   attribute). Default: `anno-editor`
  *
  * Events:
  *
@@ -38,14 +34,6 @@ module.exports = {
         eventBus.$on('remove', this.remove)
         eventBus.$on('discard', this.discard)
         eventBus.$on('save', this.save)
-    },
-    mounted() {
-        eventBus.$on('open-editor', () => {
-            const textarea = tinymce.get(this.editorId)
-            const textBody = this.$store.getters.firstHtmlBody
-            console.log({textBody, textarea, editorId: this.editorId})
-            if (textarea && textBody) textarea.setContent(textBody.value)
-        })
     },
     computed: {
         id()              { return this.$store.state.annotation.id },

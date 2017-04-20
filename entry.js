@@ -13,13 +13,6 @@ if (process.env.NODE_ENV !== 'production') {
     // Font Awesome
     require('font-awesome/css/font-awesome.css');
 
-    // TinyMCE
-    require.context('!file-loader?name=[path][name].[ext]&context=node_modules/tinymce!tinymce/skins', true, /.*/)
-    require('tinymce/tinymce');
-    require('tinymce/themes/modern/theme');
-    require('tinymce/plugins/paste');
-    require('tinymce/plugins/link');
-    require('tinymce/plugins/image');
 }
 
 

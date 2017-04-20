@@ -1,17 +1,40 @@
 <div class="panel panel-default">
   <div class="panel-heading">
-    <input :id="editorId" :placeholder="l10n('annofield_title')" v-model="title"
-      class="form-control" type="text" required="true">
+    <input :placeholder="l10n('annofield_title')" v-model="title" class="form-control" type="text" required="true">
   </div>
   <div class="panel-body">
-<form class="form" action="" method="get">
 
-    <div class="form-group">
-      <tinymce :id="`${prefix}-tinymce`" v-model="value" :options="tinymceOptions" />
+    <div ref="toolbar">
+      <button :title="l10n('fmt_bold')" class="ql-bold"></button>
+      <button :title="l10n('fmt_italic')" class="ql-italic"></button>
+      <button :title="l10n('fmt_underline')" class="ql-underline"></button>
+      <button :title="l10n('fmt_blockquote')" class="ql-blockquote"></button>
+      <button :title="l10n('fmt_list_bullet')" class="ql-list" value="bullet" type="button"></button>
+      <button :title="l10n('fmt_list_ordered')" class="ql-list" value="ordered" type="button"></button>
+      <select :title="l10n('fmt_size')" class="ql-size">
+        <option value="small">{{ l10n('fmt_size_small') }}</option>
+        <option selected>{{ l10n('fmt_size_normal') }}</option>
+        <option value="large">{{ l10n('fmt_size_large') }}</option>
+        <option value="huge">{{ l10n('fmt_size_huge') }}</option>
+      </select>
+      <button :title="l10n('fmt_image')" class="ql-image"></button>
+      <button :title="l10n('fmt_video')" class="ql-video"></button>
+      <button :title="l10n('fmt_link')" class="ql-link"></button>
+      <button :title="l10n('fmt_undo')" class="ql-undo">
+        <svg viewbox="0 0 18 18">
+          <polygon class="ql-fill ql-stroke" points="6 10 4 12 2 10 6 10"></polygon>
+          <path class="ql-stroke" d="M8.09,13.91A4.6,4.6,0,0,0,9,14,5,5,0,1,0,4,9"></path>
+        </svg>
+      </button>
+      <button :title="l10n('fmt_redo')" class="ql-redo">
+        <svg viewbox="0 0 18 18">
+          <polygon class="ql-fill ql-stroke" points="12 10 14 12 16 10 12 10"></polygon>
+          <path class="ql-stroke" d="M9.91,13.91A4.6,4.6,0,0,1,9,14a5,5,0,1,1,5-5"></path>
+        </svg>
+      </button>
     </div>
+    <div ref="editor"></div>
 
-    <select v-model="rights">
-      <option :name="l10n('license')">{{l10n.license}}</option>
-    </select>
-
-</form>
+    <input readonly v-model="rights" />
+  </div>
+</div>

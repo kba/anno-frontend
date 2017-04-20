@@ -14,6 +14,7 @@ function initialState() {return {
     title: '',
     body: [],
     target: [],
+    rights: "https://creativecommons.org/publicdomain/zero/1.0/",
 }}
 
 //

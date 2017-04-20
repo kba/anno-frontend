@@ -40,7 +40,9 @@ module.exports = {
             if (typeof jQuery().draggable !== 'function') jQuery = window.jQuery
             if (!jQuery || typeof jQuery().draggable !== 'function') console.error("draggable modal editor requires jquery ui")
             else {
-                jQuery(dialogEl).draggable()
+                jQuery(dialogEl).draggable({
+                    handle: '.modal-header'
+                })
                 dialogEl.classList.add('draggable')
             }
         }
