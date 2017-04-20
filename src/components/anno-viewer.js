@@ -4,6 +4,12 @@ const eventBus = require('../event-bus')
 const {
     numberOf,
 } = require('@kba/anno-util')
+const {
+    textualHtmlBody,
+    simpleTagBody,
+    semanticTagBody,
+    svgSelectorResource
+} = require('@kba/anno-queries')
 
 /**
  * ### anno-viewer
@@ -58,9 +64,9 @@ module.exports = {
         })
     },
     computed: {
-        firstHtmlBody()     { return this.$store.getters.firstHtmlBody },
-        simpleTagBodies()   { return this.$store.getters.simpleTagBodies },
-        semanticTagBodies() { return this.$store.getters.semanticTagBodies },
+        firstHtmlBody()     { return textualHtmlBody.first(this.annotation) },
+        simpleTagBodies()   { return simpleTagBody.all(this.annotation) },
+        semanticTagBodies() { return semanticTagBody.all(this.annotation) },
         id() { return this.annotation.id },
         slug() {
             if (!this.annotation.id) return 'unsaved-annotation-' + Date.now()
