@@ -38,7 +38,8 @@ module.exports = {
         if (this.draggable) {
             let jQuery = $
             if (typeof jQuery().draggable !== 'function') jQuery = window.jQuery
-            if (!jQuery || typeof jQuery().draggable !== 'function') console.error("draggable modal editor requires jquery ui")
+            if (!jQuery || typeof jQuery().draggable !== 'function')
+                console.error("draggable modal editor requires jquery ui")
             else {
                 jQuery(dialogEl).draggable({
                     handle: '.modal-header'
@@ -49,15 +50,16 @@ module.exports = {
 
         if (this.resizable) {
             let jQuery = $
-            if (typeof jQuery().draggable !== 'function') jQuery = window.jQuery
-            if (!jQuery || typeof jQuery().draggable !== 'function') console.error("resizable modal editor requires jquery ui")
+            if (typeof jQuery().resizable !== 'function') jQuery = window.jQuery
+            if (!jQuery || typeof jQuery().resizable !== 'function')
+                console.error("resizable modal editor requires jquery ui")
             else {
                 jQuery(contentEl).resizable({
-                    //alsoResize: ".modal-dialog",
+                    alsoResize: ".modal-dialog",
                     minHeight: 300,
                     minWidth: 300
                 })
-                contentEl.classList.add('draggable')
+                contentEl.classList.add('resizable')
                 $(this.$el).on('show.bs.modal', function () {
                     $(this).find('.modal-body').css({'max-height': '100%'});
                 });
