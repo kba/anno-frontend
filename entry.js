@@ -3,16 +3,11 @@ window.Vue = require('vue')
 window.Vuex = require('vuex')
 
 if (process.env.NODE_ENV !== 'production') {
-
-    // Enable devtools
     window.Vue.config.devtools = true
-
-    // Bootstrap
+    require('jquery-ui/ui/widgets/resizable')
+    require('jquery-ui/ui/widgets/draggable')
     require('bootstrap-webpack!./bootstrap.config.js');
-
-    // Font Awesome
     require('font-awesome/css/font-awesome.css');
-
 }
 
 
