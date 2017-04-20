@@ -1,28 +1,28 @@
 <div class="anno-list">
   <div class="btn-group btn-group-vertical pull-left hidden-print" role="group">
-    <bootstrap-button btnSize="xs" btnClass="warning" @click="logout" elem="a" v-if="isLoggedIn && logoutEndpoint">
+    <bootstrap-button btn-size="xs" btn-class="warning" @click="logout" elem="a" v-if="isLoggedIn && logoutEndpoint">
       {{ l10n('logout') }}
     </bootstrap-button>
-    <bootstrap-button btnSize="xs" @click="login" elem="a" :href="loginEndpoint" v-if="!isLoggedIn && loginEndpoint">
+    <bootstrap-button btn-size="xs" @click="login" elem="a" :href="loginEndpoint" v-if="!isLoggedIn && loginEndpoint">
       {{ l10n('login') }}
     </bootstrap-button>
-    <bootstrap-button btnClass="success" btnSize="xs" @click="create" v-if="$auth('create', targetSource)">
+    <bootstrap-button btn-class="success" btn-size="xs" @click="create" v-if="$auth('create', targetSource)">
       {{ l10n('new') }}
     </bootstrap-button>
   </div>
 
   <div class="btn-group btn-group-vertical pull-right hidden-print" role="group">
 
-    <bootstrap-button btnClass="default" btnSize="xs" font-awesome="plus" @click="collapseAll('show')"
+    <bootstrap-button btn-class="default" btn-size="xs" font-awesome="plus" @click="collapseAll('show')"
       v-show="collapsed && numberOfAnnotations > 0">
       {{ l10n('open_all') }}
     </bootstrap-button>
-    <bootstrap-button btnClass="default" btnSize="xs" font-awesome="minus" @click="collapseAll('hide')"
+    <bootstrap-button btn-class="default" btn-size="xs" font-awesome="minus" @click="collapseAll('hide')"
       v-show="!collapsed && numberOfAnnotations > 0">
       {{ l10n('close_all') }}
     </bootstrap-button>
 
-    <bootstrap-button btnClass="default dropdown-toggle" font-awesome="sort" btnSize="xs" data-toggle="dropdown"
+    <bootstrap-button btn-class="default dropdown-toggle" font-awesome="sort" btn-size="xs" data-toggle="dropdown"
       v-show="numberOfAnnotations > 0">
       {{l10n('sort')}} <span class="caret"></span>
     </bootstrap-button>
@@ -73,9 +73,9 @@
     <!-- </div> -->
 
     <div class="panel-group">
-      <anno-viewer v-for="annotation in list"
+      <anno-viewer v-for="annotation in list" :key="annotation.id"
         :annotation="annotation"
-        :asReply=false
+        :as-reply=false
         >
       </anno-viewer>
     </div>

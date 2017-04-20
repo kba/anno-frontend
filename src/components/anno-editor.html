@@ -7,12 +7,12 @@
   <bootstrap-tab :name="`${prefix}-${editorId}-tab-zones`" :title="l10n('zones')" v-if="targetImage">
     <zone-editor
       ref='zone-editor'
-      :canvasWidth="$store.state.canvasWidth"
-      :canvasHeight="$store.state.canvasHeight"
-      :thumbWidth="$store.state.thumbWidth"
-      :thumbHeight="$store.state.thumbHeight"
-      :targetImage="$store.state.targetImage"
-      :targetThumbnail="$store.state.targetThumbnail"
+      :canvas-width="$store.state.canvasWidth"
+      :canvas-height="$store.state.canvasHeight"
+      :thumb-width="$store.state.thumbWidth"
+      :thumb-height="$store.state.thumbHeight"
+      :target-image="$store.state.targetImage"
+      :target-thumbnail="$store.state.targetThumbnail"
       />
   </bootstrap-tab>
 

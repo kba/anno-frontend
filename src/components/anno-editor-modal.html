@@ -13,7 +13,7 @@
         </div>
 
         <div class="pull-right">
-          <bootstrap-button btnClass="primary" @click="save">
+          <bootstrap-button btn-class="primary" @click="save">
             {{ l10n('save') }}
           </bootstrap-button>
         </div>
@@ -29,7 +29,7 @@
       <div class="modal-footer">
 
         <div class="pull-left">
-          <bootstrap-button btnClass="danger" @click="remove" v-if="$auth('remove', id) && editor.mode === 'revise'">
+          <bootstrap-button btn-class="danger" @click="remove" v-if="$auth('remove', id) && editor.mode === 'revise'">
             {{ l10n('delete_anno') }}
           </bootstrap-button>
         </div>
@@ -38,7 +38,7 @@
           {{ l10n('discard') }}
         </bootstrap-button>
 
-        <bootstrap-button btnClass="primary" @click="save">
+        <bootstrap-button btn-class="primary" @click="save">
           {{ l10n('save') }}
         </bootstrap-button>
 

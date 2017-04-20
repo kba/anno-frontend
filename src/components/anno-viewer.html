@@ -32,10 +32,10 @@
       <div class="media-body">
 
         <div v-if="annotation.creator">
-          <bootstrap-button btnSize="xs" glyphicon="user">
+          <bootstrap-button btn-size="xs" glyphicon="user">
             {{ annotation.creator }} {{ dateformat(annotation.created || annotation.modified) }}
           </bootstrap-button>
-          <bootstrap-button btnSize="xs" glyphicon="link" elem="a"
+          <bootstrap-button btn-size="xs" glyphicon="link" elem="a"
             :title="l10n('purl')"
             data-toggle="popover"
             :data-content="id" 
@@ -80,13 +80,13 @@
     <div class="btn-toolbar pull-right" role="toolbar" style="margin-top: 10px;">
 
       <div class="btn-group btn-group-xs pull-right" role="group">
-        <bootstrap-button btnClass="default editbut" @click="revise" font-awesome="pencil" v-if="$auth('revise', id)">
+        <bootstrap-button btn-class="default editbut" @click="revise" font-awesome="pencil" v-if="$auth('revise', id)">
           {{ l10n('edit') }}
         </bootstrap-button>
-        <bootstrap-button btnClass="default commentbut" @click="reply" font-awesome="reply" v-if="$auth('create', id)">
+        <bootstrap-button btn-class="default commentbut" @click="reply" font-awesome="reply" v-if="$auth('create', id)">
           {{ l10n('comment') }}
         </bootstrap-button>
-        <bootstrap-button btnClass="danger" @click="remove" v-if="$auth('remove', id)">
+        <bootstrap-button btn-class="danger" @click="remove" v-if="$auth('remove', id)">
           {{ l10n('delete_anno') }}
         </bootstrap-button>
 
@@ -97,7 +97,10 @@
             <span class="caret"></span>
           </button>
           <ul :class="`${prefix} dropdown-menu pull-right versions`">
-            <li v-for="version in annotation.hasVersion" :class="version.id === id ? 'current-version' : ''">
+            <li v-for="version in annotation.hasVersion"
+              :key="version.id"
+              :class="version.id === id ? 'current-version' : ''"
+              >
               <a class="small"
                 @click="setToVersion(version)"
                 >
