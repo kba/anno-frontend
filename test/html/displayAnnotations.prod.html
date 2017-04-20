@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdn.quilljs.com/latest/quill.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vuex/2.3.1/vuex.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.6/vue.common.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.min.js"></script>
+
+  <script src="/home/kba/build/github.com/kba/anno/anno-webpack/dist/anno.min.js"></script>
+  <script src="/home/kba/build/github.com/UB-Heidelberg/SemToNotes/client/xrx.api.drawing.min.js"></script>
+  <script src="/home/kba/build/github.com/kba/semtonotes-utils/dist/xrx-utils.js"></script>
+
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="anno-anchor"></div>
+            </div>
+        </div>
+    </div>
+<script src="./fixtures.js"></script>
+<script type="text/javascript" src="../../dist/ubhd-anno.prod.js"> </script>
+<script type="text/javascript">
+
+  $(function() {
+    annoapp = displayAnnotations({
+
+      container: document.getElementById("anno-anchor"),
+
+      annoEndpoint: 'http://serv42.ub.uni-heidelberg.de/kba/anno',
+      tokenEndpoint: 'https://digi.ub.uni-heidelberg.de/cgi-bin/token',
+      loginEndpoint: 'https://digi.ub.uni-heidelberg.de/cgi-bin/login',
+      logoutEndpoint: null,
+
+      targetImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png",
+      targetThumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/200px-Ghostscript_Tiger.svg.png",
+    })
+  })
+
+
+</script></body></html>
