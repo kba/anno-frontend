@@ -31,11 +31,10 @@ module.exports = {
                 test: /bootstrap.config.js$/,
                 loader: 'bootstrap-webpack',
             },
-            // {
-            //     test: /font-awesome.css$/,
-            //     loader: 'style-loader!css-loader',
-
-            // },
+            {
+                test: /font-awesome.css$/,
+                loader: 'style-loader!css-loader',
+            },
             {
                 test: /\.(eot|svg|ttf)(\?v=\d+\.\d+\.\d+)?/,
                 loader: 'file-loader?emitFile=false',
@@ -54,14 +53,18 @@ module.exports = {
                 loader: "html-loader?attrs=img:src bootstrap-button:src",
             },
             {
-                test: /\.s?css$/,
+                test: /components\/.*\.s?css$/,
                 loader: "style-loader!css-loader!sass-loader",
             },
+            {test: /.*\.js$/, exclude: /node_modules/, loader: 'babel-loader?cacheDirectory'},
         ]
     },
     resolve: {
         alias: {
-            'vue$': 'vue/dist/vue.common.js'
+            'vue$': 'vue/dist/vue.common.js',
+            'quill$': 'quill/dist/quill.min.js',
+            'async$': 'async/dist/async.min.js',
+            'axios$': 'axios/dist/axios.min.js',
         }
     },
     plugins: [
@@ -69,7 +72,6 @@ module.exports = {
         // code with the value of the NODE_ENV env var, hence nested quotes.
         new webpack.DefinePlugin({ 'process.env': {
             NODE_ENV: `"${process.env.NODE_ENV}"`,
-            UBHDANNO_TOKEN: "'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicnQxMjZAdW5pLWhlaWRlbGJlcmcuZGUiLCJzZXJ2aWNlIjoiZGlnbGl0Iiwid3JpdGUiOjEsImV4cCI6MzE1MzYwMDAwfQ.h7WZ_gmWNv-uCjoobLCiHH_voinj8dddnjMBZsmCJ8o'"
         }})
     ]
 }
