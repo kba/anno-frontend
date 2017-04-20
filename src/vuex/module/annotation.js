@@ -134,6 +134,7 @@ const mutations = {
     },
 
     RESET_ANNOTATION(state) {
+        Object.keys(state).forEach(k => state[k] = null)
         Object.assign(state, initialState())
     },
 
