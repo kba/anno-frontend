@@ -1,8 +1,0 @@
-title: API schema for UB Heidelberg's annotation service
-definitions:
-  Annotation:
-    target:
-      type: 'array'
-      items:
-        type: 'string'
-        format: 'url'
