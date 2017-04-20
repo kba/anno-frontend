@@ -95,7 +95,7 @@ module.exports = {
             return new Promise((resolve, reject) => {
                 console.log("ACL check")
                 apiFactory(state).aclCheck(getters.allIds, (err, perms) => {
-                    if (err) reject(err)
+                    if (err) return reject(err)
                     commit('CHANGE_ACL', perms)
                     resolve()
                 })

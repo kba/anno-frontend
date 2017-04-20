@@ -1,5 +1,6 @@
 const Vue = require('vue')
 const Vuex = require('vuex')
+Vue.use(Vuex)
 const eventBus = require('./event-bus')
 
 /**
@@ -103,7 +104,6 @@ module.exports = function displayAnnotations(options={}) {
     Object.assign(storeProps.state, options)
     const store = new Vuex.Store(storeProps)
 
-    console.log(SidebarApp)
     const annoapp = new Vue(Object.assign({store, el}, SidebarApp))
 
     //
@@ -116,7 +116,10 @@ module.exports = function displayAnnotations(options={}) {
     //
     annoapp.$store.dispatch('fetchToken')
         .then(annoapp.$store.dispatch('fetchList'))
-        .catch(err => annoapp.eventBus.$emit('error', err))
+        .catch(err => {
+            console.error("Error with initial fetchToken/fetchList", err)
+            annoapp.eventBus.$emit('error', err)
+        })
 
     //
     // Return the app for event emitting
