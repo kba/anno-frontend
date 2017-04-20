@@ -82,7 +82,7 @@ module.exports = {
     },
     methods: {
         revise()     { return eventBus.$emit('revise', this.annotation) },
-        reply()      { return eventBus.$emit('reply', this.annotation) },
+        reply()      { return eventBus.$emit('reply',  this.annotation) },
         remove()     { return eventBus.$emit('remove', this.annotation) },
         mouseenter() {
             this.startHighlighting()

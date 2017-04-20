@@ -16,7 +16,12 @@ module.exports = {
         require('../mixin/auth'),
         require('../mixin/prefix'),
     ],
+    props: {
+        draggable: { type: Boolean, default: true },
+        resizable: { type: Boolean, default: true },
+    },
     template: require('./anno-editor-modal.html'),
+    style:    require('./anno-editor-modal.scss'),
     computed: {
         id() { return this.$store.state.annotation.id },
         editor() { return this.$refs['editor'] },
@@ -25,12 +30,45 @@ module.exports = {
         eventBus.$on('open-editor', () => this.show())
         eventBus.$on('close-editor', () => this.hide())
     },
+    mounted() {
+
+        const dialogEl = this.$el.querySelector('.modal-dialog')
+        const contentEl = this.$el.querySelector('.modal-content')
+
+        if (this.draggable) {
+            let jQuery = $
+            if (typeof jQuery().draggable !== 'function') jQuery = window.jQuery
+            if (!jQuery || typeof jQuery().draggable !== 'function') console.error("draggable modal editor requires jquery ui")
+            else {
+                jQuery(dialogEl).draggable()
+                dialogEl.classList.add('draggable')
+            }
+        }
+
+        if (this.resizable) {
+            let jQuery = $
+            if (typeof jQuery().draggable !== 'function') jQuery = window.jQuery
+            if (!jQuery || typeof jQuery().draggable !== 'function') console.error("resizable modal editor requires jquery ui")
+            else {
+                jQuery(contentEl).resizable({
+                    //alsoResize: ".modal-dialog",
+                    minHeight: 300,
+                    minWidth: 300
+                })
+                contentEl.classList.add('draggable')
+                $(this.$el).on('show.bs.modal', function () {
+                    $(this).find('.modal-body').css({'max-height': '100%'});
+                });
+            }
+        }
+
+    },
     methods: {
         save() { eventBus.$emit('save') },
         remove() { eventBus.$emit('remove', this.id) },
         discard() { eventBus.$emit('discard') },
 
-        show() { $(this.$el).modal('show') },
+        show(annotation) { $(this.$el).modal('show') },
         hide() { $(this.$el).modal('hide') },
     },
 }

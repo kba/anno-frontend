@@ -1,5 +1,8 @@
 const config = require('../config')
 const l10nMixin = require('../mixin/l10n')
+const {
+    textualHtmlBody,
+} = require('@kba/anno-queries')
 
 /* register vue-tinymce component */
 const Vue = require('vue')
@@ -36,13 +39,13 @@ module.exports = {
                     'undo redo',
                     'formatselect',
                     'bold italic underline blockquote',
-                    'alignleft aligncenter alignright',
+                    // 'alignleft aligncenter alignright',
                     'bullist numlist indent outdent',
                     'link image',
                 ].join(' | '),
                 menubar: false,
                 statusbar: false,
-                height: 400,
+                height: 300,
                 width: '100%',
             }}
         },
@@ -59,7 +62,7 @@ module.exports = {
     },
     computed: {
         value: {
-            get () { return this.$store.getters.firstHtmlBody ? this.$store.getters.firstHtmlBody.value : '' },
+            get () { return (textualHtmlBody.first(this.$store.state.annotation) || {value: '<p>MEP</p>'}).value },
             set (content) { this.$store.commit('SET_HTML_BODY_VALUE', content) },
         },
         title: {

@@ -1,7 +1,5 @@
-const eventBus = require('../event-bus')
-const tinymce = require('tinymce')
-const css = require('./anno-editor.css')
-console.log(css)
+const eventBus      = require('../event-bus')
+const tinymce       = require('tinymce')
 
 /*
  * ### anno-editor
@@ -31,7 +29,7 @@ module.exports = {
         editorId: {type: String, default: 'anno-editor'},
     },
     template: require('./anno-editor.html'),
-    style: css,
+    style: require('./anno-editor.css'),
     created() {
         // TODO Move these to store maybe??
         eventBus.$on('create', this.create)
@@ -45,6 +43,7 @@ module.exports = {
         eventBus.$on('open-editor', () => {
             const textarea = tinymce.get(this.editorId)
             const textBody = this.$store.getters.firstHtmlBody
+            console.log({textBody, textarea, editorId: this.editorId})
             if (textarea && textBody) textarea.setContent(textBody.value)
         })
     },
@@ -68,9 +67,9 @@ module.exports = {
                 eventBus.$emit('close-editor')
             }
 
-                 if (this.mode === 'create')  this.api.create(anno, cb)
-            else if (this.mode === 'reply') this.api.reply(anno.replyTo, anno, cb)
-            else if (this.mode === 'revise')  this.api.revise(anno.id, anno, cb)
+                 if (this.mode === 'create') this.api.create(anno, cb)
+            else if (this.mode === 'reply')  this.api.reply(anno.replyTo, anno, cb)
+            else if (this.mode === 'revise') this.api.revise(anno.id, anno, cb)
         },
 
         discard() {

@@ -68,7 +68,7 @@ module.exports = function displayAnnotations(options={}) {
     //
     let container = options.container
     if (!container) {
-        const container = document.createElement('div')
+        container = document.createElement('div')
         container.setAttribute('id', `${options.prefix}-container`)
         document.querySelector('body').appendChild(container)
     }

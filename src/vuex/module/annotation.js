@@ -1,3 +1,4 @@
+const Vue = require('vue')
 const {
     ensureArray, add, remove,
 } = require('@kba/anno-util')
@@ -117,11 +118,10 @@ const mutations = {
     },
 
     REPLACE_ANNOTATION(state, newState) {
-        Object.assign(state, newState)
-        // Object.keys(state).forEach(k => {
-        //     if (newState[k]) state[k] = newState[k]
-        //     else state[k] = null
-        // })
+        Object.keys(state).forEach(k => {
+            if (newState[k]) Vue.set(state,  k, newState[k])
+            else state[k] = null
+        })
     },
 
     SET_SEMTAG_PROP(state, {n, prop, value}) {
