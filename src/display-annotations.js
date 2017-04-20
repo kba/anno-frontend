@@ -19,7 +19,7 @@ const eventBus = require('./event-bus')
  *
  * #### Options
  *
- * - `el`: Element to hold the annotation sidebar/modal
+ * - `container`: Container element to hold the annotation sidebar/modal
  * - `language`: Language for l10n. Currently: `en`/`eng` or `de`/`deu` (Default)
  * - `targetSource`: The target of the annotation. Defaults to `window.location.href`
  * - `targetImage`: The image if any, to annotate on this page
@@ -35,12 +35,13 @@ const eventBus = require('./event-bus')
  *
  * - `loginEndpoint`: Function or URL of the login mask
  * - `logoutEndpoint`: Function or URL that logs the user out
- * - `isLoggedIn`: Function or boolean to designate whether the is already
- *   logged in. No login button will be shown in that case
+ * - `isLoggedIn`: Function or boolean to designate whether the user is already
+ *   logged in. No login button will be shown in that case, token will still be
+ *   retrieved unless found
  *
  * #### Events
  *
- * Either listen/emit via app.eventBus or provide listeners as `events` option
+ * Either listen/emit via app.eventBus and/or provide listeners as `events` option
  *
  * - `startHighlighting(annoId)`: $emit this to highlight the annotation
  * - `stopHighlighting(annoId)`: $emit this to un-highlight the annotation 
@@ -51,24 +52,34 @@ const eventBus = require('./event-bus')
  */
 module.exports = function displayAnnotations(options={}) {
 
+    const SidebarApp = require('./components/sidebar-app.js')
+    SidebarApp.props.standalone.default = ! options.container
+
     options.targetSource = options.targetSource || window.location.href
 
+    //
     // Set the prefix for IDs
+    //
     if (!options.prefix)
         options.prefix = `anno-${Date.now()}`
 
+    //
     // Create a container element if none was given
-    if (!options.el) {
-        const containerDiv = document.createElement('div')
-        containerDiv.setAttribute('id', `${options.prefix}-container`)
-        const appDiv = document.createElement('div')
-        appDiv.setAttribute('id', `${options.prefix}-app`)
-        containerDiv.appendChild(appDiv)
-        document.querySelector('body').appendChild(containerDiv)
-        options.el = appDiv
+    //
+    let container = options.container
+    if (!container) {
+        const container = document.createElement('div')
+        container.setAttribute('id', `${options.prefix}-container`)
+        document.querySelector('body').appendChild(container)
     }
+    const appDiv = document.createElement('div')
+    appDiv.setAttribute('id', `${options.prefix}-app`)
+    container.appendChild(appDiv)
+    const el = appDiv
 
+    //
     // Event listeners
+    //
     const eventListeners = options.events ? options.events : {}
     Object.keys(eventListeners).forEach(event => {
         console.log(`Binding "${event}" event on`, eventBus, 'to', eventListeners[event])
@@ -83,27 +94,32 @@ module.exports = function displayAnnotations(options={}) {
         }
     })
 
+    //
     // Set up the store
+    //
     // NOTE This will break reactivity if the properties are unknown so make sure
+    // you define defaults, even null or empty strings
     const storeProps = require('./vuex/store')
     Object.assign(storeProps.state, options)
     const store = new Vuex.Store(storeProps)
 
-    // Set the store options
-    // you define defaults, even null or empty strings
-    // Object.keys(options).forEach(k => store.state[k] = options[k])
-    // console.log(store.state.annoEndpoint)
-    // console.log(store.state.annotationList.list)
+    console.log(SidebarApp)
+    const annoapp = new Vue(Object.assign({store, el}, SidebarApp))
 
-    const annoapp = new Vue(Object.assign({
-            store,
-            el: options.el
-        }, require('./components/sidebar-app.js')))
-
+    //
+    // Store reference to the eventBus
+    //
     annoapp.eventBus = eventBus
 
+    //
+    // Kick off fetching tokens/list/ACL rules
+    //
     annoapp.$store.dispatch('fetchToken')
         .then(annoapp.$store.dispatch('fetchList'))
         .catch(err => annoapp.eventBus.$emit('error', err))
+
+    //
+    // Return the app for event emitting
+    //
     return annoapp
 }
