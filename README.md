@@ -6,6 +6,8 @@
 	* [`displayAnnotations(options)`](#displayannotationsoptions)
 		* [Options](#options)
 		* [Events](#events)
+	* [Structure of the application](#structure-of-the-application)
+	* [Integration into serv7](#integration-into-serv7)
 * [Development](#development)
 	* [Prerequisites](#prerequisites)
 	* [Building the development bundle](#building-the-development-bundle)
@@ -22,21 +24,16 @@
 	* [bootstrap-button](#bootstrap-button)
 		* [Properties](#properties)
 	* [html-editor](#html-editor)
-		* [Props](#props-2)
 	* [semtags-editor](#semtags-editor)
 	* [tags-editor](#tags-editor)
 	* [zone-editor](#zone-editor)
-		* [Props:](#props-3)
+		* [Props:](#props-2)
 		* [Methods](#methods)
 * [Mixins](#mixins)
 	* [`this.api`](#thisapi)
 	* [`this.$auth(cond, id)`](#thisauthcond-id)
 	* [`this.l10n(text)`](#thisl10ntext)
 	* [`this.prefix`](#thisprefix)
-* [OLD](#old)
-	* [Structure of the application](#structure-of-the-application)
-* [Using - HTML Snippets](#using---html-snippets)
-* [Using - On serv7 / ubhd3 template](#using---on-serv7--ubhd3-template)
 
 <!-- END-MARKDOWN-TOC -->
 
@@ -66,7 +63,7 @@
    and on whose `eventBus` listeners can be added `$on` and which can emit
    events with `$emit`
 #### Options
-- `el`: Element to hold the annotation sidebar/modal
+- `container`: Container element to hold the annotation sidebar/modal
 - `language`: Language for l10n. Currently: `en`/`eng` or `de`/`deu` (Default)
 - `targetSource`: The target of the annotation. Defaults to `window.location.href`
 - `targetImage`: The image if any, to annotate on this page
@@ -80,10 +77,11 @@
 - `annoEndpoint`: URL of the Open Annotation Protocol server
 - `loginEndpoint`: Function or URL of the login mask
 - `logoutEndpoint`: Function or URL that logs the user out
-- `isLoggedIn`: Function or boolean to designate whether the is already
-  logged in. No login button will be shown in that case
+- `isLoggedIn`: Function or boolean to designate whether the user is already
+  logged in. No login button will be shown in that case, token will still be
+  retrieved unless found
 #### Events
-Either listen/emit via app.eventBus or provide listeners as `events` option
+Either listen/emit via app.eventBus and/or provide listeners as `events` option
 - `startHighlighting(annoId)`: $emit this to highlight the annotation
 - `stopHighlighting(annoId)`: $emit this to un-highlight the annotation 
 - `mouseover(annoId)`: $on this to catch when an annotation is hovered in the list
@@ -221,8 +219,6 @@ These are generated from the source files.
 The editor has three modes: `create`, `reply` and `revise` that represent
 the function of the anno-store to be used on `save`
 Properties:
-- `editorId`: Identifier for the tinymce-editor (which requires a unique id
-  attribute). Default: `anno-editor`
 Events:
 - `close-editor`: The editor was closed
 - `removed(id)`: Annotation `id` was removed
@@ -271,10 +267,6 @@ A bootstrap button
 <!-- BEGIN-RENDER ./src/components/html-editor.js -->
 ### html-editor
 Editor for the `text/html` `TextualBody` body of an annotation.
-#### Props
-- `language`: Language of the tinymce UI. Default: `de`
-- **`editorId`**: HTML id of the tinymce editor. Required.
-- `tinymceOptions`: Options passed to the tinymce constructor.
 
 <!-- END-RENDER -->
 
