@@ -12,15 +12,18 @@ module.exports = {
     },
     externals: {
         jquery: "$",
-        tinymce: 'tinymce',
+        'quill/dist/quill.js': 'Quill',
         bootstrap: 'bootstrap',
-        // vue: 'vue',
-        // vuex: 'vuex',
+        vue: 'vue',
+        vuex: 'vuex',
+        'semtonotes-client': 'xrx',
         'semtonotes-utils': 'XrxUtils',
     },
     resolve: {
         alias: {
-            'vue$': 'vue/dist/vue.common.js'
+            'vue$': 'vue/dist/vue.common.js',
+            'quill$': 'quill/dist/quill.min.js',
+            'async$': 'async/dist/async.min.js',
         }
     },
     module: {
@@ -31,6 +34,7 @@ module.exports = {
                 test: /components\/.*?\.s?css$/,
                 loader: "style-loader!css-loader?sourcemap=true!sass-loader?sourcemap-=true"
             },
+            // {test: /\.css$/i, loader: "style-loader!css-loader"},
         ]
     },
     plugins: [

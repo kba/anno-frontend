@@ -10,6 +10,17 @@ module.exports = {
     },
     module: {
         loaders: [
+            // {
+            //     test: /\.vue$/,
+            //     loader: 'vue-loader',
+            //     options: {
+            //         loaders: {
+            //             'scss': 'vue-style-loader!css-loader!sass-loader',
+            //             'sass': 'vue-style-loader!css-loader!sass-loader?indentedSyntax'
+            //         }
+            //         // other vue-loader options go here
+            //     }
+            // },
             // **IMPORTANT** This is needed so that each bootstrap js file required by
             // bootstrap-webpack has access to the jQuery object
             {
@@ -20,11 +31,11 @@ module.exports = {
                 test: /bootstrap.config.js$/,
                 loader: 'bootstrap-webpack',
             },
-            {
-                test: /font-awesome.css$/,
-                loader: 'style-loader!css-loader',
+            // {
+            //     test: /font-awesome.css$/,
+            //     loader: 'style-loader!css-loader',
 
-            },
+            // },
             {
                 test: /\.(eot|svg|ttf)(\?v=\d+\.\d+\.\d+)?/,
                 loader: 'file-loader?emitFile=false',
@@ -43,7 +54,7 @@ module.exports = {
                 loader: "html-loader?attrs=img:src bootstrap-button:src",
             },
             {
-                test: /components\/.*?\.s?css$/,
+                test: /\.s?css$/,
                 loader: "style-loader!css-loader!sass-loader",
             },
         ]
