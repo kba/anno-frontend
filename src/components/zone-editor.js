@@ -134,12 +134,12 @@ module.exports = {
         toSVG(...args) {
             const shapes = this.image.getLayerShape().getShapes()
             if (!shapes || shapes.length === 0) {
-                this.$store.dispatch('removeTarget', this.$store.getters.svgTarget)
+                this.$store.commit('REMOVE_TARGET', this.$store.getters.svgTarget)
             } else {
                 const svg = XrxUtils.svgFromShapes(shapes)
                 // console.log("targetImage", this.targetImage)
                 // console.log("New SVG", svg)
-                this.$store.dispatch('setSvgSelector', {svg, source: this.targetImage})
+                this.$store.commit('SET_SVG_SELECTOR', {svg, source: this.targetImage})
             }
         },
 

@@ -14,7 +14,7 @@ module.exports = {
         simpleTagBodies() { return this.$store.getters.simpleTagBodies },
     },
     methods: {
-        addSimpleTag() { this.$store.commit('ADD_SIMPLE_TAG') },
+        addSimpleTag() { this.$store.commit('ADD_TAG_BODY') },
         removeBody(body) { this.$store.commit('REMOVE_BODY', body) },
     }
 }
