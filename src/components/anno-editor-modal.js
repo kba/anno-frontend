@@ -72,7 +72,12 @@ module.exports = {
         remove() { eventBus.$emit('remove', this.id) },
         discard() { eventBus.$emit('discard') },
 
-        show(annotation) { $(this.$el).modal('show') },
+        show(annotation) {
+            $(this.$el).modal({
+                keyboard: false,
+                backdrop: 'static',
+            })
+        },
         hide() { $(this.$el).modal('hide') },
     },
 }
