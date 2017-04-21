@@ -1,7 +1,7 @@
 var webpack = require('webpack')
 
 module.exports = {
-    entry: "./entry.prod.js",
+    entry: "./entry.js",
     devtool: 'source-map',
     node: { fs: 'empty' },
     // target: 'node',
@@ -41,7 +41,7 @@ module.exports = {
     },
     plugins: [
         new webpack.DefinePlugin({ 'process.env': {
-            NODE_ENV: `"${process.env.NODE_ENV}"`,
+            NODE_ENV: '"production"',
         }})
     ]
 }
