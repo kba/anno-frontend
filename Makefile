@@ -51,7 +51,7 @@ deploy: dist
 	
 .PHONY: dist
 dist: src
-	NODE_ENV='production' webpack --config webpack.deploy.config.js
+	NODE_ENV='production' webpack --config webpack.config.prod.js
 
 node_modules: package.json
 	$(NPM) install
