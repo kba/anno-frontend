@@ -45,7 +45,7 @@ test:
 	tap -Rspec test/*.test.js
 
 .PHONY: deploy
-deploy: dist
+deploy:
 	ssh $(DEPLOY_SERVER) mkdir -p $(DEPLOY_PATH)
 	scp -r dist/* $(DEPLOY_SERVER):$(DEPLOY_PATH)
 	
