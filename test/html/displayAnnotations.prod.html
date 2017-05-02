@@ -32,7 +32,12 @@
 <script type="text/javascript">
 
   $(function() {
-    annoapp = displayAnnotations({
+    const props = {}
+    window.location.hash.substr(1).split(';').forEach(kv => {
+      const [k,v] = kv.split('=')
+      props[k] = v
+    })
+    annoapp = displayAnnotations(Object.assign({
 
       container: document.getElementById("anno-anchor"),
 
@@ -43,7 +48,7 @@
 
       targetImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png",
       targetThumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/200px-Ghostscript_Tiger.svg.png",
-    })
+    }, props))
   })
 
 
