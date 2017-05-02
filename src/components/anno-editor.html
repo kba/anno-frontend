@@ -11,8 +11,10 @@
       :height="$store.state.canvasHeight"
       :thumb-width="$store.state.thumbWidth"
       :thumb-height="$store.state.thumbHeight"
-      :initialImage="$store.state.targetImage"
+      :initial-image="$store.state.targetImage"
+      :initial-svg="$store.getters.svgTarget.selector.value"
       :target-thumbnail="$store.state.targetThumbnail"
+      @svg-changed="onSvgChanged"
       />
   </bootstrap-tab>
 

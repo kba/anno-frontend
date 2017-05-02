@@ -101,5 +101,9 @@ module.exports = {
             this.$store.commit('REPLACE_ANNOTATION', annotation)
             eventBus.$emit('open-editor')
         },
+
+        onSvgChanged(svg) {
+            this.$store.commit('SET_SVG_SELECTOR', {svg, source: this.$store.state.targetImage})
+        }
     }
 }
