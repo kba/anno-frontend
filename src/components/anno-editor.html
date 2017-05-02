@@ -5,13 +5,13 @@
   </bootstrap-tab>
 
   <bootstrap-tab :name="`${prefix}-${editorId}-tab-zones`" :title="l10n('zones')" v-if="targetImage">
-    <zone-editor
+    <xrx-vue
       ref='zone-editor'
-      :canvas-width="$store.state.canvasWidth"
-      :canvas-height="$store.state.canvasHeight"
+      :width="$store.state.canvasWidth"
+      :height="$store.state.canvasHeight"
       :thumb-width="$store.state.thumbWidth"
       :thumb-height="$store.state.thumbHeight"
-      :target-image="$store.state.targetImage"
+      :initialImage="$store.state.targetImage"
       :target-thumbnail="$store.state.targetThumbnail"
       />
   </bootstrap-tab>

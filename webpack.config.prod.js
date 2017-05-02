@@ -18,6 +18,7 @@ module.exports = {
         '@kba/anno-store': 'Anno.Store',
         '@kba/anno-store-http': 'Anno.HttpStore',
         '@kba/anno-errors': 'Anno.Errors',
+        '@kba/xrx-vue': 'XrxVue',
     },
     resolve: {
         alias: {

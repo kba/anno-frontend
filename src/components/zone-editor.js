@@ -107,6 +107,7 @@ module.exports = {
 
         initThumb(cb) {
             this.thumbDiv = this.$el.querySelector(`div.${this.prefix}-zone-editor-thumb`)
+            this.thumbDiv.style.display = 'block'
             this.thumb = XrxUtils.createDrawing(this.thumbDiv, this.thumbWidth, this.thumbHeight)
 
             this.thumb.setBackgroundImage(this.targetThumbnail, () => {

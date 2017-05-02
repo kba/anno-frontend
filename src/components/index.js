@@ -15,7 +15,7 @@ const component = {
     'html-editor':       require('./html-editor'),
     'semtags-editor':    require('./semtags-editor'),
     'tags-editor':       require('./tags-editor'),
-    'zone-editor':       require('./zone-editor'),
+    'xrx-vue':           require('@kba/xrx-vue').XrxVue,
 
     // apps
     'sidebar-app':       require('./sidebar-app')
