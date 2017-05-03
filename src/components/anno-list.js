@@ -25,8 +25,6 @@ module.exports = {
         collapseInitially: {type: Boolean, default: false},
     },
     data() { return {
-        // TODO
-        options: {},
         collapsed: this.collapseInitially
     }},
     template: require('./anno-list.html'),
@@ -48,7 +46,7 @@ module.exports = {
     },
     methods: {
         logout() { this.$store.dispatch('logout') },
-        create()   { return eventBus.$emit('create', this.targetSource) },
+        create() { return eventBus.$emit('create', this.targetSource) },
 
         collapseAll(state) {
             this.$children.forEach(annoViewer => annoViewer.collapse && annoViewer.collapse(state))
