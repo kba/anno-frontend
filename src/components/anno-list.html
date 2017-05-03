@@ -75,6 +75,7 @@
     <div class="panel-group">
       <anno-viewer v-for="annotation in list" :key="annotation.id"
         :annotation="annotation"
+        :purl-template="purlTemplate"
         :as-reply=false
         >
       </anno-viewer>

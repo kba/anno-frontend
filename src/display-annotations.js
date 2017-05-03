@@ -28,6 +28,8 @@ const eventBus = require('./event-bus')
  * - `annotationList`: Options for the list display
  *   - `sortedBy`:     Sort key: `date`, `datereverse` or `title`
  *   - `allCollapsed`: Collapse (`true`) or expand (`false`) all annotations
+ * - `purlTemplate` A string template for the persistent URL. `{{ slug }}` will
+ *   be replaced by the slug of the annotation
  *
  * - `token`: Function or token. The literal token. Don't use this option
  *   without SSL/TLS encryption. Function must be synchronous.

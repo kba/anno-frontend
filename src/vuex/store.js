@@ -20,6 +20,7 @@ module.exports = {
         tokenEndpoint: 'http://localhost:3000/auth/token',
         loginEndpoint: 'http://localhost:3000/auth/login?from=',
         logoutEndpoint: 'http://localhost:3000/auth/logout',
+        purlTemplate: '',
         targetImage: null,
         targetThumbnail: null,
         token: null,

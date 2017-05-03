@@ -39,6 +39,7 @@ module.exports = {
         list() { return this.$store.state.annotationList.list },
         targetSource() { return this.$store.state.targetSource },
         token() { return this.$store.state.token },
+        purlTemplate() { return this.$store.state.purlTemplate },
         isLoggedIn() { return this.$store.state.isLoggedIn },
         logoutEndpoint() { return this.$store.state.logoutEndpoint },
         loginEndpoint() { return this.$store.state.loginEndpoint },

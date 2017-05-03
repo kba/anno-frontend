@@ -21,6 +21,8 @@ const {
  * - **`annotation`**: The annotation this viewer shows
  * - `asReply`: Whether the annotation should be displayed as a reply (no
  *   colapsing, smaller etc.)
+ * - `purlTemplate` A string template for the persistent URL. `{{ slug }}` will
+ *   be replaced by the slug of the annotation
  * - `collapseInitially`: Whether the anntotation should be collapsed after
  *   first render
  * - dateFormat: Format of date stamps. Default: `dd.mm.yyyy hh:MM:ss`
@@ -45,6 +47,7 @@ module.exports = {
     name: 'anno-viewer', // necessary for nesting
     props: {
         annotation: {type: Object, required: true},
+        purlTemplate: {type: String, required: false},
         // Controls whether comment is collapsible or not
         asReply: {type: Boolean, default: false},
         collapseInitially: {type: Boolean, default: false},
@@ -70,6 +73,9 @@ module.exports = {
         semanticTagBodies() { return semanticTagBody.all(this.annotation) },
         svgTarget()         { return svgSelectorResource.first(this.annotation) },
         id() { return this.annotation.id },
+        purl() { return this.purlTemplate 
+                ? this.purlTemplate.replace('{{ slug }}', this.id.replace(/.*\//, ''))
+                : this.id },
         slug() {
             if (!this.annotation.id) return 'unsaved-annotation-' + Date.now()
             return this.annotation.id.replace(/[^A-Za-z0-9]/g, '')
