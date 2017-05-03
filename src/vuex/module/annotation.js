@@ -85,10 +85,10 @@ const mutations = {
         add(state, 'body', semanticTagBody.create(v))
     },
 
-    ADD_SVG_TARGET(state, target={}) {
-        ensureArray(state, 'target')
-        add(state, 'target', Object.assign(target, svgSelectorResource.create()))
-    },
+    // ADD_SVG_TARGET(state, target={}) {
+    //     ensureArray(state, 'target')
+    //     add(state, 'target', Object.assign(target, svgSelectorResource.create()))
+    // },
 
     SET_HTML_BODY_VALUE(state, v) {
         if (!textualHtmlBody.first(state))
@@ -97,8 +97,11 @@ const mutations = {
     },
 
     SET_SVG_SELECTOR(state, {svg, source}) {
-        if (!svgSelectorResource.first(state))
-            add(state, 'target', svgSelectorResource.create({source}))
+        if (!svgSelectorResource.first(state)) {
+            add(state, 'target', svgSelectorResource.create({}))
+        }
+        if (source)
+            svgSelectorResource.first(state).source = source
         svgSelectorResource.first(state).selector.value = svg
     },
 

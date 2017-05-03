@@ -53,6 +53,7 @@ module.exports = {
     template: require('./anno-viewer.html'),
     style:    require('./anno-viewer.scss'),
     mounted() {
+        console.log(this.svgTarget)
 
         // Show popover with persistent URL
         $('[data-toggle="popover"]', this.$el).popover(); 
@@ -67,6 +68,7 @@ module.exports = {
         firstHtmlBody()     { return textualHtmlBody.first(this.annotation) },
         simpleTagBodies()   { return simpleTagBody.all(this.annotation) },
         semanticTagBodies() { return semanticTagBody.all(this.annotation) },
+        svgTarget()         { return svgSelectorResource.first(this.annotation) },
         id() { return this.annotation.id },
         slug() {
             if (!this.annotation.id) return 'unsaved-annotation-' + Date.now()
