@@ -22,6 +22,7 @@ module.exports = {
         logoutEndpoint: 'http://localhost:3000/auth/logout',
         purlTemplate: null,
         purlId: null,
+        targetSource: window.location.href,
         targetImage: null,
         targetThumbnail: null,
         token: null,
