@@ -7,7 +7,7 @@ const apiFactory = require('../api')
 const jwtDecode = require('jwt-decode')
 const eventBus = require('../event-bus')
 
-const annotation = require('./module/annotation')
+const editing = require('./module/editing')
 const annotationList = require('./module/annotationList')
 
 function isExpired(token) { return (token.exp < Date.now() / 1000) }
@@ -28,7 +28,7 @@ module.exports = {
         acl: null,
     },
     modules: {
-        annotation,
+        editing,
         annotationList,
     },
     getters: {

@@ -41,7 +41,7 @@ module.exports = {
         })
     },
     computed: {
-        id()              { return this.$store.state.annotation.id },
+        id()              { return this.$store.state.editing.id },
         stateDump()       { return this.$store.state },
         targetImage()     { return this.$store.state.targetImage },
         targetThumbnail() { return this.$store.state.targetThumbnail },
@@ -49,7 +49,7 @@ module.exports = {
     },
     methods: {
         save() {
-            const anno = this.$store.state.annotation
+            const anno = this.$store.state.editing
             if (!anno.title) {
                 window.alert("A title is required")
                 return;

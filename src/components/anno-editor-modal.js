@@ -23,7 +23,7 @@ module.exports = {
     template: require('./anno-editor-modal.html'),
     style:    require('./anno-editor-modal.scss'),
     computed: {
-        id() { return this.$store.state.annotation.id },
+        id() { return this.$store.state.editing.id },
         editor() { return this.$refs['editor'] },
     },
     created() {

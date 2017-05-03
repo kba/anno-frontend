@@ -42,15 +42,15 @@ module.exports = {
     },
     computed: {
         value: {
-            get () { return (textualHtmlBody.first(this.$store.state.annotation) || {value: ''}).value },
+            get () { return (textualHtmlBody.first(this.$store.state.editing) || {value: ''}).value },
             set (content) { this.$store.commit('SET_HTML_BODY_VALUE', content) },
         },
         title: {
-            get () { return this.$store.state.annotation.title },
+            get () { return this.$store.state.editing.title },
             set (value) { this.$store.commit('SET_TITLE', value) }
         },
         rights: {
-            get () { return this.$store.state.annotation.rights },
+            get () { return this.$store.state.editing.rights },
             set (value) { this.$store.commit('SET_RIGHTS', value) }
         },
     },
