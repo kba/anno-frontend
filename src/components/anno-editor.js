@@ -50,6 +50,10 @@ module.exports = {
     methods: {
         save() {
             const anno = this.$store.state.annotation
+            if (!anno.title) {
+                window.alert("A title is required")
+                return;
+            }
             const cb = (err, newAnno) => {
                 if (err) {
                     console.error(err)
