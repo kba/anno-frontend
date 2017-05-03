@@ -30,6 +30,7 @@ const eventBus = require('./event-bus')
  *   - `allCollapsed`: Collapse (`true`) or expand (`false`) all annotations
  * - `purlTemplate` A string template for the persistent URL. `{{ slug }}` will
  *   be replaced by the slug of the annotation
+ * - `purlId` Annotation ID of the persistent URL. Should begin with the URL of `annoEndpoint`
  *
  * - `token`: Function or token. The literal token. Don't use this option
  *   without SSL/TLS encryption. Function must be synchronous.

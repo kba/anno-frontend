@@ -23,6 +23,7 @@ const {
  *   colapsing, smaller etc.)
  * - `purlTemplate` A string template for the persistent URL. `{{ slug }}` will
  *   be replaced by the slug of the annotation
+ * - `isPurl` A boolean to highlight the anno as targeted by a purl
  * - `collapseInitially`: Whether the anntotation should be collapsed after
  *   first render
  * - dateFormat: Format of date stamps. Default: `dd.mm.yyyy hh:MM:ss`
@@ -48,6 +49,7 @@ module.exports = {
     props: {
         annotation: {type: Object, required: true},
         purlTemplate: {type: String, required: false},
+        isPurl: {type: Boolean, required: false},
         // Controls whether comment is collapsible or not
         asReply: {type: Boolean, default: false},
         collapseInitially: {type: Boolean, default: false},

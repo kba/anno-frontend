@@ -1,4 +1,9 @@
-<div :id="`${prefix}-${slug}`" :class="`panel panel-default anno-viewer ${highlighted ? 'highlight' : ''}`"
+<div :id="`${prefix}-${slug}`"
+  :class="`panel panel-default
+     anno-viewer
+     ${highlighted ? 'highlight' : ''}
+     ${isPurl ? 'purl' : ''}
+     `"
   v-on:mouseover.prevent="mouseenter"
   v-on:mouseleave.prevent="mouseleave">
 
