@@ -1,5 +1,3 @@
-const config = require('../config')
-
 const quill = require('quill/dist/quill.js')
 require('style-loader!css-loader?minimize=true!quill/dist/quill.snow.css')
 

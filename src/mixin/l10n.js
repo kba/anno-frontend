@@ -1,4 +1,4 @@
-const {langcode, defaultlang, localizations} = require('../config')
+const {langcode, defaultlang, localizations} = require('../../l10n-config.json')
 
 function l10n(lang, text) {
     lang = langcode[lang] ? langcode[lang] : defaultlang;
@@ -15,7 +15,7 @@ function l10n(lang, text) {
  * Localization mixin. Will return the localized string in the currently
  * enabled `language`.
  *
- * Translations are kept in `config.js` in an object
+ * Translations are kept in [`../../l10n-config.json`](./tree/master/l10n-config.json) in an object
  *
  * ```
  * config.localizations = {

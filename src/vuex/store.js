@@ -1,4 +1,4 @@
-const config = require('../config')
+const {defaultLang} = require('../../l10n-config.json')
 const axios = require('axios')
 const Vue = require('vue')
 const Vuex = require('vuex')
@@ -15,7 +15,7 @@ function isExpired(token) { return (token.exp < Date.now() / 1000) }
 module.exports = {
     strict: process.env.NODE_ENV != 'production',
     state: {
-        language: config.defaultLang,
+        language: defaultLang,
         annoEndpoint: 'http://localhost:3000/anno',
         tokenEndpoint: 'http://localhost:3000/auth/token',
         loginEndpoint: 'http://localhost:3000/auth/login?from=',

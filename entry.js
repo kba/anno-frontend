@@ -11,7 +11,7 @@ if (process.env.NODE_ENV !== 'production') {
 
     window._ubhddebug = {
         store: require('./src/vuex/store'),
-        config: require('./src/config'),
+        config: require('./l10n-config.json'),
         api: require('./src/api')({
             token: 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicnQxMjZAdW5pLWhlaWRlbGJlcmcuZGUiLCJzZXJ2aWNlIjoiZGlnbGl0Iiwid3JpdGUiOjEsImV4cCI6MzE1MzYwMDAwfQ.h7WZ_gmWNv-uCjoobLCiHH_voinj8dddnjMBZsmCJ8o'
         })
