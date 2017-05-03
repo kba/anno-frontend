@@ -35,6 +35,9 @@
     </div>
     <div ref="editor"></div>
 
+    <select v-model="rights" class="form-control">
+      <option value="https://creativecommons.org/publicdomain/zero/1.0/">Creative Commons CC0</option>
+      <option value="https://creativecommons.org/licenses/by/4.0/">Creative Commons CC-BY 4.0</option>
     <input readonly v-model="rights" class="form-control" />
   </div>
 </div>
