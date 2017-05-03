@@ -31,7 +31,7 @@ module.exports = {
                     }
                 }
             },
-            placeholder: 'Compose an epic...',
+            placeholder: this.l10n('editor_placeholder'),
             theme: 'snow',
         });
         this.quill.on('text-change', (delta, oldDelta, source) => {
