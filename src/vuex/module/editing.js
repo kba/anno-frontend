@@ -35,41 +35,6 @@ const getters = {
 }
 
 //
-// actions
-//
-
-const actions = {
-
-    // setSvgSelector({commit, state}, {svg, source}) {
-    //     if (!svgSelectorResource.first(state)) {
-    //         commit('ADD_SVG_TARGET', {source})
-    //     }
-    //     commit('SET_SVG_SELECTOR', svg)
-    // },
-
-    // addSimpleTag({commit, state}, v) {
-    //     commit('ADD_TAG_BODY')
-    // },
-
-    // addSemanticTag({commit, state}, v) {
-    //     commit('ADD_SEMTAG_BODY')
-    // },
-
-    // replaceAnnotation({commit, state}, newState) {
-    //     commit('REPLACE_ANNOTATION', newState)
-    // },
-
-    // removeBody({commit, state}, v) {
-    //     commit('REMOVE_BODY', v)
-    // },
-
-    // removeTarget({commit, state}, v) {
-    //     commit('REMOVE_TARGET', v)
-    // },
-
-}
-
-//
 // mutations
 //
 
@@ -84,11 +49,6 @@ const mutations = {
         ensureArray(state, 'body')
         add(state, 'body', semanticTagBody.create(v))
     },
-
-    // ADD_SVG_TARGET(state, target={}) {
-    //     ensureArray(state, 'target')
-    //     add(state, 'target', Object.assign(target, svgSelectorResource.create()))
-    // },
 
     SET_HTML_BODY_VALUE(state, v) {
         if (!textualHtmlBody.first(state))
@@ -155,7 +115,6 @@ const mutations = {
 
 module.exports = {
     state,
-    actions,
     getters,
     mutations,
 }
