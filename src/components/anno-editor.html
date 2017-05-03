@@ -6,13 +6,11 @@
 
   <bootstrap-tab :name="`${prefix}-${editorId}-tab-zones`" :title="l10n('zones')" v-if="targetImage">
     <xrx-vue
-      ref='zone-editor'
+      ref='zoneEditor'
       :width="$store.state.canvasWidth"
       :height="$store.state.canvasHeight"
       :thumb-width="$store.state.thumbWidth"
       :thumb-height="$store.state.thumbHeight"
-      :initial-image="$store.state.targetImage"
-      :initial-svg="$store.getters.svgTarget.selector.value"
       :target-thumbnail="$store.state.targetThumbnail"
       @svg-changed="onSvgChanged"
       />

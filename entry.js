@@ -2,8 +2,8 @@
 window.Vue = require('vue')
 window.Vuex = require('vuex')
 
+window.Vue.config.devtools = true
 if (process.env.NODE_ENV !== 'production') {
-    window.Vue.config.devtools = true
     require('jquery-ui/ui/widgets/resizable')
     require('jquery-ui/ui/widgets/draggable')
     require('bootstrap-webpack!./bootstrap.config.js');
