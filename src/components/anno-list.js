@@ -47,7 +47,6 @@ module.exports = {
         numberOfAnnotations() { return this.$store.getters.numberOfAnnotations },
     },
     methods: {
-        login() { this.$store.dispatch('login') },
         logout() { this.$store.dispatch('logout') },
         create()   { return eventBus.$emit('create', this.targetSource) },
 

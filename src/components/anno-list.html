@@ -1,12 +1,16 @@
 <div class="anno-list">
   <div class="btn-group btn-group-vertical pull-left hidden-print" role="group">
-    <bootstrap-button btn-size="xs" btn-class="warning" @click="logout" elem="a" v-if="isLoggedIn && logoutEndpoint">
+    <bootstrap-button btn-size="xs" btn-class="warning" @click="logout" elem="a"
+      v-if="isLoggedIn && logoutEndpoint">
       {{ l10n('logout') }}
     </bootstrap-button>
-    <bootstrap-button btn-size="xs" @click="login" elem="a" :href="loginEndpoint" v-if="!isLoggedIn && loginEndpoint">
+    <bootstrap-button btn-size="xs" @click="login" elem="a"
+      :href="loginEndpoint"
+      v-if="!isLoggedIn && loginEndpoint">
       {{ l10n('login') }}
     </bootstrap-button>
-    <bootstrap-button btn-class="success" btn-size="xs" @click="create" v-if="$auth('create', targetSource)">
+    <bootstrap-button btn-class="success" btn-size="xs" @click="create"
+      v-if="$auth('create', targetSource)">
       {{ l10n('new') }}
     </bootstrap-button>
   </div>

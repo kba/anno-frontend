@@ -26,6 +26,7 @@ module.exports = {
         targetImage: null,
         targetThumbnail: null,
         token: null,
+        isLoggedIn: false,
         acl: null,
     },
     modules: {
@@ -60,6 +61,14 @@ module.exports = {
 
         EMPTY_ACL(state) {
             state.acl = null
+        },
+
+        LOGIN(state) {
+            state.isLoggedIn = true
+        },
+
+        LOGOUT(state) {
+            state.isLoggedIn = false
         }
 
     },
@@ -72,8 +81,10 @@ module.exports = {
                 if (token) {
                     if (isExpired(token)) {
                         commit('DELETE_TOKEN')
+                        commit('LOGOUT')
                     } else {
                         commit('SET_TOKEN', token)
+                        commit('LOGIN')
                         return resolve()
                     }
                 }
@@ -85,9 +96,11 @@ module.exports = {
                     try {
                         jwtDecode(token)
                         commit('SET_TOKEN', token)
+                        commit('LOGIN')
                         dispatch('fetchList')
                         resolve()
                     } catch (err) {
+                        commit('LOGOUT')
                         reject("NO_TOKEN")
                     }
                 }).catch(reject)
@@ -118,16 +131,10 @@ module.exports = {
             })
         },
 
-        login({state, dispatch}) {
-            dispatch('fetchToken').catch(err => {
-                if (err === "NO_TOKEN")
-                    window.location.replace(state.loginEndpoint)
-            })
-        },
-
         logout({state, commit}) {
             commit('DELETE_TOKEN')
             commit('EMPTY_ACL')
+            commit('LOGOUT')
             if (state.logoutEndpoint) {
                 window.location.replace(state.logoutEndpoint)
             }
