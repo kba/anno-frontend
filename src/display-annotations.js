@@ -86,7 +86,7 @@ module.exports = function displayAnnotations(options={}) {
     //
     const eventListeners = options.events ? options.events : {}
     Object.keys(eventListeners).forEach(event => {
-        console.log(`Binding "${event}" event on`, eventBus, 'to', eventListeners[event])
+        //console.log(`Binding "${event}" event on`, eventBus, 'to', eventListeners[event])
         eventBus.$on(event, (...args) => eventListeners[event](...args))
     })
     delete options.events

@@ -11,6 +11,16 @@
     class="panel-heading"
     @click="collapse('toggle')"
     >
+        <div v-if="svgTarget" style="display: static; right: 0; top: 0; height: 31px; width: 36px; float: right">
+          <xrx-vue
+            :show-toolbar="false"
+            :enable-thumb="false"
+            :initial-image="svgTarget.source"
+            :initial-svg="svgTarget.selector.value"
+            :width="36"
+            :height="36"
+            />
+        </div>
     <h4 class="panel-title">
       <a role="button">
         <span class="glyphicon glyphicon-chevron-right" v-show="collapsed"></span>
@@ -34,16 +44,6 @@
 
 
     <div class="media" style="height: auto;">
-        <div v-if="svgTarget" style="float: right;">
-          <xrx-vue
-            :show-toolbar="false"
-            :enable-thumb="false"
-            :initial-image="svgTarget.source"
-            :initial-svg="svgTarget.selector.value"
-            :width="100"
-            :height="100"
-            />
-        </div>
 
       <div class="media-body">
 
