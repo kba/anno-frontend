@@ -1,18 +1,18 @@
-.anno-sidebar {
-  &.standalone {
+.annoeditor-sidebar {
+  &.annoeditor-sidebar-standalone {
     background: white;
     position: absolute;
     top: 0;
     right: 0;
 
-    &.open {
+    &.annoeditor-sidebar-open {
       width: 30vw;
       border-left:   1px solid black;
       border-bottom: 1px solid black;
       border-top:    1px solid black;
     }
 
-    .anno-sidebar-toggle {
+    .annoeditor-sidebar-toggle {
       float: right;
       padding-left: 0.5em;
       width: 2em;
@@ -25,7 +25,7 @@
     }
   }
 
-  .no-annotations {
+  .annoeditor-sidebar-no-annotations {
     background: #fee;
     & > div {
       width: 50%;
