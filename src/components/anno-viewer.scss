@@ -1,7 +1,20 @@
-.anno-viewer {
+.annoeditor-viewer {
 
-    &.purl {
+    &.annoeditor-purl {
         background: yellow !important;
+    }
+
+    &.annoeditor-highlight > .panel-heading {
+        background: #990000 !important;
+        color: white;
+    }
+
+    .annoeditor-current-version {
+        background: red;
+    }
+
+    .dropdown-menu a {
+        cursor: pointer;
     }
 
     .panel-heading {
@@ -14,18 +27,5 @@
 
     .panel-body {
         padding: 0 5px;
-    }
-
-    .current-version {
-        background: red;
-    }
-
-    .dropdown-menu a {
-        cursor: pointer;
-    }
-
-    &.highlight > .panel-heading {
-        background: #990000 !important;
-        color: white;
     }
 }

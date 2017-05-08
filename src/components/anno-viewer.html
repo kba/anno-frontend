@@ -1,8 +1,8 @@
 <div :id="`${prefix}-${slug}`"
   :class="`panel panel-default
-     anno-viewer
-     ${highlighted ? 'highlight' : ''}
-     ${isPurl ? 'purl' : ''}
+     annoeditor-viewer
+     ${highlighted ? 'annoeditor-highlight' : ''}
+     ${isPurl ? 'annoeditor-purl' : ''}
      `"
   v-on:mouseover.prevent="mouseenter"
   v-on:mouseleave.prevent="mouseleave">
@@ -61,13 +61,13 @@
 
         <div v-if="firstHtmlBody" v-html="firstHtmlBody.value"></div>
 
-        <div class="tags">
+        <div class="annoeditor-tags">
           <span class="label label-default" v-for="tagBody in simpleTagBodies">
             <span class="glyphicon glyphicon-tag"></span> {{ tagBody.value }}
           </span>
         </div>
 
-        <div class="tags">
+        <div class="annoeditor-tags">
           <a :href="semtagBody.id" v-for="semtagBody in semanticTagBodies">
             <span class="label label-primary">
               <span class="fa fa-cube"></span> {{ semtagBody.label }}
@@ -98,10 +98,10 @@
     <div class="btn-toolbar pull-right" role="toolbar" style="margin-top: 10px;">
 
       <div class="btn-group btn-group-xs pull-right" role="group">
-        <bootstrap-button btn-class="default editbut" @click="revise" font-awesome="pencil" v-if="$auth('revise', id)">
+        <bootstrap-button btn-class="default" @click="revise" font-awesome="pencil" v-if="$auth('revise', id)">
           {{ l10n('edit') }}
         </bootstrap-button>
-        <bootstrap-button btn-class="default commentbut" @click="reply" font-awesome="reply" v-if="$auth('create', id)">
+        <bootstrap-button btn-class="default" @click="reply" font-awesome="reply" v-if="$auth('create', id)">
           {{ l10n('comment') }}
         </bootstrap-button>
         <bootstrap-button btn-class="danger" @click="remove" v-if="$auth('remove', id)">
@@ -114,10 +114,10 @@
             {{ l10n('previous') }}
             <span class="caret"></span>
           </button>
-          <ul :class="`${prefix} dropdown-menu pull-right versions`">
+          <ul class="dropdown-menu pull-right annoeditor-versions">
             <li v-for="version in annotation.hasVersion"
               :key="version.id"
-              :class="version.id === id ? 'current-version' : ''"
+              :class="version.id === id ? 'annoeditor-current-version' : ''"
               >
               <a class="small"
                 @click="setToVersion(version)"
