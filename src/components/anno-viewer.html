@@ -68,9 +68,9 @@
         </div>
 
         <div class="annoeditor-tags">
-          <a :href="semtagBody.id" v-for="semtagBody in semanticTagBodies">
+          <a :href="semtagBody.id || semtagBody.source" v-for="semtagBody in semanticTagBodies">
             <span class="label label-primary">
-              <span class="fa fa-cube"></span> {{ semtagBody.label }}
+              <span class="fa fa-cube"></span> {{ semtagBody.value }}
             </span>
           </a>
         </div>
