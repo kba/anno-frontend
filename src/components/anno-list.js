@@ -3,13 +3,15 @@
  *
  * List of [anno-viewer](#anno-viewer) components.
  *
- * #### Props
- *
- * - `collapseInitially`: Whether all annotations should be collapsed or not
- *
  * #### Events
  *
  * - `create`: A new annotation on `targetSource` shall be created
+ *
+ * #### Methods
+ *
+ * ##### `collapseAll(state)`
+ *
+ * - `@param {String} state` Either `show` or `hide`
  *
  */
 const eventBus = require('../event-bus')
@@ -21,15 +23,17 @@ module.exports = {
         require('../mixin/api'),
         require('../mixin/prefix'),
     ],
-    props: {
-        collapseInitially: {type: Boolean, default: false},
-    },
     data() { return {
-        collapsed: this.collapseInitially
+        collapsed: 'hide'
     }},
     template: require('./anno-list.html'),
     style: require('./anno-list.scss'),
     mounted() {
+        if (window.sessionStorage.getItem("annolistCollapseAll") !== null) {
+            this.collapsed = window.sessionStorage.getItem("annolistCollapseAll") === 'hide'
+        }
+        this.$watch(() => this.list, () => this.collapseAll(this.collapsed ? 'hide' : 'show'))
+        this.collapseAll(this.collapsed ? 'hide' : 'show')
         this.sort()
     },
     computed: {
@@ -49,8 +53,9 @@ module.exports = {
         create() { return eventBus.$emit('create', this.targetSource) },
 
         collapseAll(state) {
+            this.collapsed = state === 'hide'
             this.$children.forEach(annoViewer => annoViewer.collapse && annoViewer.collapse(state))
-            this.collapsed = ! this.collapsed
+            window.sessionStorage.setItem('annolistCollapseAll', state)
         },
         sort(...args) {
             this.$store.dispatch('sort', ...args)

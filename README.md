@@ -16,19 +16,17 @@
 * [Components](#components)
 	* [anno-editor](#anno-editor)
 	* [anno-list](#anno-list)
-		* [Props](#props)
 		* [Events](#events-1)
+		* [Methods](#methods)
+			* [`collapseAll(state)`](#collapseallstate)
 	* [anno-viewer](#anno-viewer)
-		* [Props](#props-1)
+		* [Props](#props)
 		* [Events](#events-2)
 	* [bootstrap-button](#bootstrap-button)
 		* [Properties](#properties)
 	* [html-editor](#html-editor)
 	* [semtags-editor](#semtags-editor)
 	* [tags-editor](#tags-editor)
-	* [zone-editor](#zone-editor)
-		* [Props:](#props-2)
-		* [Methods](#methods)
 * [Mixins](#mixins)
 	* [`this.api`](#thisapi)
 	* [`this.$auth(cond, id)`](#thisauthcond-id)
@@ -71,6 +69,9 @@
 - `annotationList`: Options for the list display
   - `sortedBy`:     Sort key: `date`, `datereverse` or `title`
   - `allCollapsed`: Collapse (`true`) or expand (`false`) all annotations
+- `purlTemplate` A string template for the persistent URL. `{{ slug }}` will
+  be replaced by the slug of the annotation
+- `purlId` Annotation ID of the persistent URL. Should begin with the URL of `annoEndpoint`
 - `token`: Function or token. The literal token. Don't use this option
   without SSL/TLS encryption. Function must be synchronous.
 - `tokenEndpoint`: URL of the endpoint providing the JSON Webtoken
@@ -228,10 +229,11 @@ Events:
 <!-- BEGIN-RENDER ./src/components/anno-list.js -->
 ### anno-list
 List of [anno-viewer](#anno-viewer) components.
-#### Props
-- `collapseInitially`: Whether all annotations should be collapsed or not
 #### Events
 - `create`: A new annotation on `targetSource` shall be created
+#### Methods
+##### `collapseAll(state)`
+- `@param {String} state` Either `show` or `hide`
 
 <!-- END-RENDER -->
 
@@ -242,6 +244,9 @@ Show an annotation as a bootstrap panel.
 - **`annotation`**: The annotation this viewer shows
 - `asReply`: Whether the annotation should be displayed as a reply (no
   colapsing, smaller etc.)
+- `purlTemplate` A string template for the persistent URL. `{{ slug }}` will
+  be replaced by the slug of the annotation
+- `isPurl` A boolean to highlight the anno as targeted by a purl
 - `collapseInitially`: Whether the anntotation should be collapsed after
   first render
 - dateFormat: Format of date stamps. Default: `dd.mm.yyyy hh:MM:ss`
@@ -283,21 +288,7 @@ Editor for the simple text-value-only tags of an annotation.
 <!-- END-RENDER -->
 
 <!-- BEGIN-RENDER ./src/components/zone-editor.js -->
-### zone-editor
-Editor for creating zones as SVG on the `targetImage`.
-#### Props:
-- `autoLoad`: Whether the SemToNotes canvas should be initialized
-  immediately after mounting. Defaults to false, since the image can change
-- **`targetImage`**: Image to annotate
-- `targetThumbnail`: Smaller version of the image for navigation, defaults
-  to `targetImage`
-- `canvasHeight`: Height of the canvas. Default: `400`.
-- `canvasWidth`: Width of the canvas. Default: `300`.
-- `thumbHeight`: Height of the navigation thumbnail. Default: `120`.
-- `thumbWidth`: Width of the navigation thumbnail. Default: `120`.
-- `style`: Style to apply to shapes. See semtonotes-utils#applyStyle TODO
-#### Methods
-- `init(cb)`: Initialize the canvasses
+
 
 <!-- END-RENDER -->
 
@@ -327,7 +318,7 @@ Check authorization of user against `$store.state.acl`
 ### `this.l10n(text)`
 Localization mixin. Will return the localized string in the currently
 enabled `language`.
-Translations are kept in `config.js` in an object
+Translations are kept in [`../../l10n-config.json`](./tree/master/l10n-config.json) in an object
 ```
 config.localizations = {
   de: {
