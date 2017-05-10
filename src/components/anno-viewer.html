@@ -24,8 +24,8 @@
         </div>
     <h4 class="panel-title">
       <a role="button">
-        <span class="glyphicon glyphicon-chevron-right" v-show="collapsed"></span>
-        <span class="glyphicon glyphicon-chevron-down" v-show="!collapsed"></span>
+        <span class="glyphicon fa-caret-right" v-show="collapsed"></span>
+        <span class="glyphicon fa-caret-down" v-show="!collapsed"></span>
         {{ annotation.title }}
       </a>
     </h4>
@@ -35,7 +35,7 @@
     aria-expanded="true"
     @click="collapse('toggle')"
     >
-    <span class="small">{{ annotation.title }}</span>
+    <!-- <span class="small">{{ annotation.title }}</span> -->
     <!-- <h5 class="panel-title"> {{ annotation.title }} </h5> -->
   </div>
 
@@ -49,7 +49,7 @@
       <div class="media-body">
 
         <div v-if="annotation.creator">
-          <bootstrap-button btn-size="xs" glyphicon="user">
+          <bootstrap-button btn-size="xs" btnClass="" glyphicon="user">
             {{ annotation.creator }} {{ dateformat(annotation.created || annotation.modified) }}
           </bootstrap-button>
           <bootstrap-button btn-size="xs" glyphicon="link" elem="a"
@@ -58,6 +58,8 @@
             :data-content="purl" 
           />
         </div>
+
+        <h4 class="media-heading" v-if="asReply">{{ annotation.title }}</h5>
 
         <div v-if="firstHtmlBody" v-html="firstHtmlBody.value"></div>
 
@@ -104,9 +106,8 @@
         <bootstrap-button btn-class="default" @click="reply" font-awesome="reply" v-if="$auth('create', id)">
           {{ l10n('comment') }}
         </bootstrap-button>
-        <bootstrap-button btn-class="danger" @click="remove" v-if="$auth('remove', id)">
-          {{ l10n('delete_anno') }}
-        </bootstrap-button>
+        <bootstrap-button btn-class="danger" @click="remove" font-awesome="trash-o" v-if="$auth('remove', id)"
+         :title="l10n('delete_anno')"/>
 
         <br>
         <template v-if="numberOf('hasVersion') > 1">
