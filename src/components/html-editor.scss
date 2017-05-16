@@ -1,0 +1,19 @@
+.annoeditor-html-editor {
+
+    :checked {
+        background: red !important;
+    }
+
+    .btn.active {
+        background-color: #900;
+    }
+
+    .license-label {
+        margin-top: 10px;
+        margin-left: 5px;
+    }
+
+    .ql-editor {
+        min-height: 200px;
+    }
+}

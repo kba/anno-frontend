@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div class="panel panel-default annoeditor-html-editor">
   <div class="panel-heading">
     <input :placeholder="l10n('annofield_title')" v-model="title" class="form-control" type="text" required="true">
   </div>
@@ -35,9 +35,29 @@
     </div>
     <div ref="editor"></div>
 
-    <select v-model="rights" class="form-control">
-      <option value="https://creativecommons.org/publicdomain/zero/1.0/">Creative Commons CC0</option>
-      <option value="https://creativecommons.org/licenses/by/4.0/">Creative Commons CC-BY 4.0</option>
-    <input readonly v-model="rights" class="form-control" />
+    <div class="row">
+      <div class="col-sm-1">
+        <label class="license-label" for="license-select">{{ l10n('License') }}</label>
+      </div>
+      <div class="col-sm-11">
+        <form id="license-select" class="form">
+          <div class="btn-group" data-toggle="buttons">
+            <label
+              data-toggle="popover"
+              data-trigger="hover"
+              data-placement="bottom" 
+              :title="l10n(license.title)"
+              :data-content="l10n(license.desc)"
+              v-for="license in licenseInfo"
+              v-key="rights"
+              :class="{'btn': 1, 'btn-default': 1, 'active': rights == license.url}">
+              <input type="radio" v-model="rights" :value="license.url"/>
+              <img :src="license.img"/>
+            </label>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- <input readonly v-model="rights" class="form-control" /> -->
   </div>
 </div>

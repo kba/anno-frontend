@@ -1,3 +1,4 @@
+const $ = require('jquery')
 const quill = require('quill/dist/quill.js')
 require('style-loader!css-loader?minimize=true!quill/dist/quill.snow.css')
 
@@ -17,6 +18,23 @@ module.exports = {
         require('../mixin/l10n'),
         require('../mixin/prefix'),
     ],
+    data() { return {
+        licenseInfo: [
+            {
+                url: 'https://creativecommons.org/publicdomain/zero/1.0/',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/6/69/CC0_button.svg',
+                title: 'Creative Commons CC0',
+                desc: 'license_cc0_desc',
+            },
+            {
+                url: 'https://creativecommons.org/licenses/by/4.0/',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/1/16/CC-BY_icon.svg',
+                title: 'Creative Commons CC-BY 4.0',
+                desc: 'license_ccby_desc',
+            }
+        ]
+    }},
+    style: require('./html-editor.scss'),
     template: require('./html-editor.html'),
     mounted() {
         this.quill = new quill(this.$refs.editor, {
@@ -38,6 +56,9 @@ module.exports = {
             if (html === '<p><br></p>') html = ''
             this.value = html
         })
+        $('[data-toggle="popover"]', this.$el).popover({
+            container: 'body'
+        });
         eventBus.$on('open-editor', () => this.quill.pasteHTML(this.value))
     },
     computed: {
