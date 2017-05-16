@@ -1,8 +1,9 @@
-<div :class="`
-  anno-sidebar
-  ${standalone ? 'annoeditor-sidebar-standalone' : ''}
-  ${collapsed  ? 'annoeditor-sidebar-collapsed'          : 'annoeditor-sidebar-open'}
-  `">
+<div :class="{
+  'annoeditor-sidebar': true,
+  'annoeditor-sidebar-standalone': standalone,
+  'annoeditor-sidebar-collapsed': collapsed,
+  'annoeditor-sidebar-open': ! collapsed,
+  }">
   <div class="annoeditor-sidebar-toggle" @click="toggle" v-if="standalone">
     <span class="fa fa-toggle-on" v-show="!collapsed"></span>
     <span class="fa fa-toggle-off" v-show="collapsed"></span>

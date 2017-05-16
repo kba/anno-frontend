@@ -1,7 +1,8 @@
 .annoeditor-sidebar {
   &.annoeditor-sidebar-standalone {
+    position: fixed;
+    z-index: 1000;
     background: white;
-    position: absolute;
     top: 0;
     right: 0;
 
