@@ -4,7 +4,7 @@
       v-if="isLoggedIn && logoutEndpoint">
       {{ l10n('logout') }}
     </bootstrap-button>
-    <bootstrap-button btn-size="xs" @click="login" elem="a"
+    <bootstrap-button btn-size="xs" elem="a"
       :href="loginEndpoint"
       v-if="!isLoggedIn && loginEndpoint">
       {{ l10n('login') }}
