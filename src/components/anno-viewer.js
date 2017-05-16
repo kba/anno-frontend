@@ -58,7 +58,7 @@ module.exports = {
     template: require('./anno-viewer.html'),
     style:    require('./anno-viewer.scss'),
     mounted() {
-        console.log(this.svgTarget)
+        // console.log(this.svgTarget)
 
         // Show popover with persistent URL
         $('[data-toggle="popover"]', this.$el).popover(); 
