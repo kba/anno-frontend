@@ -35,9 +35,11 @@ module.exports = {
         eventBus.$on('discard', this.discard)
         eventBus.$on('save', this.save)
         eventBus.$on('open-editor', () => {
-            this.$refs.zoneEditor.loadImage(this.targetImage)
-            this.$refs.zoneEditor.loadSvg(
-                this.$store.getters.svgTarget ? this.$store.getters.svgTarget.selector.value : '')
+            if (this.targetImage) {
+                this.$refs.zoneEditor.loadImage(this.targetImage)
+                this.$refs.zoneEditor.loadSvg(
+                    this.$store.getters.svgTarget ? this.$store.getters.svgTarget.selector.value : '')
+            }
         })
     },
     computed: {
