@@ -50,7 +50,13 @@
 
         <div v-if="annotation.creator">
           <bootstrap-button btn-size="xs" btnClass="" glyphicon="user">
-            {{ annotation.creator }} {{ dateformat(annotation.created || annotation.modified) }}
+            <template v-if="annotation.creator && annotation.creator.displayName">
+              {{ annotation.creator.displayName }}
+            </template>
+            <template v-else>
+            {{ annotation.creator }}
+            </template>
+            {{ dateformat(annotation.created || annotation.modified) }}
           </bootstrap-button>
           <bootstrap-button btn-size="xs" glyphicon="link" elem="a"
             :title="l10n('purl')"
@@ -61,7 +67,7 @@
 
         <h4 class="media-heading" v-if="asReply">{{ annotation.title }}</h5>
 
-        <div v-if="firstHtmlBody" v-html="firstHtmlBody.value"></div>
+        <div v-show="firstHtmlBody" v-html="firstHtmlBody.value"></div>
 
         <div class="annoeditor-tags">
           <span class="label label-default" v-for="tagBody in simpleTagBodies">
