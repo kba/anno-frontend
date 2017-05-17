@@ -42,5 +42,5 @@ module.exports = {
     methods: {
         l10n(text) { return l10n(this.$store.state.language, text) }
     },
-
+    _l10n: l10n,
 }

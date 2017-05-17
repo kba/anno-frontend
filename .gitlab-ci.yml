@@ -1,26 +1,25 @@
 stages:
-  - build
+  # - build
   - test
 
 before_script:
-  - cd htdocs
+  - git clone --depth 1 git@gitlab.ub.uni-heidelberg.de:Webservices/anno-common
+  - cd anno-common ; lerna exec npm link ; cd ..
   - npm install
 
-build:
-  stage: build
-  script:
-    - npm build
-  cache:
-    paths:
-    - htdocs/node_modules/
-    - htdocs/dist/
+# build:
+#   stage: build
+#   script:
+#     - npm build
+#   cache:
+#     paths:
+#     - htdocs/node_modules/
+#     - htdocs/dist/
 
 test:
   stage: test
   script:
-    - cd ..
-    - make -s recreate-db
-    - make integration-test
+    - tap test/*.test.js
   cache:
     paths:
-    - htdocs/node_modules/
+    - node_modules/

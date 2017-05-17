@@ -1,8 +1,8 @@
 var tap = require('tap')
 
 tap.test('basic l10n', (t) => {
-    var config = require('../src/config');
-    var l10n = require('../src/l10n')
+    var config = require('../l10n-config.json');
+    var l10n = require('../src/mixin/l10n.js')._l10n
 
     config.localizations['de']['kicker'] = 'Tischfussball'
     config.localizations['en']['kicker'] = 'Foosball'
