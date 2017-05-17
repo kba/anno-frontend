@@ -1,11 +1,12 @@
 {
   "private": true,
-  "name": "ubhd-anno-client",
+  "name": "anno-frontend",
   "version": "0.0.1",
   "description": "Frontend for UB Heidelberg's annotation service",
   "main": "index.js",
   "scripts": {
-    "test": "tap -Rspec test/*.test.js"
+    "test": "tap -Rspec test/*.test.js",
+    "preinstall": "cd anno-common; npm install; npm run link-all"
   },
   "repository": {
     "type": "git",
@@ -35,7 +36,6 @@
     "vuex": "^2.2.1"
   },
   "devDependencies": {
-    "raw-loader": "^0.5.1",
     "babel-core": "^6.24.1",
     "babel-loader": "^6.4.1",
     "babel-plugin-transform-runtime": "^6.23.0",
@@ -53,8 +53,10 @@
     "node-sass": "^4.5.2",
     "pug": "^2.0.0-rc.1",
     "pug-loader": "^2.3.0",
+    "raw-loader": "^0.5.1",
     "sass-loader": "^6.0.3",
     "style-loader": "^0.13.1",
+    "tap": "^10.3.2",
     "url-loader": "^0.5.8",
     "vue-loader": "^11.3.4",
     "vue-template-compiler": "^2.2.6",

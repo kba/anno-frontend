@@ -1,25 +1,18 @@
+image: node:7
+
 stages:
-  # - build
   - test
 
 before_script:
-  - git clone --depth 1 https://github.com/kba/anno
-  - cd anno ; lerna exec npm link ; cd ..
-  - npm install
-
-# build:
-#   stage: build
-#   script:
-#     - npm build
-#   cache:
-#     paths:
-#     - htdocs/node_modules/
-#     - htdocs/dist/
+  - rm -rf anno-common
+  - git submodule sync --recursive
+  - git submodule update --init --recursive
 
 test:
   stage: test
   script:
-    - tap test/*.test.js
-  cache:
-    paths:
-    - node_modules/
+    - npm install
+    - npm test
+  # cache:
+  #   paths:
+  #   - node_modules/
