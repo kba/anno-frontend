@@ -61,7 +61,7 @@
             {{ annotation.creator.displayName }}
           </template>
           <template v-else>
-            {{ annotation.creator }} {{ dateformat(annotation.created || annotation.modified) }}
+            {{ annotation.creator }}
           </template>
           {{ dateformat(annotation.created || annotation.modified) }}
           <bootstrap-button btn-size="xs" glyphicon="link" elem="a"
