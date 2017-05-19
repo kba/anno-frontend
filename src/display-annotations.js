@@ -59,6 +59,8 @@ module.exports = function displayAnnotations(options={}) {
     const SidebarApp = require('./components/sidebar-app.js')
     SidebarApp.props.standalone.default = ! options.container
 
+    options.metadata = options.metadata || {}
+
     options.targetSource = options.targetSource || window.location.href
 
     //
