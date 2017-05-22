@@ -77,14 +77,14 @@
 
         <div class="annoeditor-tags">
           <span class="label label-default" v-for="tagBody in simpleTagBodies">
-            <span class="glyphicon glyphicon-tag"></span> {{ tagBody.value }}
+            <span class="glyphicon glyphicon-tag"></span> {{ tagBody.value || tagBody.label }}
           </span>
         </div>
 
         <div class="annoeditor-tags">
           <a :href="semtagBody.id || semtagBody.source" v-for="semtagBody in semanticTagBodies">
             <span class="label label-primary">
-              <span class="fa fa-cube"></span> {{ semtagBody.value }}
+              <span class="fa fa-cube"></span> {{ semtagBody.value || semtagBody.label }}
             </span>
           </a>
         </div>

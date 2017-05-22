@@ -22,6 +22,7 @@ const eventBus = require('./event-bus')
  *
  * - `container`: Container element to hold the annotation sidebar/modal
  * - `language`: Language for l10n. Currently: `en`/`eng` or `de`/`deu` (Default)
+ * - `collection`: Anno Collection
  * - `targetSource`: The target of the annotation. Defaults to `window.location.href`
  * - `targetImage`: The image if any, to annotate on this page
  * - `targetThumbnail`: Thumbnail view of the image. Defaults to `options.targetImage`
