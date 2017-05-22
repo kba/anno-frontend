@@ -6,6 +6,8 @@ module.exports = (state) => {
         BASE_URL: state.annoEndpoint,
         HTTP_HEADERS: JSON.stringify({
             Authorization: `Bearer ${state.token}`,
+            'X-Anno-Collection': state.collection,
+            'X-Anno-Context': state.targetSource,
         }),
     })
     // console.log(annoStore)

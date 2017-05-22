@@ -25,7 +25,7 @@ module.exports = {
         targetSource: window.location.href,
         targetImage: null,
         targetThumbnail: null,
-        metadata: {},
+        collection: null,
         token: null,
         isLoggedIn: false,
         acl: null,
