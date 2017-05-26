@@ -11,10 +11,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.1/vue.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.min.js"></script>
 
-  <script src="https://unpkg.com/@kba/anno-webpack@0.0.1-pre1"></script>
-  <script src="https://unpkg.com/semtonotes-client@0.2.3"></script>
-  <script src="https://unpkg.com/semtonotes-utils@0.1.13"></script>
-  <script src="https://unpkg.com/@kba/xrx-vue@0.0.17"></script>
+  <!-- <script src="https://unpkg.com/@kba/anno-webpack"></script> -->
+  <script>
+    window.ANNO_ACL_DATA='[[{}], true]'
+  </script>
+  <script type="text/javascript" src="../../../../../github.com/kba/anno/anno-webpack/dist/anno.min.js"> </script>
+  <script src="https://unpkg.com/semtonotes-client"></script>
+  <script src="https://unpkg.com/semtonotes-utils"></script>
+  <script src="https://unpkg.com/@kba/xrx-vue"></script>
   <!-- <script src="../../dist/xrx-utils.js"></script> -->
   <!-- <script src="../../dist/xrx-vue.js"></script> -->
 
@@ -46,12 +50,13 @@
       container: document.getElementById("anno-anchor"),
 
       annoEndpoint: 'http://serv42.ub.uni-heidelberg.de/anno/anno',
-      tokenEndpoint: 'https://digi.ub.uni-heidelberg.de/cgi-bin/token',
+      tokenEndpoint: 'https://digi.ub.uni-heidelberg.de/cgi-bin/annoToken',
       loginEndpoint: 'https://digi.ub.uni-heidelberg.de/cgi-bin/login',
       logoutEndpoint: null,
       purlTemplate: 'http://digi.ub.uni-heidelberg.de/PROJ/{{ slug }}',
       purlId: 'http://localhost:3000/anno/T5mEcx6uRG-kg9vtnkseeQ',
 
+      collection: 'diglit',
       targetImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png",
       targetThumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/200px-Ghostscript_Tiger.svg.png",
     }, props))
