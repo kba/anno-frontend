@@ -89,7 +89,14 @@ const mutations = {
     },
 
     SET_SEMTAG_PROP(state, {n, prop, value}) {
-        semanticTagBody.all(state)[n][prop] = value
+        if (!Array.isArray(value)) value = [value]
+        const addTo = semanticTagBody.all(state)[n]
+        ensureArray(addTo, prop)
+        addTo[prop].splice(0, addTo[prop].length)
+        value.forEach(v => {
+            console.log(addTo)
+            add(addTo, prop, v)
+        })
     },
 
     ADD_TARGET(state, v) {

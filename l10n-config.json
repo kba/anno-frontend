@@ -47,14 +47,14 @@
             "version_from":        "Version vom",
             "zones":               "Zonen",
 
-            "add_semtag":          "Semantisches Schlagwort hinzuf\u00fcgen",
-            "add_tag":             "Einfaches Schlagwort hinzuf\u00fcgen",
-            "delete_semtag":       "Semantisches Tag l\u00f6schen",
-            "delete_tag":          "Einfaches Tag l\u00f6schen",
-            "semtag":              "Semantisches Schlagwort",
-            "semtags":             "Semantische Schlagworte",
-            "tag":                 "Einfaches Schlagwort",
-            "tags":                "Einfache Schlagworte",
+            "add_semtag":          "Schlagwort hinzuf\u00fcgen",
+            "add_tag":             "Stichwort hinzuf\u00fcgen",
+            "delete_semtag":       "Schlagwort l\u00f6schen",
+            "delete_tag":          "Stichwort l\u00f6schen",
+            "semtag":              "Schlagwort",
+            "semtags":             "Schlagworte",
+            "tag":                 "Stichwort",
+            "tags":                "Stichworte",
 
             "delete_anno":         "L\u00f6schen",
             "confirm_delete":      "Sind sie sicher dass Sie die Annotation l\u00f6schen wollen?",
@@ -64,6 +64,9 @@
             "annoeditor":          "Annotations-Editor",
 
             "preview":             "Vorschau",
+
+            "http://purl.org/dc/terms/isPartOf": "ist Teil von",
+            "http://schema.org/relatedTo": "verkn\u00fcpft mit",
 
             "fmt_bold":        "Fett",
             "fmt_size":        "Schriftgr\u00f6\u00dfe",
@@ -128,6 +131,9 @@
             "unsaved":             "Unsaved",
             "discard":             "Discard",
             "annoeditor":          "Annotation editor",
+
+            "http://purl.org/dc/terms/isPartOf": "is part of",
+            "http://schema.org/relatedTo": "related to",
 
             "preview":             "Preview",
 
