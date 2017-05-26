@@ -23,6 +23,7 @@ module.exports = {
     ],
     props: {
         editorId: {type: String, default: 'anno-editor'},
+        enableTabTags: {type: Boolean, default: false},
     },
     template: require('./anno-editor.html'),
     style: require('./anno-editor.css'),

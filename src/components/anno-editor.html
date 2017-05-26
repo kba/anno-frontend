@@ -17,7 +17,7 @@
       />
   </bootstrap-tab>
 
-  <bootstrap-tab :name="`${prefix}-${editorId}-tab-tags`" :title="l10n('tags')">
+  <bootstrap-tab :name="`${prefix}-${editorId}-tab-tags`" :title="l10n('tags')" v-if="enableTabTags">
     <tags-editor/>
   </bootstrap-tab>
 
