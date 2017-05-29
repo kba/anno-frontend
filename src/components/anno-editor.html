@@ -7,6 +7,7 @@
   <bootstrap-tab :name="`${prefix}-${editorId}-tab-zones`" :title="l10n('zones')" v-if="targetImage">
     <xrx-vue
       ref='zoneEditor'
+      class="panel panel-default"
       :width="$store.state.canvasWidth"
       :height="$store.state.canvasHeight"
       :grouped="false"

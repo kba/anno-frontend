@@ -27,6 +27,16 @@
         .panel-title {
             font-size: 1em;
         }
+
+        .thumbnail {
+          display: static;
+          right: 0;
+          top: 0;
+          height: 31px;
+          width: 36px;
+          float: right;
+          border: none !important;
+        }
     }
 
     .panel-body {
