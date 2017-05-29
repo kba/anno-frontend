@@ -11,8 +11,9 @@
     class="panel-heading"
     @click="collapse('toggle')"
     >
-        <div v-if="svgTarget" style="height: 31px; width: 36px" class="thumbnail">
+        <div v-if="svgTarget" class="annoeditor-thumbnail-wrapper">
           <xrx-vue
+            class="annoeditor-thumbnail"
             initial-mode="Disabled"
             :show-toolbar="false"
             :enable-thumb="false"

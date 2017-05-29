@@ -28,14 +28,19 @@
             font-size: 1em;
         }
 
-        .thumbnail {
+        .annoeditor-thumbnail-wrapper {
           display: static;
           right: 0;
           top: 0;
-          height: 31px;
+          height: 36px;
           width: 36px;
           float: right;
           border: none !important;
+          padding: 0;
+          background: white;
+
+          .annoeditor-thumbnail {
+          }
         }
     }
 
