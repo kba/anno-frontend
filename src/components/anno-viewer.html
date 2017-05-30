@@ -77,6 +77,18 @@
 
         <div v-if="firstHtmlBody" v-html="firstHtmlBody.value"></div>
 
+        <template v-if="relationLinkBodies && relationLinkBodies.length > 0">
+          <h5><span class="fa fa-link">&nbsp;</span>{{ l10n('relationlinks') }}</h5>
+          <ul>
+            <li v-for="relationlinkBody in relationLinkBodies">
+              <a :href="relationlinkBody.id || relationlinkBody.source">
+                <!-- <span class="glyphicon glyphicon-tag"></span> -->
+                {{ relationlinkBody.value || relationlinkBody.label }}
+              </a>
+            </li>
+          </ul>
+        </template>
+
         <div class="annoeditor-tags">
           <span class="label label-default" v-for="tagBody in simpleTagBodies">
             <span class="glyphicon glyphicon-tag"></span> {{ tagBody.value || tagBody.label }}
@@ -86,7 +98,7 @@
         <div class="annoeditor-tags">
           <a :href="semtagBody.id || semtagBody.source" v-for="semtagBody in semanticTagBodies">
             <span class="label label-primary">
-              <span class="fa fa-cube"></span> {{ semtagBody.value || semtagBody.label }}
+              <span class="glyphicon glyphicon-tag"></span> {{ semtagBody.value || semtagBody.label }}
             </span>
           </a>
         </div>
@@ -106,6 +118,7 @@
           <!-- </div> -->
 
       </div>
+
     </div>
 
     <!-- navigation -->

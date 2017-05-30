@@ -5,6 +5,7 @@ const {
     numberOf,
 } = require('@kba/anno-util')
 const {
+    relationLinkBody,
     textualHtmlBody,
     simpleTagBody,
     semanticTagBody,
@@ -70,10 +71,11 @@ module.exports = {
         })
     },
     computed: {
-        firstHtmlBody()     { return textualHtmlBody.first(this.annotation) },
-        simpleTagBodies()   { return simpleTagBody.all(this.annotation) },
-        semanticTagBodies() { return semanticTagBody.all(this.annotation) },
-        svgTarget()         { return svgSelectorResource.first(this.annotation) },
+        firstHtmlBody()      { return textualHtmlBody.first(this.annotation) },
+        simpleTagBodies()    { return simpleTagBody.all(this.annotation) },
+        semanticTagBodies()  { return semanticTagBody.all(this.annotation) },
+        relationLinkBodies() { return relationLinkBody.all(this.annotation) },
+        svgTarget()          { return svgSelectorResource.first(this.annotation) },
         id() { return this.annotation.id },
         purl() { return this.purlTemplate 
                 ? this.purlTemplate.replace('{{ slug }}', this.id.replace(/.*\//, ''))
