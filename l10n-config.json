@@ -9,12 +9,11 @@
     "localizations": {
 
         "de":                      {
-            "annofield_link":      "Link (URL)",
-            "annofield_linktitle": "Link-Titel",
             "annofield_title":     "Titel (Pflichtfeld)",
             "cancel":              "Abbrechen",
             "close":               "Schließen",
             "close_all":           "Alle schließen",
+            "comment_tab":         "Kommentar",
             "comment":             "Kommentieren",
             "comments":            "Kommentare",
             "commenttarget":       "Kommentar zu",
@@ -28,7 +27,6 @@
             "license_ccby_desc":   "Annotation kann frei genutzt werden, Sie müssen als Urheberin/Urheber genannt werden.",
             "login":               "Anmelden",
             "logout":              "Abmelden",
-            "metadata":            "Metadaten",
             "new":                 "Neue Annotation",
             "no_annotations_yet":  "Noch keine Annotationen",
             "open_all":            "Alle öffnen",
@@ -47,12 +45,25 @@
             "version_from":        "Version vom",
             "zones":               "Zonen",
 
+            "add_relationlink":          "Link hinzuf\u00fcgen",
+            "delete_relationlink":       "Link l\u00f6schen",
+            "relationlink":              "Link",
+            "relationlinks":             "Links",
+            "relationlink_url":          "Link (URL)",
+            "relationlink_title":        "Link-Titel",
+
+            "add_relationlink":          "Add Link",
+            "delete_relationlink":       "Delete Link",
+            "relationlink":              "Link",
+            "relationlinks":             "Links",
+
             "add_semtag":          "Schlagwort hinzuf\u00fcgen",
-            "add_tag":             "Stichwort hinzuf\u00fcgen",
             "delete_semtag":       "Schlagwort l\u00f6schen",
-            "delete_tag":          "Stichwort l\u00f6schen",
             "semtag":              "Schlagwort",
             "semtags":             "Schlagworte",
+
+            "add_tag":             "Stichwort hinzuf\u00fcgen",
+            "delete_tag":          "Stichwort l\u00f6schen",
             "tag":                 "Stichwort",
             "tags":                "Stichworte",
 
@@ -78,13 +89,12 @@
         },
 
         "en":                      {
-            "annofield_link":      "Link (URL)",
-            "annofield_linktitle": "Link title",
             "annofield_title":     "Title (required)",
             "cancel":              "Cancel",
             "close":               "Close",
             "close_all":           "Close all",
             "comment":             "Comment",
+            "comment_tab":         "Comment",
             "comments":            "Comments",
             "commenttarget":       "Comment on",
             "edit":                "Edit",
@@ -96,8 +106,6 @@
             "license":             "Annotation is published under CC0 license (Public Domain)",
             "license_cc0_desc":    "Your annotation will be released to the public domain",
             "license_ccby_desc":   "Annotation may be reused freely but must be cited",
-            "license_comment":     "Comment is published under CC0 license (Public Domain)",
-            "metadata":            "Metadata",
             "new":                 "New Annotation",
             "no_annotations_yet":  "No Annotations yet",
             "open_all":            "Open all",
@@ -117,13 +125,21 @@
             "zones":               "Zones",
 
             "add_semtag":          "Add Semantic Tag",
-            "add_tag":             "Add Simple Tag",
             "delete_semtag":       "Delete Semantic Tag",
-            "delete_tag":          "Delete Simple Tag",
             "semtag":              "Semantic Tag",
             "semtags":             "Semantic Tags",
+
+            "add_relationlink":          "Add Link",
+            "delete_relationlink":       "Delete Link",
+            "relationlink":              "Link",
+            "relationlinks":             "Links",
+            "relationlink_url":          "Link (URL)",
+            "relationlink_title":        "Link title",
+
             "tag":                 "Simple Tag",
             "tags":                "Simple Tags",
+            "add_tag":             "Add Simple Tag",
+            "delete_tag":          "Delete Simple Tag",
 
             "delete_anno":         "Delete",
             "confirm_delete":      "Are you sure you want to delete this annotation?",
