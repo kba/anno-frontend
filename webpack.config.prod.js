@@ -16,6 +16,7 @@ module.exports = {
         'axios': 'axios',
         'semtonotes-utils': 'XrxUtils',
         '@kba/anno-store': 'Anno.Store',
+        '@kba/anno-queries': 'Anno.Queries',
         '@kba/anno-store-http': 'Anno.HttpStore',
         '@kba/anno-errors': 'Anno.Errors',
         '@kba/xrx-vue': 'XrxVue',
@@ -37,7 +38,6 @@ module.exports = {
                 test: /components\/.*?\.s?css$/,
                 loader: "style-loader!css-loader?sourcemap=true!sass-loader?sourcemap-=true"
             },
-            // {test: /\.css$/i, loader: "style-loader!css-loader"},
         ]
     },
     plugins: [
