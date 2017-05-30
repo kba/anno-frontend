@@ -52,11 +52,6 @@
             "relationlink_url":          "Link (URL)",
             "relationlink_title":        "Link-Titel",
 
-            "add_relationlink":          "Add Link",
-            "delete_relationlink":       "Delete Link",
-            "relationlink":              "Link",
-            "relationlinks":             "Links",
-
             "add_semtag":          "Schlagwort hinzuf\u00fcgen",
             "delete_semtag":       "Schlagwort l\u00f6schen",
             "semtag":              "Schlagwort",
