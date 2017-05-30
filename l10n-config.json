@@ -72,7 +72,7 @@
             "preview":             "Vorschau",
 
             "http://purl.org/dc/terms/isPartOf": "ist Teil von",
-            "http://schema.org/relatedTo": "verkn\u00fcpft mit",
+            "http://www.w3.org/2000/01/rdf-schema#seeAlso": "siehe auch",
 
             "fmt_bold":        "Fett",
             "fmt_size":        "Schriftgr\u00f6\u00dfe",
@@ -144,7 +144,7 @@
             "annoeditor":          "Annotation editor",
 
             "http://purl.org/dc/terms/isPartOf": "is part of",
-            "http://schema.org/relatedTo": "related to",
+            "http://www.w3.org/2000/01/rdf-schema#seeAlso": "see also",
 
             "preview":             "Preview",
 

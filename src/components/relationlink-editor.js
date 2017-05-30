@@ -15,7 +15,7 @@ module.exports = {
     style:    require('./relationlink-editor.css'),
     props: {
         relations: {type: Array, default() { return [
-            'http://schema.org/relatedTo',
+            'http://www.w3.org/2000/01/rdf-schema#seeAlso',
             'http://purl.org/dc/terms/isPartOf',
             'http://purl.org/vra/basedOn',
             'http://purl.org/vra/cartoonFor',
