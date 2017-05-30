@@ -76,9 +76,7 @@ module.exports = {
             return Array.isArray(maybeArray) && maybeArray.includes(val)
         },
         onSelectPurpose(n, event) {
-            const prop = 'purpose'
-            const value = ['classifying', event.target.value]
-            this.$store.commit("SET_RELATIONLINK_PROP", {n, prop, value})
+            this.$store.commit("SET_RELATIONLINK_PROP", {n, prop: 'predicate', value: event.target.value})
         },
     }
 }
