@@ -1,6 +1,6 @@
 <bootstrap-tabs class="panel-body" ref='tablist'>
 
-  <bootstrap-tab :name="`${prefix}-${editorId}-tab-metadata`" :title="l10n('metadata')" :active="true">
+  <bootstrap-tab :name="`${prefix}-${editorId}-tab-comment`" :title="l10n('comment_tab')" :active="true">
     <html-editor editor-id="${prefix}-${editorId}-html-editor" />
   </bootstrap-tab>
 
@@ -24,6 +24,14 @@
 
   <bootstrap-tab :name="`${prefix}-${editorId}-tab-semtags`" :title="l10n('semtags')">
     <semtags-editor/>
+  </bootstrap-tab>
+
+  <bootstrap-tab :name="`${prefix}-${editorId}-tab-links`" :title="l10n('relationlinks')">
+    <relationlink-editor
+      enable-field-url
+      enable-field-label
+      enable-field-relation
+      />
   </bootstrap-tab>
 
   <bootstrap-tab :name="`${prefix}-${editorId}-tab-preview`" :title="l10n('Preview')">

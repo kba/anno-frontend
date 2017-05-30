@@ -1,0 +1,51 @@
+<div class="panel panel-default annoeditor-relationlink-editor">
+  <div class="panel-heading">
+    {{ l10n('relationlinks') }}
+  </div>
+  <div class="panel-body">
+      <div class="row" v-for="(body, bodyIndex) in relationLinkBodies">
+        <div class="col-md-3">
+          <input 
+            :data-body-index="bodyIndex"
+            required
+            autocomplete
+            type="url"
+            class="form-control relationlink-source col-md-4"
+            v-model="body.source"
+            :placeholder="l10n('relationlink_url')"
+          />
+        </div>
+        <div class="col-md-3">
+          <input
+            :data-body-index="bodyIndex"
+            required
+            autocomplete
+            type="text"
+            class="form-control relationlink-value"
+            v-model="body.value"
+            :placeholder="l10n('relationlink_title')"
+          />
+        </div>
+        <div class="col-md-3">
+          <select class="form-control" @change="onSelectPurpose(bodyIndex, $event)">
+            <option v-for="rel in relations" :value="rel" :selected="body.predicate === rel">{{ l10n(rel) }}</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <bootstrap-button
+            btn-class="danger"
+            font-awesome="remove"
+            @click="removeBody(body)">
+            {{ l10n('delete_relationlink') }}
+          </bootstrap-button>
+        </div>
+    </div>
+    <bootstrap-button 
+      btn-class="success"
+      font-awesome="plus"
+      @click="addRelationLink"
+      >
+      {{ l10n('add_relationlink') }}
+    </bootstrap-button>
+  </div>
+</div>

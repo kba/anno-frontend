@@ -10,12 +10,13 @@ const component = {
     'anno-viewer':       require('./anno-viewer'),
 
     // editing
-    'anno-editor-modal': require('./anno-editor-modal'),
-    'anno-editor':       require('./anno-editor'),
-    'html-editor':       require('./html-editor'),
-    'semtags-editor':    require('./semtags-editor'),
-    'tags-editor':       require('./tags-editor'),
-    'xrx-vue':           require('@kba/xrx-vue').XrxVue,
+    'anno-editor-modal':   require('./anno-editor-modal'),
+    'anno-editor':         require('./anno-editor'),
+    'html-editor':         require('./html-editor'),
+    'semtags-editor':      require('./semtags-editor'),
+    'relationlink-editor': require('./relationlink-editor'),
+    'tags-editor':         require('./tags-editor'),
+    'xrx-vue':             require('@kba/xrx-vue').XrxVue,
 
     // apps
     'sidebar-app':       require('./sidebar-app')

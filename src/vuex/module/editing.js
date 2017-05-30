@@ -3,10 +3,11 @@ const {
     ensureArray, add, remove,
 } = require('@kba/anno-util')
 const {
-    textualHtmlBody,
-    simpleTagBody,
+    relationLinkBody,
     semanticTagBody,
-    svgSelectorResource
+    simpleTagBody,
+    svgSelectorResource,
+    textualHtmlBody,
 } = require('@kba/anno-queries')
 
 function initialState() {return {
@@ -28,10 +29,11 @@ const state = initialState()
 //
 
 const getters = {
-    firstHtmlBody(a)     { return textualHtmlBody.first(a)     },
-    simpleTagBodies(a)   { return simpleTagBody.all(a)         },
-    semanticTagBodies(a) { return semanticTagBody.all(a)       },
-    svgTarget(a)         { return svgSelectorResource.first(a) },
+    firstHtmlBody(a)      { return textualHtmlBody.first(a)     },
+    simpleTagBodies(a)    { return simpleTagBody.all(a)         },
+    semanticTagBodies(a)  { return semanticTagBody.all(a)       },
+    relationLinkBodies(a) { return relationLinkBody.all(a)    },
+    svgTarget(a)          { return svgSelectorResource.first(a) },
 }
 
 //
@@ -45,10 +47,6 @@ const mutations = {
         add(state, 'body', simpleTagBody.create(v))
     },
 
-    ADD_SEMTAG_BODY(state, v) {
-        ensureArray(state, 'body')
-        add(state, 'body', semanticTagBody.create(v))
-    },
 
     SET_HTML_BODY_VALUE(state, v) {
         if (!textualHtmlBody.first(state))
@@ -88,17 +86,6 @@ const mutations = {
         })
     },
 
-    SET_SEMTAG_PROP(state, {n, prop, value}) {
-        if (!Array.isArray(value)) value = [value]
-        const addTo = semanticTagBody.all(state)[n]
-        ensureArray(addTo, prop)
-        addTo[prop].splice(0, addTo[prop].length)
-        value.forEach(v => {
-            console.log(addTo)
-            add(addTo, prop, v)
-        })
-    },
-
     ADD_TARGET(state, v) {
         ensureArray(state, 'target')
         add(state, 'target', v)
@@ -116,6 +103,40 @@ const mutations = {
     ADD_MOTIVATION(state, v) {
         ensureArray(state, 'motivation')
         add(state, 'motivation', v)
+    },
+
+
+
+    ADD_RELATIONLINK(state, v) {
+        ensureArray(state, 'body')
+        add(state, 'body', relationLinkBody.create(v))
+    },
+
+    SET_RELATIONLINK_PROP(state, {n, prop, value}) {
+        if (!Array.isArray(value)) value = [value]
+        const addTo = relationLinkBody.all(state)[n]
+        ensureArray(addTo, prop)
+        addTo[prop].splice(0, addTo[prop].length)
+        value.forEach(v => {
+            console.log(addTo)
+            add(addTo, prop, v)
+        })
+    },
+
+    ADD_SEMTAG_BODY(state, v) {
+        ensureArray(state, 'body')
+        add(state, 'body', semanticTagBody.create(v))
+    },
+
+    SET_SEMTAG_PROP(state, {n, prop, value}) {
+        if (!Array.isArray(value)) value = [value]
+        const addTo = semanticTagBody.all(state)[n]
+        ensureArray(addTo, prop)
+        addTo[prop].splice(0, addTo[prop].length)
+        value.forEach(v => {
+            console.log(addTo)
+            add(addTo, prop, v)
+        })
     },
 
 }
