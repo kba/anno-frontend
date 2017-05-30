@@ -10,10 +10,12 @@
       class="panel panel-default"
       :width="$store.state.canvasWidth"
       :height="$store.state.canvasHeight"
-      :grouped="false"
       :thumb-width="$store.state.thumbWidth"
       :thumb-height="$store.state.thumbHeight"
       :target-thumbnail="$store.state.targetThumbnail"
+      :grouped="false"
+
+      :show-toolbar-file="false"
       @svg-changed="onSvgChanged"
       />
   </bootstrap-tab>
