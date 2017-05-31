@@ -19,7 +19,7 @@ module.exports = {
         annoEndpoint: 'http://localhost:3000/anno',
         tokenEndpoint: 'http://localhost:3000/auth/token',
         loginEndpoint: 'http://localhost:3000/auth/login?from=',
-        logoutEndpoint: 'http://localhost:3000/auth/logout',
+        logoutEndpoint: null,
         purlTemplate: null,
         purlId: null,
         targetSource: window.location.href,
@@ -29,6 +29,8 @@ module.exports = {
         token: null,
         isLoggedIn: false,
         acl: null,
+
+        enableLogoutButton: true,
     },
     modules: {
         editing,
@@ -61,7 +63,7 @@ module.exports = {
         },
 
         EMPTY_ACL(state) {
-            state.acl = null
+            state.acl = {}
         },
 
         LOGIN(state) {
@@ -101,6 +103,7 @@ module.exports = {
                         dispatch('fetchList')
                         resolve()
                     } catch (err) {
+                        commit('DELETE_TOKEN')
                         commit('LOGOUT')
                         reject("NO_TOKEN")
                     }
@@ -112,14 +115,19 @@ module.exports = {
             return new Promise((resolve, reject) => {
                 console.log("ACL check")
                 apiFactory(state).aclCheck(getters.allIds, (err, perms) => {
-                    if (err) return reject(err)
-                    commit('CHANGE_ACL', perms)
-                    resolve()
+                    if (err) {
+                        reject(err)
+                    } else {
+                        commit('CHANGE_ACL', perms)
+                        resolve()
+                    }
+                    eventBus.$emit('fetchedPermissions')
                 })
             })
         },
 
         fetchList({state, commit, dispatch}) {
+            commit('EMPTY_ACL')
             return new Promise((resolve, reject) => {
                 const query = {'$target': state.targetSource}
                 console.log("Search", query)
@@ -133,12 +141,12 @@ module.exports = {
         },
 
         logout({state, commit}) {
-            commit('DELETE_TOKEN')
-            commit('EMPTY_ACL')
+            // commit('DELETE_TOKEN')
             commit('LOGOUT')
-            if (state.logoutEndpoint) {
-                window.location.replace(state.logoutEndpoint)
-            }
+            // commit('EMPTY_ACL')
+            // if (state.logoutEndpoint) {
+            //     window.location.replace(state.logoutEndpoint)
+            // }
         },
 
     },

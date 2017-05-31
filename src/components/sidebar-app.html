@@ -14,7 +14,9 @@
     <!-- <span class="fa fa-comments"></span> -->
     <!-- <span class="fa fa-toggle-off" v-show="collapsed" @click="toggle"></span> -->
     <!-- {{ l10n('Annotations') }} -->
-    <anno-list/>
+    <anno-list
+      ref="annoList"
+      />
     <div class="annoeditor-sidebar-no-annotations" v-if="numberOfAnnotations === 0">
       <div>
         {{ l10n('no_annotations_yet') }}

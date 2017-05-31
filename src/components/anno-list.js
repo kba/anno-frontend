@@ -37,21 +37,25 @@ module.exports = {
         this.collapseAll(this.collapsed ? 'hide' : 'show')
         $('[data-toggle="popover"]', this.$el).popover({container: 'body'});
         this.sort()
+        eventBus.$on('fetchedPermissions', () => this.$forceUpdate())
     },
     computed: {
         sortedBy() { return this.$store.state.annotationList.sortedBy },
         list() { return this.$store.state.annotationList.list },
+
         targetSource() { return this.$store.state.targetSource },
         token() { return this.$store.state.token },
         purlTemplate() { return this.$store.state.purlTemplate },
         purlId() { return this.$store.state.purlId },
+        numberOfAnnotations() { return this.$store.getters.numberOfAnnotations },
+
         isLoggedIn() { return this.$store.state.isLoggedIn },
+        enableLogoutButton() { return this.$store.state.enableLogoutButton },
         logoutEndpoint() { return this.$store.state.logoutEndpoint },
         loginEndpoint() { return this.$store.state.loginEndpoint },
-        numberOfAnnotations() { return this.$store.getters.numberOfAnnotations },
     },
     methods: {
-        logout() { this.$store.dispatch('logout') },
+        logout() { console.log("YAY dispatch logout"); this.$store.dispatch('logout') },
         create() { return eventBus.$emit('create', this.targetSource) },
 
         collapseAll(state) {
