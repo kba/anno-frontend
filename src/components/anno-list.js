@@ -37,7 +37,7 @@ module.exports = {
         this.collapseAll(this.collapsed ? 'hide' : 'show')
         $('[data-toggle="popover"]', this.$el).popover({container: 'body'});
         this.sort()
-        eventBus.$on('fetchedPermissions', () => this.$forceUpdate())
+        eventBus.$on('updatedPermissions', () => this.$forceUpdate())
     },
     computed: {
         sortedBy() { return this.$store.state.annotationList.sortedBy },

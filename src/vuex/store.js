@@ -50,6 +50,12 @@ module.exports = {
         CHANGE_ACL(state, rules) {
             state.acl = state.acl || {}
             Object.assign(state.acl, rules)
+            eventBus.$emit('updatedPermissions')
+        },
+
+        EMPTY_ACL(state) {
+            state.acl = {}
+            eventBus.$emit('updatedPermissions')
         },
 
         SET_TOKEN(state, token) {
@@ -60,10 +66,6 @@ module.exports = {
         DELETE_TOKEN(state, token) {
             state.token = null
             window.localStorage.removeItem('anno-token');
-        },
-
-        EMPTY_ACL(state) {
-            state.acl = {}
         },
 
         LOGIN(state) {
@@ -116,18 +118,17 @@ module.exports = {
                 console.log("ACL check")
                 apiFactory(state).aclCheck(getters.allIds, (err, perms) => {
                     if (err) {
+                        commit('EMPTY_ACL')
                         reject(err)
                     } else {
                         commit('CHANGE_ACL', perms)
                         resolve()
                     }
-                    eventBus.$emit('fetchedPermissions')
                 })
             })
         },
 
         fetchList({state, commit, dispatch}) {
-            commit('EMPTY_ACL')
             return new Promise((resolve, reject) => {
                 const query = {'$target': state.targetSource}
                 console.log("Search", query)
@@ -141,9 +142,9 @@ module.exports = {
         },
 
         logout({state, commit}) {
-            // commit('DELETE_TOKEN')
+            commit('DELETE_TOKEN')
+            commit('EMPTY_ACL')
             commit('LOGOUT')
-            // commit('EMPTY_ACL')
             // if (state.logoutEndpoint) {
             //     window.location.replace(state.logoutEndpoint)
             // }
