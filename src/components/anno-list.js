@@ -15,6 +15,7 @@
  *
  */
 const eventBus = require('../event-bus')
+const $ = require('jquery')
 
 module.exports = {
     mixins: [
@@ -34,6 +35,7 @@ module.exports = {
         }
         this.$watch(() => this.list, () => this.collapseAll(this.collapsed ? 'hide' : 'show'))
         this.collapseAll(this.collapsed ? 'hide' : 'show')
+        $('[data-toggle="popover"]', this.$el).popover({container: 'body'});
         this.sort()
     },
     computed: {

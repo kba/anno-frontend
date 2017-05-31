@@ -57,7 +57,7 @@ module.exports = {
             this.value = html
         })
         $('[data-toggle="popover"]', this.$el).popover({
-            container: 'body'
+            container: '.modal'
         });
         eventBus.$on('open-editor', () => this.quill.pasteHTML(this.value))
     },
