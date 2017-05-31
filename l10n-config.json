@@ -69,7 +69,7 @@
             "discard":             "Verwerfen",
             "annoeditor":          "Annotations-Editor",
 
-            "preview":             "Vorschau",
+            "Preview":             "Vorschau",
 
             "http://purl.org/dc/terms/isPartOf": "ist Teil von",
             "http://www.w3.org/2000/01/rdf-schema#seeAlso": "siehe auch",
