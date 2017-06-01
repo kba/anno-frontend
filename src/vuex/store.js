@@ -68,8 +68,8 @@ module.exports = {
             window.localStorage.removeItem('anno-token');
         },
 
-        LOGIN(state) {
-            state.isLoggedIn = true
+        LOGIN(state, user) {
+            state.isLoggedIn = user
         },
 
         LOGOUT(state) {
@@ -88,8 +88,9 @@ module.exports = {
                         commit('DELETE_TOKEN')
                         commit('LOGOUT')
                     } else {
+                        const {sub} = jwtDecode(token)
                         commit('SET_TOKEN', token)
-                        commit('LOGIN')
+                        commit('LOGIN', sub)
                         return resolve()
                     }
                 }
@@ -99,9 +100,9 @@ module.exports = {
                 }).then(resp => {
                     const token = resp.data
                     try {
-                        jwtDecode(token)
+                        const {sub} = jwtDecode(token)
                         commit('SET_TOKEN', token)
-                        commit('LOGIN')
+                        commit('LOGIN', sub)
                         dispatch('fetchList')
                         resolve()
                     } catch (err) {
