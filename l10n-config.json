@@ -9,7 +9,7 @@
     "localizations": {
 
         "de":                      {
-            "msg_join_short":      "M\u00f6chten Sie annotieren?",
+            "msg_join_short":      "M\u00f6chten Sie kommentieren?",
             "msg_join_long":       "<p>Wenn Sie einen Titel aus unserem Verlagsprogramm kommentieren möchten, müssen Sie sich in einem ersten Schritt <a href='http://digi.ub.uni-heidelberg.de/cgi-bin/login'>anmelden<a/>.</p> <p>Bitte <a href='mailto:Effinger@ub.uni-heidelberg.de?Subject=Freischaltung%20Annotation'>teilen Sie uns hierzu mit</a>, in welchem Fachbereich Sie forschen, damit wir Ihr wissenschaftliches Interesse ausreichend einschätzen und Sie anschließend freischalten können.</p> <p>Nach Ihrer Freischaltung können Sie sich anmelden und dann Kommentare über einen Editor einzugeben. Sie haben die Möglichkeit, Ihre Kommentare beliebig oft upzudaten. In solchen Fällen bleiben die Versionierungen allerdings erhalten, sie können nicht mehr gelöscht werden. Sie haben zudem die Möglichkeit, Kommentare anderer Personen zu kommentieren.</p> <p>Eine Moderation der Annotationen und Kommentare seitens des Verlags nicht.</p>",
             "annofield_title":     "Titel (Pflichtfeld)",
             "cancel":              "Abbrechen",
