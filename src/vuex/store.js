@@ -16,9 +16,9 @@ module.exports = {
     strict: process.env.NODE_ENV != 'production',
     state: {
         language: defaultLang,
-        annoEndpoint: 'http://localhost:3000/anno',
-        tokenEndpoint: 'http://localhost:3000/auth/token',
-        loginEndpoint: 'http://localhost:3000/auth/login?from=',
+        annoEndpoint: null,
+        tokenEndpoint: null,
+        loginEndpoint: null,
         logoutEndpoint: null,
         purlTemplate: null,
         purlId: null,
