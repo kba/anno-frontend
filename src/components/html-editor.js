@@ -22,13 +22,13 @@ module.exports = {
         licenseInfo: [
             {
                 url: 'https://creativecommons.org/publicdomain/zero/1.0/',
-                img: 'https://upload.wikimedia.org/wikipedia/commons/6/69/CC0_button.svg',
+                img: require('../../img/CC0_button.svg'),
                 title: 'Creative Commons CC0',
                 desc: 'license_cc0_desc',
             },
             {
                 url: 'https://creativecommons.org/licenses/by/4.0/',
-                img: 'https://upload.wikimedia.org/wikipedia/commons/1/16/CC-BY_icon.svg',
+                img: require('../../img/CC-BY_icon.svg'),
                 title: 'Creative Commons CC-BY 4.0',
                 desc: 'license_ccby_desc',
             }

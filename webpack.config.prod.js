@@ -32,6 +32,7 @@ module.exports = {
     module: {
         loaders: [
             {test: /png$/i, loader: "file-loader"},
+            {test: /svg$/i, loader: "file-loader"},
             {test: /components\/.*?\.html$/, loader: "html-loader?attrs=img:src bootstrap-button:src" },
             {test: /.*\.js$/, exclude: /node_modules/, loader: 'babel-loader?cacheDirectory'},
             {
