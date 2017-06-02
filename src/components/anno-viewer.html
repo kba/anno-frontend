@@ -43,8 +43,7 @@
 
   <div class="panel-body" role="tabpanel" v-show="!collapsed">
 
-    <!-- <div :id="`old_version_${slug}`" class="well old_version"></div> -->
-
+    <div class="well old_version" v-show="isOldVersion()">{{ l10n('version_from') }} {{ dateformat(annotation.created) }} </div>
 
     <div class="media" style="height: auto;">
 
