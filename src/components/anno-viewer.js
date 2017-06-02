@@ -116,6 +116,7 @@ module.exports = {
         numberOf(k) { return numberOf(this.annotation, k) },
         setToVersion(newState) {
             Object.assign(this.annotation, newState)
+            eventBus.$emit('setToVersion', this.annotation)
             // this.$store.commit('RESET_ANNOTATION')
             // this.$store.commit('REPLACE_ANNOTATION', newState)
         }
