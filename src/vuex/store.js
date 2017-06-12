@@ -60,12 +60,12 @@ module.exports = {
 
         SET_TOKEN(state, token) {
             state.token = token
-            window.localStorage.setItem('anno-token', token);
+            window.sessionStorage.setItem('anno-token', token);
         },
 
         DELETE_TOKEN(state, token) {
             state.token = null
-            window.localStorage.removeItem('anno-token');
+            window.sessionStorage.removeItem('anno-token');
         },
 
         LOGIN(state, user) {
@@ -82,7 +82,7 @@ module.exports = {
 
         fetchToken({state, commit, dispatch}) {
             return new Promise((resolve, reject) => {
-                var token = window.localStorage.getItem('anno-token');
+                var token = window.sessionStorage.getItem('anno-token');
                 if (token) {
                     if (isExpired(token)) {
                         commit('DELETE_TOKEN')
