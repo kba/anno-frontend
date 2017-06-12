@@ -1,3 +1,4 @@
+const axios = require('axios')
 const bonanza = require('bonanza');
 
 /*
@@ -24,49 +25,71 @@ module.exports = {
         addSemanticTag() { this.$store.commit('ADD_SEMTAG_BODY') },
         removeBody(body) { this.$store.commit('REMOVE_BODY', body) },
         ensureCompletion() {
-            const bestLabel = (obj) => obj.label[this.language] || obj.label.de || obj.label.en
-
-            ;['value'].forEach(prop => {
-                Array.from(this.$el.querySelectorAll(`input.semtag-${prop}`))
-                    .filter(el => !el.classList.contains('has-completion'))
-                    .forEach(el => {
-                        el.classList.add('has-completion')
-                        const n = el.dataset.bodyIndex
-                        bonanza(
-                            el, {
-                                templates: {
-                                    item: (obj) => `${bestLabel(obj)}`
-                                }
-                            },
-                            (...args) => {
-                                this.autocomplete(prop, ...args)
+            const bestLabel = (obj) => obj.label[this.language] || obj.label.de || obj.label.en || obj.label
+            Array.from(this.$el.querySelectorAll(`input.semtag-value`))
+                .filter(el => !el.classList.contains('has-completion'))
+                .forEach(el => {
+                    el.classList.add('has-completion')
+                    const n = el.dataset.bodyIndex
+                    bonanza(
+                        el, {
+                            templates: {
+                                item: (obj) => `${bestLabel(obj)}`
                             }
-                        ).on('change', (value) => {
-                            this.$store.commit("SET_SEMTAG_PROP", {n, prop:'source', value: value.url})
-                            this.$store.commit("SET_SEMTAG_PROP", {n, prop:'label', value:bestLabel(value)})
-                        })
+                        },
+                        (...args) => this.autocomplete(...args)
+                    ).on('change', (value) => {
+                        this.$store.commit("SET_SEMTAG_PROP", {n, prop:'source', value: value.url})
+                        this.$store.commit("SET_SEMTAG_PROP", {n, prop:'label', value:bestLabel(value)})
                     })
-            })
+                })
         },
-        autocomplete(prop, query, cb) {
-            console.log(prop, query)
-            if (prop === 'value') return cb(null, [
-                {
-                    url: 'http://gnd/term2734',
+
+        _normdatenResponseToAutocomplete(docs) {
+            return docs.map(doc => {
+                return {
+                    url: `http://d-nb.info/gnd/${doc.gndIdentifier}`,
                     label: {
-                        de: 'Bank <Institution>',
-                        en: 'Bank <Institution>'
-                    }
-                },
-                {
-                    url: 'http://gnd/term28319321',
-                    label: {
-                        de: 'Bank <Gebäude>',
-                        en: 'Bank <Building>'
+                        de: `${doc.preferredName} (${doc._type})`
                     }
                 }
-            ])
-            else cb(`No such completion '${prop}'`)
+            })
+        },
+
+        _normdatenSuggestToAutocomplete(docs) {
+            return docs.map(doc => {
+                return {
+                    url: `http://d-nb.info/gnd/${doc.payload}`,
+                    label: {
+                        de: `${doc.term}`
+                    },
+                }
+            })
+        },
+
+        /**
+         * @param String prop The property to autocomplete. Either 'source' or 'label'
+         */
+        autocomplete(query, cb) {
+            if (!query.search)
+                return cb(null, [])
+            // axios.get(`http://pers42.ub.uni-heidelberg.de:8888/gnd/?q=${query.search}&suggest=true&offset=${query.offset}&limit=${query.limit}`)
+            // XXX this is with the regular search API which returns wrapped solr docs
+            //     .then(resp => cb(null, this._normdatenResponseToAutocomplete(resp.data.response.docs)))
+                // .then(resp => cb(null, this._normdatenSuggestToAutocomplete(resp.data.docs)))
+            //     .catch(err => cb(err))
+            const types = [
+                "Country",
+                "AdministrativeUnit",
+                "TerritorialCorporateBodyOrAdministrativeUnit",
+                "MemberState",
+                "DifferentiatedPerson",
+                "UndifferentiatedPerson",
+            ]
+            const q = `${query.search} AND _type:(${types.map(t => `"${t}"`).join(' ')})`
+            axios.get(`http://pers42.ub.uni-heidelberg.de:8888/gnd/?q=${encodeURIComponent(q)}`)
+                .then(resp => cb(null, this._normdatenResponseToAutocomplete(resp.data.response.docs)))
+                .catch(err => cb(err))
         },
     },
 }
