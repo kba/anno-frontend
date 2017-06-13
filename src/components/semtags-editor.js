@@ -13,7 +13,7 @@ module.exports = {
         require('../mixin/l10n'),
     ],
     template: require('./semtags-editor.html'),
-    style:    require('./semtags-editor.css'),
+    style:    require('./semtags-editor.sass'),
     computed: {
         semanticTagBodies() { return this.$store.getters.semanticTagBodies },
         language() { return this.$store.state.language },
@@ -87,7 +87,7 @@ module.exports = {
                 "UndifferentiatedPerson",
             ]
             const q = `${query.search} AND _type:(${types.map(t => `"${t}"`).join(' ')})`
-            axios.get(`http://pers42.ub.uni-heidelberg.de:8888/gnd/?q=${encodeURIComponent(q)}`)
+            axios.get(`http://serv42.ub.uni-heidelberg.de/normdaten/gnd/?q=${encodeURIComponent(q)}`)
                 .then(resp => cb(null, this._normdatenResponseToAutocomplete(resp.data.response.docs)))
                 .catch(err => cb(err))
         },
