@@ -35,10 +35,7 @@ module.exports = {
             {test: /svg$/i, loader: "file-loader"},
             {test: /components\/.*?\.html$/, loader: "html-loader?attrs=img:src bootstrap-button:src" },
             {test: /.*\.js$/, exclude: /node_modules/, loader: 'babel-loader?cacheDirectory'},
-            {
-                test: /components\/.*?\.s?css$/,
-                loader: "style-loader!css-loader?sourcemap=true!sass-loader?sourcemap-=true"
-            },
+            {test: /components\/.*?\.s?[ac]ss$/, loader: "style-loader!css-loader?sourcemap=true!sass-loader?sourcemap-=true" },
         ]
     },
     plugins: [
