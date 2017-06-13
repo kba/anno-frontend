@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html>
-<head><script type="text/javascript" src="../../dist/ubhd-anno.js"> </script></head>
+  <head>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.quilljs.com/latest/quill.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vuex/2.3.1/vuex.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.1/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.min.js"></script>
+    <script type="text/javascript" src="../../../../../github.com/kba/anno/anno-webpack/dist/anno.min.js"> </script>
+    <script src="https://unpkg.com/semtonotes-client"></script>
+    <script src="https://unpkg.com/semtonotes-utils"></script>
+    <script src="https://unpkg.com/@kba/xrx-vue"></script>
+
+    <script type="text/javascript" src="../../dist/anno-frontend.js"></script>
+  </head>
 <body>
     <div class="container-fluid">
         <div class="row">
@@ -12,7 +26,7 @@
 <script src="./fixtures.js"></script>
 <script type="text/javascript">
 
-const store = _ubhddebug.store
+const store = new Vuex.Store(_ubhddebug.store)
 window.app = new Vue({
   el: '#anchor',
   store,
