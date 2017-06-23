@@ -104,22 +104,18 @@ module.exports = {
             this.stopHighlighting()
             eventBus.$emit("mouseleave", this.id)
         },
-        isOldVersion() {
+        isNewestVersion() {
             const anno = this.annotation
-            if (anno.hasVersion && anno.hasVersion.length > 1)
-                try {
-                    const byDate = [...anno.hasVersion].sort((b,a) =>  {
-                        a = a.created || 0
-                        b = b.created || 0
-                        return !(a||b) ? 0 : !a ? -1 : !b ? +1 : a < b ? +1 : a > b ? -1 : 0
-                    })
-                    const newest = byDate[0]
-                    if (newest.id != anno.id) {
-                        return newest.created
-                    }
-                } catch (err) {
-                    console.error(err)
-                }
+            if (!anno.hasVersion || anno.hasVersion.length == 1) return true
+            const byDate = [...anno.hasVersion].sort((b,a) =>  {
+                a = a.created || 0
+                b = b.created || 0
+                return !(a||b) ? 0 : !a ? -1 : !b ? +1 : a < b ? +1 : a > b ? -1 : 0
+            })
+            const newest = byDate[0]
+            if (newest.id != anno.id) {
+                return newest.created
+            }
         },
 
         startHighlighting()  { this.highlighted = true },
