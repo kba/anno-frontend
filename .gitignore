@@ -6,3 +6,5 @@ dist/swagger-ui
 node_modules
 *.log
 dist
+rel-vra.json
+extension
