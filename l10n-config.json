@@ -45,6 +45,7 @@
             "sortdatereverse":     "Chronologisch absteigend",
             "sorttitle":           "Titel aufsteigend",
             "version_from":        "Version vom",
+            "active_version":      "Angezeigte Version",
             "zones":               "Zonen",
 
             "add_relationlink":          "Link hinzuf\u00fcgen",
@@ -118,7 +119,8 @@
             "sortdate":            "by time (ascending)",
             "sortdatereverse":     "by time (descending)",
             "sorttitle":           "by title",
-            "version_from":        "Version vom",
+            "version_from":        "Version as of",
+            "active_version":      "Active version",
             "zones":               "Zones",
 
             "add_semtag":          "Add Semantic Tag",
