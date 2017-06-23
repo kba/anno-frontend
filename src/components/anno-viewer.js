@@ -54,7 +54,7 @@ module.exports = {
         // Controls whether comment is collapsible or not
         asReply: {type: Boolean, default: false},
         collapseInitially: {type: Boolean, default: false},
-        dateFormat: {type: String, default: 'dd.mm.yyyy hh:MM:ss'},
+        dateFormat: {type: String, default: 'dd.mm.yyyy HH:MM:ss'},
     },
     template: require('./anno-viewer.html'),
     style:    require('./anno-viewer.scss'),
