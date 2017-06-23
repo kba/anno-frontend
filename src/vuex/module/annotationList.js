@@ -1,13 +1,13 @@
 
 const sorters = {
     date(a, b) {
-        a = a.modified || 0
-        b = b.modified || 0
+        a = a.created || 0
+        b = b.created || 0
         return !(a||b) ? 0 : !a ? -1 : !b ? +1 : a < b ? +1 : a > b ? -1 : 0
     },
     datereverse(a, b) {
-        a = a.modified || 0
-        b = b.modified || 0
+        a = a.created || 0
+        b = b.created || 0
         return -1 * (!(a||b) ? 0 : !a ? -1 : !b ? +1 : a < b ? +1 : a > b ? -1 : 0)
     },
     title(a, b)       {
@@ -20,7 +20,7 @@ const sorters = {
 module.exports = {
     state: {
         list: [],
-        sortedBy: 'title',
+        sortedBy: 'date',
         allCollaped: 'false',
     },
     getters: {
