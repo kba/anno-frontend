@@ -144,7 +144,7 @@
           <ul class="dropdown-menu pull-right annoeditor-versions">
             <li v-for="version in annotation.hasVersion"
               :key="version.id"
-              :class="version.id === id ? 'annoeditor-current-version' : ''"
+              :class="version.id === id || version.created === annotation.created ? 'annoeditor-current-version' : ''"
               >
               <a class="small"
                 @click="setToVersion(version)"
