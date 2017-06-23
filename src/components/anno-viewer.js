@@ -110,12 +110,9 @@ module.exports = {
             const byDate = [...anno.hasVersion].sort((b,a) =>  {
                 a = a.created || 0
                 b = b.created || 0
-                return !(a||b) ? 0 : !a ? -1 : !b ? +1 : a < b ? +1 : a > b ? -1 : 0
+                return !(a||b) ? 0 : !a ? +1 : !b ? -1 : a < b ? -1 : a > b ? +1 : 0
             })
-            const newest = byDate[0]
-            if (newest.id != anno.id) {
-                return newest.created
-            }
+            return byDate[0].id === anno.id || byDate[0].created === anno.created
         },
 
         startHighlighting()  { this.highlighted = true },
