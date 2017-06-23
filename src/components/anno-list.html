@@ -1,17 +1,13 @@
 <div class="annoeditor-list">
   <div class="btn-group btn-group-vertical pull-left hidden-print" role="group">
 
-    <bootstrap-button btn-size="xs" btn-class="warning" elem="a"
-      @click="logout"
-      v-if="isLoggedIn && enableLogoutButton">
+    <a class="btn btn-xs btn-warning" @click.stop="logout" v-if="isLoggedIn && enableLogoutButton">
       {{ l10n('logout') }}
-    </bootstrap-button>
+    </a>
 
-    <bootstrap-button btn-size="xs" elem="a"
-      :href="loginEndpoint"
-      v-if="!isLoggedIn && loginEndpoint">
+    <a class="btn btn-xs" :href="loginEndpoint" v-if="!isLoggedIn && loginEndpoint">
       {{ l10n('login') }}
-    </bootstrap-button>
+    </a>
 
     <bootstrap-button btn-class="success" btn-size="xs"
       @click="create"
