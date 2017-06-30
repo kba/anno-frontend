@@ -71,7 +71,7 @@ module.exports = {
         // React to highlighting events startHighlighting / stopHighlighting / toggleHighlighting
         ;['start', 'stop', 'toggle'].forEach(state => {
             const method = `${state}Highlighting`
-            eventBus.$on(method, (id, open) => { if (id == this.id) this[method](open) })
+            eventBus.$on(method, (id, expand) => { if (id == this.id) this[method](expand) })
         })
     },
     computed: {
@@ -119,9 +119,17 @@ module.exports = {
             return byDate[0].id === anno.id || byDate[0].created === anno.created
         },
 
-        startHighlighting(open)  {
+        startHighlighting(expand)  {
             this.highlighted = true;
-            if (open) this.collapsed = false
+            if (expand) {
+                this.collapsed = false
+                // also highlight/expand the root id so the anno is visible
+                const rootId = this.id.replace(/[~\.][~\.0-9]+$/, '')
+                console.log(rootId)
+                if (rootId !== this.id) {
+                    eventBus.$emit('startHighlighting', rootId, expand)
+                }
+            }
         },
         stopHighlighting()   { this.highlighted = false },
         toggleHighlighting() { this.highlighted = ! this.highlighted },

@@ -55,7 +55,7 @@ module.exports = {
         loginEndpoint() { return this.$store.state.loginEndpoint },
     },
     methods: {
-        logout() { console.log("YAY dispatch logout"); this.$store.dispatch('logout') },
+        logout() { return this.$store.dispatch('logout') },
         create() { return eventBus.$emit('create', this.targetSource) },
 
         collapseAll(state) {
