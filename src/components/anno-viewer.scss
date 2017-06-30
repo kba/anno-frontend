@@ -8,6 +8,10 @@
         background: #990000 !important;
         color: white;
     }
+    &.annoeditor-highlight.annoeditor-reply {
+        border: 1px solid #fc3;
+        background-color: #fea;
+    }
 
     .annoeditor-tags {
       margin-top: 5px;

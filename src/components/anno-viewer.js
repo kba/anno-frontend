@@ -64,7 +64,7 @@ module.exports = {
         // Show popover with persistent URL
         $('[data-toggle="popover"]', this.$el).popover(); 
 
-        // React to highlighting events
+        // React to highlighting events startHighlighting / stopHighlighting / toggleHighlighting
         ;['start', 'stop', 'toggle'].forEach(state => {
             const method = `${state}Highlighting`
             eventBus.$on(method, (id) => { if (id == this.id) this[method]() })
