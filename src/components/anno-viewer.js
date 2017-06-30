@@ -59,10 +59,14 @@ module.exports = {
     template: require('./anno-viewer.html'),
     style:    require('./anno-viewer.scss'),
     mounted() {
-        // console.log(this.svgTarget)
-
         // Show popover with persistent URL
-        $('[data-toggle="popover"]', this.$el).popover(); 
+        const Clipboard = require('clipboard')
+        const purlPopoverTrigger = this.$el.querySelector('[data-toggle="popover"]')
+        $(purlPopoverTrigger).popover(); 
+        $(purlPopoverTrigger).on('shown.bs.popover', function() {
+            const purlPopoverDiv = purlPopoverTrigger.nextElementSibling
+            const clip = new Clipboard(purlPopoverDiv.querySelector("[data-clipboard-text]"))
+        })
 
         // React to highlighting events startHighlighting / stopHighlighting / toggleHighlighting
         ;['start', 'stop', 'toggle'].forEach(state => {

@@ -70,7 +70,10 @@
             data-html="true"
             data-placement="left"
             :title="l10n('purl')"
-            :data-content='`<a href="${purl}">${id.replace(/.*\//, "")}</a>`'
+            :data-content='`
+            <button data-clipboard-text="${purl}" class="btn btn-default btn-xs"><span class="fa fa-clipboard"></span></button>
+            <a href="${purl}">${id.replace(/.*\//, "")}</a>
+            `'
           />
         </div>
 
