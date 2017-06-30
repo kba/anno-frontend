@@ -66,9 +66,11 @@
           </template>
           {{ dateformat(annotation.created || annotation.modified) }}
           <bootstrap-button btn-size="xs" glyphicon="link" elem="a"
-            :title="l10n('purl')"
             data-toggle="popover"
-            :data-content="purl" 
+            data-html="true"
+            data-placement="left"
+            :title="l10n('purl')"
+            :data-content='`<a href="${purl}">${id.replace(/.*\//, "")}</a>`'
           />
         </div>
 

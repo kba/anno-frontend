@@ -67,7 +67,7 @@ module.exports = {
         // React to highlighting events startHighlighting / stopHighlighting / toggleHighlighting
         ;['start', 'stop', 'toggle'].forEach(state => {
             const method = `${state}Highlighting`
-            eventBus.$on(method, (id) => { if (id == this.id) this[method]() })
+            eventBus.$on(method, (id, open) => { if (id == this.id) this[method](open) })
         })
     },
     computed: {
@@ -115,7 +115,10 @@ module.exports = {
             return byDate[0].id === anno.id || byDate[0].created === anno.created
         },
 
-        startHighlighting()  { this.highlighted = true },
+        startHighlighting(open)  {
+            this.highlighted = true;
+            if (open) this.collapsed = false
+        },
         stopHighlighting()   { this.highlighted = false },
         toggleHighlighting() { this.highlighted = ! this.highlighted },
 
