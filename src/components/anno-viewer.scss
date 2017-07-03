@@ -1,7 +1,8 @@
 .annoeditor-viewer {
 
-    &.annoeditor-purl {
-        background: yellow !important;
+    &.annoeditor-purl > .panel-heading {
+      background-color: #365187;
+      color: white;
     }
 
     &.annoeditor-highlight > .panel-heading {
