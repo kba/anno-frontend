@@ -1,7 +1,7 @@
 .annoeditor-viewer {
 
     &.annoeditor-purl {
-        &.panel-heading,
+        & > .panel-heading,
         &.annoeditor-reply > .panel-body > .media > div > div:nth-child(1) {
             background-color: #365187;
             color: white;
