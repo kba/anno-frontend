@@ -175,6 +175,8 @@
       <anno-viewer
         v-for="reply in annotation.hasReply"
         as-reply
+        :purl-id="purlId"
+        :purl-template="purlTemplate"
         :annotation="reply"
         />
 

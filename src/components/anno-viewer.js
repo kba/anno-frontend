@@ -50,6 +50,7 @@ module.exports = {
     props: {
         annotation: {type: Object, required: true},
         purlTemplate: {type: String, required: false},
+        purlId: {type: String, required: false},
         // Controls whether comment is collapsible or not
         asReply: {type: Boolean, default: false},
         collapseInitially: {type: Boolean, default: false},
@@ -88,7 +89,8 @@ module.exports = {
             return this.annotation.id.replace(/[^A-Za-z0-9]/g, '')
         },
         isPurl() {
-            return this.annotation.id === this.$store.state.purlId
+            console.log(this.annotation.id, this.purlId, this.annotation.id === this.purlId)
+            return this.annotation.id === this.purlId
         }
     },
     data() {
