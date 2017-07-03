@@ -89,7 +89,6 @@ module.exports = {
             return this.annotation.id.replace(/[^A-Za-z0-9]/g, '')
         },
         isPurl() {
-            console.log(this.annotation.id, this.purlId, this.annotation.id === this.purlId)
             return this.annotation.id === this.purlId
         }
     },
