@@ -13,6 +13,7 @@ const {
 function initialState() {return {
     id: '',
     title: '',
+    collection: null,
     body: [],
     target: [],
     replyTo: null,
@@ -99,6 +100,10 @@ const mutations = {
 
     SET_REPLY_TO(state, v) {
         state.replyTo = v
+    },
+
+    SET_COLLECTION(state, v) {
+        state.collection = v
     },
 
     ADD_MOTIVATION(state, v) {

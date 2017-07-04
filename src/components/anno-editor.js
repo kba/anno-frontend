@@ -97,6 +97,7 @@ module.exports = {
         create(annotation) {
             this.mode = 'create'
             this.$store.commit('RESET_ANNOTATION')
+            this.$store.commit('SET_COLLECTION', this.$store.state.collection)
             this.$store.commit('ADD_TARGET', this.targetSource)
             eventBus.$emit('open-editor')
         },
@@ -105,6 +106,7 @@ module.exports = {
             this.mode = 'reply'
             this.$store.commit('RESET_ANNOTATION')
             this.$store.commit('ADD_TARGET', annotation.id)
+            this.$store.commit('SET_COLLECTION', this.$store.state.collection)
             this.$store.commit('ADD_MOTIVATION', 'replying')
             this.$store.commit('SET_REPLY_TO', annotation.id)
             eventBus.$emit('open-editor')
@@ -112,6 +114,7 @@ module.exports = {
 
         revise(annotation) {
             this.mode = 'revise'
+            this.$store.commit('SET_COLLECTION', this.$store.state.collection)
             this.$store.commit('RESET_ANNOTATION')
             this.$store.commit('REPLACE_ANNOTATION', annotation)
             eventBus.$emit('open-editor')

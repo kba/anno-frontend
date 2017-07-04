@@ -68,7 +68,7 @@ module.exports = {
 
     },
     methods: {
-        save() { console.log("emit save") ;eventBus.$emit('save') },
+        save() { eventBus.$emit('save') },
         remove() { eventBus.$emit('remove', this.id) },
         discard() { eventBus.$emit('discard') },
 

@@ -93,7 +93,7 @@ module.exports = function displayAnnotations(options={}) {
     delete options.events
 
     // These options can also be functions to be called to produce the value now
-    ;['token', 'isLoggedIn', 'loginEndpoint', 'logoutEndpoint'].forEach(fn => {
+    ;['token', 'collection', 'isLoggedIn', 'loginEndpoint', 'logoutEndpoint'].forEach(fn => {
         if (typeof options[fn] === 'function') {
             options[fn] = options[fn]()
         }
