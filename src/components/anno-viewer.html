@@ -50,20 +50,20 @@
       <div class="media-body">
 
         <div v-if="annotation.creator">
-          <bootstrap-button btn-size="xs" btnClass="">
+          <button class="btn btn-xs">
             <template v-if="annotation.creator && annotation.creator.icon">
-              <img class="media-object" style="max-width: 100%;" :src="annotation.creator.icon" alt="Logo" width="15px" height="15px">
+              <img class="media-object" style="display: inline" :src="annotation.creator.icon" alt="Logo" width="15px" height="15px">
             </template>
             <template v-else>
               <span class="glyphicon glyphicon-user"></span>
             </template>
-          </bootstrap-button>
-          <template v-if="annotation.creator && annotation.creator.displayName">
-            {{ annotation.creator.displayName }}
-          </template>
-          <template v-else>
-            {{ annotation.creator }}
-          </template>
+            <template v-if="annotation.creator && annotation.creator.displayName">
+              {{ annotation.creator.displayName }}
+            </template>
+            <template v-else>
+              {{ annotation.creator }}
+            </template>
+          </button>
           {{ dateformat(annotation.created || annotation.modified) }}
           <bootstrap-button btn-size="xs" glyphicon="link" elem="a"
             data-toggle="popover"
