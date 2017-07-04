@@ -40,11 +40,13 @@ module.exports = {
         eventBus.$on('save', this.save)
         eventBus.$on('open-editor', () => {
             if (this.targetImage) {
-                this.$refs.zoneEditor.loadImage(this.targetImage)
-                this.$refs.zoneEditor.loadSvg(
-                    this.$store.getters.svgTarget ? this.$store.getters.svgTarget.selector.value : '')
+                this.zoneEditor.reset()
+                this.zoneEditor.loadImage(this.targetImage)
             }
         })
+    },
+    mounted() {
+        this.zoneEditor.$on('load-image', () => this.loadSvg())
     },
     computed: {
         id()              { return this.$store.state.editing.id },
@@ -52,6 +54,8 @@ module.exports = {
         targetImage()     { return this.$store.state.targetImage },
         targetThumbnail() { return this.$store.state.targetThumbnail },
         targetSource()    { return this.$store.state.targetSource },
+        svgTarget()       { return this.$store.getters.svgTarget },
+        zoneEditor()      { return this.$refs.zoneEditor },
     },
     methods: {
         save() {
@@ -62,17 +66,23 @@ module.exports = {
             }
             const cb = (err, newAnno) => {
                 if (err) {
-                    console.error(err)
+                    console.error("Error saving annotation", err)
                     return
                 }
-                this.$store.commit('RESET_ANNOTATION')
                 this.$store.dispatch('fetchList')
+                this.$store.commit('RESET_ANNOTATION')
                 eventBus.$emit('close-editor')
             }
 
                  if (this.mode === 'create') this.api.create(anno, cb)
             else if (this.mode === 'reply')  this.api.reply(anno.replyTo, anno, cb)
             else if (this.mode === 'revise') this.api.revise(anno.id, anno, cb)
+        },
+
+        loadSvg() {
+            const svg = (this.svgTarget && this.svgTarget.selector.value) ? this.svgTarget.selector.value : false
+            console.log({svg})
+            if (svg) this.zoneEditor.loadSvg(svg)
         },
 
         discard() {
@@ -105,8 +115,8 @@ module.exports = {
         reply(annotation) {
             this.mode = 'reply'
             this.$store.commit('RESET_ANNOTATION')
-            this.$store.commit('ADD_TARGET', annotation.id)
             this.$store.commit('SET_COLLECTION', this.$store.state.collection)
+            this.$store.commit('ADD_TARGET', {id: annotation.id, scope: this.targetSource})
             this.$store.commit('ADD_MOTIVATION', 'replying')
             this.$store.commit('SET_REPLY_TO', annotation.id)
             eventBus.$emit('open-editor')
