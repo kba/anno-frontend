@@ -66,6 +66,11 @@ module.exports = {
         $(purlPopoverTrigger).on('shown.bs.popover', function() {
             const purlPopoverDiv = purlPopoverTrigger.nextElementSibling
             const clip = new Clipboard(purlPopoverDiv.querySelector("[data-clipboard-text]"))
+            clip.on('success', () => {
+                const successLabel = $(".label-success", purlPopoverDiv)
+                successLabel.show()
+                setTimeout(() => $(successLabel).hide(), 2000)
+            })
         })
 
         // React to highlighting events startHighlighting / stopHighlighting / toggleHighlighting
