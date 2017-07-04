@@ -44,12 +44,15 @@ const eventBus = require('./event-bus')
  *   logged in. No login button will be shown in that case, token will still be
  *   retrieved unless found
  *
- * #### Events
- *
- * Either listen/emit via app.eventBus and/or provide listeners as `events` option
- *
- * - `startHighlighting(annoId)`: $emit this to highlight the annotation
+ * #### Methods
+ * 
+ * - `startHighlighting(annoId, open)`: Highlight the annotation with `id` annoId, open the subtree, if open is given
  * - `stopHighlighting(annoId)`: $emit this to un-highlight the annotation 
+ * 
+ * #### Events
+ * 
+ * Either listen/emit via app.eventBus and/or provide listeners as `events` option
+ * 
  * - `mouseover(annoId)`: $on this to catch when an annotation is hovered in the list
  * - `mouseleave(annoId)`: $on this to catch when an annotation is un-hovered in the list
  * - `fetched(annotationList)`: List of annotations has been fetched from the server
@@ -114,6 +117,9 @@ module.exports = function displayAnnotations(options={}) {
     // Store reference to the eventBus
     //
     annoapp.eventBus = eventBus
+
+    annoapp.startHighlighting = function(...args) { eventBus.$emit('startHighlighting', ...args) }
+    annoapp.stopHighlighting = function(...args) { eventBus.$emit('stopHighlighting', ...args) }
 
     //
     // Kick off fetching tokens/list/ACL rules
