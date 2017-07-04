@@ -22,6 +22,7 @@ module.exports = {
         logoutEndpoint: null,
         purlTemplate: null,
         purlId: null,
+        purlAnnoInitiallyOpen: true,
         targetSource: window.location.href,
         targetImage: null,
         targetThumbnail: null,

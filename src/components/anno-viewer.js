@@ -133,7 +133,7 @@ module.exports = {
                 this.collapsed = false
                 // also highlight/expand the root id so the anno is visible
                 const rootId = this.id.replace(/[~\.][~\.0-9]+$/, '')
-                console.log(rootId)
+                // console.log(rootId)
                 if (rootId !== this.id) {
                     eventBus.$emit('startHighlighting', rootId, expand)
                 }

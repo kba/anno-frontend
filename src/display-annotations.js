@@ -32,6 +32,8 @@ const eventBus = require('./event-bus')
  * - `purlTemplate` A string template for the persistent URL. `{{ slug }}` will
  *   be replaced by the slug of the annotation
  * - `purlId` Annotation ID of the persistent URL. Should begin with the URL of `annoEndpoint`
+ * - `purlAnnoInitiallyOpen` Whether the persistently adressed annotation
+ *   should be made visible initially, if necessary by opening parent threads
  *
  * - `token`: Function or token. The literal token. Don't use this option
  *   without SSL/TLS encryption. Function must be synchronous.
@@ -118,6 +120,9 @@ module.exports = function displayAnnotations(options={}) {
     //
     annoapp.eventBus = eventBus
 
+    //
+    // Convenience methods for startHighlighting / stopHighlighting event emission
+    //
     annoapp.startHighlighting = function(...args) { eventBus.$emit('startHighlighting', ...args) }
     annoapp.stopHighlighting = function(...args) { eventBus.$emit('stopHighlighting', ...args) }
 

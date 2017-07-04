@@ -38,6 +38,13 @@ module.exports = {
         $('[data-toggle="popover"]', this.$el).popover({container: 'body'});
         this.sort()
         eventBus.$on('updatedPermissions', () => this.$forceUpdate())
+        if (this.purlId && this.purlAnnoInitiallyOpen) {
+            eventBus.$once('fetched', () => {
+                setTimeout(() => {
+                    eventBus.$emit('startHighlighting', this.purlId, true)
+                }, 10)
+            })
+        }
     },
     computed: {
         sortedBy() { return this.$store.state.annotationList.sortedBy },
@@ -47,6 +54,7 @@ module.exports = {
         token() { return this.$store.state.token },
         purlTemplate() { return this.$store.state.purlTemplate },
         purlId() { return this.$store.state.purlId },
+        purlAnnoInitiallyOpen() { return this.$store.state.purlAnnoInitiallyOpen },
         numberOfAnnotations() { return this.$store.getters.numberOfAnnotations },
 
         isLoggedIn() { return this.$store.state.isLoggedIn },

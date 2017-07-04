@@ -5,6 +5,7 @@
 * [Usage](#usage)
 	* [`displayAnnotations(options)`](#displayannotationsoptions)
 		* [Options](#options)
+		* [Methods](#methods)
 		* [Events](#events)
 	* [Structure of the application](#structure-of-the-application)
 	* [Integration into serv7](#integration-into-serv7)
@@ -17,7 +18,7 @@
 	* [anno-editor](#anno-editor)
 	* [anno-list](#anno-list)
 		* [Events](#events-1)
-		* [Methods](#methods)
+		* [Methods](#methods-1)
 			* [`collapseAll(state)`](#collapseallstate)
 	* [anno-viewer](#anno-viewer)
 		* [Props](#props)
@@ -63,6 +64,7 @@
 #### Options
 - `container`: Container element to hold the annotation sidebar/modal
 - `language`: Language for l10n. Currently: `en`/`eng` or `de`/`deu` (Default)
+- `collection`: Anno Collection
 - `targetSource`: The target of the annotation. Defaults to `window.location.href`
 - `targetImage`: The image if any, to annotate on this page
 - `targetThumbnail`: Thumbnail view of the image. Defaults to `options.targetImage`
@@ -72,6 +74,8 @@
 - `purlTemplate` A string template for the persistent URL. `{{ slug }}` will
   be replaced by the slug of the annotation
 - `purlId` Annotation ID of the persistent URL. Should begin with the URL of `annoEndpoint`
+- `purlAnnoInitiallyOpen` Whether the persistently adressed annotation
+  should be made visible initially, if necessary by opening parent threads
 - `token`: Function or token. The literal token. Don't use this option
   without SSL/TLS encryption. Function must be synchronous.
 - `tokenEndpoint`: URL of the endpoint providing the JSON Webtoken
@@ -81,10 +85,15 @@
 - `isLoggedIn`: Function or boolean to designate whether the user is already
   logged in. No login button will be shown in that case, token will still be
   retrieved unless found
-#### Events
-Either listen/emit via app.eventBus and/or provide listeners as `events` option
-- `startHighlighting(annoId)`: $emit this to highlight the annotation
+#### Methods
+
+- `startHighlighting(annoId, open)`: Highlight the annotation with `id` annoId, open the subtree, if open is given
 - `stopHighlighting(annoId)`: $emit this to un-highlight the annotation 
+
+#### Events
+
+Either listen/emit via app.eventBus and/or provide listeners as `events` option
+
 - `mouseover(annoId)`: $on this to catch when an annotation is hovered in the list
 - `mouseleave(annoId)`: $on this to catch when an annotation is un-hovered in the list
 - `fetched(annotationList)`: List of annotations has been fetched from the server
@@ -246,7 +255,7 @@ Show an annotation as a bootstrap panel.
   colapsing, smaller etc.)
 - `purlTemplate` A string template for the persistent URL. `{{ slug }}` will
   be replaced by the slug of the annotation
-- `isPurl` A boolean to highlight the anno as targeted by a purl
+- `purlId` The URL of the persistently adressed annotation
 - `collapseInitially`: Whether the anntotation should be collapsed after
   first render
 - dateFormat: Format of date stamps. Default: `dd.mm.yyyy hh:MM:ss`
@@ -278,6 +287,7 @@ Editor for the `text/html` `TextualBody` body of an annotation.
 <!-- BEGIN-RENDER ./src/components/semtags-editor.js -->
 ### semtags-editor
 Editor for *semantic* tags, i.e. link-label tuples with autocompletion.
+@param String prop The property to autocomplete. Either 'source' or 'label'
 
 <!-- END-RENDER -->
 
