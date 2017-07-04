@@ -74,6 +74,9 @@ module.exports = {
             get () { return this.$store.state.editing.rights },
             set (value) { this.$store.commit('SET_RIGHTS', value) }
         },
+        titleRequired() {
+            return ! this.$store.state.editing.replyTo
+        },
     },
 
 }

@@ -15,6 +15,7 @@ function initialState() {return {
     title: '',
     body: [],
     target: [],
+    replyTo: null,
     rights: "https://creativecommons.org/publicdomain/zero/1.0/",
 }}
 

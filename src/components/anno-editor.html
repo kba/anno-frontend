@@ -1,7 +1,9 @@
 <bootstrap-tabs class="panel-body" ref='tablist'>
 
   <bootstrap-tab :name="`${prefix}-${editorId}-tab-comment`" :title="l10n('comment_tab')" :active="true">
-    <html-editor editor-id="${prefix}-${editorId}-html-editor" />
+    <html-editor
+      editor-id="${prefix}-${editorId}-html-editor"
+      />
   </bootstrap-tab>
 
   <bootstrap-tab :name="`${prefix}-${editorId}-tab-zones`" :title="l10n('zones')" v-if="targetImage">

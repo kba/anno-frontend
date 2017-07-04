@@ -21,12 +21,15 @@ module.exports = {
         require('../mixin/api'),
         require('../mixin/prefix'),
     ],
+    template: require('./anno-editor.html'),
+    style: require('./anno-editor.css'),
     props: {
         editorId: {type: String, default: 'anno-editor'},
         enableTabTags: {type: Boolean, default: false},
     },
-    template: require('./anno-editor.html'),
-    style: require('./anno-editor.css'),
+    data() { return {
+        mode: 'create'
+    }},
     created() {
         // TODO Move these to store maybe??
         eventBus.$on('create', this.create)
@@ -53,7 +56,7 @@ module.exports = {
     methods: {
         save() {
             const anno = this.$store.state.editing
-            if (!anno.title) {
+            if (!anno.title && this.mode == 'create') {
                 window.alert("A title is required")
                 return;
             }
