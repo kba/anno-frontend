@@ -152,17 +152,18 @@
           <ul class="dropdown-menu dropdown-menu-right annoeditor-versions">
             <li v-for="version in annotation.hasVersion"
               :key="version.id"
-              :class="version.id === id || version.created === annotation.created ? 'active' : ''"
+              :class="{'active': isCurrentVersion(version)}"
               >
               <a class="small"
                 @click="setToVersion(version)"
                 >
                 <span class="glyphicon glyphicon-time">
                   {{ dateformat(version.created) }}
-                  <template v-if="version.id === id || version.created === annotation.created">
-                    ({{ l10n("active_version") }})
-                  </template>
                 </span>
+                &nbsp;
+                <template v-if="isCurrentVersion(version)">
+                  ({{ l10n("active_version") }})
+                </template>
               </a>
             </li>
           </ul>

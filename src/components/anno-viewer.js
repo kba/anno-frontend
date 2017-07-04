@@ -152,6 +152,9 @@ module.exports = {
             eventBus.$emit('setToVersion', this.annotation)
             // this.$store.commit('RESET_ANNOTATION')
             // this.$store.commit('REPLACE_ANNOTATION', newState)
+        },
+        isCurrentVersion(version) {
+            return version.created == this.annotation.created
         }
     },
 }
