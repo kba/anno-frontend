@@ -5,6 +5,10 @@
         &.annoeditor-reply > .panel-body > .media > div > div:nth-child(1) {
             background-color: #365187;
             color: white;
+
+            & > .btn {
+                background-color: #7793cc;
+            }
         }
     }
 
