@@ -6,6 +6,9 @@
 	* [`displayAnnotations(options)`](#displayannotationsoptions)
 		* [Options](#options)
 		* [Methods](#methods)
+			* [`startHighlighting(annoId, open)`](#starthighlightingannoid-open)
+			* [`stopHighlighting(annoId)`](#stophighlightingannoid)
+			* [`expand(annoId)`](#expandannoid)
 		* [Events](#events)
 	* [Structure of the application](#structure-of-the-application)
 	* [Integration into serv7](#integration-into-serv7)
@@ -69,7 +72,7 @@
 - `targetImage`: The image if any, to annotate on this page
 - `targetThumbnail`: Thumbnail view of the image. Defaults to `options.targetImage`
 - `annotationList`: Options for the list display
-  - `sortedBy`:     Sort key: `date`, `datereverse` or `title`
+  - `sortedBy`:     Sort key: `created_az`, `created_za` or `title_az`
   - `allCollapsed`: Collapse (`true`) or expand (`false`) all annotations
 - `purlTemplate` A string template for the persistent URL. `{{ slug }}` will
   be replaced by the slug of the annotation
@@ -86,9 +89,13 @@
   logged in. No login button will be shown in that case, token will still be
   retrieved unless found
 #### Methods
+##### `startHighlighting(annoId, open)`
+Highlight the annotation with `id` annoId
 
-- `startHighlighting(annoId, open)`: Highlight the annotation with `id` annoId, open the subtree, if open is given
-- `stopHighlighting(annoId)`: $emit this to un-highlight the annotation 
+##### `stopHighlighting(annoId)`
+Stop highlighting the annotation with `id` annoId
+##### `expand(annoId)`
+Open thread tree to reveal anno with id `annoId`
 
 #### Events
 
@@ -267,6 +274,7 @@ Show an annotation as a bootstrap panel.
 - `stopHighlighting`: Stop highlighting this annotation
 - `mouseenter`: The mouse cursor is now on this annotation
 - `mouseleave`: The mouse cursor has left this annotation
+- `setToVersion`: Reset the currently edited annotation to the revision passed
 
 <!-- END-RENDER -->
 

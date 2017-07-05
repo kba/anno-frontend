@@ -47,10 +47,18 @@ const eventBus = require('./event-bus')
  *   retrieved unless found
  *
  * #### Methods
+ *
+ * ##### `startHighlighting(annoId, open)`
+ *
+ * Highlight the annotation with `id` annoId
  * 
- * - `startHighlighting(annoId, open)`: Highlight the annotation with `id` annoId
- * - `stopHighlighting(annoId)`: Stop highlighting the annotation with `id` annoId
- * - `expand(annoId)`: Open thread tree to reveal anno with id `annoId`
+ * ##### `stopHighlighting(annoId)`
+ *
+ * Stop highlighting the annotation with `id` annoId
+ *
+ * ##### `expand(annoId)`
+ *
+ * Open thread tree to reveal anno with id `annoId`
  * 
  * #### Events
  * 
