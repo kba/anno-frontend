@@ -33,12 +33,16 @@
     </bootstrap-button>
 
     <ul class="dropdown-menu dropdown-menu-small small" role="menu">
-      <li><a @click="sort('date')" class="small">{{ l10n('sortdate') }}
-          <span v-if="sortedBy == 'date'" class="glyphicon glyphicon-ok"></span></a></li>
-      <li><a @click="sort('datereverse')" class="small">{{ l10n('sortdatereverse') }}
-          <span v-if="sortedBy == 'datereverse'" class="glyphicon glyphicon-ok"></span></a></li>
-      <li><a @click="sort('title')" class="small">{{ l10n('sorttitle') }}
-          <span v-if="sortedBy == 'title'" class="glyphicon glyphicon-ok"></span></a></li>
+      <li><a @click="sort('created_az')" class="small">{{ l10n('sort_created_az') }}
+          <span v-if="sortedBy == 'created_az'" class="glyphicon glyphicon-ok"></span></a></li>
+      <li><a @click="sort('created_za')" class="small">{{ l10n('sort_created_za') }}
+          <span v-if="sortedBy == 'created_za'" class="glyphicon glyphicon-ok"></span></a></li>
+      <li><a @click="sort('modified_az')" class="small">{{ l10n('sort_modified_az') }}
+          <span v-if="sortedBy == 'modified_az'" class="glyphicon glyphicon-ok"></span></a></li>
+      <li><a @click="sort('modified_za')" class="small">{{ l10n('sort_modified_za') }}
+          <span v-if="sortedBy == 'modified_za'" class="glyphicon glyphicon-ok"></span></a></li>
+      <li><a @click="sort('title_az')" class="small">{{ l10n('sort_title_az') }}
+          <span v-if="sortedBy == 'title_az'" class="glyphicon glyphicon-ok"></span></a></li>
     </ul>
 
   </div>

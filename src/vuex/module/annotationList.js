@@ -1,16 +1,18 @@
 
+function _sortByDateTime(field, dir=1) {
+    return function(a, b) {
+        a = a[field] || 0
+        b = b[field] || 0
+        return dir * (!(a||b) ? 0 : !a ? -1 : !b ? +1 : a < b ? +1 : a > b ? -1 : 0)
+    }
+}
+
 const sorters = {
-    date(a, b) {
-        a = a.created || 0
-        b = b.created || 0
-        return !(a||b) ? 0 : !a ? -1 : !b ? +1 : a < b ? +1 : a > b ? -1 : 0
-    },
-    datereverse(a, b) {
-        a = a.created || 0
-        b = b.created || 0
-        return -1 * (!(a||b) ? 0 : !a ? -1 : !b ? +1 : a < b ? +1 : a > b ? -1 : 0)
-    },
-    title(a, b)       {
+    created_az: _sortByDateTime('created'),
+    created_za: _sortByDateTime('created', -1),
+    modified_az: _sortByDateTime('modified'),
+    modified_za: _sortByDateTime('modified', -1),
+    title_az(a, b) {
         a = a.title ? a.title.toLowerCase() : ''
         b = b.title ? b.title.toLowerCase() : ''
         return !a ? +1 : !b ? -1 : a < b ? -1 : a > b ? + 1 : 0
@@ -20,7 +22,7 @@ const sorters = {
 module.exports = {
     state: {
         list: [],
-        sortedBy: 'date',
+        sortedBy: 'created_az',
         allCollaped: 'false',
     },
     getters: {

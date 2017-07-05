@@ -27,7 +27,7 @@ const eventBus = require('./event-bus')
  * - `targetImage`: The image if any, to annotate on this page
  * - `targetThumbnail`: Thumbnail view of the image. Defaults to `options.targetImage`
  * - `annotationList`: Options for the list display
- *   - `sortedBy`:     Sort key: `date`, `datereverse` or `title`
+ *   - `sortedBy`:     Sort key: `created_az`, `created_za` or `title_az`
  *   - `allCollapsed`: Collapse (`true`) or expand (`false`) all annotations
  * - `purlTemplate` A string template for the persistent URL. `{{ slug }}` will
  *   be replaced by the slug of the annotation
