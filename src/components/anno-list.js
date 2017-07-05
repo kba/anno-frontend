@@ -30,14 +30,25 @@ module.exports = {
     template: require('./anno-list.html'),
     style: require('./anno-list.scss'),
     mounted() {
+
+        // Collapse/Expand all according to setting
         if (window.sessionStorage.getItem("annolistCollapseAll") !== null) {
             this.collapsed = window.sessionStorage.getItem("annolistCollapseAll") === 'hide'
         }
         this.$watch(() => this.list, () => this.collapseAll(this.collapsed ? 'hide' : 'show'))
         this.collapseAll(this.collapsed ? 'hide' : 'show')
+        
+        // enable popovers
         $('[data-toggle="popover"]', this.$el).popover({container: 'body'});
+
+        // Sort the list initially and after every fetch
         this.sort()
+        eventBus.$on('fetched', () => this.sort())
+
+        // When permissions have been updated, force an update.
         eventBus.$on('updatedPermissions', () => this.$forceUpdate())
+
+        // Initially open the list if there was an annotation persistently adressed
         if (this.purlId && this.purlAnnoInitiallyOpen) {
             eventBus.$once('fetched', () => {
                 setTimeout(() => {
@@ -64,15 +75,13 @@ module.exports = {
     },
     methods: {
         logout() { return this.$store.dispatch('logout') },
+        sort(...args) { return this.$store.dispatch('sort', ...args) },
         create() { return eventBus.$emit('create', this.targetSource) },
 
         collapseAll(state) {
             this.collapsed = state === 'hide'
             this.$children.forEach(annoViewer => annoViewer.collapse && annoViewer.collapse(state))
             window.sessionStorage.setItem('annolistCollapseAll', state)
-        },
-        sort(...args) {
-            this.$store.dispatch('sort', ...args)
         },
     },
 }
