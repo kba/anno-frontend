@@ -52,18 +52,17 @@
               data-toggle="popover"
               data-trigger="hover"
               data-placement="bottom" 
+              v-for="license in licenseInfo"
+              :key="$store.state.editing.rights"
               :title="l10n(license.title)"
               :data-content="l10n(license.desc)"
-              v-for="license in licenseInfo"
-              v-key="rights"
-              :class="{'btn': 1, 'btn-default': 1, 'active': rights == license.url}">
-              <input type="radio" v-model="rights" :value="license.url"/>
+              @click="$store.commit('SET_RIGHTS', license.url)"
+              :class="{'btn': 1, 'btn-default': 1, 'active': $store.state.editing.rights === license.url}">
               <img :src="license.img"/>
             </label>
           </div>
         </form>
       </div>
     </div>
-    <!-- <input readonly v-model="rights" class="form-control" /> -->
   </div>
 </div>

@@ -37,6 +37,9 @@ module.exports = {
     style: require('./html-editor.scss'),
     template: require('./html-editor.html'),
     mounted() {
+        $('[data-toggle="popover"]', this.$el).popover({
+            container: '#license-select'
+        });
         this.quill = new quill(this.$refs.editor, {
             modules: {
                 toolbar: {
@@ -56,9 +59,6 @@ module.exports = {
             if (html === '<p><br></p>') html = ''
             this.value = html
         })
-        $('[data-toggle="popover"]', this.$el).popover({
-            container: '.modal'
-        });
         eventBus.$on('open-editor', () => this.quill.pasteHTML(this.value))
     },
     computed: {
@@ -73,10 +73,6 @@ module.exports = {
         title: {
             get () { return this.$store.state.editing.title },
             set (value) { this.$store.commit('SET_TITLE', value) }
-        },
-        rights: {
-            get () { return this.$store.state.editing.rights },
-            set (value) { this.$store.commit('SET_RIGHTS', value) }
         },
         titleRequired() {
             return ! this.$store.state.editing.replyTo
