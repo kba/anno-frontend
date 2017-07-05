@@ -63,7 +63,11 @@ module.exports = {
     },
     computed: {
         value: {
-            get () { return (textualHtmlBody.first(this.$store.state.editing) || {value: ''}).value },
+            get () {
+                const textBody = textualHtmlBody.first(this.$store.state.editing)
+                if (!textBody.value) this.$store.commit('SET_HTML_BODY_VALUE', '') 
+                return textBody.value
+            },
             set (content) { this.$store.commit('SET_HTML_BODY_VALUE', content) },
         },
         title: {
