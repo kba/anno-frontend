@@ -9,6 +9,7 @@ function _sortByDateTime(field, dir=1) {
 function _sortAlpha(field, dir=1) {
     return function(a, b) {
         [a,b] = [a,b].map(x => {
+            x = x[field]
             if (!x) return ''
             if (x && typeof x.displayName === 'string') x = x.displayName
             if (typeof x === 'string') return x.toLowerCase()
