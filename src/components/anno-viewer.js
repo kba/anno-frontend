@@ -80,6 +80,14 @@ module.exports = {
             const method = `${state}Highlighting`
             eventBus.$on(method, (id, expand) => { if (id == this.id) this[method](expand) })
         })
+
+        //
+        eventBus.$on('expand', (id) => {
+            if (id !== this.id) return 
+            this.collapse(false)
+            const rootId = this.id.replace(/[~\.][~\.0-9]+$/, '')
+            if (rootId !== id) eventBus.$emit('expand', rootId)
+        })
     },
     computed: {
         id()                 { return this.annotation.id },
@@ -133,15 +141,7 @@ module.exports = {
 
         startHighlighting(expand)  {
             this.highlighted = true;
-            if (expand) {
-                this.collapsed = false
-                // also highlight/expand the root id so the anno is visible
-                const rootId = this.id.replace(/[~\.][~\.0-9]+$/, '')
-                // console.log(rootId)
-                if (rootId !== this.id) {
-                    eventBus.$emit('startHighlighting', rootId, expand)
-                }
-            }
+            if (expand) eventBus.$emit('expand', this.id, true)
         },
         stopHighlighting()   { this.highlighted = false },
         toggleHighlighting() { this.highlighted = ! this.highlighted },

@@ -48,8 +48,9 @@ const eventBus = require('./event-bus')
  *
  * #### Methods
  * 
- * - `startHighlighting(annoId, open)`: Highlight the annotation with `id` annoId, open the subtree, if open is given
- * - `stopHighlighting(annoId)`: $emit this to un-highlight the annotation 
+ * - `startHighlighting(annoId, open)`: Highlight the annotation with `id` annoId
+ * - `stopHighlighting(annoId)`: Stop highlighting the annotation with `id` annoId
+ * - `expand(annoId)`: Open thread tree to reveal anno with id `annoId`
  * 
  * #### Events
  * 
@@ -125,6 +126,7 @@ module.exports = function displayAnnotations(options={}) {
     //
     annoapp.startHighlighting = function(...args) { eventBus.$emit('startHighlighting', ...args) }
     annoapp.stopHighlighting = function(...args) { eventBus.$emit('stopHighlighting', ...args) }
+    annoapp.expand = function(...args) { eventBus.$emit('expand', ...args) }
 
     //
     // Kick off fetching tokens/list/ACL rules
