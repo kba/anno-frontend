@@ -1,9 +1,20 @@
-
 function _sortByDateTime(field, dir=1) {
     return function(a, b) {
         a = a[field] || 0
         b = b[field] || 0
-        return dir * (!(a||b) ? 0 : !a ? -1 : !b ? +1 : a < b ? +1 : a > b ? -1 : 0)
+        return dir * (!(a||b) ? 0 : !a ? +1 : !b ? -1 : a < b ? -1 : a > b ? +1 : 0)
+    }
+}
+
+function _sortAlpha(field, dir=1) {
+    return function(a, b) {
+        [a,b] = [a,b].map(x => {
+            if (!x) return ''
+            if (x && typeof x.displayName === 'string') x = x.displayName
+            if (typeof x === 'string') return x.toLowerCase()
+            return ''
+        })
+        return dir * (!(a||b) ? 0 : !a ? +1 : !b ? -1 : a < b ? -1 : a > b ? +1 : 0)
     }
 }
 
@@ -12,11 +23,10 @@ const sorters = {
     created_za: _sortByDateTime('created', -1),
     modified_az: _sortByDateTime('modified'),
     modified_za: _sortByDateTime('modified', -1),
-    title_az(a, b) {
-        a = a.title ? a.title.toLowerCase() : ''
-        b = b.title ? b.title.toLowerCase() : ''
-        return !a ? +1 : !b ? -1 : a < b ? -1 : a > b ? + 1 : 0
-    },
+    title_az: _sortAlpha('title'),
+    title_za: _sortAlpha('title', -1),
+    creator_az: _sortAlpha('creator'),
+    creator_za: _sortAlpha('creator', -1),
 }
 
 module.exports = {
