@@ -28,7 +28,7 @@
       <a role="button">
         <span class="fa fa-caret-right" v-show="collapsed"></span>
         <span class="fa fa-caret-down" v-show="!collapsed"></span>
-        {{ annotation.title }}
+        {{ title }}
       </a>
     </h4>
   </div>
@@ -37,34 +37,36 @@
     aria-expanded="true"
     @click="collapse('toggle')"
     >
-    <!-- <span class="small">{{ annotation.title }}</span> -->
-    <!-- <h5 class="panel-title"> {{ annotation.title }} </h5> -->
+    <!-- <span class="small">{{ title }}</span> -->
+    <!-- <h5 class="panel-title"> {{ title }} </h5> -->
   </div>
 
   <div class="panel-body" role="tabpanel" v-show="!collapsed">
-
-    <div class="well old_version" v-show="! isNewestVersion()">{{ l10n('version_from') }} {{ dateformat(annotation.created) }} </div>
 
     <div class="media" style="height: auto;">
 
       <div class="media-body">
 
-        <div v-if="annotation.creator">
+        <div v-if="creator">
           <button class="btn btn-xs">
-            <template v-if="annotation.creator && annotation.creator.icon">
-              <img class="media-object" style="display: inline" :src="annotation.creator.icon" alt="Logo" width="15px" height="15px">
+            <template v-if="creator && creator.icon">
+              <img class="media-object" style="display: inline" :src="creator.icon" alt="Logo" width="15px" height="15px">
             </template>
             <template v-else>
               <span class="glyphicon glyphicon-user"></span>
             </template>
-            <template v-if="annotation.creator && annotation.creator.displayName">
-              {{ annotation.creator.displayName }}
+            <template v-if="creator && creator.displayName">
+              {{ creator.displayName }}
             </template>
             <template v-else>
-              {{ annotation.creator }}
+              {{ creator }}
             </template>
           </button>
-          {{ dateformat(annotation.created || annotation.modified) }}
+          <span 
+            class="annoeditor-date"
+            :title="`${l10n('Created')}: ${created}\n${l10n('Modified')}: ${modified}`">
+            {{ dateformat(created) }}
+          </span>
           <button class="btn btn-xs"
             data-toggle="popover"
             data-html="true"
@@ -81,7 +83,9 @@
           </button>
         </div>
 
-        <h4 class="media-heading" v-if="asReply">{{ annotation.title }}</h4>
+        <div class="well old_version" v-show="! isNewestVersion()">{{ l10n('version_from') }} {{ dateformat(created) }} </div>
+
+        <h4 class="media-heading" v-if="asReply">{{ title }}</h4>
 
         <div v-if="firstHtmlBody" v-html="firstHtmlBody.value"></div>
 

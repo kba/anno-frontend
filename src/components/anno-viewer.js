@@ -80,12 +80,16 @@ module.exports = {
         })
     },
     computed: {
+        id()                 { return this.annotation.id },
+        created()            { return this.annotation.created },
+        creator()            { return this.annotation.creator },
+        modified()           { return this.annotation.modified },
+        title()              { return this.annotation.title },
         firstHtmlBody()      { return textualHtmlBody.first(this.annotation) },
         simpleTagBodies()    { return simpleTagBody.all(this.annotation) },
         semanticTagBodies()  { return semanticTagBody.all(this.annotation) },
         relationLinkBodies() { return relationLinkBody.all(this.annotation) },
         svgTarget()          { return svgSelectorResource.first(this.annotation) },
-        id() { return this.annotation.id },
         purl() { return this.purlTemplate 
                 ? this.purlTemplate.replace('{{ slug }}', this.id.replace(/.*\//, ''))
                 : this.id },
