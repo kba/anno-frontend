@@ -38,6 +38,7 @@ const {
  * - `stopHighlighting`: Stop highlighting this annotation
  * - `mouseenter`: The mouse cursor is now on this annotation
  * - `mouseleave`: The mouse cursor has left this annotation
+ * - `setToVersion`: Reset the currently edited annotation to the revision passed
  */
 
 module.exports = {
@@ -59,6 +60,7 @@ module.exports = {
     template: require('./anno-viewer.html'),
     style:    require('./anno-viewer.scss'),
     mounted() {
+
         // Show popover with persistent URL
         const Clipboard = require('clipboard')
         const purlPopoverTrigger = this.$el.querySelector('[data-toggle="popover"]')
@@ -85,6 +87,14 @@ module.exports = {
         creator()            { return this.annotation.creator },
         modified()           { return this.annotation.modified },
         title()              { return this.annotation.title },
+        isOlderVersion()     {
+            if (!this.annotation.versionOf) return false
+            const versionedId = this.annotation.id
+            const unversionedId = this.annotation.versionOf
+            const versions = this.annotation.hasVersion
+            if (versions.findIndex(r => r.id === versionedId) === versions.length - 1) return false
+            return true
+        },
         firstHtmlBody()      { return textualHtmlBody.first(this.annotation) },
         simpleTagBodies()    { return simpleTagBody.all(this.annotation) },
         semanticTagBodies()  { return semanticTagBody.all(this.annotation) },
@@ -120,16 +130,6 @@ module.exports = {
             this.stopHighlighting()
             eventBus.$emit("mouseleave", this.id)
         },
-        isNewestVersion() {
-            const anno = this.annotation
-            if (!anno.hasVersion || anno.hasVersion.length == 1) return true
-            const byDate = [...anno.hasVersion].sort((b,a) =>  {
-                a = a.created || 0
-                b = b.created || 0
-                return !(a||b) ? 0 : !a ? +1 : !b ? -1 : a < b ? -1 : a > b ? +1 : 0
-            })
-            return byDate[0].id === anno.id || byDate[0].created === anno.created
-        },
 
         startHighlighting(expand)  {
             this.highlighted = true;
@@ -154,11 +154,11 @@ module.exports = {
         setToVersion(newState) {
             Object.assign(this.annotation, newState)
             eventBus.$emit('setToVersion', this.annotation)
-            // this.$store.commit('RESET_ANNOTATION')
-            // this.$store.commit('REPLACE_ANNOTATION', newState)
         },
-        isCurrentVersion(version) {
-            return version.created == this.annotation.created
-        }
+        versionIsShown(version) {
+            return this.isOlderVersion
+                ? version.created == this.annotation.created
+                : version.created == this.annotation.modified
+        },
     },
 }

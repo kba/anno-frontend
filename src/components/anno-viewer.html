@@ -83,7 +83,7 @@
           </button>
         </div>
 
-        <div class="well old_version" v-show="! isNewestVersion()">{{ l10n('version_from') }} {{ dateformat(created) }} </div>
+        <div class="well old_version" v-show="isOlderVersion">{{ l10n('version_from') }} {{ dateformat(created) }} </div>
 
         <h4 class="media-heading" v-if="asReply">{{ title }}</h4>
 
@@ -157,7 +157,7 @@
           <ul class="dropdown-menu dropdown-menu-right annoeditor-versions">
             <li v-for="version in annotation.hasVersion"
               :key="version.id"
-              :class="{'active': isCurrentVersion(version)}"
+              :class="{'active': versionIsShown(version)}"
               >
               <a class="small"
                 @click="setToVersion(version)"
@@ -166,7 +166,7 @@
                   {{ dateformat(version.created) }}
                 </span>
                 &nbsp;
-                <template v-if="isCurrentVersion(version)">
+                <template v-if="versionIsShown(version)">
                   ({{ l10n("active_version") }})
                 </template>
               </a>
