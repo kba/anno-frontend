@@ -95,14 +95,6 @@ module.exports = {
         creator()            { return this.annotation.creator },
         modified()           { return this.annotation.modified },
         title()              { return this.annotation.title },
-        isOlderVersion()     {
-            if (!this.annotation.versionOf) return false
-            const versionedId = this.annotation.id
-            const unversionedId = this.annotation.versionOf
-            const versions = this.annotation.hasVersion
-            if (versions.findIndex(r => r.id === versionedId) === versions.length - 1) return false
-            return true
-        },
         firstHtmlBody()      { return textualHtmlBody.first(this.annotation) },
         simpleTagBodies()    { return simpleTagBody.all(this.annotation) },
         semanticTagBodies()  { return semanticTagBody.all(this.annotation) },
@@ -155,8 +147,20 @@ module.exports = {
             Object.assign(this.annotation, newState)
             eventBus.$emit('setToVersion', this.annotation)
         },
+        newestVersionId() {
+            if (!this.annotation.hasVersion) return
+            return this.annotation.hasVersion[this.annotation.hasVersion.length - 1].id
+        },
+        isOlderVersion()     {
+            if (!this.annotation.id.match(/~/)) return false
+            const newestVersionId = this.newestVersionId()
+            if (!newestVersionId) return false
+            if (this.annotation.id === newestVersionId) return false
+            return true
+        },
         versionIsShown(version) {
-            return this.isOlderVersion
+            if (version.id === this.annotation.id) return true
+            return this.isOlderVersion()
                 ? version.created == this.annotation.created
                 : version.created == this.annotation.modified
         },
