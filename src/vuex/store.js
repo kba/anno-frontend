@@ -39,6 +39,10 @@ module.exports = {
     },
     getters: {
 
+        tokenDecoded(state) {
+            return jwtDecode(state.token)
+        },
+
         allIds(state) {
             const ret = collectIds(state.annotationList.list)
             ret.push(state.targetSource)
