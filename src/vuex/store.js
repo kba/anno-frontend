@@ -31,6 +31,8 @@ module.exports = {
         loginId: null,
         acl: null,
 
+        editMode: null,
+
         enableLogoutButton: true,
     },
     modules: {
@@ -76,6 +78,10 @@ module.exports = {
         DELETE_TOKEN(state, token) {
             state.token = null
             window.sessionStorage.removeItem('anno-token');
+        },
+
+        SET_EDIT_MODE(state, editMode) {
+            state.editMode = editMode
         },
 
     },

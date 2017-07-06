@@ -27,9 +27,6 @@ module.exports = {
         editorId: {type: String, default: 'anno-editor'},
         enableTabTags: {type: Boolean, default: false},
     },
-    data() { return {
-        mode: 'create'
-    }},
     created() {
         // TODO Move these to store maybe??
         eventBus.$on('create', this.create)
@@ -54,6 +51,7 @@ module.exports = {
         id()              { return this.$store.state.editing.id },
         stateDump()       { return this.$store.state },
         targetImage()     { return this.$store.state.targetImage },
+        editMode()        { return this.$store.state.editMode },
         targetThumbnail() { return this.$store.state.targetThumbnail },
         targetSource()    { return this.$store.state.targetSource },
         svgTarget()       { return this.$store.getters.svgTarget },
@@ -62,7 +60,7 @@ module.exports = {
     methods: {
         save() {
             const anno = this.$store.state.editing
-            if (!anno.title && this.mode == 'create') {
+            if (!anno.title && this.editMode == 'create') {
                 window.alert("A title is required")
                 return;
             }
@@ -76,9 +74,9 @@ module.exports = {
                 eventBus.$emit('close-editor')
             }
 
-                 if (this.mode === 'create') this.api.create(anno, cb)
-            else if (this.mode === 'reply')  this.api.reply(anno.replyTo, anno, cb)
-            else if (this.mode === 'revise') this.api.revise(anno.id, anno, cb)
+                 if (this.editMode === 'create') this.api.create(anno, cb)
+            else if (this.editMode === 'reply')  this.api.reply(anno.replyTo, anno, cb)
+            else if (this.editMode === 'revise') this.api.revise(anno.id, anno, cb)
         },
 
         loadSvg() {
@@ -107,7 +105,7 @@ module.exports = {
         },
 
         create(annotation) {
-            this.mode = 'create'
+            this.$store.commit('SET_EDIT_MODE', 'create')
             this.$store.commit('RESET_ANNOTATION')
             this.$store.commit('SET_COLLECTION', this.$store.state.collection)
             this.$store.commit('ADD_TARGET', this.targetSource)
@@ -115,7 +113,7 @@ module.exports = {
         },
 
         reply(annotation) {
-            this.mode = 'reply'
+            this.$store.commit('SET_EDIT_MODE', 'reply')
             this.$store.commit('RESET_ANNOTATION')
             this.$store.commit('SET_COLLECTION', this.$store.state.collection)
             this.$store.commit('SET_HTML_BODY_VALUE', '')
@@ -126,7 +124,7 @@ module.exports = {
         },
 
         revise(annotation) {
-            this.mode = 'revise'
+            this.$store.commit('SET_EDIT_MODE', 'revise')
             this.$store.commit('SET_COLLECTION', this.$store.state.collection)
             this.$store.commit('RESET_ANNOTATION')
             this.$store.commit('REPLACE_ANNOTATION', annotation)

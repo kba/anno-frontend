@@ -156,8 +156,7 @@ module.exports = {
             return this.annotation.hasVersion[this.annotation.hasVersion.length - 1].id
         },
         isOlderVersion()     {
-            if (!this.hasVersion) return false
-            if (!this.hasVersion.length > 1) return false
+            if (this.annotation.hasVersion && this.annotation.hasVersion.length <= 1) return false
             if (!this.annotation.id.match(/~/)) return false
             const newestVersionId = this.newestVersionId()
             if (!newestVersionId) return false

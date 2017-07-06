@@ -29,7 +29,7 @@
       <div class="modal-footer">
 
         <div class="pull-left">
-          <bootstrap-button btn-class="danger" @click="remove" v-if="$auth('remove', id) && editor.mode === 'revise'">
+          <bootstrap-button btn-class="danger" @click="remove" v-if="$auth('remove', id) && editMode === 'revise'">
             {{ l10n('delete_anno') }}
           </bootstrap-button>
         </div>
