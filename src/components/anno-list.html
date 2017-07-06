@@ -1,11 +1,13 @@
 <div class="annoeditor-list">
   <div class="btn-group btn-group-vertical pull-left hidden-print" role="group">
 
-    <a class="btn btn-xs btn-warning" @click.stop="logout" v-if="isLoggedIn && enableLogoutButton">
-      {{ l10n('logout') }}
-    </a>
+    <template  v-if="isLoggedIn && enableLogoutButton">
+      <a class="btn btn-xs btn-warning" @click.stop="logout" :href="tokenDecoded.sub">
+        {{ l10n('logout') }}
+      </a>
+    </template>
 
-    <a class="btn btn-xs btn-default" :href="loginEndpoint" v-if="!isLoggedIn && loginEndpoint">
+    <a class="btn btn-xs" :href="loginEndpoint" v-if="!isLoggedIn && loginEndpoint">
       {{ l10n('login') }}
     </a>
 

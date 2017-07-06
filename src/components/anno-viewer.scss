@@ -30,8 +30,12 @@
       margin-top: 5px;
     }
 
-    .dropdown-menu a {
+    .dropdown-menu {
+      text-align: left;
+      color: inherit !important;
+      a {
         cursor: pointer;
+      }
     }
 
     .panel-heading {

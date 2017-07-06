@@ -37,7 +37,7 @@ module.exports = {
         }
         this.$watch(() => this.list, () => this.collapseAll(this.collapsed ? 'hide' : 'show'))
         this.collapseAll(this.collapsed ? 'hide' : 'show')
-        
+
         // enable popovers
         $('[data-toggle="popover"]', this.$el).popover({container: 'body'});
 
@@ -70,6 +70,7 @@ module.exports = {
         enableLogoutButton() { return this.$store.state.enableLogoutButton },
         logoutEndpoint() { return this.$store.state.logoutEndpoint },
         loginEndpoint() { return this.$store.state.loginEndpoint },
+        tokenDecoded() { return this.$store.getters.tokenDecoded },
     },
     methods: {
         logout() { return this.$store.dispatch('logout') },
