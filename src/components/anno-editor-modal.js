@@ -24,6 +24,9 @@ module.exports = {
     style:    require('./anno-editor-modal.scss'),
     computed: {
         id() { return this.$store.state.editing.id },
+        purlTemplate() { return this.$store.state.purlTemplate },
+        editMode() { return this.$store.state.editMode },
+        replyTo() { return this.$store.state.editing.replyTo },
         editor() { return this.$refs['editor'] },
     },
     created() {
@@ -72,6 +75,8 @@ module.exports = {
         save() { eventBus.$emit('save') },
         remove() { eventBus.$emit('remove', this.id) },
         discard() { eventBus.$emit('discard') },
+        startHighlighting(...args) { eventBus.$emit('startHighlighting', ...args) },
+        stopHighlighting(...args) { eventBus.$emit('stopHighlighting', ...args) },
 
         show(annotation) {
             $(this.$el).modal({
@@ -80,5 +85,11 @@ module.exports = {
             })
         },
         hide() { $(this.$el).modal('hide') },
+        purl(id) {
+            return (this.purlTemplate && id)
+                ? this.purlTemplate
+                    .replace('{{ slug }}', id.replace(/.*\//, '')) 
+                : id ? id : ''
+        },
     },
 }

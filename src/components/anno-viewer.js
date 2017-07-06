@@ -104,7 +104,7 @@ module.exports = {
         semanticTagBodies()  { return semanticTagBody.all(this.annotation) },
         relationLinkBodies() { return relationLinkBody.all(this.annotation) },
         svgTarget()          { return svgSelectorResource.first(this.annotation) },
-        purl() { return this.purlTemplate 
+        purl()               { return this.purlTemplate 
                 ? this.purlTemplate.replace('{{ slug }}', this.id.replace(/.*\//, ''))
                 : this.id },
         slug() {

@@ -58,6 +58,10 @@
             "active_version":      "Angezeigte Version",
             "zones":               "Zonen",
 
+            "annoeditor_mode_create": "Neue Annotation anlegen",
+            "annoeditor_mode_revise": "Bearbeiten der Annotation",
+            "annoeditor_mode_reply": "Antworten auf Annotation",
+
             "add_relationlink":          "Link hinzuf\u00fcgen",
             "delete_relationlink":       "Link l\u00f6schen",
             "relationlink":              "Link",
@@ -78,7 +82,6 @@
             "delete_anno":         "L\u00f6schen",
             "confirm_delete":      "Sind sie sicher dass Sie die Annotation l\u00f6schen wollen?",
 
-            "unsaved":             "Nicht gespeichert",
             "discard":             "Verwerfen",
             "annoeditor":          "Annotations-Editor",
 
@@ -143,6 +146,10 @@
             "active_version":      "Active version",
             "zones":               "Zones",
 
+            "annoeditor_mode_create": "Create a new annotation",
+            "annoeditor_mode_revise": "Edit annotation",
+            "annoeditor_mode_reply": "Reply to annotation",
+
             "add_semtag":          "Add Semantic Tag",
             "delete_semtag":       "Delete Semantic Tag",
             "semtag":              "Semantic Tag",
@@ -163,7 +170,6 @@
             "delete_anno":         "Delete",
             "confirm_delete":      "Are you sure you want to delete this annotation?",
 
-            "unsaved":             "Unsaved",
             "discard":             "Discard",
             "annoeditor":          "Annotation editor",
 
