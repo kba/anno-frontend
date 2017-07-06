@@ -66,7 +66,7 @@ module.exports = {
         purlAnnoInitiallyOpen() { return this.$store.state.purlAnnoInitiallyOpen },
         numberOfAnnotations() { return this.$store.getters.numberOfAnnotations },
 
-        isLoggedIn() { return this.$store.state.isLoggedIn },
+        isLoggedIn() { return this.$store.getters.isLoggedIn },
         enableLogoutButton() { return this.$store.state.enableLogoutButton },
         logoutEndpoint() { return this.$store.state.logoutEndpoint },
         loginEndpoint() { return this.$store.state.loginEndpoint },

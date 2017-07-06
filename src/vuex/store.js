@@ -28,7 +28,7 @@ module.exports = {
         targetThumbnail: null,
         collection: null,
         token: null,
-        isLoggedIn: false,
+        loginId: null,
         acl: null,
 
         enableLogoutButton: true,
@@ -39,8 +39,13 @@ module.exports = {
     },
     getters: {
 
+        isLoggedIn(state) {
+            return state.loginId && state.token && jwtDecode(state.token).sub === state.loginId
+        },
+
         tokenDecoded(state) {
-            return jwtDecode(state.token)
+            console.log('tokenDecoded', state.token, state.isLoggedIn)
+            return state.isLoggedIn ? jwtDecode(state.token) : {}
         },
 
         allIds(state) {
@@ -73,14 +78,6 @@ module.exports = {
             window.sessionStorage.removeItem('anno-token');
         },
 
-        LOGIN(state, user) {
-            state.isLoggedIn = user
-        },
-
-        LOGOUT(state) {
-            state.isLoggedIn = false
-        }
-
     },
 
     actions: {
@@ -91,11 +88,9 @@ module.exports = {
                 if (token) {
                     if (isExpired(token)) {
                         commit('DELETE_TOKEN')
-                        commit('LOGOUT')
                     } else {
                         const {sub} = jwtDecode(token)
                         commit('SET_TOKEN', token)
-                        commit('LOGIN', sub)
                         return resolve()
                     }
                 }
@@ -107,12 +102,10 @@ module.exports = {
                     try {
                         const {sub} = jwtDecode(token)
                         commit('SET_TOKEN', token)
-                        commit('LOGIN', sub)
                         dispatch('fetchList')
                         resolve()
                     } catch (err) {
                         commit('DELETE_TOKEN')
-                        commit('LOGOUT')
                         reject("NO_TOKEN")
                     }
                 }).catch(reject)
@@ -150,7 +143,6 @@ module.exports = {
         logout({state, commit}) {
             commit('DELETE_TOKEN')
             commit('EMPTY_ACL')
-            commit('LOGOUT')
             // if (state.logoutEndpoint) {
             //     window.location.replace(state.logoutEndpoint)
             // }
