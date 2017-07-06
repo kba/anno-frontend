@@ -46,7 +46,9 @@ module.exports = {
         })
     },
     mounted() {
-        this.zoneEditor.$on('load-image', () => this.loadSvg())
+        if (this.targetImage) {
+            this.zoneEditor.$on('load-image', () => this.loadSvg())
+        }
     },
     computed: {
         id()              { return this.$store.state.editing.id },
@@ -116,6 +118,7 @@ module.exports = {
             this.mode = 'reply'
             this.$store.commit('RESET_ANNOTATION')
             this.$store.commit('SET_COLLECTION', this.$store.state.collection)
+            this.$store.commit('SET_HTML_BODY_VALUE', '')
             this.$store.commit('ADD_TARGET', {id: annotation.id, scope: this.targetSource})
             this.$store.commit('ADD_MOTIVATION', 'replying')
             this.$store.commit('SET_REPLY_TO', annotation.id)
