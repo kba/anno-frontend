@@ -149,30 +149,29 @@
          :title="l10n('delete_anno')"/>
 
         <br>
-        <template v-if="numberOf('hasVersion') > 1">
-          <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        <div v-if="numberOf('hasVersion') > 1" class="dropdown btn-group-xs annoeditor-versions">
+          <a class="btn btn-default dropdown-toggle"
+            data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="true">
+            <span class="fa fa-history"></span>
             {{ l10n('previous_version') }}
             <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu dropdown-menu-right annoeditor-versions">
+          </a>
+          <ul role="menu" class="dropdown-menu dropdown-menu-right annoeditor-versions">
             <li v-for="version in annotation.hasVersion"
               :key="version.id"
               :class="{'active': versionIsShown(version)}"
               >
-              <a class="small"
-                @click="setToVersion(version)"
-                >
-                <span class="glyphicon glyphicon-time">
-                  {{ dateformat(version.created) }}
-                </span>
+              <a class="small" @click="setToVersion(version)">
+                <span class="glyphicon glyphicon-time"></span>
                 &nbsp;
-                <template v-if="versionIsShown(version)">
-                  ({{ l10n("active_version") }})
-                </template>
+                {{ dateformat(version.created) }}
+                &nbsp;
+                <template v-if="versionIsShown(version)">({{ l10n("active_version") }})</template>
               </a>
             </li>
           </ul>
-        </template>
+        </div>
 
       </div>
     </div>

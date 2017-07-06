@@ -1,4 +1,7 @@
-.annoeditor-viewer {
+.annoeditor-viewer.panel.panel-default {
+
+    // This changed between bootstrap 3.1 and 3.2 for panels
+    overflow: visible;
 
     &.annoeditor-purl {
         & > .panel-heading,

@@ -64,7 +64,9 @@ module.exports = {
         // Show popover with persistent URL
         const Clipboard = require('clipboard')
         const purlPopoverTrigger = this.$el.querySelector('[data-toggle="popover"]')
-        $(purlPopoverTrigger).popover(); 
+        $(purlPopoverTrigger).popover({
+            container: 'body'
+        }); 
         $(purlPopoverTrigger).on('shown.bs.popover', function() {
             const purlPopoverDiv = purlPopoverTrigger.nextElementSibling
             const clip = new Clipboard(purlPopoverDiv.querySelector("[data-clipboard-text]"))
