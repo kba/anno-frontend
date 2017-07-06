@@ -60,13 +60,14 @@ module.exports = {
             this.value = html
         })
         eventBus.$on('open-editor', () => this.quill.pasteHTML(this.value))
+        eventBus.$on('close-editor', () => this.quill.pasteHTML(''))
     },
     computed: {
         value: {
             get () {
                 const textBody = textualHtmlBody.first(this.$store.state.editing)
-                if (!textBody.value) this.$store.commit('SET_HTML_BODY_VALUE', '') 
-                return textBody.value
+                if (!textBody || !textBody.value) this.$store.commit('SET_HTML_BODY_VALUE', '') 
+                return textualHtmlBody.first(this.$store.state.editing)
             },
             set (content) { this.$store.commit('SET_HTML_BODY_VALUE', content) },
         },
