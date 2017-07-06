@@ -68,12 +68,14 @@ module.exports = {
             container: 'body'
         }); 
         $(purlPopoverTrigger).on('shown.bs.popover', function() {
-            const purlPopoverDiv = purlPopoverTrigger.nextElementSibling
-            const clip = new Clipboard(purlPopoverDiv.querySelector("[data-clipboard-text]"))
-            clip.on('success', () => {
-                const successLabel = $(".label-success", purlPopoverDiv)
-                successLabel.show()
-                setTimeout(() => $(successLabel).hide(), 2000)
+            setTimeout(() => {
+                const purlPopoverDiv = document.getElementById(purlPopoverTrigger.getAttribute("aria-describedby"))
+                const clip = new Clipboard(purlPopoverDiv.querySelector("[data-clipboard-text]"))
+                clip.on('success', () => {
+                    const successLabel = $(".label-success", purlPopoverDiv)
+                    successLabel.show()
+                    setTimeout(() => $(successLabel).hide(), 2000)
+                })
             })
         })
 
