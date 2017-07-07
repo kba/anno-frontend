@@ -43,6 +43,11 @@
 
         .panel-title {
             font-size: 1em;
+
+            & > a {
+              display: block;
+              padding: 10px 15px;
+            }
         }
 
         .annoeditor-thumbnail-wrapper {
@@ -62,7 +67,24 @@
     }
 
     .panel-body {
-        padding: 0 5px;
+
+      padding: 0 5px;
+
+      & .media-body {
+
+        & > h4 {
+          margin-top: 3px;
+          font-size: 14px;
+          font-weight: 700;
+        }
+
+        img {
+          max-width: 100%;
+        }
+
+
+      }
+
         .well.old_version {
             background-color: #ddf;
         }
