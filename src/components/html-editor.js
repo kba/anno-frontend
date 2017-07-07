@@ -2,7 +2,7 @@ const $ = require('jquery')
 const quill = require('quill/dist/quill.js')
 require('style-loader!css-loader?minimize=true!quill/dist/quill.snow.css')
 
-const { textualHtmlBody } = require('@kba/anno-queries')
+// const { textualHtmlBody } = require('@kba/anno-queries')
 
 const eventBus = require('../event-bus')
 
@@ -63,12 +63,9 @@ module.exports = {
         eventBus.$on('close-editor', () => this.quill.pasteHTML(''))
     },
     computed: {
+        firstHtmlBody() { return this.$store.getters.firstHtmlBody },
         value: {
-            get () {
-                const textBody = textualHtmlBody.first(this.$store.state.editing)
-                if (!textBody || !textBody.value) this.$store.commit('SET_HTML_BODY_VALUE', '') 
-                return textualHtmlBody.first(this.$store.state.editing)
-            },
+            get () { return this.firstHtmlBody ? this.firstHtmlBody.value : '' },
             set (content) { this.$store.commit('SET_HTML_BODY_VALUE', content) },
         },
         title: {
