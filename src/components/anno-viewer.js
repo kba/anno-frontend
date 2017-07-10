@@ -1,6 +1,7 @@
 const $ = require('jquery')
 const _dateformat = require('dateformat')
 const eventBus = require('../event-bus')
+const XrxUtils = require('semtonotes-utils')
 const {
     numberOf,
 } = require('@kba/anno-util')
@@ -55,26 +56,30 @@ module.exports = {
         // Controls whether comment is collapsible or not
         asReply: {type: Boolean, default: false},
         collapseInitially: {type: Boolean, default: false},
+        imageWidth: {type: Number, default: -1},
+        imageHeight: {type: Number, default: -1},
+        iiifUrlTemplate: {type: String, default: null},
         dateFormat: {type: String, default: 'dd.mm.yyyy HH:MM:ss'},
     },
     template: require('./anno-viewer.html'),
     style:    require('./anno-viewer.scss'),
     mounted() {
 
+        this.iiifLink = this._iiifLink()
+
         // Show popover with persistent URL
         const Clipboard = require('clipboard')
-        const purlPopoverTrigger = this.$el.querySelector('[data-toggle="popover"]')
-        $(purlPopoverTrigger).popover({
-            container: 'body'
-        }); 
-        $(purlPopoverTrigger).on('shown.bs.popover', function() {
-            setTimeout(() => {
-                const purlPopoverDiv = document.getElementById(purlPopoverTrigger.getAttribute("aria-describedby"))
-                const clip = new Clipboard(purlPopoverDiv.querySelector("[data-clipboard-text]"))
-                clip.on('success', () => {
-                    const successLabel = $(".label-success", purlPopoverDiv)
-                    successLabel.show()
-                    setTimeout(() => $(successLabel).hide(), 2000)
+        Array.from(this.$el.querySelectorAll('[data-toggle="popover"]')).forEach(purlPopoverTrigger => {
+            $(purlPopoverTrigger).popover({ container: 'body' }); 
+            $(purlPopoverTrigger).on('shown.bs.popover', () => {
+                setTimeout(() => {
+                    const purlPopoverDiv = document.getElementById(purlPopoverTrigger.getAttribute("aria-describedby"))
+                    const clip = new Clipboard(purlPopoverDiv.querySelector("[data-clipboard-text]"))
+                    clip.on('success', () => {
+                        const successLabel = $(".label-success", purlPopoverDiv)
+                        successLabel.show()
+                        setTimeout(() => $(successLabel).hide(), 2000)
+                    })
                 })
             })
         })
@@ -113,10 +118,11 @@ module.exports = {
         },
         isPurl() {
             return this.annotation.id === this.purlId
-        }
+        },
     },
     data() {
         return {
+            iiifLink: '',
             currentVersion: this.initialAnnotation,
             highlighted: false,
             collapsed: this.collapseInitially,
@@ -168,6 +174,26 @@ module.exports = {
             return this.isOlderVersion()
                 ? version.created == this.annotation.created
                 : version.created == this.annotation.modified
+        },
+        _iiifLink() {
+            if (! this.svgTarget || this.imageHeight <= 0 || this.imageWidth <= 0 || ! this.iiifUrlTemplate) {
+                console.error("Could not determine width / height of img")
+                return ''
+            }
+            // console.log(this.svgTarget, this.imageHeight,  this.imageWidth, this.iiifUrlTemplate)
+            const svg = this.svgTarget.selector.value
+
+            const drawing = XrxUtils.createDrawing(this.$el.querySelector(".annoeditor-iiif-canvas"), 10000, 10000)
+            XrxUtils.drawFromSvg(svg, drawing, {
+                absolute: true,
+                grouped: false,
+            })
+            const [[x1, y1], [x2, y2]] = XrxUtils.boundingBox(drawing)
+            const x = x1 / this.imageWidth * 100
+            const y = y1 / this.imageHeight * 100
+            const w = (x2 - x1) / this.imageWidth * 100
+            const h = (y2 - y1) / this.imageHeight * 100
+            return this.$store.state.iiifUrlTemplate.replace(`{{ iiifRegion }}`, `pct:${x},${y},${w},${h}`)
         },
     },
 }

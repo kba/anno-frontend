@@ -115,17 +115,27 @@
           </a>
         </div>
 
+        <div class="annoeditor-iiif-canvas" style="display:none"></div>
+        <div v-show="iiifLink" class="annoeditor-iiif-link">
+          <button class="btn btn-xs"
+            data-toggle="popover"
+            data-html="true"
+            data-placement="left"
+            :title="l10n('iiif_link')"
+            :data-content='`
+            <button data-clipboard-text="${purl}" class="btn btn-default btn-xs">
+              <span class="fa fa-clipboard"></span>
+              <span class="label label-success" style="display: none">${l10n("copied_to_clipboard")}</span>
+            </button>
+            <a href="${iiifLink}">${iiifLink.replace(/\//g, "/<wbr>")}</a>
+            `'>
+            <span class="glyphicon glyphicon-link"></span>
+            Bildausschnitt (IIIF-Image)
+          </button>
+          <!-- <a @click="iiifLink">IIIF Link</a> -->
+        </div>
         <!-- <div v-if="!options.no_oai" v-bind:class="prefix+'iiiflink'"> -->
           <!--   <template v-if="item.iiif_url"> -->
-            <!--     <button class="btn-link" onclick="anno_toggle_iiif($(this));"> -->
-              <!--       <span class="fa fa-caret-right"> -->
-                <!--       </span> Bildausschnitt (IIIF-Image) -->
-              <!--     </button> -->
-
-            <!--     <div> -->
-              <!--       <a v-bind:href="item.iiif_url" target="_blank">{{item.iiif_url}} -->
-                <!--       </a> -->
-              <!--     </div> -->
             <!--   </template> -->
           <!-- </div> -->
 
@@ -186,6 +196,9 @@
         :purl-id="purlId"
         :purl-template="purlTemplate"
         :annotation="reply"
+        :image-width="imageWidth"
+        :image-height="imageHeight"
+        :iiif-url-template="iiifUrlTemplate"
         />
 
       </template>
