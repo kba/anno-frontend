@@ -37,6 +37,7 @@ module.exports = {
         editMode: null,
 
         enableLogoutButton: true,
+        enableIIIF: true,
     },
     modules: {
         editing,
