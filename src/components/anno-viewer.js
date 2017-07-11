@@ -177,22 +177,27 @@ module.exports = {
         },
         _iiifLink() {
             if (! this.svgTarget || this.imageHeight <= 0 || this.imageWidth <= 0 || ! this.iiifUrlTemplate) {
-                console.error("Could not determine width / height of img")
+                // console.error("Could not determine width / height of img")
                 return ''
             }
             // console.log(this.svgTarget, this.imageHeight,  this.imageWidth, this.iiifUrlTemplate)
             const svg = this.svgTarget.selector.value
+            let svgWidth
+            svg.replace(/width="(\d+)"/, (_, w) => svgWidth = parseInt(w))
 
             const drawing = XrxUtils.createDrawing(this.$el.querySelector(".annoeditor-iiif-canvas"), 10000, 10000)
             XrxUtils.drawFromSvg(svg, drawing, {
                 absolute: true,
                 grouped: false,
             })
-            const [[x1, y1], [x2, y2]] = XrxUtils.boundingBox(drawing)
-            const x = x1 / this.imageWidth * 100
-            const y = y1 / this.imageHeight * 100
-            const w = (x2 - x1) / this.imageWidth * 100
-            const h = (y2 - y1) / this.imageHeight * 100
+            let scale = svgWidth / this.imageWidth
+            // console.log({svgWidth, scale, svg, imageWidth: this.imageWidth, imageHeight: this.imageHeight})
+            let [[x, y], [x2, y2]] = XrxUtils.boundingBox(drawing)
+            let w = (x2 - x)
+            let h = (y2 - y)
+            ;[x,w] = [x,w].map(_ => _ / this.imageWidth)
+            ;[y,h] = [y,h].map(_ => _ / this.imageHeight)
+            ;[x,y,w,h] = [x,y,w,h].map(_ => _ / scale * 100)
             return this.$store.state.iiifUrlTemplate.replace(`{{ iiifRegion }}`, `pct:${x},${y},${w},${h}`)
         },
     },
