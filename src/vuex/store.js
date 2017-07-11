@@ -50,7 +50,7 @@ module.exports = {
         },
 
         tokenDecoded(state) {
-            console.log('tokenDecoded', state.token, state.isLoggedIn)
+            // console.log('tokenDecoded', state.token, state.isLoggedIn)
             return state.isLoggedIn ? jwtDecode(state.token) : {}
         },
 
@@ -124,7 +124,7 @@ module.exports = {
 
         fetchAcl({state, commit, getters}) {
             return new Promise((resolve, reject) => {
-                console.log("ACL check")
+                // console.log("ACL check")
                 apiFactory(state).aclCheck(getters.allIds, (err, perms) => {
                     if (err) {
                         commit('EMPTY_ACL')
@@ -140,7 +140,7 @@ module.exports = {
         fetchList({state, commit, dispatch}) {
             return new Promise((resolve, reject) => {
                 const query = {'$target': state.targetSource}
-                console.log("Search", query)
+                // console.log("Search", query)
                 apiFactory(state).search(query, (err, list) => {
                     if (err) return reject(err)
                     commit('REPLACE_LIST', list)

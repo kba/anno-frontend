@@ -142,7 +142,7 @@ module.exports = function displayAnnotations(options={}) {
     annoapp.$store.dispatch('fetchToken')
         .then(annoapp.$store.dispatch('fetchList'))
         .catch(err => {
-            console.error("Error with initial fetchToken/fetchList", err)
+            // console.error("Error with initial fetchToken/fetchList", err)
             annoapp.eventBus.$emit('error', err)
         })
 
