@@ -52,7 +52,11 @@ module.exports = {
     computed: {
         firstHtmlBody() { return this.$store.getters.firstHtmlBody },
         value: {
-            get () { return this.firstHtmlBody ? this.firstHtmlBody.value : '' },
+            get () {
+                const {firstHtmlBody} = this
+                // console.log({firstHtmlBody})
+                return firstHtmlBody && firstHtmlBody.value ? firstHtmlBody.value : ''
+            },
             set (content) { this.$store.commit('SET_HTML_BODY_VALUE', content) },
         },
         title: {

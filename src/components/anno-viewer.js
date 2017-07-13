@@ -154,6 +154,12 @@ module.exports = {
         },
         numberOf(k) { return numberOf(this.annotation, k) },
         setToVersion(newState) {
+            // const x = {}
+            // ;['modified', 'created'].forEach(prop => {
+            //     x[`${prop}-old`] = new Date(this.annotation[prop])
+            //     x[`${prop}-new`] = new Date(newState[prop])
+            // })
+            // console.log(x)
             Object.assign(this.annotation, newState)
             eventBus.$emit('setToVersion', this.annotation)
         },
