@@ -59,7 +59,6 @@ module.exports = {
         imageWidth: {type: Number, default: -1},
         imageHeight: {type: Number, default: -1},
         iiifUrlTemplate: {type: String, default: null},
-        dateFormat: {type: String, default: 'dd.mm.yyyy HH:MM:ss'},
     },
     template: require('./anno-viewer.html'),
     style:    require('./anno-viewer.scss'),
@@ -150,7 +149,7 @@ module.exports = {
         stopHighlighting()   { this.highlighted = false },
         toggleHighlighting() { this.highlighted = ! this.highlighted },
 
-        dateformat(date) { return date ? _dateformat(date, this.dateFormat) : '' },
+        dateformat(date) { return date ? _dateformat(date, this.l10n('dateformat')) : '' },
         collapse(collapseState) {
             this.collapsed = collapseState === 'toggle' ? ! this.collapsed : collapseState === 'hide'
         },
@@ -200,7 +199,7 @@ module.exports = {
             ;[x,w] = [x,w].map(_ => _ / this.imageWidth)
             ;[y,h] = [y,h].map(_ => _ / this.imageHeight)
             ;[x,y,w,h] = [x,y,w,h].map(_ => _ / scale * 100)
-            return this.$store.state.iiifUrlTemplate.replace(`{{ iiifRegion }}`, `pct:${x},${y},${w},${h}`)
+            return this.iiifUrlTemplate.replace(`{{ iiifRegion }}`, `pct:${x},${y},${w},${h}`)
         },
     },
 }
