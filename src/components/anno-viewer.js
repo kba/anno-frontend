@@ -88,7 +88,7 @@ module.exports = {
             eventBus.$on(method, (id, expand) => { if (id == this.id) this[method](expand) })
         })
 
-        //
+        // Expand this annotation
         eventBus.$on('expand', (id) => {
             if (id !== this.id) return 
             this.collapse(false)

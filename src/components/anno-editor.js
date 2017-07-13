@@ -44,7 +44,13 @@ module.exports = {
     },
     mounted() {
         if (this.targetImage) {
-            this.zoneEditor.$on('load-image', () => this.loadSvg())
+            this.zoneEditor.$on('load-image', () => {
+                this.loadSvg()
+                this.zoneEditor.$on('svg-changed', svg => {
+                    this.$refs.preview.$refs.thumbnail.reset()
+                    this.$refs.preview.$refs.thumbnail.loadSvg(this.svgTarget.selector.value)
+                })
+            })
         }
     },
     computed: {
@@ -81,7 +87,7 @@ module.exports = {
 
         loadSvg() {
             const svg = (this.svgTarget && this.svgTarget.selector.value) ? this.svgTarget.selector.value : false
-            console.log({svg})
+            // console.log({svg})
             if (svg) this.zoneEditor.loadSvg(svg)
         },
 

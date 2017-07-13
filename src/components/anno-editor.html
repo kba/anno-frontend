@@ -36,6 +36,7 @@
 
   <bootstrap-tab :name="`${prefix}-${editorId}-tab-preview`" :title="l10n('Preview')">
     <anno-viewer
+      ref="preview"
       :annotation="$store.state.editing"
       purl="https://purl/foo/3000"
       />
