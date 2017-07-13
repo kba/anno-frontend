@@ -265,7 +265,6 @@ Show an annotation as a bootstrap panel.
 - `purlId` The URL of the persistently adressed annotation
 - `collapseInitially`: Whether the anntotation should be collapsed after
   first render
-- dateFormat: Format of date stamps. Default: `dd.mm.yyyy hh:MM:ss`
 #### Events
 - `revise`: This annotation should be opened in an editor for revision
 - `reply`: A new annotation as a reply to this annotation should be opened in an editor
@@ -359,4 +358,5 @@ the string.
 Sets `this.prefix` to the prefix defined globally.
 
 <!-- END-RENDER -->
+
 

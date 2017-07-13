@@ -28,7 +28,6 @@ const {
  * - `purlId` The URL of the persistently adressed annotation
  * - `collapseInitially`: Whether the anntotation should be collapsed after
  *   first render
- * - dateFormat: Format of date stamps. Default: `dd.mm.yyyy hh:MM:ss`
  *
  * #### Events
  *
