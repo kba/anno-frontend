@@ -52,13 +52,15 @@
               data-toggle="popover"
               data-trigger="hover"
               data-placement="bottom" 
-              v-for="license in licenseInfo"
+              v-for="(license, licenseName) in licenseInfo"
               :key="$store.state.editing.rights"
               :title="l10n(license.title)"
               :data-content="l10n(license.desc)"
               @click="$store.commit('SET_RIGHTS', license.url)"
               :class="{'btn': 1, 'btn-default': 1, 'active': $store.state.editing.rights === license.url}">
-              <img :src="license.img"/>
+              <!-- <pre>{{ licenseName }}</pre> -->
+              <!-- <pre>{{ license }}</pre> -->
+              <img :src="license.img_88x31"/>
             </label>
           </div>
         </form>

@@ -104,6 +104,7 @@ module.exports = {
         creator()            { return this.annotation.creator },
         modified()           { return this.annotation.modified },
         title()              { return this.annotation.title },
+        rights()             { return this.annotation.rights },
         firstHtmlBody()      { return textualHtmlBody.first(this.annotation) },
         simpleTagBodies()    { return simpleTagBody.all(this.annotation) },
         semanticTagBodies()  { return semanticTagBody.all(this.annotation) },
@@ -126,6 +127,7 @@ module.exports = {
             currentVersion: this.initialAnnotation,
             highlighted: false,
             collapsed: this.collapseInitially,
+            licenseInfo: require('../../license-config.js'),
         }
     },
     methods: {
