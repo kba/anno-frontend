@@ -265,6 +265,12 @@ Show an annotation as a bootstrap panel.
 - `purlId` The URL of the persistently adressed annotation
 - `collapseInitially`: Whether the anntotation should be collapsed after
   first render
+- `imageWidth`: Width of the image this annotation is about, if any
+- `imageHeight`: Height of the image this annotation is about, if any
+- `iiifUrlTemplate`: URL template for the IIIF link if this annotation
+  contains zones about an image. The string `{{ iiifRegion }}` is replaced
+  with a IIIF Image API conformant region specification that contains the
+  bounding box of all zones in this annotation.
 #### Events
 - `revise`: This annotation should be opened in an editor for revision
 - `reply`: A new annotation as a reply to this annotation should be opened in an editor
