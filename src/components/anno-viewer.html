@@ -63,11 +63,11 @@
               {{ creator }}
             </template>
           </button>
-          <span 
-            class="annoeditor-date"
+          <button
+            class="annoeditor-date btn btn-xs"
             :title="`${l10n('Created')}: ${created}\n${l10n('Modified')}: ${modified}`">
             {{ dateformat(created) }}
-          </span>
+          </button>
 
           <button class="btn btn-xs"
             data-toggle="popover"
