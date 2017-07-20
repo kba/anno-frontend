@@ -8,7 +8,7 @@ module.exports = {
     output: {
         path: __dirname + "/dist",
         filename: "anno-frontend.js",
-        publicPath: 'http://anno.ub.uni-heidelberg.de/dist/',
+        publicPath: 'http://anno.ub.uni-heidelberg.de/',
     },
     externals: {
         'jquery': "$",
