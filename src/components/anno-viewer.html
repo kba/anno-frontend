@@ -73,6 +73,7 @@
             data-toggle="popover"
             data-html="true"
             data-placement="left"
+            data-focus-dismiss
             :title="l10n('purl')"
             :data-content='`
             <button data-clipboard-text="${purl}" class="btn btn-default btn-xs">
@@ -88,6 +89,7 @@
             v-if="rights"
             data-toggle="popover"
             data-html="false"
+            data-focus-dismiss
             data-placement="left"
             :title="l10n('License')"
             :data-content='

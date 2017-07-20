@@ -67,23 +67,36 @@ module.exports = {
 
         // Show popover with persistent URL
         const Clipboard = require('clipboard')
-        Array.from(this.$el.querySelectorAll('[data-toggle="popover"]')).forEach(purlPopoverTrigger => {
-            $(purlPopoverTrigger).popover({ container: 'body' }); 
-            $(purlPopoverTrigger).on('shown.bs.popover', () => {
-                setTimeout(() => {
-                    const purlPopoverDiv = document.getElementById(purlPopoverTrigger.getAttribute("aria-describedby"))
-                    const clipboardTextElem = purlPopoverDiv.querySelector("[data-clipboard-text]")
-                    if (clipboardTextElem) {
-                        const clip = new Clipboard(clipboardTextElem)
+        Array.from(this.$el.querySelectorAll('[data-toggle="popover"]')).forEach(popoverTrigger => {
+            $(popoverTrigger).popover({ container: 'body', trigger: 'click' }); 
+            $(popoverTrigger).on('shown.bs.popover', () => {
+                const popoverDiv = document.getElementById(popoverTrigger.getAttribute("aria-describedby"))
+                if (popoverDiv) {
+                    const clipboardText = popoverDiv.querySelector("[data-clipboard-text]")
+                    if (clipboardText) {
+                        const clip = new Clipboard(clipboardText)
                         clip.on('success', () => {
-                            const successLabel = $(".label-success", purlPopoverDiv)
+                            const successLabel = $(".label-success", popoverDiv)
                             successLabel.show()
                             setTimeout(() => $(successLabel).hide(), 2000)
                         })
                     }
-                })
+                }
             })
         })
+
+        if (!window.annoInstalledPopoverHandler) {
+            // Dismiss all popovers with the 'data-focus-dismiss' attribute whenever user clicks outside of the popup divs
+            $('body').on('click', function (e) {
+                if (
+                    !(e.target.getAttribute('data-toggle') === 'popover' || $(e.target).parents('[data-toggle="popover"]').length > 0)
+                    && $(e.target).parents('.popover.in').length === 0
+                ) {
+                    $('[data-toggle="popover"][data-focus-dismiss]').popover('hide')
+                }
+            });
+            window.annoInstalledPopoverHandler = true
+        }
 
         // React to highlighting events startHighlighting / stopHighlighting / toggleHighlighting
         ;['start', 'stop', 'toggle'].forEach(state => {
