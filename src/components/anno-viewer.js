@@ -72,12 +72,15 @@ module.exports = {
             $(purlPopoverTrigger).on('shown.bs.popover', () => {
                 setTimeout(() => {
                     const purlPopoverDiv = document.getElementById(purlPopoverTrigger.getAttribute("aria-describedby"))
-                    const clip = new Clipboard(purlPopoverDiv.querySelector("[data-clipboard-text]"))
-                    clip.on('success', () => {
-                        const successLabel = $(".label-success", purlPopoverDiv)
-                        successLabel.show()
-                        setTimeout(() => $(successLabel).hide(), 2000)
-                    })
+                    const clipboardTextElem = purlPopoverDiv.querySelector("[data-clipboard-text]")
+                    if (clipboardTextElem) {
+                        const clip = new Clipboard(clipboardTextElem)
+                        clip.on('success', () => {
+                            const successLabel = $(".label-success", purlPopoverDiv)
+                            successLabel.show()
+                            setTimeout(() => $(successLabel).hide(), 2000)
+                        })
+                    }
                 })
             })
         })
