@@ -21,6 +21,7 @@
             :initial-image="svgTarget.source"
             :grouped="true"
             :initial-svg="svgTarget.selector.value"
+            :xrx-style="{strokeColor: '#900', fillColor: '#900'}"
             :width="36"
             :height="36"
             />
@@ -48,7 +49,7 @@
 
       <div class="media-body">
 
-        <div v-if="creator">
+        <div>
           <button class="btn btn-xs">
             <template v-if="creator && creator.icon">
               <img class="media-object" style="display: inline" :src="creator.icon" alt="Logo" width="15px" height="15px">
