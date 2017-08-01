@@ -213,7 +213,7 @@ module.exports = {
             let svgWidth
             svg.replace(/width="(\d+)"/, (_, w) => svgWidth = parseInt(w))
 
-            const drawing = XrxUtils.createDrawing(this.$el.querySelector(".annoeditor-iiif-canvas"), 10000, 10000)
+            const drawing = XrxUtils.createDrawing(this.$el.querySelector(".annoeditor-iiif-canvas"), 1, 1)
             XrxUtils.drawFromSvg(svg, drawing, {
                 absolute: true,
                 grouped: false,
