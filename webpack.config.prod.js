@@ -23,7 +23,7 @@ module.exports = {
     },
     resolve: {
         alias: {
-            'vue$': 'vue/dist/vue.common.js',
+            'vue$': 'vue/dist/vue.min.js',
             'quill$': 'quill/dist/quill.min.js',
             'async$': 'async/dist/async.min.js',
             // 'axios': 'axios/dist/axios.min.js',
