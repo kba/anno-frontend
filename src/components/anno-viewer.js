@@ -213,7 +213,8 @@ module.exports = {
             let svgWidth
             svg.replace(/width="(\d+)"/, (_, w) => svgWidth = parseInt(w))
 
-            const drawing = XrxUtils.createDrawing(this.$el.querySelector(".annoeditor-iiif-canvas"), 1, 1)
+            const $container = $('<div class="annoeditor-iiif-canvas" style="display:none"></div>').appendTo(this.$el).get(0)
+            const drawing = XrxUtils.createDrawing($container, 1, 1)
             XrxUtils.drawFromSvg(svg, drawing, {
                 absolute: true,
                 grouped: false,
@@ -221,6 +222,9 @@ module.exports = {
             let scale = svgWidth / this.imageWidth
             // console.log({svgWidth, scale, svg, imageWidth: this.imageWidth, imageHeight: this.imageHeight})
             let [[x, y], [x2, y2]] = XrxUtils.boundingBox(drawing)
+            $container.remove()
+
+
             let w = (x2 - x)
             let h = (y2 - y)
             ;[x,w] = [x,w].map(_ => _ / this.imageWidth)
