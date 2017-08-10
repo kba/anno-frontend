@@ -2,6 +2,7 @@ const Vue = require('vue')
 const Vuex = require('vuex')
 Vue.use(Vuex)
 const eventBus = require('./event-bus')
+const {localizations} = require('../l10n-config.json')
 
 /**
  * ### `displayAnnotations(options)`
@@ -76,6 +77,18 @@ module.exports = function displayAnnotations(options={}) {
     SidebarApp.props.collapseInitially.default = !! options.collapseInitially
 
     options.targetSource = options.targetSource || window.location.href
+
+    //
+    // Override l10n
+    //
+    if (options.l10n) {
+        Object.keys(localizations).forEach(lang => {
+            if (lang in options.l10n) {
+                Object.assign(localizations[lang], options.l10n[lang])
+            }
+        })
+        delete options.l10n
+    }
 
     //
     // Set the prefix for IDs
