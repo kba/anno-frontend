@@ -38,6 +38,8 @@ module.exports = {
 
         enableLogoutButton: true,
         enableIIIF: true,
+
+        cacheBusterEnabled: false,
     },
     modules: {
         editing,
@@ -88,6 +90,10 @@ module.exports = {
             state.editMode = editMode
         },
 
+        ENABLE_CACHE_BUSTER(state) { state.cacheBusterEnabled = true },
+
+        DISABLE_CACHE_BUSTER(state) { state.cacheBusterEnabled = false }
+
     },
 
     actions: {
@@ -137,15 +143,32 @@ module.exports = {
             })
         },
 
+        /*
+         * Cache-busting to get around 304 with changed schemes
+         * https://gitlab.ub.uni-heidelberg.de/DWork/Presentation/issues/75
+         */
+
         fetchList({state, commit, dispatch}) {
             return new Promise((resolve, reject) => {
                 const query = {'$target': state.targetSource}
+                if (state.cacheBusterEnabled) {
+                    query._cacheBuster = Date.now()
+                }
                 // console.log("Search", query)
                 apiFactory(state).search(query, (err, list) => {
-                    if (err) return reject(err)
-                    commit('REPLACE_LIST', list)
-                    eventBus.$emit('fetched', list)
-                    resolve(dispatch('fetchAcl'))
+                    if (err && !state.cacheBusterEnabled) {
+                        // console.log("Initial fail, try busting cache")
+                        commit('ENABLE_CACHE_BUSTER')
+                        dispatch('fetchList')
+                    } else if (err) {
+                        console.log("Failed even with cache busting. much sadness :(")
+                        reject(err)
+                    } else {
+                        commit('DISABLE_CACHE_BUSTER')
+                        commit('REPLACE_LIST', list)
+                        eventBus.$emit('fetched', list)
+                        resolve(dispatch('fetchAcl'))
+                    }
                 })
             })
         },
