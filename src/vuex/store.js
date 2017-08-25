@@ -31,7 +31,6 @@ module.exports = {
         targetThumbnail: null,
         collection: null,
         token: null,
-        loginId: null,
         acl: null,
 
         editMode: null,
@@ -48,7 +47,7 @@ module.exports = {
     getters: {
 
         isLoggedIn(state) {
-            return state.loginId && state.token && jwtDecode(state.token).sub === state.loginId
+            return state.token && jwtDecode(state.token).sub
         },
 
         tokenDecoded(state) {

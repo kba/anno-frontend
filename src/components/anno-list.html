@@ -7,13 +7,16 @@
       </a>
     </template>
 
-    <a class="btn btn-xs btn-default" :href="loginEndpoint" v-if="!isLoggedIn && loginEndpoint">
+    <a class="btn btn-xs btn-default" :href="loginEndpoint"
+      v-if="!isLoggedIn && loginEndpoint"
+      >
       {{ l10n('login') }}
     </a>
 
     <bootstrap-button btn-class="success" btn-size="xs"
       @click="create"
-      v-show="$auth('create', targetSource)">
+      v-show="$auth('create', targetSource)"
+      >
       {{ l10n('new') }}
     </bootstrap-button>
 
@@ -26,7 +29,7 @@
         :title="l10n('msg_join_short')" 
         :data-content="l10n('msg_join_long')"
         class="btn btn-default btn-xs"
-        v-show="!isLoggedIn"
+        v-show="!$auth('create', targetSource)"
         >
         {{ l10n('msg_join_short') }}
     </a>
