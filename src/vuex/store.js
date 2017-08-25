@@ -156,19 +156,19 @@ module.exports = {
                 }
                 // console.log("Search", query)
                 apiFactory(state).search(query, (err, list) => {
-                    if (err && !state.cacheBusterEnabled) {
-                        // console.log("Initial fail, try busting cache")
-                        commit('ENABLE_CACHE_BUSTER')
-                        dispatch('fetchList')
-                    } else if (err) {
-                        console.log("Failed even with cache busting. much sadness :(")
-                        reject(err)
-                    } else {
+                    // if (err && !state.cacheBusterEnabled) {
+                    //     // console.log("Initial fail, try busting cache")
+                    //     commit('ENABLE_CACHE_BUSTER')
+                    //     dispatch('fetchList')
+                    // } else if (err) {
+                    //     console.log("Failed even with cache busting. much sadness :(")
+                    //     reject(err)
+                    // } else {
                         commit('DISABLE_CACHE_BUSTER')
                         commit('REPLACE_LIST', list)
                         eventBus.$emit('fetched', list)
                         resolve(dispatch('fetchAcl'))
-                    }
+                    // }
                 })
             })
         },
