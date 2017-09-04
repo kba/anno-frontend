@@ -8,3 +8,4 @@ node_modules
 dist
 rel-vra.json
 extension
+package-lock.json

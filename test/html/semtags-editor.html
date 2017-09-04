@@ -9,6 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vuex/2.3.1/vuex.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.1/vue.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.min.js"></script>
+    <script type="text/javascript" src="https://anno.ub.uni-heidelberg.de/anno/dist/authorities-client.js"> </script>
     <script type="text/javascript" src="../../../../../github.com/kba/anno/anno-webpack/dist/anno.min.js"> </script>
     <script src="https://unpkg.com/semtonotes-client"></script>
     <script src="https://unpkg.com/semtonotes-utils"></script>
@@ -36,5 +37,4 @@ window.app = new Vue({
   store,
   template: '<semtags-editor/>',
 })
-setTimeout(() => store.dispatch('replaceAnnotation', window.annotations[3]), 1000)
 </script></body></html>

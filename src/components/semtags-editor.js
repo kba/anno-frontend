@@ -1,5 +1,6 @@
 const axios = require('axios')
 const bonanza = require('bonanza');
+const gndClient = require('@ubhd/authorities-client').plugin('ubhd/gnd')
 
 /*
  * ### semtags-editor
@@ -13,7 +14,7 @@ module.exports = {
         require('../mixin/l10n'),
     ],
     template: require('./semtags-editor.html'),
-    style:    require('./semtags-editor.sass'),
+    style:    require('./bonanza.sass'),
     computed: {
         semanticTagBodies() { return this.$store.getters.semanticTagBodies },
         language() { return this.$store.state.language },
@@ -25,71 +26,45 @@ module.exports = {
         addSemanticTag() { this.$store.commit('ADD_SEMTAG_BODY') },
         removeBody(body) { this.$store.commit('REMOVE_BODY', body) },
         ensureCompletion() {
-            const bestLabel = (obj) => obj.label[this.language] || obj.label.de || obj.label.en || obj.label
+            const label = ({term}) => term[this.language] || term.de || term.en || term
+            const source = ({payload}) => payload.startsWith('http') ? payload : `http://d-nb.info/gnd/${payload}`
+
             Array.from(this.$el.querySelectorAll(`input.semtag-value`))
                 .filter(el => !el.classList.contains('has-completion'))
                 .forEach(el => {
                     el.classList.add('has-completion')
                     const n = el.dataset.bodyIndex
                     bonanza(
-                        el, {
+                        el,
+                        {
                             templates: {
-                                item: (obj) => `${bestLabel(obj)}`
+                                item(obj) { return label(obj) },
                             }
                         },
-                        (...args) => this.autocomplete(...args)
+                        function(query, cb) {
+                            if (!(query && query.search)) return cb(null, [])
+                            gndClient.suggest(query.search, {
+                                types: [
+                                    "Country",
+                                    "AdministrativeUnit",
+                                    "TerritorialCorporateBodyOrAdministrativeUnit",
+                                    "MemberState",
+                                    "DifferentiatedPerson",
+                                    "UndifferentiatedPerson",
+                                ],
+                                count: query.limit
+                            })
+                                .then(results => cb(null, results.suggestions))
+                                .catch(err => cb(err))
+                        }
                     ).on('change', (value) => {
-                        this.$store.commit("SET_SEMTAG_PROP", {n, prop:'source', value: value.url})
-                        this.$store.commit("SET_SEMTAG_PROP", {n, prop:'label', value:bestLabel(value)})
+                        this.$store.commit("SET_SEMTAG_PROP", {n, prop:'source', value: source(value)})
+                        this.$store.commit("SET_SEMTAG_PROP", {n, prop:'label', value: label(value)})
                     })
                 })
-        },
 
-        _normdatenResponseToAutocomplete(docs) {
-            return docs.map(doc => {
-                return {
-                    url: `http://d-nb.info/gnd/${doc.gndIdentifier}`,
-                    label: {
-                        de: `${doc.preferredName} (${doc._type})`
-                    }
-                }
-            })
-        },
-
-        _normdatenSuggestToAutocomplete(docs) {
-            return docs.map(doc => {
-                return {
-                    url: `http://d-nb.info/gnd/${doc.payload}`,
-                    label: {
-                        de: `${doc.term}`
-                    },
-                }
-            })
-        },
-
-        /**
-         * @param String prop The property to autocomplete. Either 'source' or 'label'
-         */
-        autocomplete(query, cb) {
-            if (!query.search)
-                return cb(null, [])
-            // axios.get(`http://pers42.ub.uni-heidelberg.de:8888/gnd/?q=${query.search}&suggest=true&offset=${query.offset}&limit=${query.limit}`)
-            // XXX this is with the regular search API which returns wrapped solr docs
-            //     .then(resp => cb(null, this._normdatenResponseToAutocomplete(resp.data.response.docs)))
-                // .then(resp => cb(null, this._normdatenSuggestToAutocomplete(resp.data.docs)))
-            //     .catch(err => cb(err))
-            const types = [
-                "Country",
-                "AdministrativeUnit",
-                "TerritorialCorporateBodyOrAdministrativeUnit",
-                "MemberState",
-                "DifferentiatedPerson",
-                "UndifferentiatedPerson",
-            ]
-            const q = `${query.search} AND _type:(${types.map(t => `"${t}"`).join(' ')})`
-            axios.get(`http://serv42.ub.uni-heidelberg.de/normdaten/gnd/?q=${encodeURIComponent(q)}`)
-                .then(resp => cb(null, this._normdatenResponseToAutocomplete(resp.data.response.docs)))
-                .catch(err => cb(err))
         },
     },
 }
+
+// vim: sw=4 ts=4

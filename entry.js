@@ -20,3 +20,7 @@ require('./src/components')(window.Vue)
 
 // Code
 window.displayAnnotations = require('./src/display-annotations.js')
+
+window._ubhddebug = {
+  store: require('./src/vuex/store')
+}

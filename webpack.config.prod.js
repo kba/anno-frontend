@@ -14,6 +14,7 @@ module.exports = {
         'jquery': "$",
         'quill/dist/quill.js': 'Quill',
         'axios': 'axios',
+        '@ubhd/authorities-client': 'AuthoritiesClient',
         'semtonotes-utils': 'XrxUtils',
         '@kba/anno-store': 'Anno.Store',
         '@kba/anno-queries': 'Anno.Queries',
