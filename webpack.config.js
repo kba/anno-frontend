@@ -1,14 +1,17 @@
-var webpack = require('webpack')
+const webpack = require('webpack')
+
+// detect if webpack bundle is being processed in a production or development env
+let prodBuild = require('yargs').argv.p || false
+let suffix = prodBuild ? '.js' : '.dev.js'
 
 module.exports = {
     entry: "./entry.js",
     devtool: 'source-map',
-    node: { fs: 'empty' },
+    node: {fs: 'empty'},
     // target: 'node',
     output: {
         path: __dirname + "/dist",
-        filename: "anno-frontend.js",
-        publicPath: '//anno.ub.uni-heidelberg.de/anno/dist/',
+        filename: `anno-frontend${suffix}`,
     },
     externals: {
         'jquery': "$",
@@ -32,15 +35,15 @@ module.exports = {
     },
     module: {
         loaders: [
-            {test: /png$/i, loader: "file-loader"},
-            {test: /svg$/i, loader: "file-loader"},
-            {test: /components\/.*?\.html$/, loader: "html-loader?attrs=img:src bootstrap-button:src" },
+            {test: /png$/i, loader: "url-loader"},
+            {test: /svg$/i, loader: "url-loader"},
+            {test: /components\/.*?\.html$/, loader: "html-loader?attrs=img:src bootstrap-button:src"},
             {test: /.*\.js$/, exclude: /node_modules/, loader: 'babel-loader?cacheDirectory'},
-            {test: /components\/.*?\.s?[ac]ss$/, loader: "style-loader!css-loader?sourcemap=true!sass-loader?sourcemap-=true" },
+            {test: /components\/.*?\.s?[ac]ss$/, loader: "style-loader!css-loader?sourcemap=true!sass-loader?sourcemap-=true"},
         ]
     },
     plugins: [
-        new webpack.DefinePlugin({ 'process.env': {
+        new webpack.DefinePlugin({'process.env': {
             NODE_ENV: '"production"',
         }})
     ]
