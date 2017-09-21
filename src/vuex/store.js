@@ -16,9 +16,9 @@ module.exports = {
     strict: process.env.NODE_ENV != 'production',
     state: {
         language: defaultLang,
-        annoEndpoint: null,
+        annoEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/anno',
         tokenEndpoint: null,
-        loginEndpoint: null,
+        loginEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/auth/login',
         logoutEndpoint: null,
         purlTemplate: null,
         purlId: null,
