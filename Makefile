@@ -44,4 +44,5 @@ node_modules: package.json
 	$(NPM) install
 
 serve-samples:
+	@echo "Open <http://localhost:3001/test> in your browser"
 	python2 -mSimpleHTTPServer 3001
