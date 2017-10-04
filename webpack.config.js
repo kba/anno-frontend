@@ -2,7 +2,6 @@ const webpack = require('webpack')
 
 // detect if webpack bundle is being processed in a production or development env
 let prodBuild = require('yargs').argv.p || false
-let suffix = prodBuild ? '.js' : '.dev.js'
 
 module.exports = {
     entry: "./entry.js",
@@ -11,7 +10,7 @@ module.exports = {
     // target: 'node',
     output: {
         path: __dirname + "/dist",
-        filename: `anno-frontend${suffix}`,
+        filename: `anno-frontend.js`,
     },
     externals: {
         'jquery': "$",
@@ -44,7 +43,7 @@ module.exports = {
     },
     plugins: [
         new webpack.DefinePlugin({'process.env': {
-            NODE_ENV: '"production"',
+          NODE_ENV: prodBuild ? '"production"' : '"development"',
         }})
     ]
 }
