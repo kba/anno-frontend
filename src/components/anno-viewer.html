@@ -98,10 +98,10 @@
             : rights === licenseInfo.cc_by.url ? l10n(licenseInfo.cc_by.user_desc)
             : rights'>
             <template v-if="rights === licenseInfo.cc_zero.url">
-              <img height="14" width="14" :src="licenseInfo.cc_zero.img_64x64"/>
+              <img style="width: 14px; height: 14px;" :src="licenseInfo.cc_zero.img_64x64"/>
             </template>
             <template v-else-if="rights === licenseInfo.cc_by.url">
-              <img height="14" width="14" :src="licenseInfo.cc_by.img_64x64"/>
+              <img style="width: 14px; height: 14px;" :src="licenseInfo.cc_by.img_64x64"/>
             </template>
             <template v-else>§</template>
           </button>
