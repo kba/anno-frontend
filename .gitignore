@@ -9,4 +9,3 @@ dist
 rel-vra.json
 extension
 deploy.mk
-package-lock.json
