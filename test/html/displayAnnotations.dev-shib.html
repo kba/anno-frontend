@@ -13,7 +13,6 @@
     </div>
 <script src="https://www.ub.uni-heidelberg.de/cdn/jquery/latest/jquery.js"></script>
 <link rel="stylesheet" href="https://www.ub.uni-heidelberg.de/cdn/bootstrap/3.2.0-ubhd-digi/css/bootstrap.min.css"/>
-<link rel="stylesheet" href="https://www.ub.uni-heidelberg.de/cdn/font-awesome/4.7.0/font-awesome.css"></script>
 <script src="https://www.ub.uni-heidelberg.de/cdn/bootstrap/3.2.0-ubhd-digi/js/bootstrap.min.js"></script>
 <script src="https://www.ub.uni-heidelberg.de/cdn/jquery-ui/1.12.1/jquery-ui.js"></script>
 <script src="https://www.ub.uni-heidelberg.de/cdn/quill/1.2.4/quill.js"></script>
@@ -31,12 +30,11 @@
 
 displayAnnotations({
   container: document.getElementById("anno-anchor"),
-  collection: 'default',
 
-  annoEndpoint: 'http://localhost:3000/anno',
-  tokenEndpoint: 'http://localhost:3000/auth/token/default',
-  loginEndpoint: `http://localhost:3000/auth/login?from=${window.location.href}`,
-  logoutEndpoint: 'http://localhost:3000/auth/logout',
+  annoEndpoint: 'http://serv42.ub.uni-heidelberg.de/anno/anno',
+  tokenEndpoint: 'http://serv42.ub.uni-heidelberg.de/anno/auth/token/default',
+  loginEndpoint: 'http://serv42.ub.uni-heidelberg.de/anno/auth/login',
+  logoutEndpoint: 'http://serv42.ub.uni-heidelberg.de/anno/auth/logout',
 
   targetImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png",
   targetThumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/200px-Ghostscript_Tiger.svg.png",

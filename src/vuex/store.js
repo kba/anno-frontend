@@ -19,6 +19,8 @@ module.exports = {
         annoEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/anno',
         tokenEndpoint: null,
         loginEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/auth/login',
+        registerEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/auth/register',
+        requestEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/auth/request',
         logoutEndpoint: null,
         purlTemplate: null,
         purlId: null,
@@ -35,6 +37,8 @@ module.exports = {
 
         editMode: null,
 
+        enableRequestButton: true,
+        enableRegisterButton: true,
         enableLogoutButton: true,
         enableIIIF: true,
 

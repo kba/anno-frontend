@@ -47,20 +47,26 @@
       const [k,v] = kv.split('=')
       props[k] = v
     })
+    console.log({props})
+    const authServer = props.authServer || 'https://anno.ub.uni-heidelberg.de/anno/auth'
+    const annoServer = props.annoServer || 'http://anno.ub.uni-heidelberg.de/anno'
+    const collection = props.collection || 'test'
     annoapp = displayAnnotations(Object.assign({
 
       container: document.getElementById("anno-anchor"),
 
-      annoEndpoint: 'http://serv42.ub.uni-heidelberg.de/anno/anno',
-      tokenEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/auth/token/default',
-      loginEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/auth/login',
+      annoEndpoint: `${annoServer}/anno`,
+      tokenEndpoint: `${authServer}/token/${collection}`,
+      loginEndpoint: `${authServer}/login?c=${collection}`,
+      requestEndpoint: `${authServer}/request?c=${collection}`,
       logoutEndpoint: null,
       purlTemplate: 'http://digi.ub.uni-heidelberg.de/PROJ/{{ slug }}',
       purlId: 'http://localhost:3000/anno/T5mEcx6uRG-kg9vtnkseeQ',
 
-      collection: 'diglit',
+      collection,
       targetImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png",
       targetThumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/200px-Ghostscript_Tiger.svg.png",
+      targetSource: window.location.href.replace(/\?.*/, '')
     }, props))
   })
 

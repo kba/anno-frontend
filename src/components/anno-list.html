@@ -1,7 +1,7 @@
 <div class="annoeditor-list">
   <div class="btn-group btn-group-vertical pull-left hidden-print" role="group">
 
-    <template  v-if="isLoggedIn && enableLogoutButton">
+    <template v-if="isLoggedIn && enableLogoutButton">
       <a class="btn btn-xs btn-warning" @click.stop="logout" :href="tokenDecoded.sub">
         {{ l10n('logout') }}
       </a>
@@ -13,25 +13,23 @@
       {{ l10n('login') }}
     </a>
 
-    <bootstrap-button btn-class="success" btn-size="xs"
+    <template v-if="! isLoggedIn && enableRegisterButton">
+      <a class="btn btn-xs btn-info"
+        :href="registerEndpoint">{{ l10n('register') }}</a>
+    </template>
+
+    <button class="btn btn-xs btn-success"
       @click="create"
       v-show="$auth('create', targetSource)"
       >
       {{ l10n('new') }}
-    </bootstrap-button>
+    </button>
 
-    <a  tabindex="0"
-        rel="popover" 
-        data-html="true"
-        data-toggle="popover"
-        data-trigger="focus"
-        data-placement="left" 
-        :title="l10n('msg_join_short')" 
-        :data-content="l10n('msg_join_long')"
-        class="btn btn-default btn-xs"
-        v-show="!$auth('create', targetSource)"
-        >
-        {{ l10n('msg_join_short') }}
+    <a class="btn btn-xs btn-danger"
+      :href="requestEndpoint"
+      v-show="isLoggedIn && ! $auth('create', targetSource)"
+      >
+      {{ l10n('not_enough_rights') }}
     </a>
 
   </div>
