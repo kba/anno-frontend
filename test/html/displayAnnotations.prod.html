@@ -15,7 +15,9 @@
   <script>
     window.ANNO_ACL_DATA='[[{}], true]'
   </script>
-  <script type="text/javascript" src="../../../../../github.com/kba/anno/anno-webpack/dist/anno.min.js"> </script>
+  <script src="https://www.ub.uni-heidelberg.de/cdn/authorities-client/latest/authorities-client.js"> </script>
+  <!-- <script src="../../../../../github.com/kba/anno-common/anno-webpack/dist/anno.min.js"> </script> -->
+  <script src="https://www.ub.uni-heidelberg.de/cdn/anno-common/dev/anno-common.js"> </script>
   <script src="https://unpkg.com/semtonotes-client"></script>
   <script src="https://unpkg.com/semtonotes-utils"></script>
   <script src="https://unpkg.com/@kba/xrx-vue"></script>
@@ -50,8 +52,8 @@
       container: document.getElementById("anno-anchor"),
 
       annoEndpoint: 'http://serv42.ub.uni-heidelberg.de/anno/anno',
-      tokenEndpoint: 'https://digi.ub.uni-heidelberg.de/cgi-bin/annoToken',
-      loginEndpoint: 'https://digi.ub.uni-heidelberg.de/cgi-bin/login',
+      tokenEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/auth/token/default',
+      loginEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/auth/login',
       logoutEndpoint: null,
       purlTemplate: 'http://digi.ub.uni-heidelberg.de/PROJ/{{ slug }}',
       purlId: 'http://localhost:3000/anno/T5mEcx6uRG-kg9vtnkseeQ',

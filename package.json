@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "tap -Rspec test/*.test.js",
-    "preinstall": "cd anno-common; npm install; npm run link-all"
+    "### preinstall": "cd anno-common; npm install; npm run link-all"
   },
   "repository": {
     "type": "git",
