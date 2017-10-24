@@ -171,7 +171,7 @@ module.exports = {
         stopHighlighting()   { this.highlighted = false },
         toggleHighlighting() { this.highlighted = ! this.highlighted },
 
-        dateformat(date) { return date ? _dateformat(date, this.l10n('dateformat')) : '' },
+        dateformat(date=new Date()) { return date ? _dateformat(date, this.l10n('dateformat')) : '' },
         collapse(collapseState) {
             this.collapsed = collapseState === 'toggle' ? ! this.collapsed : collapseState === 'hide'
         },
