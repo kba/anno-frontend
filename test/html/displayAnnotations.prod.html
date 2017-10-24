@@ -16,8 +16,8 @@
     window.ANNO_ACL_DATA='[[{}], true]'
   </script>
   <script src="https://www.ub.uni-heidelberg.de/cdn/authorities-client/latest/authorities-client.js"> </script>
-  <!-- <script src="../../../../../github.com/kba/anno-common/anno-webpack/dist/anno.min.js"> </script> -->
-  <script src="https://www.ub.uni-heidelberg.de/cdn/anno-common/dev/anno-common.js"> </script>
+  <script src=""> </script>
+  <script src="../../dist/anno-common.dev.js"> </script>
   <script src="https://unpkg.com/semtonotes-client"></script>
   <script src="https://unpkg.com/semtonotes-utils"></script>
   <script src="https://unpkg.com/@kba/xrx-vue"></script>
@@ -37,7 +37,7 @@
         </div>
     </div>
 <script src="./fixtures.js"></script>
-<script type="text/javascript" src="../../dist/anno-frontend.js"> </script>
+<script src="../../dist/anno-frontend.js"> </script>
 <!-- <script type="text/javascript" src="../../dist/ubhd-anno.js"> </script> -->
 <script type="text/javascript">
 
@@ -49,13 +49,13 @@
     })
     console.log({props})
     const authServer = props.authServer || 'https://anno.ub.uni-heidelberg.de/anno/auth'
-    const annoServer = props.annoServer || 'http://anno.ub.uni-heidelberg.de/anno'
+    const annoEndpoint = props.annoEndpoint || 'http://anno.ub.uni-heidelberg.de/anno/anno'
     const collection = props.collection || 'test'
     annoapp = displayAnnotations(Object.assign({
 
       container: document.getElementById("anno-anchor"),
 
-      annoEndpoint: `${annoServer}/anno`,
+      annoEndpoint,
       tokenEndpoint: `${authServer}/token/${collection}`,
       loginEndpoint: `${authServer}/login?c=${collection}`,
       requestEndpoint: `${authServer}/request?c=${collection}`,

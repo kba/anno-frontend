@@ -88,6 +88,8 @@
             "delete_anno":         "L\u00f6schen",
             "confirm_delete":      "Sind sie sicher dass Sie die Annotation l\u00f6schen wollen?",
 
+            "mint_doi":            "DOI registrieren",
+
             "discard":             "Verwerfen",
             "annoeditor":          "Annotations-Editor",
 
@@ -181,6 +183,8 @@
 
             "delete_anno":         "Delete",
             "confirm_delete":      "Are you sure you want to delete this annotation?",
+
+            "mint_doi":            "Mint DOI",
 
             "discard":             "Discard",
             "annoeditor":          "Annotation editor",

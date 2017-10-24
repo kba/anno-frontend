@@ -17,17 +17,18 @@ module.exports = {
         require('../mixin/prefix'),
     ],
     props: {
-        draggable: { type: Boolean, default: true },
-        resizable: { type: Boolean, default: true },
+        draggable: {type: Boolean, default: true},
+        resizable: {type: Boolean, default: true},
     },
     template: require('./anno-editor-modal.html'),
     style:    require('./anno-editor-modal.scss'),
     computed: {
-        id() { return this.$store.state.editing.id },
-        purlTemplate() { return this.$store.state.purlTemplate },
-        editMode() { return this.$store.state.editMode },
-        replyTo() { return this.$store.state.editing.replyTo },
-        editor() { return this.$refs['editor'] },
+        id()           {return this.$store.state.editing.id},
+        doi()          {return this.$store.state.editing.doi},
+        purlTemplate() {return this.$store.state.purlTemplate},
+        editMode()     {return this.$store.state.editMode},
+        replyTo()      {return this.$store.state.editing.replyTo},
+        editor()       {return this.$refs['editor']},
     },
     created() {
         eventBus.$on('open-editor', () => this.show())
@@ -74,6 +75,7 @@ module.exports = {
         editMode() { return this.$store.state.editMode },
         save() { eventBus.$emit('save') },
         remove() { eventBus.$emit('remove', this.id) },
+        mintDoi() { eventBus.$emit('mintDoi') },
         discard() { eventBus.$emit('discard') },
         startHighlighting(...args) { eventBus.$emit('startHighlighting', ...args) },
         stopHighlighting(...args) { eventBus.$emit('stopHighlighting', ...args) },

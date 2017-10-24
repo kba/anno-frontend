@@ -114,6 +114,14 @@
 
         <div v-if="firstHtmlBody" v-html="firstHtmlBody.value"></div>
 
+        <template  v-if="annotation.doi">
+          <a :href="`https://doi.org/${annotation.doi}`">
+            <span class="label label-default">
+              <span class="glyphicon glyphicon-tag"></span>
+              {{ annotation.doi }}
+            </span>
+          </a>
+        </template>
         <template v-if="relationLinkBodies && relationLinkBodies.length > 0">
           <h5><span class="fa fa-link">&nbsp;</span>{{ l10n('relationlinks') }}</h5>
           <ul>

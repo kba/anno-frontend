@@ -12,6 +12,7 @@ const {
 
 function initialState() {return {
     id: '',
+    doi: null,
     title: '',
     collection: null,
     body: [],

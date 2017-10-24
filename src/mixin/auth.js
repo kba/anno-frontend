@@ -11,7 +11,7 @@ module.exports = {
     methods: {
         $auth(cond, id) {
             const acl = this.$store.state.acl
-            if (cond.match(/^(?:create|read|revise|remove)$/)) {
+            if (cond.match(/^(?:create|read|revise|remove|mintDoi)$/)) {
                 if (id === undefined) {
                     throw new Error(`Undefined id. Cannot check ${cond}`)
                 }
