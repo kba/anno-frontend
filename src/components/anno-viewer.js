@@ -4,6 +4,7 @@ const eventBus = require('../event-bus')
 const XrxUtils = require('semtonotes-utils')
 const {
     numberOf,
+    ensureArray,
 } = require('@kba/anno-util')
 const {
     relationLinkBody,
@@ -174,7 +175,8 @@ module.exports = {
         collapse(collapseState) {
             this.collapsed = collapseState === 'toggle' ? ! this.collapsed : collapseState === 'hide'
         },
-        numberOf(k) { return numberOf(this.annotation, k) },
+        numberOf(k) {return numberOf(this.annotation, k)},
+        ensureArray(...args) {return ensureArray(...args)},
         setToVersion(newState) {
             // const x = {}
             // ;['modified', 'created'].forEach(prop => {

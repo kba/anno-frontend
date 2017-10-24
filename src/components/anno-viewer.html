@@ -50,18 +50,18 @@
       <div class="media-body">
 
         <div>
-          <button class="btn btn-xs">
-            <template v-if="creator && creator.icon">
-              <img class="media-object" style="display: inline" :src="creator.icon" alt="Logo" width="15px" height="15px">
+          <button class="btn btn-xs" v-for="aCreator in ensureArray(annotation, 'creator')">
+            <template v-if="aCreator.icon">
+              <img class="media-object" style="display: inline" :src="aCreator.icon" alt="Logo" width="15px" height="15px">
             </template>
             <template v-else>
               <span class="glyphicon glyphicon-user"></span>
             </template>
-            <template v-if="creator && creator.displayName">
-              {{ creator.displayName }}
+            <template v-if="aCreator.displayName">
+              {{ aCreator.displayName }}
             </template>
             <template v-else>
-              {{ creator }}
+              {{ aCreator }}
             </template>
           </button>
           <button
