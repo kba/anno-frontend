@@ -65,8 +65,8 @@ module.exports = {
                 })
                 contentEl.classList.add('resizable')
                 $(this.$el).on('show.bs.modal', function () {
-                    $(this).find('.modal-body').css({'max-height': '100%'});
-                });
+                    $(this).find('.modal-body').css({'max-height': '100%'})
+                })
             }
         }
 
@@ -90,7 +90,7 @@ module.exports = {
         purl(id) {
             return (this.purlTemplate && id)
                 ? this.purlTemplate
-                    .replace('{{ slug }}', id.replace(/.*\//, '')) 
+                    .replace('{{ slug }}', id.replace(/.*\//, ''))
                 : id ? id : ''
         },
     },

@@ -87,9 +87,9 @@ module.exports = {
         },
 
         mintDoi() {
-            const anno = this.$store.state.editing
-            this.api.mintDoi(anno, (err, ...args) => {
-                console.log({err, args})
+            const {id} = this.$store.state.editing
+            this.api.mintDoi(id, (err, ...args) => {
+                console.log("mintDOI response", {err, args})
             })
         },
 

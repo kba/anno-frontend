@@ -50,7 +50,7 @@
       <div class="media-body">
 
         <div>
-          <button class="btn btn-xs" v-for="aCreator in ensureArray(annotation, 'creator')">
+          <button class="btn btn-xs" v-for="aCreator in ensureArray('creator')">
             <template v-if="aCreator.icon">
               <img class="media-object" style="display: inline" :src="aCreator.icon" alt="Logo" width="15px" height="15px">
             </template>
@@ -105,6 +105,11 @@
             </template>
             <template v-else>§</template>
           </button>
+          <template  v-if="annotation.doi">
+            <a :href="`https://doi.org/${annotation.doi}`">
+              <img :src="`https://img.shields.io/badge/DOI-${encodeURIComponent(annotation.doi).replace(/-/g, '--') }-blue.svg`"/>
+            </a>
+          </template>
 
         </div>
 
@@ -114,14 +119,6 @@
 
         <div v-if="firstHtmlBody" v-html="firstHtmlBody.value"></div>
 
-        <template  v-if="annotation.doi">
-          <a :href="`https://doi.org/${annotation.doi}`">
-            <span class="label label-default">
-              <span class="glyphicon glyphicon-tag"></span>
-              {{ annotation.doi }}
-            </span>
-          </a>
-        </template>
         <template v-if="relationLinkBodies && relationLinkBodies.length > 0">
           <h5><span class="fa fa-link">&nbsp;</span>{{ l10n('relationlinks') }}</h5>
           <ul>

@@ -165,7 +165,7 @@ module.exports = {
         },
 
         startHighlighting(expand)  {
-            this.highlighted = true;
+            this.highlighted = true
             if (expand) eventBus.$emit('expand', this.id, true)
         },
         stopHighlighting()   { this.highlighted = false },
@@ -176,7 +176,7 @@ module.exports = {
             this.collapsed = collapseState === 'toggle' ? ! this.collapsed : collapseState === 'hide'
         },
         numberOf(k) {return numberOf(this.annotation, k)},
-        ensureArray(...args) {return ensureArray(...args)},
+        ensureArray(k) {return ensureArray(JSON.parse(JSON.stringify(this.annotation)), k)},
         setToVersion(newState) {
             // const x = {}
             // ;['modified', 'created'].forEach(prop => {

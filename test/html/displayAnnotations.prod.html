@@ -57,11 +57,11 @@
 
       annoEndpoint,
       tokenEndpoint: `${authServer}/token/${collection}`,
-      loginEndpoint: `${authServer}/login?c=${collection}`,
+      loginEndpoint: `${authServer}/login?c=${collection}&from=${encodeURIComponent(window.location.href)}`,
       requestEndpoint: `${authServer}/request?c=${collection}`,
-      logoutEndpoint: null,
-      purlTemplate: 'http://digi.ub.uni-heidelberg.de/PROJ/{{ slug }}',
-      purlId: 'http://localhost:3000/anno/T5mEcx6uRG-kg9vtnkseeQ',
+      logoutEndpoint: `${authServer}/logout?c=${collection}&from=${encodeURIComponent(window.location.href)}`,
+      <!-- purlTemplate: 'http://digi.ub.uni-heidelberg.de/PROJ/{{ slug }}', -->
+      <!-- purlId: 'http://localhost:3000/anno/T5mEcx6uRG-kg9vtnkseeQ', -->
 
       collection,
       targetImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png",
