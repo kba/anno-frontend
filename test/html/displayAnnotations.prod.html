@@ -15,7 +15,9 @@
   <script>
     window.ANNO_ACL_DATA='[[{}], true]'
   </script>
-  <script type="text/javascript" src="../../../../../github.com/kba/anno/anno-webpack/dist/anno.min.js"> </script>
+  <script src="https://www.ub.uni-heidelberg.de/cdn/authorities-client/latest/authorities-client.js"> </script>
+  <script src=""> </script>
+  <script src="../../dist/anno-common.dev.js"> </script>
   <script src="https://unpkg.com/semtonotes-client"></script>
   <script src="https://unpkg.com/semtonotes-utils"></script>
   <script src="https://unpkg.com/@kba/xrx-vue"></script>
@@ -35,7 +37,7 @@
         </div>
     </div>
 <script src="./fixtures.js"></script>
-<script type="text/javascript" src="../../dist/anno-frontend.js"> </script>
+<script src="../../dist/anno-frontend.js"> </script>
 <!-- <script type="text/javascript" src="../../dist/ubhd-anno.js"> </script> -->
 <script type="text/javascript">
 
@@ -45,20 +47,26 @@
       const [k,v] = kv.split('=')
       props[k] = v
     })
+    console.log({props})
+    const authServer = props.authServer || 'https://anno.ub.uni-heidelberg.de/anno/auth'
+    const annoEndpoint = props.annoEndpoint || 'http://anno.ub.uni-heidelberg.de/anno/anno'
+    const collection = props.collection || 'test'
     annoapp = displayAnnotations(Object.assign({
 
       container: document.getElementById("anno-anchor"),
 
-      annoEndpoint: 'http://serv42.ub.uni-heidelberg.de/anno/anno',
-      tokenEndpoint: 'https://digi.ub.uni-heidelberg.de/cgi-bin/annoToken',
-      loginEndpoint: 'https://digi.ub.uni-heidelberg.de/cgi-bin/login',
-      logoutEndpoint: null,
-      purlTemplate: 'http://digi.ub.uni-heidelberg.de/PROJ/{{ slug }}',
-      purlId: 'http://localhost:3000/anno/T5mEcx6uRG-kg9vtnkseeQ',
+      annoEndpoint,
+      tokenEndpoint: `${authServer}/token/${collection}`,
+      loginEndpoint: `${authServer}/login?c=${collection}&from=${encodeURIComponent(window.location.href)}`,
+      requestEndpoint: `${authServer}/request?c=${collection}`,
+      logoutEndpoint: `${authServer}/logout?c=${collection}&from=${encodeURIComponent(window.location.href)}`,
+      <!-- purlTemplate: 'http://digi.ub.uni-heidelberg.de/PROJ/{{ slug }}', -->
+      <!-- purlId: 'http://localhost:3000/anno/T5mEcx6uRG-kg9vtnkseeQ', -->
 
-      collection: 'diglit',
+      collection,
       targetImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png",
       targetThumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/200px-Ghostscript_Tiger.svg.png",
+      targetSource: window.location.href.replace(/\?.*/, '')
     }, props))
   })
 

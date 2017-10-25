@@ -50,18 +50,18 @@
       <div class="media-body">
 
         <div>
-          <button class="btn btn-xs">
-            <template v-if="creator && creator.icon">
-              <img class="media-object" style="display: inline" :src="creator.icon" alt="Logo" width="15px" height="15px">
+          <button class="btn btn-xs" v-for="aCreator in ensureArray('creator')">
+            <template v-if="aCreator.icon">
+              <img class="media-object" style="display: inline" :src="aCreator.icon" alt="Logo" width="15px" height="15px">
             </template>
             <template v-else>
               <span class="glyphicon glyphicon-user"></span>
             </template>
-            <template v-if="creator && creator.displayName">
-              {{ creator.displayName }}
+            <template v-if="aCreator.displayName">
+              {{ aCreator.displayName }}
             </template>
             <template v-else>
-              {{ creator }}
+              {{ aCreator }}
             </template>
           </button>
           <button
@@ -105,6 +105,11 @@
             </template>
             <template v-else>§</template>
           </button>
+          <template  v-if="annotation.doi">
+            <a :href="`https://doi.org/${annotation.doi}`">
+              <img :src="`https://img.shields.io/badge/DOI-${encodeURIComponent(annotation.doi).replace(/-/g, '--') }-blue.svg`"/>
+            </a>
+          </template>
 
         </div>
 

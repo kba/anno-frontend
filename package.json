@@ -5,8 +5,7 @@
   "description": "Frontend for UB Heidelberg's annotation service",
   "main": "index.js",
   "scripts": {
-    "test": "tap -Rspec test/*.test.js",
-    "preinstall": "cd anno-common; npm install; npm run link-all"
+    "test": "tap -Rspec test/*.test.js"
   },
   "repository": {
     "type": "git",

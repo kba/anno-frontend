@@ -44,6 +44,11 @@
           <bootstrap-button btn-class="danger" @click="remove" v-if="$auth('remove', id) && editMode === 'revise'">
             {{ l10n('delete_anno') }}
           </bootstrap-button>
+          <button class="btn btn-primary"
+            @click="mintDoi"
+            v-if="!doi && $auth('mintDoi', id) && editMode === 'revise'">
+            {{ l10n('mint_doi') }}
+          </button>
         </div>
 
         <bootstrap-button data-dismiss="modal" @click="discard">

@@ -4,6 +4,7 @@ const eventBus = require('../event-bus')
 const XrxUtils = require('semtonotes-utils')
 const {
     numberOf,
+    ensureArray,
 } = require('@kba/anno-util')
 const {
     relationLinkBody,
@@ -164,17 +165,18 @@ module.exports = {
         },
 
         startHighlighting(expand)  {
-            this.highlighted = true;
+            this.highlighted = true
             if (expand) eventBus.$emit('expand', this.id, true)
         },
         stopHighlighting()   { this.highlighted = false },
         toggleHighlighting() { this.highlighted = ! this.highlighted },
 
-        dateformat(date) { return date ? _dateformat(date, this.l10n('dateformat')) : '' },
+        dateformat(date=new Date()) { return date ? _dateformat(date, this.l10n('dateformat')) : '' },
         collapse(collapseState) {
             this.collapsed = collapseState === 'toggle' ? ! this.collapsed : collapseState === 'hide'
         },
-        numberOf(k) { return numberOf(this.annotation, k) },
+        numberOf(k) {return numberOf(this.annotation, k)},
+        ensureArray(k) {return ensureArray(JSON.parse(JSON.stringify(this.annotation)), k)},
         setToVersion(newState) {
             // const x = {}
             // ;['modified', 'created'].forEach(prop => {

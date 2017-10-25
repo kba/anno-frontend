@@ -103,7 +103,7 @@ module.exports = {
 
         fetchToken({state, commit, dispatch}) {
             return new Promise((resolve, reject) => {
-                var token = window.sessionStorage.getItem('anno-token');
+                let token = window.sessionStorage.getItem('anno-token');
                 if (token) {
                     if (isExpired(token)) {
                         commit('DELETE_TOKEN')

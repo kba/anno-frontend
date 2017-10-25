@@ -33,6 +33,7 @@ module.exports = {
         eventBus.$on('reply', this.reply)
         eventBus.$on('revise', this.revise)
         eventBus.$on('remove', this.remove)
+        eventBus.$on('mintDoi', this.mintDoi)
         eventBus.$on('discard', this.discard)
         eventBus.$on('save', this.save)
         eventBus.$on('open-editor', () => {
@@ -68,7 +69,7 @@ module.exports = {
             const anno = this.$store.state.editing
             if (!anno.title && this.editMode == 'create') {
                 window.alert("A title is required")
-                return;
+                return
             }
             const cb = (err, newAnno) => {
                 if (err) {
@@ -85,6 +86,18 @@ module.exports = {
             else if (this.editMode === 'revise') this.api.revise(anno.id, anno, cb)
         },
 
+        mintDoi() {
+            const {id} = this.$store.state.editing
+            this.api.mintDoi(id, (err, ...args) => {
+              if (err) {
+                  console.log("mintDOI error", {err})
+              } else {
+                console.log("mintDOI response", {err, args})
+                this.save()
+              }
+            })
+        },
+
         loadSvg() {
             const svg = (this.svgTarget && this.svgTarget.selector.value) ? this.svgTarget.selector.value : false
             // console.log({svg})
@@ -97,7 +110,7 @@ module.exports = {
         },
 
         remove(annotation) {
-            if(window.confirm(this.l10n("confirm_delete"))) {
+            if (window.confirm(this.l10n("confirm_delete"))) {
                 this.api.delete(annotation.id, (err) => {
                     if (err) {
                         console.error(err)
