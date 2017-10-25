@@ -2,21 +2,21 @@
   "private": true,
   "name": "anno-frontend",
   "version": "0.0.3",
-  "description": "Frontend for UB Heidelberg's annotation service",
+  "description": "Frontend for @kba/anno",
   "main": "index.js",
   "scripts": {
     "test": "tap -Rspec test/*.test.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.ub.uni-heidelberg.de/Webservices/AnnotationService"
+    "url": "https://github.com/kba/anno-frontend"
   },
-  "author": "my,jb,kba",
+  "author": "kba",
   "license": "MIT",
   "dependencies": {
-    "@kba/anno-queries": "^0.0.1",
-    "@kba/anno-store-http": "^0.0.1",
-    "@kba/anno-util": "^0.0.1",
+    "@kba/anno-queries": "^0.0.2",
+    "@kba/anno-store-http": "^0.0.2",
+    "@kba/anno-util": "^0.0.2",
     "@kba/xrx-vue": "^0.0.22",
     "@ubhd/authorities-client": "^0.3.1",
     "axios": "^0.15.3",
