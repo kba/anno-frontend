@@ -38,7 +38,7 @@ test:
 
 .PHONY: dist
 dist: src
-	NODE_ENV='production' webpack --config webpack.config.prod.js
+	NODE_ENV='production' webpack --config webpack.config.js
 
 node_modules: package.json
 	$(NPM) install
