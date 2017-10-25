@@ -2,7 +2,9 @@ const {defaultLang} = require('../../l10n-config.json')
 const axios = require('axios')
 const Vue = require('vue')
 const Vuex = require('vuex')
-const {collectIds} = require('@kba/anno-util')
+const {
+  collectIds
+} = require('@kba/anno-util')
 const apiFactory = require('../api')
 const jwtDecode = require('jwt-decode')
 const eventBus = require('../event-bus')
@@ -60,7 +62,7 @@ module.exports = {
         },
 
         allIds(state) {
-            const ret = collectIds(state.annotationList.list)
+            const ret = collectIds(state.annotationList.list).filter(u => u.startsWith('http'))
             ret.push(state.targetSource)
             return ret
         },
