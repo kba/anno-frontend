@@ -69,7 +69,7 @@ module.exports = {
             const anno = this.$store.state.editing
             if (!anno.title && this.editMode == 'create') {
                 window.alert("A title is required")
-                return;
+                return
             }
             const cb = (err, newAnno) => {
                 if (err) {
@@ -89,7 +89,12 @@ module.exports = {
         mintDoi() {
             const {id} = this.$store.state.editing
             this.api.mintDoi(id, (err, ...args) => {
+              if (err) {
+                  console.log("mintDOI error", {err})
+              } else {
                 console.log("mintDOI response", {err, args})
+                this.save()
+              }
             })
         },
 
