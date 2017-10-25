@@ -50,7 +50,7 @@
       <div class="media-body">
 
         <div>
-          <button class="btn btn-xs" v-for="aCreator in ensureArray('creator')">
+          <button class="btn btn-xs" v-for="aCreator of ensureArray('creator')">
             <template v-if="aCreator.icon">
               <img class="media-object" style="display: inline" :src="aCreator.icon" alt="Logo" width="15px" height="15px">
             </template>

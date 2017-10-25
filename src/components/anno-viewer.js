@@ -176,7 +176,11 @@ module.exports = {
             this.collapsed = collapseState === 'toggle' ? ! this.collapsed : collapseState === 'hide'
         },
         numberOf(k) {return numberOf(this.annotation, k)},
-        ensureArray(k) {return ensureArray(JSON.parse(JSON.stringify(this.annotation)), k)},
+        ensureArray(k) {
+          const anno = JSON.parse(JSON.stringify(this.annotation))
+          ensureArray(anno, k)
+          return anno[k]
+        },
         setToVersion(newState) {
             // const x = {}
             // ;['modified', 'created'].forEach(prop => {
