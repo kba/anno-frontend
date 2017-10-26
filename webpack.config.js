@@ -44,6 +44,9 @@ module.exports = {
     plugins: [
         new webpack.DefinePlugin({'process.env': {
           NODE_ENV: prodBuild ? '"production"' : '"development"',
-        }})
+        }}),
+        new (require('uglifyjs-webpack-plugin'))({
+        })
+
     ]
 }

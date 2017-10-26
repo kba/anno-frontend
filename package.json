@@ -58,6 +58,7 @@
     "sass-loader": "^6.0.3",
     "style-loader": "^0.13.1",
     "tap": "^10.3.2",
+    "uglifyjs-webpack-plugin": "^1.0.1",
     "url-loader": "^0.5.8",
     "vue-loader": "^11.3.4",
     "vue-template-compiler": "^2.2.6",
