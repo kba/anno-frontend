@@ -1,99 +1,95 @@
 .annoeditor-viewer.panel.panel-default {
 
-    // This changed between bootstrap 3.1 and 3.2 for panels
-    overflow: visible;
+  // This changed between bootstrap 3.1 and 3.2 for panels
+  overflow: visible;
 
-    &.annoeditor-purl {
-        & > .panel-heading,
-        &.annoeditor-reply > .panel-body > .media > div > div:nth-child(1) {
-            background-color: #365187;
-            color: white;
+  &.annoeditor-purl {
+    & > .panel-heading,
+    &.annoeditor-reply > .panel-body > .media > div > div:nth-child(1) {
+      background-color: #365187;
+      color: white;
 
-            & > .btn {
-                background-color: #7793cc;
-            }
-        }
+      & > .btn {
+        background-color: #7793cc;
+      }
     }
+  }
 
-    &.annoeditor-highlight {
-        & > .panel-heading {
-            background: #990000;
-            color: white;
-        }
-        &.annoeditor-reply {
-            border: 1px solid #fc3;
-            background-color: #fea;
-        }
+  &.annoeditor-highlight {
+    & > .panel-heading {
+      background: #990000;
+      color: white;
     }
-
-    .annoeditor-tags {
-      margin-top: 5px;
+    &.annoeditor-reply {
+      border: 1px solid #fc3;
+      background-color: #fea;
     }
+  }
 
-    .dropdown-menu {
-      text-align: left;
-      color: inherit !important;
-      a {
-        cursor: pointer;
+  .annoeditor-tags {
+    margin-top: 5px;
+  }
+
+  .dropdown-menu {
+    text-align: left;
+    color: inherit !important;
+    a {
+      cursor: pointer;
+    }
+  }
+
+  .panel-heading {
+    display: flex;
+    padding: 2px 0;
+
+    .panel-title {
+      font-size: 1em;
+      flex-grow: 1;
+
+      & > a {
+        display: block;
+        padding: 10px 15px;
       }
     }
 
-    .panel-heading {
-        padding: 2px 0;
-
-        .panel-title {
-            font-size: 1em;
-
-            & > a {
-              display: block;
-              padding: 10px 15px;
-            }
-        }
-
-        .annoeditor-thumbnail-wrapper {
-          display: static;
-          right: 0;
-          top: 0;
-          height: 36px;
-          width: 36px;
-          float: right;
-          border: none !important;
-          padding: 0;
-          background: white;
-
-          .annoeditor-thumbnail {
-          }
-        }
+    .annoeditor-thumbnail-wrapper {
+      height: 36px;
+      width: 36px;
+      border: none !important;
+      padding: 0;
+      background: white;
     }
 
-    .panel-body {
+  }
 
-      padding: 0 5px;
+  .panel-body {
 
-      & .media-body {
+    padding: 0 5px;
 
-        padding: 5px;
+    & .media-body {
 
-        // The header containing name, date, purl, iiif
-        & > div:nth-child(1) {
-            min-height: 22px;
-        }
+      padding: 5px;
 
-        & > h4 {
-          margin-top: 3px;
-          font-size: 14px;
-          font-weight: 700;
-        }
-
-        img {
-          max-width: 100%;
-        }
-
-
+      // The header containing name, date, purl, iiif
+      & > div:nth-child(1) {
+        min-height: 22px;
       }
 
-        .well.old_version {
-            background-color: #ddf;
-        }
+      & > h4 {
+        margin-top: 3px;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      img {
+        max-width: 100%;
+      }
+
+
     }
+
+    .well.old_version {
+      background-color: #ddf;
+    }
+  }
 }
