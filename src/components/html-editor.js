@@ -36,12 +36,17 @@ module.exports = {
                         undo() {this.quill.history.undo()},
                         redo() {this.quill.history.redo()},
                         image() {
+                          const value = window.prompt(l10n("image.prompt.url"))
+                          if (!value) {return}
+                          // // TODO
+                          // if (!value.match(/^https?:\/\/heidicon/)) {
+                          //   window.alert("Domain not allowed :(")
+                          // }
                           this.quill.insertEmbed(
                             this.quill.getSelection().index,
                             'image',
-                            window.prompt(l10n("image.prompt.url")),
-                            quill.sources.USER
-                          )
+                            value,
+                            quill.sources.USER)
                         },
                     }
                 }
