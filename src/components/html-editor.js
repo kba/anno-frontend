@@ -18,31 +18,40 @@ module.exports = {
         require('../mixin/l10n'),
         require('../mixin/prefix'),
     ],
-    data() { return {
-        licenseInfo: require('../../license-config'),
+    data() {return {
+      licenseInfo: require('../../license-config')
     }},
     style: require('./html-editor.scss'),
     template: require('./html-editor.html'),
     mounted() {
         $('[data-toggle="popover"]', this.$el).popover({
             container: '#license-select'
-        });
+        })
+        const {l10n} = this
         this.quill = new quill(this.$refs.editor, {
             modules: {
                 toolbar: {
                     container: this.$refs.toolbar,
                     handlers: {
-                        undo() { this.quill.history.undo() },
-                        redo() { this.quill.history.redo() },
+                        undo() {this.quill.history.undo()},
+                        redo() {this.quill.history.redo()},
+                        image() {
+                          this.quill.insertEmbed(
+                            this.quill.getSelection().index,
+                            'image',
+                            window.prompt(l10n("image.prompt.url")),
+                            quill.sources.USER
+                          )
+                        },
                     }
                 }
             },
             placeholder: this.l10n('editor_placeholder'),
             theme: 'snow',
-        });
+        })
         this.quill.on('text-change', (delta, oldDelta, source) => {
             console.log(this.$refs.editor)
-            var html = this.$refs.editor.children[0].innerHTML
+            let html = this.$refs.editor.children[0].innerHTML
             if (html === '<p><br></p>') html = ''
             this.value = html
         })
@@ -50,18 +59,18 @@ module.exports = {
         eventBus.$on('close-editor', () => this.quill.pasteHTML(''))
     },
     computed: {
-        firstHtmlBody() { return this.$store.getters.firstHtmlBody },
+        firstHtmlBody() {return this.$store.getters.firstHtmlBody},
         value: {
             get () {
                 const {firstHtmlBody} = this
                 // console.log({firstHtmlBody})
                 return firstHtmlBody && firstHtmlBody.value ? firstHtmlBody.value : ''
             },
-            set (content) { this.$store.commit('SET_HTML_BODY_VALUE', content) },
+            set (content) {this.$store.commit('SET_HTML_BODY_VALUE', content)},
         },
         title: {
-            get () { return this.$store.state.editing.title },
-            set (value) { this.$store.commit('SET_TITLE', value) }
+            get () {return this.$store.state.editing.title},
+            set (value) {this.$store.commit('SET_TITLE', value)}
         },
         titleRequired() {
             return ! this.$store.state.editing.replyTo
