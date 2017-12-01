@@ -5,4 +5,10 @@
       margin-top: 0 !important;
     }
   }
+  .sort-menu {
+    & > li {
+      display: block;
+      text-align: left;
+    }
+  }
 }

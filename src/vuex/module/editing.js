@@ -32,11 +32,11 @@ const state = initialState()
 //
 
 const getters = {
-    firstHtmlBody(a)      { return textualHtmlBody.first(a)     },
-    simpleTagBodies(a)    { return simpleTagBody.all(a)         },
-    semanticTagBodies(a)  { return semanticTagBody.all(a)       },
-    relationLinkBodies(a) { return relationLinkBody.all(a)    },
-    svgTarget(a)          { return svgSelectorResource.first(a) },
+    firstHtmlBody(a)      {return textualHtmlBody.first(a)},
+    simpleTagBodies(a)    {return simpleTagBody.all(a)},
+    semanticTagBodies(a)  {return semanticTagBody.all(a)},
+    relationLinkBodies(a) {return relationLinkBody.all(a)},
+    svgTarget(a)          {return svgSelectorResource.first(a)},
 }
 
 //
@@ -111,8 +111,6 @@ const mutations = {
         ensureArray(state, 'motivation')
         add(state, 'motivation', v)
     },
-
-
 
     ADD_RELATIONLINK(state, v) {
         ensureArray(state, 'body')
