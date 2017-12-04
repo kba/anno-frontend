@@ -1,7 +1,7 @@
 const Vue = require('vue')
 const Vuex = require('vuex')
 Vue.use(Vuex)
-const eventBus = require('./event-bus')
+const eventBus = require('@/event-bus')
 const {localizations} = require('../l10n-config.json')
 
 /**
@@ -72,7 +72,7 @@ const {localizations} = require('../l10n-config.json')
  */
 module.exports = function displayAnnotations(options={}) {
 
-    const SidebarApp = require('./components/sidebar-app.js')
+    const SidebarApp = require('@/components/sidebar-app')
     SidebarApp.props.standalone.default = ! options.container
     SidebarApp.props.collapseInitially.default = !! options.collapseInitially
 

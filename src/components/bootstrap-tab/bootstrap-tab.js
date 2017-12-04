@@ -1,5 +1,5 @@
 module.exports = {
-    mixins: [require('../mixin/l10n')],
+    mixins: [require('@/mixin/l10n')],
     template: require('./bootstrap-tab.html'),
     props: {
         title:  {type: String, required: true},

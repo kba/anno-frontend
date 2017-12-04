@@ -6,8 +6,8 @@
  */
 module.exports = {
     mixins: [
-        require('../mixin/l10n'),
-        require('../mixin/prefix'),
+        require('@/mixin/l10n'),
+        require('@/mixin/prefix'),
     ],
     template: require('./tags-editor.html'),
     computed: {

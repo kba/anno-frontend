@@ -1,4 +1,4 @@
-const eventBus      = require('../event-bus')
+const eventBus      = require('@/event-bus')
 
 /*
  * ### anno-editor
@@ -17,9 +17,9 @@ const eventBus      = require('../event-bus')
 
 module.exports = {
     mixins: [
-        require('../mixin/l10n'),
-        require('../mixin/api'),
-        require('../mixin/prefix'),
+        require('@/mixin/l10n'),
+        require('@/mixin/api'),
+        require('@/mixin/prefix'),
     ],
     template: require('./anno-editor.html'),
     style: require('./anno-editor.css'),

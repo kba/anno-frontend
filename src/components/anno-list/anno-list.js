@@ -14,15 +14,15 @@
  * - `@param {String} state` Either `show` or `hide`
  *
  */
-const eventBus = require('../event-bus')
+const eventBus = require('@/event-bus')
 const $ = require('jquery')
 
 module.exports = {
     mixins: [
-        require('../mixin/l10n'),
-        require('../mixin/auth'),
-        require('../mixin/api'),
-        require('../mixin/prefix'),
+        require('@/mixin/l10n'),
+        require('@/mixin/auth'),
+        require('@/mixin/api'),
+        require('@/mixin/prefix'),
     ],
     data() {return {
         collapsed: 'hide'

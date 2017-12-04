@@ -4,7 +4,7 @@ require('style-loader!css-loader?minimize=true!quill/dist/quill.snow.css')
 
 // const { textualHtmlBody } = require('@kba/anno-queries')
 
-const eventBus = require('../event-bus')
+const eventBus = require('@/event-bus')
 
 /**
  * ### html-editor
@@ -15,11 +15,11 @@ const eventBus = require('../event-bus')
 
 module.exports = {
     mixins: [
-        require('../mixin/l10n'),
-        require('../mixin/prefix'),
+        require('@/mixin/l10n'),
+        require('@/mixin/prefix'),
     ],
     data() {return {
-      licenseInfo: require('../../license-config')
+      licenseInfo: require('@/../license-config')
     }},
     style: require('./html-editor.scss'),
     template: require('./html-editor.html'),

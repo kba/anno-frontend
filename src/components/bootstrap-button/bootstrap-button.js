@@ -9,7 +9,7 @@
  *
  */
 module.exports = {
-    mixins: [require('../mixin/l10n')],
+    mixins: [require('@/mixin/l10n')],
     props: {
         title:       String,
         prefix:      {type: String, default: 'ubhdannoprefix_zoneeditor'},

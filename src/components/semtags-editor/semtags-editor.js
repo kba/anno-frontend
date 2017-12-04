@@ -11,7 +11,7 @@ const gndClient = require('@ubhd/authorities-client').plugin('ubhd/gnd')
 
 module.exports = {
     mixins: [
-        require('../mixin/l10n'),
+        require('@/mixin/l10n'),
     ],
     template: require('./semtags-editor.html'),
     style:    require('./bonanza.sass'),

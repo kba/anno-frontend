@@ -1,4 +1,5 @@
 const webpack = require('webpack')
+const path = require('path')
 
 // detect if webpack bundle is being processed in a production or development env
 let prodBuild = require('yargs').argv.p || false
@@ -26,6 +27,7 @@ module.exports = {
     },
     resolve: {
         alias: {
+            '@': path.join(__dirname, 'src'),
             'vue$': 'vue/dist/vue.min.js',
             'quill$': 'quill/dist/quill.min.js',
             'async$': 'async/dist/async.min.js',

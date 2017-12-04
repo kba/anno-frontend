@@ -1,6 +1,6 @@
 const $ = require('jquery')
 const _dateformat = require('dateformat')
-const eventBus = require('../event-bus')
+const eventBus = require('@/event-bus')
 const XrxUtils = require('semtonotes-utils')
 const {
     numberOf,
@@ -50,9 +50,9 @@ const {
 
 module.exports = {
     mixins: [
-        require('../mixin/l10n'),
-        require('../mixin/auth'),
-        require('../mixin/prefix'),
+        require('@/mixin/l10n'),
+        require('@/mixin/auth'),
+        require('@/mixin/prefix'),
     ],
     name: 'anno-viewer', // necessary for nesting
     props: {
@@ -148,7 +148,7 @@ module.exports = {
             currentVersion: this.initialAnnotation,
             highlighted: false,
             collapsed: this.collapseInitially,
-            licenseInfo: require('../../license-config.js'),
+            licenseInfo: require('@/../license-config.js'),
         }
     },
     methods: {

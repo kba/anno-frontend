@@ -1,5 +1,5 @@
 const $ = require('jquery')
-const eventBus = require('../event-bus')
+const eventBus = require('@/event-bus')
 
 /*
  * ### anno-editor-modal
@@ -12,9 +12,9 @@ const eventBus = require('../event-bus')
 
 module.exports = {
     mixins: [
-        require('../mixin/l10n'),
-        require('../mixin/auth'),
-        require('../mixin/prefix'),
+        require('@/mixin/l10n'),
+        require('@/mixin/auth'),
+        require('@/mixin/prefix'),
     ],
     props: {
         draggable: {type: Boolean, default: true},

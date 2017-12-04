@@ -9,10 +9,10 @@ const bonanza = require('bonanza');
 
 module.exports = {
     mixins: [
-        require('../mixin/l10n'),
+        require('@/mixin/l10n'),
     ],
     template: require('./relationlink-editor.html'),
-    style:    require('./bonanza.sass'),
+    // style:    require('./bonanza.sass'),
     props: {
         relations: {type: Array, default() { return [
             'http://www.w3.org/2000/01/rdf-schema#seeAlso',
