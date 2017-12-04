@@ -1,33 +1,38 @@
 <div class="annoeditor-list">
   <div class="btn-group btn-group-vertical pull-left hidden-print" role="group">
 
-    <template v-if="isLoggedIn && enableLogoutButton">
-      <a class="btn btn-xs btn-warning" @click.stop="logout" :href="tokenDecoded.sub">
-        {{ l10n('logout') }}
-      </a>
-    </template>
+    <a v-if="isLoggedIn && enableLogoutButton"
+      class="btn btn-xs btn-warning"
+      @click.stop="logout"
+      :href="tokenDecoded.sub"
+      >
+      {{ l10n('logout') }}
+    </a>
 
-    <a class="btn btn-xs btn-default" :href="loginEndpoint"
-      v-if="!isLoggedIn && loginEndpoint"
+    <a v-if="!isLoggedIn && loginEndpoint"
+      class="btn btn-xs btn-default dropdown-toggle"
+      :href="loginEndpoint"
       >
       {{ l10n('login') }}
     </a>
 
-    <template v-if="! isLoggedIn && enableRegisterButton">
-      <a class="btn btn-xs btn-info"
-        :href="registerEndpoint">{{ l10n('register') }}</a>
-    </template>
+    <a v-if="! isLoggedIn && enableRegisterButton"
+      class="btn btn-xs btn-info"
+      :href="registerEndpoint"
+      >
+      {{ l10n('register') }}
+    </a>
 
-    <button class="btn btn-xs btn-success"
+    <button v-if="$auth('create', targetSource)"
+      class="btn btn-xs btn-success"
       @click="create"
-      v-show="$auth('create', targetSource)"
       >
       {{ l10n('new') }}
     </button>
 
     <a class="btn btn-xs btn-danger"
       :href="requestEndpoint"
-      v-show="isLoggedIn && ! $auth('create', targetSource)"
+      v-if="isLoggedIn && ! $auth('create', targetSource)"
       >
       {{ l10n('not_enough_rights') }}
     </a>
@@ -36,31 +41,29 @@
 
   <div class="btn-group btn-group-vertical pull-right hidden-print" role="group">
 
-    <bootstrap-button btn-class="default" btn-size="xs" font-awesome="plus" @click="collapseAll('show')"
-      v-show="collapsed && numberOfAnnotations > 0">
-      {{ l10n('open_all') }}
-    </bootstrap-button>
-    <bootstrap-button btn-class="default" btn-size="xs" font-awesome="minus" @click="collapseAll('hide')"
-      v-show="!collapsed && numberOfAnnotations > 0">
-      {{ l10n('close_all') }}
-    </bootstrap-button>
+    <button v-if="collapsed && numberOfAnnotations > 0" class="btn btn-default btn-xs" @click="collapseAll('show')">
+      <span class="fa fa-plus"></span>&nbsp;{{ l10n('open_all') }}
+    </button>
 
-    <bootstrap-button btn-class="default dropdown-toggle" font-awesome="sort" btn-size="xs" data-toggle="dropdown"
-      v-show="numberOfAnnotations > 0">
-      {{l10n('sort')}} <span class="caret"></span>
-    </bootstrap-button>
+    <button v-if="! collapsed && numberOfAnnotations > 0" class="btn btn-default btn-xs" @click="collapseAll('hide')">
+      <span class="fa fa-minus"></span>&nbsp;{{ l10n('close_all') }}
+    </button>
+
+    <button v-if="numberOfAnnotations > 0" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" @click="collapseAll('hide')">
+      <span class="fa fa-sort"></span>&nbsp;{{ l10n('sort') }} <span class="caret"></span>
+    </button>
 
     <!-- {{ sortedBy }} -->
     <ul class="dropdown-menu dropdown-menu-small small sort-menu" role="menu">
 
-      <li :class="{btn: true, 'btn-primary': sortedBy == 'created_az'}"  @click="sort('created_az')"  > {{ l10n('sort_created_az')  }}</li >
-      <li :class="{btn: true, 'btn-primary': sortedBy == 'created_za'}"  @click="sort('created_za')"  > {{ l10n('sort_created_za')  }}</li >
-      <li :class="{btn: true, 'btn-primary': sortedBy == 'modified_az'}" @click="sort('modified_az')" > {{ l10n('sort_modified_az') }}</li >
-      <li :class="{btn: true, 'btn-primary': sortedBy == 'modified_za'}" @click="sort('modified_za')" > {{ l10n('sort_modified_za') }}</li >
-      <li :class="{btn: true, 'btn-primary': sortedBy == 'title_az'}"    @click="sort('title_az')"    > {{ l10n('sort_title_az')    }}</li >
-      <li :class="{btn: true, 'btn-primary': sortedBy == 'title_za'}"    @click="sort('title_za')"    > {{ l10n('sort_title_za')    }}</li >
-      <li :class="{btn: true, 'btn-primary': sortedBy == 'creator_az'}"  @click="sort('creator_az')"  > {{ l10n('sort_creator_az')  }}</li >
-      <li :class="{btn: true, 'btn-primary': sortedBy == 'creator_za'}"  @click="sort('creator_za')"  > {{ l10n('sort_creator_za')  }}</li >
+      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'created_az'}"  @click="sort('created_az')"  > {{ l10n('sort_created_az')  }}</li >
+      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'created_za'}"  @click="sort('created_za')"  > {{ l10n('sort_created_za')  }}</li >
+      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'modified_az'}" @click="sort('modified_az')" > {{ l10n('sort_modified_az') }}</li >
+      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'modified_za'}" @click="sort('modified_za')" > {{ l10n('sort_modified_za') }}</li >
+      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'title_az'}"    @click="sort('title_az')"    > {{ l10n('sort_title_az')    }}</li >
+      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'title_za'}"    @click="sort('title_za')"    > {{ l10n('sort_title_za')    }}</li >
+      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'creator_az'}"  @click="sort('creator_az')"  > {{ l10n('sort_creator_az')  }}</li >
+      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'creator_za'}"  @click="sort('creator_za')"  > {{ l10n('sort_creator_za')  }}</li >
 
     </ul>
 
