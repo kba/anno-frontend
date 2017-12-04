@@ -69,23 +69,22 @@
 
   </div>
 
-    <div style="clear: both;">
-    </div>
+    <div style="clear: both;"></div>
 
-    <div v-if="!isLoggedIn" style="text-align: center; margin-top: 10px; font-size: 95%;">
-      <!--     [> class="btn btn-lg btn-primary"  <] -->
-      <!--     [> role="button"  <] -->
-      <!-- <a  tabindex="0" -->
-      <!--     rel="popover"  -->
-      <!--     data-html="true" -->
-      <!--     data-toggle="popover" -->
-      <!--     data-trigger="focus" -->
-      <!--     data-placement="left"  -->
-      <!--     :title="l10n('msg_join_short')"  -->
-      <!--     :data-content="l10n('msg_join_long')" -->
-      <!--     > -->
-      <!--     {{ l10n('msg_join_short') }} -->
-      <!-- </a> -->
+
+    <div style="text-align: left; margin: 5px; margin-top: 0;">
+
+      <a  tabindex="0"
+        rel="popover"
+        data-html="true"
+        data-toggle="popover"
+        data-trigger="focus"
+        data-placement="left"
+        :title="l10n('msg_join_short')"
+        :data-content="l10n('msg_join_long')"
+        class=""
+        >
+        {{ l10n('msg_join_short') }}
     </div>
 
     <div class="panel-group">
