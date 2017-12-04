@@ -8,7 +8,7 @@ function _sortByDateTime(field, dir=1) {
 
 function _sortAlpha(field, dir=1) {
     return function(a, b) {
-        [a,b] = [a,b].map(x => {
+        [a, b] = [a, b].map(x => {
             x = x[field]
             if (!x) return ''
             if (x && typeof x.displayName === 'string') x = x.displayName
@@ -37,7 +37,7 @@ module.exports = {
         allCollaped: 'false',
     },
     getters: {
-        numberOfAnnotations(state) { return state.list.length },
+        numberOfAnnotations(state) {return state.list.length},
     },
     actions: {
 

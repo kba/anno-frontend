@@ -3,7 +3,7 @@ module.exports = {
     template: require('./bootstrap-tab.html'),
     props: {
         title:  {type: String, required: true},
-        active: {type: [Boolean,String], default:false},
+        active: {type: [Boolean, String], default:false},
         name:   {type: String, required: true}
     }
 }

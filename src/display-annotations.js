@@ -115,7 +115,7 @@ module.exports = function displayAnnotations(options={}) {
     //
     const eventListeners = options.events ? options.events : {}
     Object.keys(eventListeners).forEach(event => {
-        //console.log(`Binding "${event}" event on`, eventBus, 'to', eventListeners[event])
+        // console.log(`Binding "${event}" event on`, eventBus, 'to', eventListeners[event])
         eventBus.$on(event, (...args) => eventListeners[event](...args))
     })
     delete options.events
@@ -146,9 +146,9 @@ module.exports = function displayAnnotations(options={}) {
     //
     // Convenience methods for startHighlighting / stopHighlighting event emission
     //
-    annoapp.startHighlighting = function(...args) { eventBus.$emit('startHighlighting', ...args) }
-    annoapp.stopHighlighting = function(...args) { eventBus.$emit('stopHighlighting', ...args) }
-    annoapp.expand = function(...args) { eventBus.$emit('expand', ...args) }
+    annoapp.startHighlighting = function(...args) {eventBus.$emit('startHighlighting', ...args)}
+    annoapp.stopHighlighting = function(...args) {eventBus.$emit('stopHighlighting', ...args)}
+    annoapp.expand = function(...args) {eventBus.$emit('expand', ...args)}
 
     //
     // Kick off fetching tokens/list/ACL rules

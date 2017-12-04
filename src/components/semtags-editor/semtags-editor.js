@@ -1,5 +1,5 @@
 const axios = require('axios')
-const bonanza = require('bonanza');
+const bonanza = require('bonanza')
 const gndClient = require('@ubhd/authorities-client').plugin('ubhd/gnd')
 
 /*
@@ -16,15 +16,15 @@ module.exports = {
     template: require('./semtags-editor.html'),
     style:    require('./bonanza.sass'),
     computed: {
-        semanticTagBodies() { return this.$store.getters.semanticTagBodies },
-        language() { return this.$store.state.language },
+        semanticTagBodies() {return this.$store.getters.semanticTagBodies},
+        language() {return this.$store.state.language},
     },
     updated() {
         this.ensureCompletion()
     },
     methods: {
-        addSemanticTag() { this.$store.commit('ADD_SEMTAG_BODY') },
-        removeBody(body) { this.$store.commit('REMOVE_BODY', body) },
+        addSemanticTag() {this.$store.commit('ADD_SEMTAG_BODY')},
+        removeBody(body) {this.$store.commit('REMOVE_BODY', body)},
         ensureCompletion() {
             const label = ({term}) => term[this.language] || term.de || term.en || term
             const source = ({payload}) => payload.startsWith('http') ? payload : `http://d-nb.info/gnd/${payload}`
@@ -38,7 +38,7 @@ module.exports = {
                         el,
                         {
                             templates: {
-                                item(obj) { return label(obj) },
+                                item(obj) {return label(obj)},
                             }
                         },
                         function(query, cb) {

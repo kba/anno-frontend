@@ -1,4 +1,4 @@
-const bonanza = require('bonanza');
+const bonanza = require('bonanza')
 
 /*
  * ### relationlinks-editor
@@ -14,7 +14,7 @@ module.exports = {
     template: require('./relationlink-editor.html'),
     // style:    require('./bonanza.sass'),
     props: {
-        relations: {type: Array, default() { return [
+        relations: {type: Array, default() {return [
             'http://www.w3.org/2000/01/rdf-schema#seeAlso',
             'http://purl.org/dc/terms/isPartOf',
             'http://purl.org/vra/basedOn',
@@ -66,11 +66,11 @@ module.exports = {
         ]}
     }},
     computed: {
-        relationLinkBodies() { return this.$store.getters.relationLinkBodies }
+        relationLinkBodies() {return this.$store.getters.relationLinkBodies}
     },
     methods: {
-        addRelationLink() { this.$store.commit('ADD_RELATIONLINK') },
-        removeBody(body) { this.$store.commit('REMOVE_BODY', body) },
+        addRelationLink() {this.$store.commit('ADD_RELATIONLINK')},
+        removeBody(body) {this.$store.commit('REMOVE_BODY', body)},
         // TODO anno-utils!
         includes(maybeArray, val) {
             return Array.isArray(maybeArray) && maybeArray.includes(val)

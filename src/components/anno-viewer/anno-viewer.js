@@ -75,7 +75,7 @@ module.exports = {
         // Show popover with persistent URL
         const Clipboard = require('clipboard')
         Array.from(this.$el.querySelectorAll('[data-toggle="popover"]')).forEach(popoverTrigger => {
-            $(popoverTrigger).popover({ container: 'body', trigger: 'click' }); 
+            $(popoverTrigger).popover({container: 'body', trigger: 'click'})
             $(popoverTrigger).on('shown.bs.popover', () => {
                 const popoverDiv = document.getElementById(popoverTrigger.getAttribute("aria-describedby"))
                 if (popoverDiv) {
@@ -101,39 +101,39 @@ module.exports = {
                 ) {
                     $('[data-toggle="popover"][data-focus-dismiss]').popover('hide')
                 }
-            });
+            })
             window.annoInstalledPopoverHandler = true
         }
 
         // React to highlighting events startHighlighting / stopHighlighting / toggleHighlighting
         ;['start', 'stop', 'toggle'].forEach(state => {
             const method = `${state}Highlighting`
-            eventBus.$on(method, (id, expand) => { if (id == this.id) this[method](expand) })
+            eventBus.$on(method, (id, expand) => {if (id == this.id) this[method](expand)})
         })
 
         // Expand this annotation
         eventBus.$on('expand', (id) => {
-            if (id !== this.id) return 
+            if (id !== this.id) return
             this.collapse(false)
             const rootId = this.id.replace(/[~\.][~\.0-9]+$/, '')
             if (rootId !== id) eventBus.$emit('expand', rootId)
         })
     },
     computed: {
-        id()                 { return this.annotation.id },
-        created()            { return this.annotation.created },
-        creator()            { return this.annotation.creator },
-        modified()           { return this.annotation.modified },
-        title()              { return this.annotation.title },
-        rights()             { return this.annotation.rights },
-        firstHtmlBody()      { return textualHtmlBody.first(this.annotation) },
-        simpleTagBodies()    { return simpleTagBody.all(this.annotation) },
-        semanticTagBodies()  { return semanticTagBody.all(this.annotation) },
-        relationLinkBodies() { return relationLinkBody.all(this.annotation) },
-        svgTarget()          { return svgSelectorResource.first(this.annotation) },
-        purl()               { return this.purlTemplate 
+        id()                 {return this.annotation.id},
+        created()            {return this.annotation.created},
+        creator()            {return this.annotation.creator},
+        modified()           {return this.annotation.modified},
+        title()              {return this.annotation.title},
+        rights()             {return this.annotation.rights},
+        firstHtmlBody()      {return textualHtmlBody.first(this.annotation)},
+        simpleTagBodies()    {return simpleTagBody.all(this.annotation)},
+        semanticTagBodies()  {return semanticTagBody.all(this.annotation)},
+        relationLinkBodies() {return relationLinkBody.all(this.annotation)},
+        svgTarget()          {return svgSelectorResource.first(this.annotation)},
+        purl()               {return this.purlTemplate
                 ? this.purlTemplate.replace('{{ slug }}', this.id.replace(/.*\//, ''))
-                : this.id },
+                : this.id},
         slug() {
             if (!this.annotation.id) return 'unsaved-annotation-' + Date.now()
             return this.annotation.id.replace(/[^A-Za-z0-9]/g, '')
@@ -152,9 +152,9 @@ module.exports = {
         }
     },
     methods: {
-        revise()     { return eventBus.$emit('revise', this.annotation) },
-        reply()      { return eventBus.$emit('reply',  this.annotation) },
-        remove()     { return eventBus.$emit('remove', this.annotation) },
+        revise()     {return eventBus.$emit('revise', this.annotation)},
+        reply()      {return eventBus.$emit('reply',  this.annotation)},
+        remove()     {return eventBus.$emit('remove', this.annotation)},
         mouseenter() {
             this.startHighlighting()
             eventBus.$emit("mouseenter", this.id)
@@ -168,10 +168,10 @@ module.exports = {
             this.highlighted = true
             if (expand) eventBus.$emit('expand', this.id, true)
         },
-        stopHighlighting()   { this.highlighted = false },
-        toggleHighlighting() { this.highlighted = ! this.highlighted },
+        stopHighlighting()   {this.highlighted = false},
+        toggleHighlighting() {this.highlighted = ! this.highlighted},
 
-        dateformat(date=new Date()) { return date ? _dateformat(date, this.l10n('dateformat')) : '' },
+        dateformat(date=new Date()) {return date ? _dateformat(date, this.l10n('dateformat')) : ''},
         collapse(collapseState) {
             this.collapsed = collapseState === 'toggle' ? ! this.collapsed : collapseState === 'hide'
         },
@@ -233,9 +233,9 @@ module.exports = {
 
             let w = (x2 - x)
             let h = (y2 - y)
-            ;[x,w] = [x,w].map(_ => _ / this.imageWidth)
-            ;[y,h] = [y,h].map(_ => _ / this.imageHeight)
-            ;[x,y,w,h] = [x,y,w,h].map(_ => _ / scale * 100)
+            ;[x, w] = [x, w].map(_ => _ / this.imageWidth)
+            ;[y, h] = [y, h].map(_ => _ / this.imageHeight)
+            ;[x, y, w, h] = [x, y, w, h].map(_ => _ / scale * 100)
             return this.iiifUrlTemplate.replace(`{{ iiifRegion }}`, `pct:${x},${y},${w},${h}`)
         },
     },

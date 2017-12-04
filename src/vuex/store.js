@@ -12,7 +12,7 @@ const eventBus = require('../event-bus')
 const editing = require('./module/editing')
 const annotationList = require('./module/annotationList')
 
-function isExpired(token) { return (token.exp < Date.now() / 1000) }
+function isExpired(token) {return (token.exp < Date.now() / 1000)}
 
 module.exports = {
     strict: process.env.NODE_ENV != 'production',
@@ -83,21 +83,21 @@ module.exports = {
 
         SET_TOKEN(state, token) {
             state.token = token
-            window.sessionStorage.setItem('anno-token', token);
+            window.sessionStorage.setItem('anno-token', token)
         },
 
         DELETE_TOKEN(state, token) {
             state.token = null
-            window.sessionStorage.removeItem('anno-token');
+            window.sessionStorage.removeItem('anno-token')
         },
 
         SET_EDIT_MODE(state, editMode) {
             state.editMode = editMode
         },
 
-        ENABLE_CACHE_BUSTER(state) { state.cacheBusterEnabled = true },
+        ENABLE_CACHE_BUSTER(state) {state.cacheBusterEnabled = true},
 
-        DISABLE_CACHE_BUSTER(state) { state.cacheBusterEnabled = false }
+        DISABLE_CACHE_BUSTER(state) {state.cacheBusterEnabled = false}
 
     },
 
@@ -105,7 +105,7 @@ module.exports = {
 
         fetchToken({state, commit, dispatch}) {
             return new Promise((resolve, reject) => {
-                let token = window.sessionStorage.getItem('anno-token');
+                let token = window.sessionStorage.getItem('anno-token')
                 if (token) {
                     if (isExpired(token)) {
                         commit('DELETE_TOKEN')

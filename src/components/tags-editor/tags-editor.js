@@ -11,10 +11,10 @@ module.exports = {
     ],
     template: require('./tags-editor.html'),
     computed: {
-        simpleTagBodies() { return this.$store.getters.simpleTagBodies },
+        simpleTagBodies() {return this.$store.getters.simpleTagBodies},
     },
     methods: {
-        addSimpleTag() { this.$store.commit('ADD_TAG_BODY') },
-        removeBody(body) { this.$store.commit('REMOVE_BODY', body) },
+        addSimpleTag() {this.$store.commit('ADD_TAG_BODY')},
+        removeBody(body) {this.$store.commit('REMOVE_BODY', body)},
     }
 }

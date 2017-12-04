@@ -72,13 +72,13 @@ module.exports = {
 
     },
     methods: {
-        editMode() { return this.$store.state.editMode },
-        save() { eventBus.$emit('save') },
-        remove() { eventBus.$emit('remove', this.id) },
-        mintDoi() { eventBus.$emit('mintDoi') },
-        discard() { eventBus.$emit('discard') },
-        startHighlighting(...args) { eventBus.$emit('startHighlighting', ...args) },
-        stopHighlighting(...args) { eventBus.$emit('stopHighlighting', ...args) },
+        editMode() {return this.$store.state.editMode},
+        save() {eventBus.$emit('save')},
+        remove() {eventBus.$emit('remove', this.id)},
+        mintDoi() {eventBus.$emit('mintDoi')},
+        discard() {eventBus.$emit('discard')},
+        startHighlighting(...args) {eventBus.$emit('startHighlighting', ...args)},
+        stopHighlighting(...args) {eventBus.$emit('stopHighlighting', ...args)},
 
         show(annotation) {
             $(this.$el).modal({
@@ -86,7 +86,7 @@ module.exports = {
                 backdrop: 'static',
             })
         },
-        hide() { $(this.$el).modal('hide') },
+        hide() {$(this.$el).modal('hide')},
         purl(id) {
             return (this.purlTemplate && id)
                 ? this.purlTemplate

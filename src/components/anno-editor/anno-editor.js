@@ -55,14 +55,14 @@ module.exports = {
         }
     },
     computed: {
-        id()              { return this.$store.state.editing.id },
-        stateDump()       { return this.$store.state },
-        targetImage()     { return this.$store.state.targetImage },
-        editMode()        { return this.$store.state.editMode },
-        targetThumbnail() { return this.$store.state.targetThumbnail },
-        targetSource()    { return this.$store.state.targetSource },
-        svgTarget()       { return this.$store.getters.svgTarget },
-        zoneEditor()      { return this.$refs.zoneEditor },
+        id()              {return this.$store.state.editing.id},
+        stateDump()       {return this.$store.state},
+        targetImage()     {return this.$store.state.targetImage},
+        editMode()        {return this.$store.state.editMode},
+        targetThumbnail() {return this.$store.state.targetThumbnail},
+        targetSource()    {return this.$store.state.targetSource},
+        svgTarget()       {return this.$store.getters.svgTarget},
+        zoneEditor()      {return this.$refs.zoneEditor},
     },
     methods: {
         save() {
