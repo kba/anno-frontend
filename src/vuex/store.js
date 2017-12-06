@@ -1,7 +1,5 @@
 const {defaultLang} = require('../../l10n-config.json')
 const axios = require('axios')
-const Vue = require('vue')
-const Vuex = require('vuex')
 const {
   collectIds
 } = require('@kba/anno-util')
@@ -110,7 +108,6 @@ module.exports = {
                     if (isExpired(token)) {
                         commit('DELETE_TOKEN')
                     } else {
-                        const {sub} = jwtDecode(token)
                         commit('SET_TOKEN', token)
                         return resolve()
                     }
@@ -121,7 +118,6 @@ module.exports = {
                 }).then(resp => {
                     const token = resp.data
                     try {
-                        const {sub} = jwtDecode(token)
                         commit('SET_TOKEN', token)
                         dispatch('fetchList')
                         resolve()
