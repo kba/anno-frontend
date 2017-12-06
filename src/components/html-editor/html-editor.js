@@ -27,6 +27,23 @@ module.exports = {
         $('[data-toggle="popover"]', this.$el).popover({
             container: '#license-select'
         })
+        Array.from(this.$el.querySelectorAll('[data-help-topic]')).map(helpPopover => {
+            const url = this.$store.state.helpUrlTemplate
+                .replace('{{ language }}', this.$store.state.language)
+                .replace('{{ topic }}', helpPopover.dataset.helpTopic)
+            console.log(this.$store.state)
+            $(helpPopover).popover({
+                html: true,
+                container: 'body',
+                content() {
+                    fetch(url)
+                        .then(resp => resp.text())
+                        .then(data => $(`#help-popover-content`).html(data))
+                        .catch(err => console.log(err))
+                    return '<div id="help-popover-content">Loading ...</div>'
+                }
+            })
+        })
         const {l10n} = this
         this.quill = new quill(this.$refs.editor, {
             modules: {
