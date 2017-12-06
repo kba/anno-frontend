@@ -15,7 +15,7 @@ help:
 	@echo "    clean  Remove dist"
 	@echo "    test   Run tests"
 	@echo "    dist   Build production bundle"
-	@echo "    serve  Serve samples on localhost:3001"
+	@echo "    serve  Serve samples on localhost:3003"
 
 # END-EVAL
 
@@ -46,7 +46,7 @@ dist: src
 node_modules: package.json
 	$(NPM) install
 
-# Serve samples on localhost:3001
+# Serve samples on localhost:3003
 serve:
-	@echo "Open <http://localhost:3001/test> in your browser"
-	python2 -mSimpleHTTPServer 3001
+	@echo "Open <http://localhost:3003/test> in your browser"
+	python2 -mSimpleHTTPServer 3003

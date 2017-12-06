@@ -1,4 +1,4 @@
-const {defaultLang} = require('../../l10n-config.json')
+const {defaultlang} = require('../../l10n-config.json')
 const axios = require('axios')
 const {
   collectIds
@@ -15,7 +15,7 @@ function isExpired(token) {return (token.exp < Date.now() / 1000)}
 module.exports = {
     strict: process.env.NODE_ENV != 'production',
     state: {
-        language: defaultLang,
+        language: defaultlang,
         annoEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/anno',
         tokenEndpoint: null,
         loginEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/auth/login',
