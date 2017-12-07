@@ -15,4 +15,13 @@
   .btn-group>.btn:first-child {
     border-top-right-radius: 4px !important;
   }
+  
+  .annoeditor-info-button {
+    border-radius: 50%;
+    margin-left: 5px;
+    height: 16px;
+    line-height: 1;
+    width: 16px;
+    padding-top: 1px;
+  }
 }

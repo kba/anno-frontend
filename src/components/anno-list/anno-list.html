@@ -1,5 +1,5 @@
 <div class="annoeditor-list">
-  <div class="btn-group btn-group-vertical pull-left hidden-print" role="group">
+  <div class="btn-group pull-left hidden-print" role="group">
 
     <a v-if="isLoggedIn && enableLogoutButton"
       class="btn btn-xs btn-warning"
@@ -39,6 +39,47 @@
 
   </div>
 
+  <a v-if="!isLoggedIn"
+    class="btn btn-xs btn-info annoeditor-info-button"
+    tabindex="0"
+    data-html="true"
+    data-toggle="popover"
+    data-trigger="focus"
+    data-placement="bottom"
+    data-container="body"
+    :title="l10n('help.popover.register.title')"
+    :data-original-title="l10n('help.popover.register.title')"
+    :data-content="l10n('help.popover.register.body')"
+    ><span class="fa fa-info"></span></a>
+
+  <a v-if="isLoggedIn && ! $auth('create', targetSource)"
+    class="btn btn-xs btn-info annoeditor-info-button"
+    tabindex="0"
+    data-html="true"
+    data-toggle="popover"
+    data-trigger="focus"
+    data-placement="bottom"
+    data-container="body"
+    :title="l10n('help.popover.no_rights.title')"
+    :data-original-title="l10n('help.popover.no_rights.title')"
+    :data-content="l10n('help.popover.no_rights.body')"
+    ><span class="fa fa-info"></span></a>
+
+  <a v-if="isLoggedIn && $auth('create', targetSource)"
+    class="btn btn-xs btn-info annoeditor-info-button"
+    tabindex="0"
+    data-html="true"
+    data-toggle="popover"
+    data-trigger="focus"
+    data-placement="bottom"
+    data-container="body"
+    :title="l10n('help.popover.editing.title')"
+    :data-original-title="l10n('help.popover.editing.title')"
+    :data-content="l10n('help.popover.editing.body')"
+    ><span class="fa fa-info"></span></a>
+
+
+
   <div class="btn-group btn-group-vertical pull-right hidden-print" role="group">
 
     <button v-if="collapsed && numberOfAnnotations > 0" class="btn btn-default btn-xs" @click="collapseAll('show')">
@@ -73,19 +114,6 @@
 
 
     <div style="text-align: left; margin: 5px; margin-top: 0;">
-
-      <a  tabindex="0"
-        rel="popover"
-        data-html="true"
-        data-toggle="popover"
-        data-trigger="focus"
-        data-placement="left"
-        :title="l10n('msg_join_short')"
-        :data-content="l10n('msg_join_long')"
-        class=""
-        >
-        {{ l10n('msg_join_short') }}
-    </div>
 
     <div class="panel-group">
       <anno-viewer v-for="annotation in list" :key="annotation.id"
