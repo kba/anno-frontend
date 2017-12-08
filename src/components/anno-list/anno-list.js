@@ -15,6 +15,7 @@
  *
  */
 const eventBus = require('@/event-bus')
+const HelpButton = require('@/components/help-button')
 const $ = require('jquery')
 
 module.exports = {
@@ -24,6 +25,7 @@ module.exports = {
         require('@/mixin/api'),
         require('@/mixin/prefix'),
     ],
+    components: {HelpButton},
     data() {return {
         collapsed: 'hide'
     }},

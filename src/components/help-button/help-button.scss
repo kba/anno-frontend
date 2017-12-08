@@ -1,0 +1,26 @@
+.nav > li > a.help-button {
+  padding: 0px 10px 0 6px;
+  color: white !important;
+  background-color: #31b0d5;
+  border-color: #269abc;
+  border-radius: 100%;
+  margin: auto;
+  height: 20px;
+  width: 10px;
+
+  span {
+    border-radius: 50%;
+    line-height: 1;
+  }
+
+
+
+  &+ .popover {
+    min-width: 200px;
+    max-height: 50vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-width: unset;
+  }
+
+}

@@ -1,12 +1,19 @@
-<div>
+<div class="annoeditor-bootstrap-tabs">
   <ul class="nav nav-tabs">
     <li role="presentation"
       v-for="tab in tablist"
       :class="{'active':tab.active}"
       >
-      <a :href="'#' + tab.name" :aria-controls="tab.name" role="tab" data-toggle="tab" @click='clickHandler'>
-        {{tab.title}}
-      </a>
+
+        <a :href="'#' + tab.name" :aria-controls="tab.name" role="tab" data-toggle="tab" @click='clickHandler'>
+          {{tab.title}}
+        </a>
+
+        <help-button v-if="tab.topic"
+          :topic="tab.topic"
+          :helpUrlTemplate="helpUrlTemplate"
+          :language="language" />
+
     </li>
   </ul>
   <div class="tab-content">

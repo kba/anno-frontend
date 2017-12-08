@@ -17,7 +17,6 @@ module.exports = {
     mixins: [
         require('@/mixin/l10n'),
         require('@/mixin/prefix'),
-        require('@/mixin/help-popover'),
     ],
     data() {return {
       licenseInfo: require('@/../license-config')
