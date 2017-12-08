@@ -1,4 +1,4 @@
-<bootstrap-tabs class="panel-body" ref='tablist'>
+<bootstrap-tabs class="panel-body annoeditor-editor" ref='tablist'>
 
   <bootstrap-tab :name="`${prefix}-${editorId}-tab-comment`" :title="l10n('comment_tab')" :active="true">
     <html-editor
@@ -7,6 +7,7 @@
   </bootstrap-tab>
 
   <bootstrap-tab :name="`${prefix}-${editorId}-tab-zones`" :title="l10n('zones')" v-if="targetImage">
+    <a class="btn btn-info" data-help-topic="zones">?</a>
     <xrx-vue
       ref='zoneEditor'
       class="panel panel-default"

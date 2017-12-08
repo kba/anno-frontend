@@ -22,7 +22,7 @@ module.exports = {
         require('@/mixin/prefix'),
     ],
     template: require('./anno-editor.html'),
-    style: require('./anno-editor.css'),
+    style: require('./anno-editor.scss'),
     props: {
         editorId: {type: String, default: 'anno-editor'},
         enableTabTags: {type: Boolean, default: false},
