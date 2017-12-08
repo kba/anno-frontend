@@ -31,3 +31,14 @@
   font-size: 13px;
 }
 
+.annoeditor-editor {
+
+  .popover {
+    width: 70vw;
+    height: 50vh;
+    overflow: auto;
+    .popover-content {
+    }
+  }
+
+}

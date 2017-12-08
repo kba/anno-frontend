@@ -1,20 +1,14 @@
 <div class="panel panel-default annoeditor-html-editor">
   <div class="panel-heading">
-    <div class="row">
-      <div class="col-xs-10">
-        <input 
-        :placeholder="l10n('annofield_title') + (titleRequired ? ` (${l10n('required_field')})` : '')"
-        v-model="title"
-        class="form-control"
-        type="text"
-        :required="titleRequired"
-        >
-      </div>
-      <div class="col-xs-2">
-        <a class="btn btn-info form-control"
-          data-help-topic="comment"
-          >?</a>
-      </div>
+    <div style="display: flex">
+      <input
+      :placeholder="l10n('annofield_title') + (titleRequired ? ` (${l10n('required_field')})` : '')"
+      v-model="title"
+      class="form-control"
+      type="text"
+      :required="titleRequired"
+      >
+      <a class="btn btn-info" data-help-topic="html">?</a>
     </div>
   </div>
   <div class="panel-body">
