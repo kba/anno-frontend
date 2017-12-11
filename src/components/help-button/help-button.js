@@ -73,7 +73,7 @@ module.exports = {
           })
         window.helpPopoverModal = this
         const modal = document.querySelector(".modal-dialog")
-        if (modal) {
+        if (modal && modal.getClientRects()[0]) {
           const xOffset = modal.getClientRects()[0].x
           this.$el.querySelector('.panel').style.marginLeft = `-${xOffset}px`
         }

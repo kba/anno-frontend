@@ -3,7 +3,7 @@
     <span class="fa fa-info"></span>
   </a>
   <div :class="divClasses">
-    <div class="panel-heading">
+    <div class="panel-heading" @click="dismiss">
       {{ topic }}
       <span class="pull-right" @click="dismiss">&times;</span>
     </div>
