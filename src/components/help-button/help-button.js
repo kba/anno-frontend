@@ -5,10 +5,20 @@ module.exports = {
   template: require('./help-button.html'),
   style: require('./help-button.scss'),
 
+  data() {return {
+    classes: {
+      'btn': true,
+      'btn-info': true,
+      'help-button': true,
+      [`btn-${this.size}`]: true,
+    }
+  }},
+
   props: {
     language:        {type: String, required: false, default: 'de'},
     topic:           {type: String, required: true},
     helpUrlTemplate: {type: String, required: true},
+    size:            {type: String, required: false, default: 'xs'},
   },
 
   mounted() {
