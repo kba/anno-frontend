@@ -7,12 +7,14 @@
 
         <a :href="'#' + tab.name" :aria-controls="tab.name" role="tab" data-toggle="tab" @click='clickHandler'>
           {{tab.title}}
-        </a>
 
         <help-button v-if="tab.topic"
           :topic="tab.topic"
+          :title="tab.name"
           :helpUrlTemplate="helpUrlTemplate"
           :language="language" />
+
+        </a>
 
     </li>
   </ul>

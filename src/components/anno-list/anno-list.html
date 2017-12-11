@@ -42,21 +42,21 @@
   <help-button v-show="!isLoggedIn"
     :language="$store.state.language"
     :helpUrlTemplate="$store.state.helpUrlTemplate"
-    :title="l10n('help.popover.register.title')"
+    :title="l10n('popover-not-logged-in')"
     topic="popover-not-logged-in"
     />
 
   <help-button v-show="isLoggedIn && ! $auth('create', targetSource)"
     :language="$store.state.language"
     :helpUrlTemplate="$store.state.helpUrlTemplate"
-    :title="l10n('help.popover.no_rights.title')"
+    :title="l10n('popover-not-authorized')"
     topic="popover-not-authorized"
     />
 
   <help-button v-show="isLoggedIn && $auth('create', targetSource)"
-    :title="l10n('help.popover.editing.title')"
     :language="$store.state.language"
     :helpUrlTemplate="$store.state.helpUrlTemplate"
+    :title="l10n('popover-logged-in')"
     topic="popover-logged-in"
     />
 

@@ -9,6 +9,9 @@ module.exports = {
         .replace('{{ language }}', this.language)
         .replace('{{ topic }}', this.topic)
     },
+    topicTitle() {
+      return this.title ? this.title : this.topic
+    },
     divClasses() {
       return {
         'panel': true,
@@ -35,6 +38,7 @@ module.exports = {
   props: {
     language:        {type: String, required: false, default: 'de'},
     topic:           {type: String, required: true},
+    title:           {type: String, required: false},
     helpUrlTemplate: {type: String, required: true},
     size:            {type: String, required: false, default: 'xs'},
   },

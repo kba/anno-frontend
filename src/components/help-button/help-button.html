@@ -1,11 +1,11 @@
 <span class="help-button">
-  <a :class="btnClasses" @click="togglePopover()">
+  <a :class="btnClasses" @click.stop="togglePopover()">
     <span class="fa fa-info"></span>
   </a>
   <div :class="divClasses">
-    <div class="panel-heading" @click="dismiss">
-      {{ topic }}
-      <span class="pull-right" @click="dismiss">&times;</span>
+    <div class="panel-heading" @click.stop="dismiss">
+      {{ title }}
+      <span class="pull-right" @click.stop="dismiss">&times;</span>
     </div>
     <div class="panel-body">
       Loading ...

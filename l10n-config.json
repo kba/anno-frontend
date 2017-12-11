@@ -11,9 +11,9 @@
         "de":                      {
             "dateformat":  "dd.mm.yyyy HH:MM",
             "copied_to_clipboard": "In Zwischenablage kopiert",
-            "help.popover.no_rights.title": "Noch nicht freigeschaltet?",
-            "help.popover.editing.title": "Annotieren und Kommentieren!",
-            "help.popover.register.title": "Zum Annotieren bitte einloggen!",
+            "popover-not-authorized": "Noch nicht freigeschaltet?",
+            "popover-logged-in": "Annotieren und Kommentieren!",
+            "popover-not-logged-in": "Zum Annotieren bitte einloggen!",
             "annofield_title":     "Titel",
             "required_field":      "Pflichtfeld",
             "cancel":              "Abbrechen",
@@ -110,6 +110,9 @@
         },
 
         "en":                      {
+            "popover-not-authorized": "Not yet authorized?",
+            "popover-logged-in": "Annotating and commenting",
+            "popover-not-logged-in": "Please login to annotate",
             "dateformat":  "yyyy-mm-dd hh:MM:ss TT",
             "copied_to_clipboard": "Copied to clipboard",
             "annofield_title":     "Title",

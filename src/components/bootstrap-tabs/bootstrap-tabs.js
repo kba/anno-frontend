@@ -25,7 +25,7 @@ module.exports = {
                 name: c.name,
                 title: c.title,
                 active: c.active,
-                topic: c.topic
+                topic: c.topic,
             })
         })
     }
