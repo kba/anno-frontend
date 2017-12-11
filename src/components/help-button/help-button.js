@@ -71,8 +71,6 @@ module.exports = {
 
     togglePopover() {
       const content = this.$el.querySelector('div.panel-body')
-      if (window.helpPopoverModal)
-        window.helpPopoverModal.dismiss()
       if (!this.visible) {
         this.fetchContent()
           .then(() => {
@@ -81,16 +79,19 @@ module.exports = {
           .catch(err => {
             content.innerHTML = "loading failed :'("
           })
+        if (window.helpPopoverModal)
+          window.helpPopoverModal.dismiss()
         window.helpPopoverModal = this
         const modal = document.querySelector(".modal-dialog")
         if (modal && modal.getClientRects()[0]) {
           const xOffset = modal.getClientRects()[0].x
           this.$el.querySelector('.panel').style.marginLeft = `-${xOffset}px`
         }
+        this.visible = true
       } else {
         this.dismiss()
+        this.visible = false
       }
-      this.visible = ! this.visible
     }
 
   },
