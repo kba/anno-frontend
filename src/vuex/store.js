@@ -21,7 +21,6 @@ module.exports = {
         loginEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/auth/login',
         registerEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/auth/register',
         requestEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/auth/request',
-        helpUrlTemplate: 'https://anno.ub.uni-heidelberg.de/anno/dist/help/digi/{{ language }}/{{ topic }}.html',
         logoutEndpoint: null,
         purlTemplate: null,
         purlId: null,

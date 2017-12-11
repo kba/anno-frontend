@@ -6,6 +6,12 @@
     <div class="panel-heading" @click.stop="dismiss">
       {{ title }}
       <span class="pull-right" @click.stop="dismiss">&times;</span>
+      <a v-if="helpUrlManual"
+        class="pull-right"
+        :href="manualUrl"
+        target="_blank">
+        <span class="fa fa-link"></span>
+      </a>
     </div>
     <div class="panel-body">
       Loading ...

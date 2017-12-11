@@ -18,6 +18,7 @@ module.exports = {
     props: {
       language:        {type: String, required: true},
       helpUrlTemplate: {type: String, required: true},
+      helpUrlManual: {type: String, required: false},
     },
     mounted() {
         this.$children.forEach( c => {

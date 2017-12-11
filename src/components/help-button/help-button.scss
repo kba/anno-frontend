@@ -60,6 +60,10 @@ $divWidth: 50vw;
     & .panel-body {
       max-height: calc(100vh - 30px);
       overflow: auto;
+
+      h2 {
+        font-size: 20px;
+      }
     }
   }
 

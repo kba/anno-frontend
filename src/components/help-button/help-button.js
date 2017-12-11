@@ -12,6 +12,11 @@ module.exports = {
     topicTitle() {
       return this.title ? this.title : this.topic
     },
+    manualUrl() {
+      return this.helpUrlManual
+        .replace('{{ language }}', this.language)
+        .replace('{{ topic }}', this.topic)
+    },
     divClasses() {
       return {
         'panel': true,
@@ -40,6 +45,7 @@ module.exports = {
     topic:           {type: String, required: true},
     title:           {type: String, required: false},
     helpUrlTemplate: {type: String, required: true},
+    helpUrlManual:   {type: String, required: false},
     size:            {type: String, required: false, default: 'xs'},
   },
 

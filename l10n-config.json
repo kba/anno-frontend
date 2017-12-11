@@ -10,6 +10,8 @@
 
         "de":                      {
             "dateformat":  "dd.mm.yyyy HH:MM",
+            "help.url.manual": "https://anno.ub.uni-heidelberg.de/anno/dist/help/digi/de/manual.html#{{ topic }}",
+            "help.url.template": "https://anno.ub.uni-heidelberg.de/anno/dist/help/digi/de/{{ topic }}.html",
             "copied_to_clipboard": "In Zwischenablage kopiert",
             "popover-not-authorized": "Noch nicht freigeschaltet?",
             "popover-logged-in": "Annotieren und Kommentieren!",
@@ -110,10 +112,12 @@
         },
 
         "en":                      {
+            "dateformat":  "yyyy-mm-dd hh:MM:ss TT",
+            "help.url.manual": "https://anno.ub.uni-heidelberg.de/anno/dist/help/digi/en/manual.html#{{ topic }}",
+            "help.url.template": "https://anno.ub.uni-heidelberg.de/anno/dist/help/digi/en/{{ topic }}.html",
             "popover-not-authorized": "Not yet authorized?",
             "popover-logged-in": "Annotating and commenting",
             "popover-not-logged-in": "Please login to annotate",
-            "dateformat":  "yyyy-mm-dd hh:MM:ss TT",
             "copied_to_clipboard": "Copied to clipboard",
             "annofield_title":     "Title",
             "required_field":      "required",

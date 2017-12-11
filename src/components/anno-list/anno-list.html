@@ -40,22 +40,19 @@
   </div>
 
   <help-button v-show="!isLoggedIn"
-    :language="$store.state.language"
-    :helpUrlTemplate="$store.state.helpUrlTemplate"
+    :helpUrlTemplate="l10n('help.url.template')"
     :title="l10n('popover-not-logged-in')"
     topic="popover-not-logged-in"
     />
 
   <help-button v-show="isLoggedIn && ! $auth('create', targetSource)"
-    :language="$store.state.language"
-    :helpUrlTemplate="$store.state.helpUrlTemplate"
+    :helpUrlTemplate="l10n('help.url.template')"
     :title="l10n('popover-not-authorized')"
     topic="popover-not-authorized"
     />
 
   <help-button v-show="isLoggedIn && $auth('create', targetSource)"
-    :language="$store.state.language"
-    :helpUrlTemplate="$store.state.helpUrlTemplate"
+    :helpUrlTemplate="l10n('help.url.template')"
     :title="l10n('popover-logged-in')"
     topic="popover-logged-in"
     />
