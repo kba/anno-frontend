@@ -5,13 +5,17 @@
   <div :class="divClasses">
     <div class="panel-heading" @click.stop="dismiss">
       {{ title }}
-      <span class="pull-right" @click.stop="dismiss">&times;</span>
-      <a v-if="helpUrlManual"
-        class="pull-right"
-        :href="manualUrl"
-        target="_blank">
-        <span class="fa fa-link"></span>
-      </a>
+      <button class="close">
+        <span @click.stop="dismiss">&times;</span>
+      </button>
+      <button class="close">
+        <a v-if="helpUrlManual"
+          class="pull-right"
+          :href="manualUrl"
+          target="_blank">
+          <span class="fa fa-link"></span>
+        </a>
+      </button>
     </div>
     <div class="panel-body">
       Loading ...

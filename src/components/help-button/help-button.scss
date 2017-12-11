@@ -1,5 +1,3 @@
-$divWidth: 50vw;
-
 .nav > li > a.help-button {
   padding: 0px 10px 0 6px;
   border-radius: 100%;
@@ -35,20 +33,24 @@ $divWidth: 50vw;
 
   &> .panel {
     position: fixed;
-    width: $divWidth;
-    left: - $divWidth;
-    top: 0;
+    width: auto;
+    left: 10vw;
+    top: 10vw;
+    min-height: 30vh;
+    color: initial;
     background: white;
-    z-index: 5;
+    z-index: 1000;
+    text-align: left;
 
     &.slide-in {
       transition: 1s;
-      left: 0;
+      top: 0;
     }
 
     &.slide-out {
       transition: 1s;
-      left: - $divWidth;
+      top: -10vw;
+      opacity: 0;
       visibility: hidden;
     }
 

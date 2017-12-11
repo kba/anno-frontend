@@ -1,5 +1,6 @@
 const $ = require('jquery')
 const eventBus = require('@/event-bus')
+const HelpButton = require('@/components/help-button')
 
 /*
  * ### anno-editor-modal
@@ -16,6 +17,7 @@ module.exports = {
         require('@/mixin/auth'),
         require('@/mixin/prefix'),
     ],
+    components: {HelpButton},
     props: {
         draggable: {type: Boolean, default: true},
         resizable: {type: Boolean, default: true},
