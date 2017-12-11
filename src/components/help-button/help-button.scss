@@ -1,26 +1,66 @@
+$divWidth: 50vw;
+
 .nav > li > a.help-button {
   padding: 0px 10px 0 6px;
-  color: white !important;
-  background-color: #31b0d5;
-  border-color: #269abc;
   border-radius: 100%;
   margin: auto;
   height: 20px;
   width: 10px;
+}
 
-  span {
-    border-radius: 50%;
-    line-height: 1;
+.modal-dialog .help-button .panel {
+  margin: -10px;
+}
+@media (min-width: 768px) {
+  .modal-dialog .help-button .panel {
+    margin: -30px;
+  }
+}
+
+.help-button {
+  > a {
+    color: white !important;
+    background-color: #31b0d5;
+    border-color: #269abc;
+
+    &:hover {
+      cursor: help;
+    }
+
+    &> span {
+      border-radius: 50%;
+      line-height: 1;
+    }
   }
 
+  &> .panel {
+    position: fixed;
+    width: $divWidth;
+    left: - $divWidth;
+    top: 0;
+    background: white;
+    z-index: 5;
 
+    &.slide-in {
+      transition: 1s;
+      left: 0;
+    }
 
-  &+ .popover {
-    min-width: 200px;
-    max-height: 50vh;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    max-width: unset;
+    &.slide-out {
+      transition: 1s;
+      left: - $divWidth;
+      visibility: hidden;
+    }
+
+    & > .panel-heading {
+      & > span {
+        cursor: pointer;
+      }
+    }
+    & .panel-body {
+      max-height: calc(100vh - 30px);
+      overflow: auto;
+    }
   }
 
 }

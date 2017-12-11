@@ -1,17 +1,35 @@
-const $ = require('jquery')
-
 module.exports = {
 
   template: require('./help-button.html'),
   style: require('./help-button.scss'),
 
+  computed: {
+    url() {
+      return this.helpUrlTemplate
+        .replace('{{ language }}', this.language)
+        .replace('{{ topic }}', this.topic)
+    },
+    divClasses() {
+      return {
+        'panel': true,
+        'panel-info': true,
+        'slide-out': ! this.visible,
+        'slide-in': this.visible,
+      }
+    },
+    btnClasses() {
+      return {
+        'btn': true,
+        'btn-info': true,
+        'help-button': true,
+        [`btn-${this.size}`]: true
+      }
+    },
+  },
+
   data() {return {
-    classes: {
-      'btn': true,
-      'btn-info': true,
-      'help-button': true,
-      [`btn-${this.size}`]: true,
-    }
+    visible: false,
+    content: null,
   }},
 
   props: {
@@ -21,32 +39,50 @@ module.exports = {
     size:            {type: String, required: false, default: 'xs'},
   },
 
-  mounted() {
+  methods: {
 
-    const url = this.helpUrlTemplate
-      .replace('{{ language }}', this.language)
-      .replace('{{ topic }}', this.topic)
+    dismiss() {
+      this.visible = false
+      window.helpPopoverModal = null
+    },
 
-    $(this.$el).popover({
-      html: true,
-      title: '',
-      placement: 'bottom',
-      content: () => {
-        fetch(url)
-        .then(resp => resp.text())
-        .then(data => {
-          const content = $(`#help-popover-${this.topic}`)
-          const container = content.parent().parent()[0]
-          let left = container.style.left
-          left = parseInt(left.substr(0, left.length -2))
-          container.style.left = (left - 48) + 'px'
-          if ($.fn.resizable) $(container).resizable()
-          content[0].innerHTML = data
-        })
-        .catch(err => console.log(err))
-        return `<div id="help-popover-${this.topic}">Loading ...</div>`
+    fetchContent() {
+      return new Promise((resolve, reject) => {
+          if (this.content) {
+            return resolve(this.content)
+          } else {
+            fetch(this.url)
+              .then(resp => resp.text())
+              .then(data => resolve(this.content = data))
+              .catch(reject)
+          }
+      })
+    },
+
+    togglePopover() {
+      const content = this.$el.querySelector('div.panel-body')
+      if (window.helpPopoverModal)
+        window.helpPopoverModal.dismiss()
+      if (!this.visible) {
+        this.fetchContent()
+          .then(() => {
+            content.innerHTML = this.content
+          })
+          .catch(err => {
+            content.innerHTML = "loading failed :'("
+          })
+        window.helpPopoverModal = this
+        const modal = document.querySelector(".modal-dialog")
+        if (modal) {
+          const xOffset = modal.getClientRects()[0].x
+          this.$el.querySelector('.panel').style.marginLeft = `-${xOffset}px`
+        }
+      } else {
+        this.dismiss()
       }
-    })
+      this.visible = ! this.visible
+    }
 
-  }
+  },
+
 }

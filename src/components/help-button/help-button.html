@@ -1,4 +1,14 @@
-<a :class="classes">
-  <span class="fa fa-info"></span>
-</a>
-
+<span class="help-button">
+  <a :class="btnClasses" @click="togglePopover()">
+    <span class="fa fa-info"></span>
+  </a>
+  <div :class="divClasses">
+    <div class="panel-heading">
+      {{ topic }}
+      <span class="pull-right" @click="dismiss">&times;</span>
+    </div>
+    <div class="panel-body">
+      Loading ...
+    </div>
+  </div>
+</span>
