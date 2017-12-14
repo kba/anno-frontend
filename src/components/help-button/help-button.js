@@ -20,7 +20,7 @@ module.exports = {
     divClasses() {
       return {
         'panel': true,
-        'panel-info': true,
+        'panel-primary': true,
         'slide-out': ! this.visible,
         'slide-in': this.visible,
       }
@@ -28,7 +28,7 @@ module.exports = {
     btnClasses() {
       return {
         'btn': true,
-        'btn-info': true,
+        'btn-primary': true,
         'help-button': true,
         [`btn-${this.size}`]: true
       }
