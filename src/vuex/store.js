@@ -29,6 +29,8 @@ module.exports = {
         targetImage: null,
         targetImageWidth: -1,
         targetImageHeight: -1,
+        thumbStrokeColor: '#900',
+        thumbFillColor: '#900',
         iiifUrlTemplate: null,
         targetThumbnail: null,
         collection: null,

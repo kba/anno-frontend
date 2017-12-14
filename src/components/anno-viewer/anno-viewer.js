@@ -65,6 +65,8 @@ module.exports = {
         imageWidth: {type: Number, default: -1},
         imageHeight: {type: Number, default: -1},
         iiifUrlTemplate: {type: String, default: null},
+        thumbStrokeColor: {type: String, default: '#090'},
+        thumbFillColor: {type: String, default: '#090'},
     },
     template: require('./anno-viewer.html'),
     style:    require('./anno-viewer.scss'),
