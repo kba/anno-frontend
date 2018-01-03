@@ -1,5 +1,7 @@
 # UB Heidelberg Annotationen Frontend
 
+[![Known Vulnerabilities](https://snyk.io/test/github/kba/anno-frontend/badge.svg?targetFile=package.json)](https://snyk.io/test/github/kba/anno-frontend?targetFile=package.json)
+
 <!-- BEGIN-MARKDOWN-TOC -->
 * [Demo](#demo)
 * [Usage](#usage)
