@@ -26,14 +26,14 @@
     "dateformat": "^2.0.0",
     "font-awesome": "^4.7.0",
     "interactjs": "^1.2.8",
-    "jquery": "1.11.1",
+    "jquery": "3.2.1",
     "jquery-ui": "^1.12.1",
     "js-cookie": "2.1.2",
     "jwt-decode": "^2.2.0",
     "querystring": "^0.2.0",
     "quill": "^1.2.4",
     "semtonotes-utils": "0.2.0",
-    "vue": "2.2.6",
+    "vue": "2.3.1",
     "vuex": "^2.2.1"
   },
   "devDependencies": {
