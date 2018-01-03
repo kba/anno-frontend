@@ -18,14 +18,13 @@
     "@kba/anno-store-http": "^0.0.2",
     "@kba/anno-util": "^0.0.2",
     "@kba/xrx-vue": "^0.0.22",
-    "@ubhd/authorities-client": "^0.3.1",
+    "@ubhd/authorities-client": "^0.4.0",
     "axios": "^0.15.3",
     "bonanza": "^1.0.1",
     "bootstrap": "3.2.0",
     "clipboard": "^1.7.1",
     "dateformat": "^2.0.0",
     "font-awesome": "^4.7.0",
-    "interactjs": "^1.2.8",
     "jquery": "3.2.1",
     "jquery-ui": "^1.12.1",
     "js-cookie": "2.1.2",
@@ -43,6 +42,7 @@
     "babel-preset-env": "^1.3.3",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
+    "babel-runtime": "^6.26.0",
     "bootstrap-webpack": "0.0.5",
     "css-loader": "^0.28.0",
     "exports-loader": "^0.6.3",
@@ -58,10 +58,11 @@
     "sass-loader": "^6.0.3",
     "style-loader": "^0.13.1",
     "tap": "^10.3.2",
-    "uglifyjs-webpack-plugin": "^1.0.1",
+    "uglifyjs-webpack-plugin": "^1.1.5",
     "url-loader": "^0.5.8",
     "vue-loader": "^11.3.4",
     "vue-template-compiler": "^2.2.6",
-    "webpack": "^2.7.0"
+    "webpack": "^2.7.0",
+    "yargs": "^10.0.3"
   }
 }
