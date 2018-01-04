@@ -82,6 +82,7 @@ module.exports = function displayAnnotations(options={}) {
     // Override l10n
     //
     if (options.l10n) {
+      console.log("Overriding l10n")
         Object.keys(localizations).forEach(lang => {
             if (lang in options.l10n) {
                 Object.assign(localizations[lang], options.l10n[lang])

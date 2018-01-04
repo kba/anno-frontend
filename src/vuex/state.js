@@ -1,7 +1,6 @@
-const {defaultLang} = require('../../l10n-config.json')
+const {defaultLang, localizations} = require('../../l10n-config.json')
 
 module.exports = {
-  language: defaultLang,
   annoEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/anno',
   tokenEndpoint: null,
   loginEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/auth/login',
@@ -31,4 +30,7 @@ module.exports = {
   enableIIIF: true,
 
   cacheBusterEnabled: false,
+
+  language: defaultLang,
+  localizations,
 }
