@@ -14,8 +14,8 @@
   "author": "kba",
   "license": "MIT",
   "dependencies": {
-    "@kba/anno-queries": "^0.0.2",
-    "@kba/anno-store-http": "^0.0.2",
+    "@kba/anno-queries": "^0.0.4",
+    "@kba/anno-store-http": "^0.0.8",
     "@kba/anno-util": "^0.0.2",
     "@kba/xrx-vue": "^0.0.22",
     "@ubhd/authorities-client": "^0.4.0",
