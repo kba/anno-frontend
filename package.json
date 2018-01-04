@@ -63,6 +63,6 @@
     "vue-loader": "^11.3.4",
     "vue-template-compiler": "^2.2.6",
     "webpack": "^2.7.0",
-    "yargs": "^10.0.3"
+    "yargs": "^10.1.0"
   }
 }
