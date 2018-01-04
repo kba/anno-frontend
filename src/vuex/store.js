@@ -1,8 +1,5 @@
-const {defaultlang} = require('../../l10n-config.json')
 const axios = require('axios')
-const {
-  collectIds
-} = require('@kba/anno-util')
+const {collectIds} = require('@kba/anno-util')
 const apiFactory = require('../api')
 const jwtDecode = require('jwt-decode')
 const eventBus = require('../event-bus')
@@ -10,42 +7,13 @@ const eventBus = require('../event-bus')
 const editing = require('./module/editing')
 const annotationList = require('./module/annotationList')
 
+const state = require('./state')
+
 function isExpired(token) {return (token.exp < Date.now() / 1000)}
 
 module.exports = {
     strict: process.env.NODE_ENV != 'production',
-    state: {
-        language: defaultlang,
-        annoEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/anno',
-        tokenEndpoint: null,
-        loginEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/auth/login',
-        registerEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/auth/register',
-        requestEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/auth/request',
-        logoutEndpoint: null,
-        purlTemplate: null,
-        purlId: null,
-        purlAnnoInitiallyOpen: true,
-        targetSource: window.location.href,
-        targetImage: null,
-        targetImageWidth: -1,
-        targetImageHeight: -1,
-        thumbStrokeColor: '#900',
-        thumbFillColor: '#900',
-        iiifUrlTemplate: null,
-        targetThumbnail: null,
-        collection: null,
-        token: null,
-        acl: null,
-
-        editMode: null,
-
-        enableRequestButton: true,
-        enableRegisterButton: true,
-        enableLogoutButton: true,
-        enableIIIF: true,
-
-        cacheBusterEnabled: false,
-    },
+    state,
     modules: {
         editing,
         annotationList,
@@ -110,6 +78,7 @@ module.exports = {
                     if (isExpired(token)) {
                         commit('DELETE_TOKEN')
                     } else {
+                        // const {sub} = jwtDecode(token)
                         commit('SET_TOKEN', token)
                         return resolve()
                     }
@@ -120,6 +89,7 @@ module.exports = {
                 }).then(resp => {
                     const token = resp.data
                     try {
+                        // const {sub} = jwtDecode(token)
                         commit('SET_TOKEN', token)
                         dispatch('fetchList')
                         resolve()
