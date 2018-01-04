@@ -1,22 +1,17 @@
+function replaceTemplates(str, ctx) {
+  return str.replace(/(?:[\(\{]{2})\s*([a-z]+)\s*(?:[\)\}]{2})/g, (_, name) => {
+    return ctx[name]
+  })
+}
 module.exports = {
 
   template: require('./help-button.html'),
   style: require('./help-button.scss'),
 
   computed: {
-    url() {
-      return this.helpUrlTemplate
-        .replace('{{ language }}', this.language)
-        .replace('{{ topic }}', this.topic)
-    },
-    topicTitle() {
-      return this.title ? this.title : this.topic
-    },
-    manualUrl() {
-      return this.helpUrlManual
-        .replace('{{ language }}', this.language)
-        .replace('{{ topic }}', this.topic)
-    },
+    url() {return replaceTemplates(this.helpUrlTemplate, this)},
+    topicTitle() {return this.title ? this.title : this.topic},
+    manualUrl() {return replaceTemplates(this.helpUrlManual, this)},
     divClasses() {
       return {
         'panel': true,
