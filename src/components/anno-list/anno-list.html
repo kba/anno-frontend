@@ -37,8 +37,6 @@
       {{ l10n('not_enough_rights') }}
     </a>
 
-  </div>
-
   <help-button v-show="!isLoggedIn"
     :helpUrlTemplate="l10n('help.url.template')"
     :title="l10n('popover-not-logged-in')"
@@ -56,6 +54,8 @@
     :title="l10n('popover-logged-in')"
     topic="popover-logged-in"
     />
+
+  </div>
 
   <div class="btn-group btn-group-vertical pull-right hidden-print" role="group">
 

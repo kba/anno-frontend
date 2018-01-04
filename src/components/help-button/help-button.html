@@ -1,5 +1,12 @@
-<span class="help-button">
-  <a :class="btnClasses" @click.stop="togglePopover()">
+<span class="help-button" style="
+  padding: 0;
+  margin: 0;
+  border: 0;
+  ">
+  <a :class="btnClasses"
+    @click.stop="togglePopover()"
+    style="vertical-align: top"
+    >
     <span class="fa fa-info"></span>
   </a>
   <div :class="divClasses">
