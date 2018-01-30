@@ -105,11 +105,16 @@
             </template>
             <template v-else>§</template>
           </button>
-          <template  v-if="annotation.doi">
-            <a :href="`https://doi.org/${annotation.doi}`">
-              <img :src="`https://img.shields.io/badge/DOI-${encodeURIComponent(annotation.doi).replace(/-/g, '--') }-blue.svg`"/>
-            </a>
-          </template>
+          <button class="btn btn-xs"
+            v-if="annotation.doi"
+            data-toggle="popover"
+            data-html="true"
+            data-placement="left"
+            data-focus-dismiss
+            :title="l10n('doi')"
+            :data-content="doiPopup">
+            <span class="glyphicon glyphicon-link"></span> DOI
+          </button>
 
         </div>
 

@@ -9,6 +9,7 @@ if (process.env.NODE_ENV !== 'production') {
     // require('font-awesome/css/font-awesome.css');
     window.Vue.config.devtools = true
 }
+window.Vue.config.devtools = false
 
 //
 // Our code

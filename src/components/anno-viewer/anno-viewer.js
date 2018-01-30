@@ -70,8 +70,10 @@ module.exports = {
     },
     template: require('./anno-viewer.html'),
     style:    require('./anno-viewer.scss'),
+    created() {
+        this.toplevelDoi = this.annotation.doi
+    },
     mounted() {
-
         this.iiifLink = this._iiifLink()
 
         // Show popover with persistent URL
@@ -79,18 +81,17 @@ module.exports = {
         Array.from(this.$el.querySelectorAll('[data-toggle="popover"]')).forEach(popoverTrigger => {
             $(popoverTrigger).popover({container: 'body', trigger: 'click'})
             $(popoverTrigger).on('shown.bs.popover', () => {
-                const popoverDiv = document.getElementById(popoverTrigger.getAttribute("aria-describedby"))
-                if (popoverDiv) {
-                    const clipboardText = popoverDiv.querySelector("[data-clipboard-text]")
-                    if (clipboardText) {
-                        const clip = new Clipboard(clipboardText)
-                        clip.on('success', () => {
-                            const successLabel = $(".label-success", popoverDiv)
-                            successLabel.show()
-                            setTimeout(() => $(successLabel).hide(), 2000)
-                        })
-                    }
-                }
+              const popoverDiv = document.getElementById(popoverTrigger.getAttribute("aria-describedby"))
+              if (!popoverDiv)
+                return
+              Array.from(popoverDiv.querySelectorAll("[data-clipboard-text]")).forEach(clipboardTrigger => {
+                const clip = new Clipboard(clipboardTrigger)
+                clip.on('success', () => {
+                  const $successLabel = $(clipboardTrigger.querySelector(".label-success"))
+                  $successLabel.show()
+                  setTimeout(() => $successLabel.hide(), 2000)
+                })
+              })
             })
         })
 
@@ -143,6 +144,37 @@ module.exports = {
         isPurl() {
             return this.annotation.id === this.purlId
         },
+        doiPopup() {
+          const {annotation, toplevelDoi, l10n} = this
+          let ret = `
+            `
+          ret += 'DOI of the annotation:'
+          ret += '<br/>'
+          ret += `
+            <button data-clipboard-text="${toplevelDoi}" class="btn btn-default btn-xs">
+              <span class="fa fa-clipboard"></span>
+              <span class="label label-success" style="display: none">${l10n("copied_to_clipboard")}</span>
+            </button>
+            <a href="${toplevelDoi}">
+              <img src="https://img.shields.io/badge/DOI-${encodeURIComponent(toplevelDoi).replace(/-/g, "--") }-blue.svg"/>
+            </a>
+          `
+          console.log(annotation.doi, toplevelDoi)
+          if (annotation.doi !== toplevelDoi) {
+            ret += '<br/>'
+            ret += 'DOI of this revision of the annotation:'
+            ret += '<br/>'
+            ret += `
+            <button data-clipboard-text="${annotation.doi}" class="btn btn-default btn-xs">
+              <span class="fa fa-clipboard"></span>
+              <span class="label label-success" style="display: none">${l10n("copied_to_clipboard")}</span>
+            </button>
+            <a href="${annotation.doi}">
+              <img src="https://img.shields.io/badge/DOI-${encodeURIComponent(annotation.doi).replace(/-/g, "--") }-blue.svg"/> </a>
+            `
+          }
+          return ret
+        }
     },
     data() {
         return {
@@ -184,14 +216,20 @@ module.exports = {
           return anno[k]
         },
         setToVersion(newState) {
+          // console.log('SETO', newState.doi)
             // const x = {}
             // ;['modified', 'created'].forEach(prop => {
             //     x[`${prop}-old`] = new Date(this.annotation[prop])
             //     x[`${prop}-new`] = new Date(newState[prop])
             // })
             // console.log(x)
-            Object.assign(this.annotation, newState)
-            eventBus.$emit('setToVersion', this.annotation)
+            // console.log('before', this.toplevelDoi, this.annotation.doi)
+            ;['body', 'target', 'title', 'doi'].map(prop => {
+              this.annotation[prop] = newState[prop]
+            })
+            // Object.assign(this.annotation, newState)
+            // console.log('after', this.toplevelDoi, this.annotation.doi)
+            // eventBus.$emit('setToVersion', this.annotation)
         },
         newestVersionId() {
             if (!this.annotation.hasVersion) return
