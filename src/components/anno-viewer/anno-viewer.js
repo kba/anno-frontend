@@ -151,25 +151,25 @@ module.exports = {
           ret += 'DOI of the annotation:'
           ret += '<br/>'
           ret += `
-            <button data-clipboard-text="${toplevelDoi}" class="btn btn-default btn-xs">
+            <button data-clipboard-text="https://doi.org/${toplevelDoi}" class="btn btn-default btn-xs">
               <span class="fa fa-clipboard"></span>
               <span class="label label-success" style="display: none">${l10n("copied_to_clipboard")}</span>
             </button>
-            <a href="${toplevelDoi}">
+            <a href="https://doi.org/${toplevelDoi}">
               <img src="https://img.shields.io/badge/DOI-${encodeURIComponent(toplevelDoi).replace(/-/g, "--") }-blue.svg"/>
             </a>
           `
-          console.log(annotation.doi, toplevelDoi)
+          // console.log(annotation.doi, toplevelDoi)
           if (annotation.doi !== toplevelDoi) {
             ret += '<br/>'
             ret += 'DOI of this revision of the annotation:'
             ret += '<br/>'
             ret += `
-            <button data-clipboard-text="${annotation.doi}" class="btn btn-default btn-xs">
+            <button data-clipboard-text="https://doi.org/${annotation.doi}" class="btn btn-default btn-xs">
               <span class="fa fa-clipboard"></span>
               <span class="label label-success" style="display: none">${l10n("copied_to_clipboard")}</span>
             </button>
-            <a href="${annotation.doi}">
+            <a href="https://doi.org/${annotation.doi}">
               <img src="https://img.shields.io/badge/DOI-${encodeURIComponent(annotation.doi).replace(/-/g, "--") }-blue.svg"/> </a>
             `
           }
