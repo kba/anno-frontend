@@ -148,8 +148,8 @@ module.exports = {
           const {annotation, toplevelDoi, l10n} = this
           let ret = `
             `
-          ret += 'DOI of the annotation:'
-          ret += '<br/>'
+          ret += l10n('doi.of.annotation')
+          ret += ': <br/>'
           ret += `
             <button data-clipboard-text="https://doi.org/${toplevelDoi}" class="btn btn-default btn-xs">
               <span class="fa fa-clipboard"></span>
@@ -162,8 +162,8 @@ module.exports = {
           // console.log(annotation.doi, toplevelDoi)
           if (annotation.doi !== toplevelDoi) {
             ret += '<br/>'
-            ret += 'DOI of this revision of the annotation:'
-            ret += '<br/>'
+            ret += l10n('doi.of.annotation.revision')
+            ret += ':<br/>'
             ret += `
             <button data-clipboard-text="https://doi.org/${annotation.doi}" class="btn btn-default btn-xs">
               <span class="fa fa-clipboard"></span>

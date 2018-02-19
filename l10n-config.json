@@ -9,6 +9,9 @@
     "localizations": {
 
         "de":                      {
+            "doi": "DOI",
+            "doi.of.annotation": "DOI der Annotation",
+            "doi.of.annotation.revision": "DOI der Annotation in dieser Version",
             "dateformat":  "dd.mm.yyyy HH:MM",
             "help.url.manual": "https://anno.ub.uni-heidelberg.de/anno/dist/help/digi/de/manual.html#{{ topic }}",
             "help.url.template": "https://anno.ub.uni-heidelberg.de/anno/dist/help/digi/de/{{ topic }}.html",
@@ -111,7 +114,10 @@
 
         },
 
-        "en":                      {
+        "en": {
+            "doi": "DOI",
+            "doi.of.annotation": "DOI of the annotation",
+            "doi.of.annotation.revision": "DOI of this revision of the annotation",
             "dateformat":  "yyyy-mm-dd hh:MM:ss TT",
             "help.url.manual": "https://anno.ub.uni-heidelberg.de/anno/dist/help/digi/en/manual.html#{{ topic }}",
             "help.url.template": "https://anno.ub.uni-heidelberg.de/anno/dist/help/digi/en/{{ topic }}.html",
