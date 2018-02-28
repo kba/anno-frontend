@@ -71,57 +71,62 @@ module.exports = {
     template: require('./anno-viewer.html'),
     style:    require('./anno-viewer.scss'),
     created() {
-        this.toplevelDoi = this.annotation.doi
+      this.toplevelDoi = this.annotation.doi
     },
-    mounted() {
-        this.iiifLink = this._iiifLink()
+  mounted() {
+    this.iiifLink = this._iiifLink()
 
-        // Show popover with persistent URL
-        const Clipboard = require('clipboard')
-        Array.from(this.$el.querySelectorAll('[data-toggle="popover"]')).forEach(popoverTrigger => {
-            $(popoverTrigger).popover({container: 'body', trigger: 'click'})
-            $(popoverTrigger).on('shown.bs.popover', () => {
-              const popoverDiv = document.getElementById(popoverTrigger.getAttribute("aria-describedby"))
-              if (!popoverDiv)
-                return
-              Array.from(popoverDiv.querySelectorAll("[data-clipboard-text]")).forEach(clipboardTrigger => {
-                const clip = new Clipboard(clipboardTrigger)
-                clip.on('success', () => {
-                  const $successLabel = $(clipboardTrigger.querySelector(".label-success"))
-                  $successLabel.show()
-                  setTimeout(() => $successLabel.hide(), 2000)
-                })
-              })
-            })
+    // Show popover with persistent URL
+    const Clipboard = require('clipboard')
+    Array.from(this.$el.querySelectorAll('[data-toggle="popover"]')).forEach(popoverTrigger => {
+      $(popoverTrigger).popover({container: 'body', trigger: 'click'})
+      $(popoverTrigger).on('shown.bs.popover', () => {
+        const popoverDiv = document.getElementById(popoverTrigger.getAttribute("aria-describedby"))
+        if (!popoverDiv)
+          return
+        Array.from(popoverDiv.querySelectorAll("[data-clipboard-text]")).forEach(clipboardTrigger => {
+          const clip = new Clipboard(clipboardTrigger)
+          clip.on('success', () => {
+            const $successLabel = $(clipboardTrigger.querySelector(".label-success"))
+            $successLabel.show()
+            setTimeout(() => $successLabel.hide(), 2000)
+          })
         })
+      })
+    })
 
-        if (!window.annoInstalledPopoverHandler) {
-            // Dismiss all popovers with the 'data-focus-dismiss' attribute whenever user clicks outside of the popup divs
-            $('body').on('click', function (e) {
-                if (
-                    !(e.target.getAttribute('data-toggle') === 'popover' || $(e.target).parents('[data-toggle="popover"]').length > 0)
-                    && $(e.target).parents('.popover.in').length === 0
-                ) {
-                    $('[data-toggle="popover"][data-focus-dismiss]').popover('hide')
-                }
-            })
-            window.annoInstalledPopoverHandler = true
+    if (!window.annoInstalledPopoverHandler) {
+      // Dismiss all popovers with the 'data-focus-dismiss' attribute whenever user clicks outside of the popup divs
+      $('body').on('click', function (e) {
+        if (
+          !(e.target.getAttribute('data-toggle') === 'popover' || $(e.target).parents('[data-toggle="popover"]').length > 0)
+          && $(e.target).parents('.popover.in').length === 0
+        ) {
+          $('[data-toggle="popover"][data-focus-dismiss]').popover('hide')
         }
+      })
+      window.annoInstalledPopoverHandler = true
+    }
 
-        // React to highlighting events startHighlighting / stopHighlighting / toggleHighlighting
-        ;['start', 'stop', 'toggle'].forEach(state => {
-            const method = `${state}Highlighting`
-            eventBus.$on(method, (id, expand) => {if (id == this.id) this[method](expand)})
-        })
+    // React to highlighting events startHighlighting / stopHighlighting / toggleHighlighting
+    ;['start', 'stop', 'toggle'].forEach(state => {
+      const method = `${state}Highlighting`
+      eventBus.$on(method, (id, expand) => {if (id == this.id) this[method](expand)})
+    })
 
-        // Expand this annotation
-        eventBus.$on('expand', (id) => {
-            if (id !== this.id) return
-            this.collapse(false)
-            const rootId = this.id.replace(/[~\.][~\.0-9]+$/, '')
-            if (rootId !== id) eventBus.$emit('expand', rootId)
-        })
-    },
+    // Expand this annotation
+    eventBus.$on('expand', (id) => {
+      if (id !== this.id) return
+      this.collapse(false)
+      const rootId = this.id.replace(/[~\.][~\.0-9]+$/, '')
+      if (rootId !== id) eventBus.$emit('expand', rootId)
+    })
+
+    if (this.annotation.hasVersion) {
+     this.setToVersion(this.annotation.hasVersion[this.annotation.hasVersion.length - 1])
+      // this.annotation.doi = this.annotation.hasVersion[this.annotation.hasVersion.length - 1].doi
+    }
+  },
     computed: {
         id()                 {return this.annotation.id},
         created()            {return this.annotation.created},
