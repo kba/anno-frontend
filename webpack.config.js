@@ -29,6 +29,7 @@ module.exports = {
         alias: {
             '@': path.join(__dirname, 'src'),
             'vue$': 'vue/dist/vue.min.js',
+            'vuex$': 'vuex/dist/vuex.min.js',
             'quill$': 'quill/dist/quill.min.js',
             'async$': 'async/dist/async.min.js',
             // 'axios': 'axios/dist/axios.min.js',
