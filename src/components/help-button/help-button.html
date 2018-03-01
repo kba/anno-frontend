@@ -3,7 +3,17 @@
   margin: 0;
   border: 0;
   ">
-  <a :class="btnClasses"
+  <a
+    v-show="buttonLabel"
+    :class="btnClasses"
+    @click.stop="togglePopover()"
+    style="vertical-align: top"
+    >
+    {{ buttonLabel }}
+  </a>
+  <a
+    v-show="! buttonLabel"
+    :class="btnClasses"
     @click.stop="togglePopover()"
     style="vertical-align: top"
     >

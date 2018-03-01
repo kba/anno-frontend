@@ -39,6 +39,7 @@ module.exports = {
     language:        {type: String, required: false, default: 'de'},
     topic:           {type: String, required: true},
     title:           {type: String, required: false},
+    buttonLabel:     {type: String, default: ''},
     helpUrlTemplate: {type: String, required: true},
     helpUrlManual:   {type: String, required: false},
     size:            {type: String, required: false, default: 'xs'},
