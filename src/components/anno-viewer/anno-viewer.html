@@ -118,7 +118,11 @@
 
         </div>
 
-        <div class="well old_version" v-show="isOlderVersion()">{{ l10n('version_from') }} {{ dateformat(created) }} </div>
+        <div class="well old_version" v-show="isOlderVersion()">
+          {{ l10n('version_from') }} {{ dateformat(created) }}
+          <br/>
+          <a @click="setToVersion(newestVersion)">{{ l10n('newer_version') }}</a>
+        </div>
 
         <h4 class="media-heading" v-if="asReply">{{ title }}</h4>
 

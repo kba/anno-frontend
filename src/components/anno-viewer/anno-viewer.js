@@ -122,7 +122,7 @@ module.exports = {
       if (rootId !== id) eventBus.$emit('expand', rootId)
     })
 
-    this.toplevelCreated = this.annotation.created
+    this.toplevelCreated = this.annotation.modified
     this.setToVersion(this.newestVersion)
   },
     computed: {
@@ -244,7 +244,7 @@ module.exports = {
           // eventBus.$emit('setToVersion', this.annotation)
         },
         isOlderVersion()     {
-          return this.toplevelCreated === this.annotation.created
+          return this.newestVersion.created !== this.annotation.created
         },
         versionIsShown(version) {
           return version.created === this.created
