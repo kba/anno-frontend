@@ -49,12 +49,14 @@ const {
  */
 
 module.exports = {
+    name: 'anno-viewer', // necessary for nesting
+    template: require('./anno-viewer.html'),
+    style:    require('./anno-viewer.scss'),
     mixins: [
         require('@/mixin/l10n'),
         require('@/mixin/auth'),
         require('@/mixin/prefix'),
     ],
-    name: 'anno-viewer', // necessary for nesting
     props: {
         annotation: {type: Object, required: true},
         purlTemplate: {type: String, required: false},
@@ -68,11 +70,10 @@ module.exports = {
         thumbStrokeColor: {type: String, default: '#090'},
         thumbFillColor: {type: String, default: '#090'},
     },
-    template: require('./anno-viewer.html'),
-    style:    require('./anno-viewer.scss'),
-    created() {
-      this.toplevelDoi = this.annotation.doi
-    },
+  beforeCreate() {
+    console.log(this.$options.propsData.annotation.doi)
+    this.toplevelDoi = this.$options.propsData.annotation.doi
+  },
   mounted() {
     this.iiifLink = this._iiifLink()
 
@@ -122,14 +123,12 @@ module.exports = {
       if (rootId !== id) eventBus.$emit('expand', rootId)
     })
 
-    if (this.annotation.hasVersion) {
-     this.setToVersion(this.annotation.hasVersion[this.annotation.hasVersion.length - 1])
-      // this.annotation.doi = this.annotation.hasVersion[this.annotation.hasVersion.length - 1].doi
-    }
+    this.toplevelCreated = this.annotation.created
+    this.setToVersion(this.newestVersion)
   },
     computed: {
         id()                 {return this.annotation.id},
-        created()            {return this.annotation.created},
+        created()            {return this._created ? this._created : this.annotation.created},
         creator()            {return this.annotation.creator},
         modified()           {return this.annotation.modified},
         title()              {return this.annotation.title},
@@ -149,6 +148,14 @@ module.exports = {
         isPurl() {
             return this.annotation.id === this.purlId
         },
+        newestVersion() {
+          const versions = this.annotation.hasVersion
+          if (!versions || versions.length <= 1) {
+            return this.annotation
+          } else {
+            return versions[versions.length - 1]
+          }
+        },
         doiPopup() {
           const {annotation, toplevelDoi, l10n} = this
           let ret = `
@@ -165,17 +172,18 @@ module.exports = {
             </a>
           `
           // console.log(annotation.doi, toplevelDoi)
-          if (annotation.doi !== toplevelDoi) {
+          const versionDoi = annotation.doi
+          if (versionDoi) {
             ret += '<br/>'
             ret += l10n('doi.of.annotation.revision')
             ret += ':<br/>'
             ret += `
-            <button data-clipboard-text="https://doi.org/${annotation.doi}" class="btn btn-default btn-xs">
+            <button data-clipboard-text="https://doi.org/${versionDoi}" class="btn btn-default btn-xs">
               <span class="fa fa-clipboard"></span>
               <span class="label label-success" style="display: none">${l10n("copied_to_clipboard")}</span>
             </button>
-            <a href="https://doi.org/${annotation.doi}">
-              <img src="https://img.shields.io/badge/DOI-${encodeURIComponent(annotation.doi).replace(/-/g, "--") }-blue.svg"/> </a>
+            <a href="https://doi.org/${versionDoi}">
+              <img src="https://img.shields.io/badge/DOI-${encodeURIComponent(versionDoi).replace(/-/g, "--") }-blue.svg"/> </a>
             `
           }
           return ret
@@ -183,6 +191,7 @@ module.exports = {
     },
     data() {
         return {
+          _created: null,
             iiifLink: '',
             currentVersion: this.initialAnnotation,
             highlighted: false,
@@ -221,38 +230,25 @@ module.exports = {
           return anno[k]
         },
         setToVersion(newState) {
-          // console.log('SETO', newState.doi)
-            // const x = {}
-            // ;['modified', 'created'].forEach(prop => {
-            //     x[`${prop}-old`] = new Date(this.annotation[prop])
-            //     x[`${prop}-new`] = new Date(newState[prop])
-            // })
-            // console.log(x)
-            // console.log('before', this.toplevelDoi, this.annotation.doi)
-            ;['body', 'target', 'title', 'doi'].map(prop => {
-              this.annotation[prop] = newState[prop]
+          ;[
+            'body',
+            'created',
+            'modified',
+            'target',
+            'title',
+            'doi',
+          ].map(prop => {
+            Object.assign(this.annotation, {
+              [prop]: newState[prop]
             })
-            // Object.assign(this.annotation, newState)
-            // console.log('after', this.toplevelDoi, this.annotation.doi)
-            // eventBus.$emit('setToVersion', this.annotation)
-        },
-        newestVersionId() {
-            if (!this.annotation.hasVersion) return
-            return this.annotation.hasVersion[this.annotation.hasVersion.length - 1].id
+          })
+          // eventBus.$emit('setToVersion', this.annotation)
         },
         isOlderVersion()     {
-            if (this.annotation.hasVersion && this.annotation.hasVersion.length <= 1) return false
-            if (!this.annotation.id.match(/~/)) return false
-            const newestVersionId = this.newestVersionId()
-            if (!newestVersionId) return false
-            if (this.annotation.id === newestVersionId) return false
-            return true
+          return this.toplevelCreated === this.annotation.created
         },
         versionIsShown(version) {
-            if (version.id === this.annotation.id) return true
-            return this.isOlderVersion()
-                ? version.created == this.annotation.created
-                : version.created == this.annotation.modified
+          return version.created === this.created
         },
         _iiifLink() {
             if (! this.svgTarget || this.imageHeight <= 0 || this.imageWidth <= 0 || ! this.iiifUrlTemplate) {
