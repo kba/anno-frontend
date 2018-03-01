@@ -71,7 +71,6 @@ module.exports = {
         thumbFillColor: {type: String, default: '#090'},
     },
   beforeCreate() {
-    console.log(this.$options.propsData.annotation.doi)
     this.toplevelDoi = this.$options.propsData.annotation.doi
   },
   mounted() {
