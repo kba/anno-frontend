@@ -179,9 +179,32 @@
     <!-- navigation -->
 
     <div style="clear: both; margin-bottom: 2px;"></div>
+    <transition name="fade">
+      <div class="alert alert-danger fade" :class="{in: mintDoiError}" v-if="mintDoiError" @click="mintDoiError = null">
+      <button type="button" class="close" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <strong>{{ l10n('mint_doi') }} Error:</strong> {{mintDoiError}}
+      </div>
+    </transition>
     <div class="btn-toolbar pull-right" role="toolbar" style="margin-top: 10px;">
-
       <div class="btn-group btn-group-xs pull-right" role="group">
+        <button v-if="!annotation.doi && $auth('mintDoi', id)"
+            class="btn btn-default btn-xs"
+            data-toggle="popover"            
+            data-focus-dismiss
+            :data-content= '`
+            <button data-click="mintDoi" class="btn btn-xs btn-success">Yes</button>
+            <button data-click="close" class="btn btn-xs btn-default">No</button>`'
+            data-html="true"
+            data-placement = "auto left"
+            data-trigger = "manual"
+            data-container = "body"
+            @click="showMintDoiPopover"
+            >
+            <span class="glyphicon glyphicon-link"></span>
+            {{ l10n('mint_doi') }}
+        </button>
         <bootstrap-button btn-class="default" @click="revise" font-awesome="pencil" v-if="$auth('revise', id)">
           {{ l10n('edit') }}
         </bootstrap-button>

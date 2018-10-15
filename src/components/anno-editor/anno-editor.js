@@ -33,7 +33,6 @@ module.exports = {
         eventBus.$on('reply', this.reply)
         eventBus.$on('revise', this.revise)
         eventBus.$on('remove', this.remove)
-        eventBus.$on('mintDoi', this.mintDoi)
         eventBus.$on('discard', this.discard)
         eventBus.$on('save', this.save)
         eventBus.$on('open-editor', () => {
@@ -84,18 +83,6 @@ module.exports = {
                  if (this.editMode === 'create') this.api.create(anno, cb)
             else if (this.editMode === 'reply')  this.api.reply(anno.replyTo, anno, cb)
             else if (this.editMode === 'revise') this.api.revise(anno.id, anno, cb)
-        },
-
-        mintDoi() {
-            const {id} = this.$store.state.editing
-            this.api.mintDoi(id, (err, ...args) => {
-              if (err) {
-                  console.log("mintDOI error", {err})
-              } else {
-                console.log("mintDOI response", {err, args})
-                this.save()
-              }
-            })
         },
 
         loadSvg() {

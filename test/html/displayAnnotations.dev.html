@@ -34,10 +34,9 @@ displayAnnotations({
   collection: 'default',
 
   annoEndpoint: 'http://localhost:3000/anno',
-  tokenEndpoint: 'http://localhost:3000/auth/token/default',
-  loginEndpoint: `http://localhost:3000/auth/login?from=${window.location.href}`,
-  logoutEndpoint: 'http://localhost:3000/auth/logout',
-
+  tokenEndpoint: 'http://localhost:3008/token/default',
+  loginEndpoint: `http://localhost:3008/login?from=${window.location.href}`,
+  logoutEndpoint: 'http://localhost:3000/auth/logout',  
   targetImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png",
   targetThumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/200px-Ghostscript_Tiger.svg.png",
 })

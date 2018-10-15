@@ -76,8 +76,7 @@ module.exports = {
     methods: {
         editMode() {return this.$store.state.editMode},
         save() {eventBus.$emit('save')},
-        remove() {eventBus.$emit('remove', this.id)},
-        mintDoi() {eventBus.$emit('mintDoi')},
+        remove() {eventBus.$emit('remove', this.id)},        
         discard() {eventBus.$emit('discard')},
         startHighlighting(...args) {eventBus.$emit('startHighlighting', ...args)},
         stopHighlighting(...args) {eventBus.$emit('stopHighlighting', ...args)},
