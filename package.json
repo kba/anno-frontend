@@ -21,7 +21,7 @@
     "@ubhd/authorities-client": "^0.4.0",
     "axios": "^0.15.3",
     "bonanza": "^1.0.1",
-    "bootstrap": "3.2.0",
+    "bootstrap": "3.4.0",
     "clipboard": "^1.7.1",
     "dateformat": "^2.0.0",
     "font-awesome": "^4.7.0",
