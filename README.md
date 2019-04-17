@@ -190,33 +190,18 @@ Install all dependencies and devDependencies:
 
 ```sh
 npm install
+make
 ```
 
 In particular, [anno](/kba/anno) is required to be built from our repos since
 it's not yet published.
 
-### Building the development bundle
-
-This creates a large bundle (~4 MB) that contains all libraries, fonts and images. You
-only have to source this in a script-tag, instead of requiring additional CSS,
-libraries etc.
-
-Useful for testing but not for deployment.
-
-```
-webpack -d
-```
-
-To have webpack update the bundle continuously as sources are changed, add `-d` flag.
-
-```
-webpack -dw
-```
 
 ### Building for deployment
 
 ```
-webpack -p --config webpack.deploy.config.js
+npm install
+make build
 ```
 
 To `scp` it to serv42: `make deploy`.
