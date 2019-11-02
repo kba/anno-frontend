@@ -19,7 +19,7 @@
     "@kba/anno-util": "^0.0.2",
     "@kba/xrx-vue": "^0.0.22",
     "@ubhd/authorities-client": "^0.4.0",
-    "axios": "^0.15.3",
+    "axios": "^0.18.1",
     "bonanza": "^1.0.1",
     "bootstrap": "3.2.0",
     "clipboard": "^1.7.1",
