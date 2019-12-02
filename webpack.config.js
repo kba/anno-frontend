@@ -1,9 +1,6 @@
 const webpack = require('webpack')
 const path = require('path')
 
-// detect if webpack bundle is being processed in a production or development env
-let prodBuild = require('yargs').argv.p || false
-
 module.exports = {
     entry: "./entry.js",
     devtool: 'source-map',
@@ -36,20 +33,52 @@ module.exports = {
         }
     },
     module: {
-        loaders: [
-            {test: /png$/i, loader: "url-loader"},
-            {test: /svg$/i, loader: "url-loader"},
-            {test: /components\/.*?\.html$/, loader: "html-loader?attrs=img:src bootstrap-button:src"},
-            {test: /.*\.js$/, exclude: /node_modules/, loader: 'babel-loader?cacheDirectory'},
-            {test: /components\/.*?\.s?[ac]ss$/, loader: "style-loader!css-loader?sourcemap=true!sass-loader?sourcemap-=true"},
+        rules: [
+            {
+                test: /png$/i,
+                loader: "url-loader"
+            },
+            {
+                test: /svg$/i,
+                loader: "url-loader"
+            },
+            {
+                test: /components\/.*?\.html$/,
+                use: {
+                    loader: "html-loader",
+                    options: {
+                        attrs: 'img:src bootstrap-button:src'
+                    }
+                }
+            },
+            {
+                test: /.*\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        cacheDirectory: true
+                    }
+                }
+            },
+            {
+                test: /components\/.*?\.s?[ac]ss$/,
+                use: [
+                    "style-loader",
+                    {
+                        loader: "css-loader",
+                        options: {
+                            sourceMap: true
+                        }
+                    },
+                    {
+                        loader: "sass-loader",
+                        options: {
+                            sourceMap: true
+                        }
+                    }
+                ]
+            }
         ]
     },
-    plugins: [
-        new webpack.DefinePlugin({'process.env': {
-          NODE_ENV: prodBuild ? '"production"' : '"development"',
-        }}),
-        new (require('uglifyjs-webpack-plugin'))({
-        })
-
-    ]
 }

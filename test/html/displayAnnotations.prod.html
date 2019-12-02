@@ -15,18 +15,20 @@
   <script>
     window.ANNO_ACL_DATA='[[{}], true]'
   </script>
-  <script src="https://www.ub.uni-heidelberg.de/cdn/authorities-client/latest/authorities-client.js"> </script>
-  <script src=""> </script>
-  <script src="../../dist/anno-common.js"> </script>
-  <script src="https://unpkg.com/semtonotes-client"></script>
-  <script src="https://unpkg.com/semtonotes-utils"></script>
-  <script src="https://unpkg.com/@kba/xrx-vue"></script>
-  <!-- <script src="../../dist/xrx-utils.js"></script> -->
-  <!-- <script src="../../dist/xrx-vue.js"></script> -->
-
-  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
-
+  <script src="https://www.ub.uni-heidelberg.de/cdn/jquery/3.4.1/jquery.js"></script>
+<link rel="stylesheet" href="https://www.ub.uni-heidelberg.de/cdn/bootstrap/3.2.0-ubhd-digi/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="https://www.ub.uni-heidelberg.de/cdn/font-awesome/4.7.0/font-awesome.css"></script>
+<script src="https://www.ub.uni-heidelberg.de/cdn/bootstrap/3.2.0-ubhd-digi/js/bootstrap.min.js"></script>
+<script src="https://www.ub.uni-heidelberg.de/cdn/jquery-ui/1.12.1/jquery-ui.js"></script>
+<script src="https://www.ub.uni-heidelberg.de/cdn/quill/1.2.4/quill.js"></script>
+<!-- <script src="https://www.ub.uni-heidelberg.de/cdn/vuex/2.3.1/vuex.js"></script>
+<script src="https://www.ub.uni-heidelberg.de/cdn/vue/2.3.1/vue.js"></script>
+ --><script src="https://www.ub.uni-heidelberg.de/cdn/axios/0.19.0/axios.js"></script>
+<script src="https://www.ub.uni-heidelberg.de/cdn/semtonotes/latest/semtonotes.js"></script>
+<script src="https://www.ub.uni-heidelberg.de/cdn/authorities-client/latest/authorities-client.js"></script>
+<script src="https://www.ub.uni-heidelberg.de/cdn/xrx-utils/latest/xrx-utils.js"></script>
+<script src="https://www.ub.uni-heidelberg.de/cdn/xrx-vue/latest/xrx-vue.js"></script>
+<script src="https://www.ub.uni-heidelberg.de/cdn/anno-common/0.0.9/anno-common.js"></script>
 </head>
 <body>
     <div class="container-fluid">
@@ -49,7 +51,7 @@
     })
     console.log({props})
     const authServer = props.authServer || 'https://anno.ub.uni-heidelberg.de/anno/auth'
-    const annoEndpoint = props.annoEndpoint || 'http://anno.ub.uni-heidelberg.de/anno/anno'
+    const annoEndpoint = props.annoEndpoint || 'https://anno.ub.uni-heidelberg.de/anno/'
     const collection = props.collection || 'test'
     annoapp = displayAnnotations(Object.assign({
 
@@ -61,7 +63,7 @@
       requestEndpoint: `${authServer}/request?c=${collection}`,
       logoutEndpoint: `${authServer}/logout?c=${collection}&from=${encodeURIComponent(window.location.href)}`,
       <!-- purlTemplate: 'http://digi.ub.uni-heidelberg.de/PROJ/{{ slug }}', -->
-      <!-- purlId: 'http://localhost:3000/anno/T5mEcx6uRG-kg9vtnkseeQ', -->
+      purlId: 'http://localhost:3000/anno/T5mEcx6uRG-kg9vtnkseeQ',
 
       collection,
       targetImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png",

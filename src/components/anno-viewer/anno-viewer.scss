@@ -33,7 +33,13 @@
     }
   }
 
+  .annoeditor-tag {
+    margin: 1px;
+  }
+
   .annoeditor-tags {
+    display: flex;
+    flex-wrap: wrap;
     margin-top: 5px;
     margin-bottom: 10px;
   }

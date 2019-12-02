@@ -76,9 +76,8 @@ module.exports = {
   },
   mounted() {
     this.iiifLink = this._iiifLink()
-
     // Show popover with persistent URL
-    const Clipboard = require('clipboard')    
+    const Clipboard = require('clipboard')
     Array.from(this.$el.querySelectorAll('[data-toggle="popover"]')).forEach(popoverTrigger => {
       $(popoverTrigger).popover({container: 'body', trigger: 'click'})
       $(popoverTrigger).on('shown.bs.popover', () => {
@@ -207,35 +206,35 @@ module.exports = {
         reply()      {return eventBus.$emit('reply',  this.annotation)},
         remove()     {return eventBus.$emit('remove', this.annotation)},
         showMintDoiPopover(event) {
-          const vm = this          
-          const popoverTrigger = $(event.target)          
+          const vm = this
+          const popoverTrigger = $(event.target)
           // TODO remove the popup init from here
-          if (!("mintDoiPopoverCreated" in this) || !this.mintDoiPopoverCreated) {            
+          if (!("mintDoiPopoverCreated" in this) || !this.mintDoiPopoverCreated) {
             console.log("init popover")
             popoverTrigger.popover()
-            popoverTrigger.on('shown.bs.popover', (ev) => {              
-              const popoverDiv = document.getElementById(popoverTrigger.attr("aria-describedby"))              
+            popoverTrigger.on('shown.bs.popover', (ev) => {
+              const popoverDiv = document.getElementById(popoverTrigger.attr("aria-describedby"))
               Array.from(popoverDiv.querySelectorAll("[data-click]")).forEach(button => {
                 const clickAttr = $(button).data('click')
                 if (clickAttr == 'mintDoi') {
                   $(button).on('click', () => {
                     popoverTrigger.popover('hide')
-                    vm.mintDoi().catch( (error) => {                      
+                    vm.mintDoi().catch( (error) => {
                       vm.mintDoiError = error
                     })
                   })
                 }
                 else {
-                  $(button).on('click', () => { popoverTrigger.popover('hide') }) 
+                  $(button).on('click', () => { popoverTrigger.popover('hide') })
                 }
-              })              
+              })
             })
             this.mintDoiPopoverCreated = true
           }
           popoverTrigger.popover('toggle')
         },
         mintDoi() {
-          // TODO It would be much nicer to implement a Vuex store action 
+          // TODO It would be much nicer to implement a Vuex store action
           const api = this.api
           return new Promise((resolve, reject) => {
             api.mintDoi(this.id, (err, ...args) => {
@@ -245,7 +244,7 @@ module.exports = {
               } else {
                 console.log("mintDOI response", {err, args})
                 // TODO Do not reload the complete list. Only update this annotation.
-                this.$store.dispatch('fetchList')                
+                this.$store.dispatch('fetchList')
                 resolve(...args)
               }
             })

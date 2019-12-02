@@ -2,18 +2,18 @@
 <html>
 <head>
   <meta charset="utf-8"/>
-  <script src="https://www.ub.uni-heidelberg.de/cdn/jquery/latest/jquery.js"></script>
-  <link rel="stylesheet" href="https://www.ub.uni-heidelberg.de/cdn/bootstrap/3.2.0-ubhd-digi/css/bootstrap.min.css"/>
+  <script src="https://www.ub.uni-heidelberg.de/cdn/jquery/3.4.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://www.ub.uni-heidelberg.de/cdn/bootstrap/3.4.1/css/bootstrap.min.css"/>
   <link rel="stylesheet" href="https://www.ub.uni-heidelberg.de/cdn/font-awesome/4.7.0/font-awesome.css"></script>
-  <script src="https://www.ub.uni-heidelberg.de/cdn/bootstrap/3.2.0-ubhd-digi/js/bootstrap.min.js"></script>
+  <script src="https://www.ub.uni-heidelberg.de/cdn/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script src="https://www.ub.uni-heidelberg.de/cdn/jquery-ui/1.12.1/jquery-ui.js"></script>
   <script src="https://www.ub.uni-heidelberg.de/cdn/quill/1.2.4/quill.js"></script>
-  <script src="https://www.ub.uni-heidelberg.de/cdn/axios/0.16.2/axios.js"></script>
+  <script src="https://www.ub.uni-heidelberg.de/cdn/axios/0.19.0/axios.js"></script>
   <script src="https://www.ub.uni-heidelberg.de/cdn/semtonotes/latest/semtonotes.js"></script>
-  <script src="https://www.ub.uni-heidelberg.de/cdn/authorities-client/latest/authorities-client.js"></script>
+  <script src="https://www.ub.uni-heidelberg.de/cdn/authorities-client/0.7.0/authorities-client.js"></script>
   <script src="https://www.ub.uni-heidelberg.de/cdn/xrx-utils/latest/xrx-utils.js"></script>
   <script src="https://www.ub.uni-heidelberg.de/cdn/xrx-vue/latest/xrx-vue.js"></script>
-  <script src="https://www.ub.uni-heidelberg.de/cdn/anno-common/dev/anno-common.js"></script>
+  <script src="https://www.ub.uni-heidelberg.de/cdn/anno-common/0.0.9/anno-common.js"></script>
   <script type="text/javascript" src="../../dist/anno-frontend.js"> </script>
 </head>
 <body>
@@ -26,6 +26,7 @@
     </div>
 <script src="./fixtures.js"></script>
 <script type="text/javascript">
+
 // _ubhddebug.store only contains an object with the store properties
 // the store has to instatiated
 const store = new Vuex.Store(_ubhddebug.store)
@@ -33,12 +34,15 @@ window.app = new Vue({
   el: '#anchor',
   store,
   data: {
-    annotation: window.annotations[1],
+    annotation: {}
   },
   template: `<anno-viewer
       :annotation="annotation"
-      purl="https://purl/foo/3000" />
+      purlId="https://purl/foo/3000" />
   `,
+});
+fetch('../fixtures/annotation-with-tags.json').then( resp => resp.json() ).then(annotation => {
+  app.annotation = annotation
 })
 window.disableAuth = function () {
   window.app.$children[0].$auth = function () { return true };

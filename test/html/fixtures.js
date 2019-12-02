@@ -1,5 +1,4 @@
 window.annotations = [
-
   {
     id: 'https://anno.ub.uni-heidelberg.de/123',
     creator: 'john',
@@ -145,26 +144,23 @@ window.annotations = [
       }
     ]
   },
-
-    {
-        body: [],
-        target: [
-            {
-                selector: {
-                    type: "SvgSelector",
-                    value:
+  {
+    body: [],
+    target: [
+      {
+        selector: {
+            type: "SvgSelector",
+            value:
 `<svg xmlns="http://www.w3.org/2000/svg">
-    <rect x="0" y="0" width="200" height="200"/>
-    <rect x="200" y="200" width="200" height="200"/>
-    <rect x="400" y="400" width="200" height="200"/>
-    <rect x="600" y="600" width="200" height="200"/>
-    <rect x="800" y="800" width="200" height="200"/>
-    <rect x="800" y="1000" width="224" height="24"/>
+<rect x="0" y="0" width="200" height="200"/>
+<rect x="200" y="200" width="200" height="200"/>
+<rect x="400" y="400" width="200" height="200"/>
+<rect x="600" y="600" width="200" height="200"/>
+<rect x="800" y="800" width="200" height="200"/>
+<rect x="800" y="1000" width="224" height="24"/>
 </svg>`,
-                }
-            },
-        ],
-    }
+        }
+      },
+    ],
+  }
 ]
-
-

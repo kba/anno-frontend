@@ -141,14 +141,14 @@
         </template>
 
         <div class="annoeditor-tags">
-          <span class="label label-default" v-for="tagBody in simpleTagBodies">
+          <span class="annoeditor-tag label label-default" v-for="tagBody in simpleTagBodies">
             <span class="glyphicon glyphicon-tag"></span> {{ tagBody.value || tagBody.label }}
           </span>
         </div>
 
         <div class="annoeditor-tags">
           <a :href="semtagBody.id || semtagBody.source" v-for="semtagBody in semanticTagBodies">
-            <span class="label label-primary">
+            <span class="annoeditor-tag label label-primary">
               <span class="glyphicon glyphicon-tag"></span> {{ semtagBody.value || semtagBody.label }}
             </span>
           </a>
@@ -191,7 +191,7 @@
       <div class="btn-group btn-group-xs pull-right" role="group">
         <button v-if="!annotation.doi && $auth('mintDoi', id)"
             class="btn btn-default btn-xs"
-            data-toggle="popover"            
+            data-toggle="popover"
             data-focus-dismiss
             :data-content= '`
             <button data-click="mintDoi" class="btn btn-xs btn-success">Yes</button>

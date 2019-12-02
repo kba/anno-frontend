@@ -5,18 +5,18 @@
   <div class="panel-body">
       <div class="row" v-for="(body, bodyIndex) in semanticTagBodies">
         <div class="col-md-9">
-          <input 
+          <input
             :data-body-index="bodyIndex"
             required
             autocomplete
             type="text"
             class="form-control semtag-value"
-            v-model="body.value"
+            :value="body.value"
             :placeholder="l10n('semtag')"
           />
         </div>
         <div class="col-md-3">
-          <bootstrap-button 
+          <bootstrap-button
             btn-class="danger"
             font-awesome="remove"
             @click="removeBody(body)">
@@ -24,7 +24,7 @@
           </bootstrap-button>
         </div>
     </div>
-    <bootstrap-button 
+    <bootstrap-button
       btn-class="success"
       font-awesome="plus"
       @click="addSemanticTag"

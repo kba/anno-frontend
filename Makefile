@@ -41,7 +41,7 @@ test:
 .PHONY: dist
 # Build production bundle
 dist: src
-	NODE_ENV='production' webpack --config webpack.config.js
+	NODE_ENV='production' webpack -p --config webpack.config.js
 
 node_modules: package.json
 	$(NPM) install

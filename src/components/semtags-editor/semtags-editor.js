@@ -1,6 +1,8 @@
 const axios = require('axios')
 const bonanza = require('bonanza')
-const gndClient = require('@ubhd/authorities-client').plugin('ubhd/gnd')
+const authorities = require('@ubhd/authorities-client')
+const authHelpers = authorities.utils.handlebars.helpers;
+const gndClient = authorities.plugin('ubhd/gnd')
 
 /*
  * ### semtags-editor
@@ -26,8 +28,8 @@ module.exports = {
         addSemanticTag() {this.$store.commit('ADD_SEMTAG_BODY')},
         removeBody(body) {this.$store.commit('REMOVE_BODY', body)},
         ensureCompletion() {
-            const label = ({term}) => term[this.language] || term.de || term.en || term
-            const source = ({payload}) => payload.startsWith('http') ? payload : `http://d-nb.info/gnd/${payload}`
+            const label = (obj) => authHelpers.preferredName(obj)
+            const source = ({gndIdentifier}) => `https://d-nb.info/gnd/${gndIdentifier}`
 
             Array.from(this.$el.querySelectorAll(`input.semtag-value`))
                 .filter(el => !el.classList.contains('has-completion'))
@@ -38,12 +40,20 @@ module.exports = {
                         el,
                         {
                             templates: {
-                                item(obj) {return label(obj)},
+                                itemLabel(obj) { return authHelpers.helpfulPreferredName(obj) },
+                                label(obj) { return label(obj)}
+                            },
+                            limit: 50,
+                            hasMoreItems(result) {
+                                return !!result.numFound && ( (result.start + result.docs.length) < result.numFound )
+                            },
+                            getItems(result) {
+                                return result.docs
                             }
                         },
                         function(query, cb) {
                             if (!(query && query.search)) return cb(null, [])
-                            gndClient.suggest(query.search, {
+                            gndClient.search(query.search, {
                                 types: [
                                     "Country",
                                     "AdministrativeUnit",
@@ -52,14 +62,17 @@ module.exports = {
                                     "DifferentiatedPerson",
                                     "UndifferentiatedPerson",
                                 ],
-                                count: query.limit
+                                count: query.limit,
+                                offset: query.offset,
+                                queryLevel: 1
                             })
-                                .then(results => cb(null, results.suggestions))
+                                .then(results => cb(null, results.response))
                                 .catch(err => cb(err))
                         }
                     ).on('change', (value) => {
                         this.$store.commit("SET_SEMTAG_PROP", {n, prop:'source', value: source(value)})
                         this.$store.commit("SET_SEMTAG_PROP", {n, prop:'label', value: label(value)})
+                        this.$store.commit("SET_SEMTAG_PROP", {n, prop:'value', value: label(value)})
                     })
                 })
 

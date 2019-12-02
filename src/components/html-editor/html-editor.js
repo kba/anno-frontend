@@ -1,6 +1,6 @@
 const $ = require('jquery')
 const quill = require('quill/dist/quill.js')
-require('style-loader!css-loader?minimize=true!quill/dist/quill.snow.css')
+require('style-loader!css-loader!quill/dist/quill.snow.css')
 
 // const { textualHtmlBody } = require('@kba/anno-queries')
 
