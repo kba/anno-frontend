@@ -64,7 +64,7 @@ module.exports = {
                                 ],
                                 count: query.limit,
                                 offset: query.offset,
-                                queryLevel: 1
+                                queryLevel: 0
                             })
                                 .then(results => cb(null, results.response))
                                 .catch(err => cb(err))
