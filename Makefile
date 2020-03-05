@@ -46,7 +46,7 @@ dist: src
 node_modules: package.json
 	$(NPM) install
 
-# Serve samples on localhost:3003
+.PHONY: serve
+# Serve samples with webpack-dev-server and start browser
 serve:
-	@echo "Open <http://localhost:3003/test> in your browser"
-	python2 -mSimpleHTTPServer 3003
+	webpack-dev-server --open

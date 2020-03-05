@@ -1,4 +1,5 @@
-const Vue = require('vue')
+import Vue from 'vue'
+
 const {
     ensureArray, add, remove,
 } = require('@kba/anno-util')
@@ -18,7 +19,7 @@ function initialState() {return {
     body: [],
     target: [],
     replyTo: null,
-    rights: "https://creativecommons.org/publicdomain/zero/1.0/",
+    rights: "https://creativecommons.org/licenses/by/4.0/",
 }}
 
 //

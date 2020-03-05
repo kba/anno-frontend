@@ -1,6 +1,8 @@
 // Vue + Vuex
-window.Vue = require('vue')
-window.Vuex = require('vuex')
+import Vue from 'vue'
+import Vuex from 'vuex'
+window.Vue = Vue
+window.Vuex = Vuex
 
 if (process.env.NODE_ENV !== 'production') {
     // require('jquery-ui/ui/widgets/resizable')
@@ -8,8 +10,9 @@ if (process.env.NODE_ENV !== 'production') {
     // require('bootstrap-webpack!./bootstrap.config.js');
     // require('font-awesome/css/font-awesome.css');
     window.Vue.config.devtools = true
+    console.log("Enable devtools")
 }
-window.Vue.config.devtools = false
+
 
 //
 // Our code

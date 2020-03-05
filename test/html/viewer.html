@@ -30,19 +30,18 @@
 // _ubhddebug.store only contains an object with the store properties
 // the store has to instatiated
 const store = new Vuex.Store(_ubhddebug.store)
-window.app = new Vue({
-  el: '#anchor',
-  store,
-  data: {
-    annotation: {}
-  },
-  template: `<anno-viewer
-      :annotation="annotation"
-      purlId="https://purl/foo/3000" />
-  `,
-});
 fetch('../fixtures/annotation-with-tags.json').then( resp => resp.json() ).then(annotation => {
-  app.annotation = annotation
+  window.app = new Vue({
+    el: '#anchor',
+    store,
+    data: {
+      annotation
+    },
+    template: `<anno-viewer
+        :annotation="annotation"
+        purlId="https://purl/foo/3000" />
+    `,
+  });
 })
 window.disableAuth = function () {
   window.app.$children[0].$auth = function () { return true };

@@ -10,6 +10,10 @@ module.exports = {
         path: __dirname + "/dist",
         filename: `anno-frontend.js`,
     },
+    devServer: {
+        publicPath: '/dist/',
+        compress: true
+    },
     externals: {
         'jquery': "$",
         'quill/dist/quill.js': 'Quill',
@@ -25,10 +29,9 @@ module.exports = {
     resolve: {
         alias: {
             '@': path.join(__dirname, 'src'),
-            'vue$': 'vue/dist/vue.min.js',
-            'vuex$': 'vuex/dist/vuex.min.js',
+            'vue$': 'vue/dist/vue.esm.js',
+            'vuex$': 'vuex/dist/vuex.esm.js',
             'quill$': 'quill/dist/quill.min.js',
-            'async$': 'async/dist/async.min.js',
             // 'axios': 'axios/dist/axios.min.js',
         }
     },

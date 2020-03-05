@@ -1,1 +1,2 @@
-module.exports = new(require('vue'))()
+import Vue from 'vue'
+module.exports = new Vue()

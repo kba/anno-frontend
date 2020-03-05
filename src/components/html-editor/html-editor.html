@@ -53,9 +53,9 @@
             <label
               data-toggle="popover"
               data-trigger="hover"
-              data-placement="bottom" 
+              data-placement="bottom"
               v-for="(license, licenseName) in licenseInfo"
-              :key="$store.state.editing.rights"
+              :key="licenseName"
               :title="l10n(license.title)"
               :data-content="l10n(license.author_desc)"
               @click="$store.commit('SET_RIGHTS', license.url)"

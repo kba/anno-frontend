@@ -1,5 +1,5 @@
-const Vue = require('vue')
-const Vuex = require('vuex')
+import Vue from 'vue'
+import Vuex from 'vuex'
 Vue.use(Vuex)
 const eventBus = require('@/event-bus')
 const {localizations} = require('../l10n-config.json')
@@ -52,7 +52,7 @@ const {localizations} = require('../l10n-config.json')
  * ##### `startHighlighting(annoId, open)`
  *
  * Highlight the annotation with `id` annoId
- * 
+ *
  * ##### `stopHighlighting(annoId)`
  *
  * Stop highlighting the annotation with `id` annoId
@@ -60,11 +60,11 @@ const {localizations} = require('../l10n-config.json')
  * ##### `expand(annoId)`
  *
  * Open thread tree to reveal anno with id `annoId`
- * 
+ *
  * #### Events
- * 
+ *
  * Either listen/emit via app.eventBus and/or provide listeners as `events` option
- * 
+ *
  * - `mouseover(annoId)`: $on this to catch when an annotation is hovered in the list
  * - `mouseleave(annoId)`: $on this to catch when an annotation is un-hovered in the list
  * - `fetched(annotationList)`: List of annotations has been fetched from the server
