@@ -1,5 +1,5 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+const Vue = require('vue').default
+const Vuex = require('vuex').default
 Vue.use(Vuex)
 const eventBus = require('@/event-bus')
 const {localizations} = require('../l10n-config.json')

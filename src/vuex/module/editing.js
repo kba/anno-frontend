@@ -1,5 +1,4 @@
-import Vue from 'vue'
-
+const Vue = require('vue').default
 const {
     ensureArray, add, remove,
 } = require('@kba/anno-util')

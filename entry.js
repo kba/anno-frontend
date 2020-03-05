@@ -1,6 +1,7 @@
 // Vue + Vuex
 import Vue from 'vue'
 import Vuex from 'vuex'
+
 window.Vue = Vue
 window.Vuex = Vuex
 
