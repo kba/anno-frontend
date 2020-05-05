@@ -1,8 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script type="text/javascript" src="../../dist/ubhd-anno.js"> </script>
 <meta charset="utf-8"/>
+  <script src="https://www.ub.uni-heidelberg.de/cdn/jquery/3.4.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://www.ub.uni-heidelberg.de/cdn/bootstrap/3.4.1/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://www.ub.uni-heidelberg.de/cdn/font-awesome/4.7.0/font-awesome.css"></script>
+  <script src="https://www.ub.uni-heidelberg.de/cdn/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://www.ub.uni-heidelberg.de/cdn/jquery-ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://www.ub.uni-heidelberg.de/cdn/quill/1.2.4/quill.js"></script>
+  <script src="https://www.ub.uni-heidelberg.de/cdn/axios/0.19.0/axios.js"></script>
+  <script src="https://www.ub.uni-heidelberg.de/cdn/semtonotes/latest/semtonotes.js"></script>
+  <script src="https://www.ub.uni-heidelberg.de/cdn/authorities-client/0.7.1/authorities-client.js"></script>
+  <script src="https://www.ub.uni-heidelberg.de/cdn/xrx-utils/latest/xrx-utils.js"></script>
+  <!-- <script src="https://www.ub.uni-heidelberg.de/cdn/xrx-vue/latest/xrx-vue.js"></script> -->
+  <script src="http://localhost:8081/dist/xrx-vue.js"></script>
+  <script src="https://www.ub.uni-heidelberg.de/cdn/anno-common/0.0.9/anno-common.js"></script>
+  <script type="text/javascript" src="../../dist/anno-frontend.js"> </script>
 </head>
 <body>
 <div class="container-fluid">
@@ -19,9 +32,7 @@
 window.UBHDANNO_ENDPOINT = 'http://anno.ub.uni-heidelberg.de/cgi-bin/anno.cgi'
 window.UBHDANNO_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoia2JhIiwic2VydmljZSI6ImtiYS10ZXN0LXNlcnZpY2UiLCJ3cml0ZSI6MSwiZXhwIjozMTUzNjAwMDB9.M6OoYjbjhHoSMZqs-lGLnrgPPMNJhwLwwk3OuCXETiA'
 
-const store = _ubhddebug.store
-
-Object.assign(store.state, {
+Object.assign(_ubhddebug.store.state, {
   targetImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png",
   targetThumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/200px-Ghostscript_Tiger.svg.png",
   canvasHeight: 400,
@@ -30,6 +41,10 @@ Object.assign(store.state, {
   thumbWidth: 100,
 })
 
+// _ubhddebug.store only contains an object with the store properties
+// the store has to instatiated
+const store = new Vuex.Store(_ubhddebug.store)
+
 window.app = new Vue({
   el: '#anchor',
   store,
@@ -37,7 +52,7 @@ window.app = new Vue({
     <anno-editor />
   `,
 })
-store.dispatch('replaceAnnotation', window.annotations[3])
+store.commit('REPLACE_ANNOTATION', window.annotations[3])
 
 </script></body></html>
 
