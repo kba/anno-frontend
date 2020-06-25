@@ -41,7 +41,7 @@ module.exports = {
         this.collapseAll(this.collapsed ? 'hide' : 'show')
 
         // enable popovers
-        $('[data-toggle="popover"]', this.$el).popover({container: 'body'})
+        $('[data-toggle="popover"]', this.$el).popover()
 
         // Sort the list initially and after every fetch
         this.sort()

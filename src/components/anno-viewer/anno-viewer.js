@@ -79,7 +79,7 @@ module.exports = {
     // Show popover with persistent URL
     const Clipboard = require('clipboard')
     Array.from(this.$el.querySelectorAll('[data-toggle="popover"]')).forEach(popoverTrigger => {
-      $(popoverTrigger).popover({container: 'body', trigger: 'click'})
+      $(popoverTrigger).popover({trigger: 'click'})
       $(popoverTrigger).on('shown.bs.popover', () => {
         const popoverDiv = document.getElementById(popoverTrigger.getAttribute("aria-describedby"))
         if (!popoverDiv)
