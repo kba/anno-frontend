@@ -2,22 +2,14 @@
 <html><head>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Display Annotations Test</title>
+  <title>BS3 Display Annotations Test</title>
   <!--
-
-  This demo is meant for local development, potentially offline.
-  It sources the external modules from `node_modules`,
-  so you'll need to `npm install` this package or otherwise gather the files,
-  then web-host the module root folder (where `package.json` resides) locally.
-  Assuming port 33380, the demo would be at
-  http://localhost:33380/test/html/displayAnnotations.nm.html .
-  The `annoEndpoint` below should point to an anno-backend server or similar.
-
+    Bootstrap3 variant of displayAnnotations.nm.html – quod vide for docs.
   -->
   <meta http-equiv="Content-Script-Type" content="text/javascript">
   <meta http-equiv="Content-Style-Type" content="text/css">
 </head><body
-  data-bootstrap-version-major="4"
+  data-bootstrap-version-major="3"
   >
 
 <div class="container-fluid"><div class="row"><div class="col-md-12">
@@ -27,14 +19,10 @@
 <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
 <script src="../../node_modules/jquery-ui/ui/widget.js"></script>
 <style>
-  @import url("../../node_modules/bootstrap/dist/css/bootstrap.min.css");
+  @import url("../../node_modules/bootstrap3/dist/css/bootstrap.min.css");
   @import url("../../node_modules/font-awesome/css/font-awesome.min.css");
 </style>
-<!-- [2021-04-16] Do not load popper.js separately. It fails with
-  "TypeError: Popper__default.default is not a constructor".
-  Instead, use the bundled version of bootstrap, baked with popper inside.
-  -->
-<script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../../node_modules/bootstrap3/dist/js/bootstrap.min.js"></script>
 <script src="../../node_modules/quill/dist/quill.js"></script>
 <script src="../../node_modules/axios/dist/axios.js"></script>
 <script src="../../node_modules/semtonotes-client/xrx.api.drawing.min.js"></script>
