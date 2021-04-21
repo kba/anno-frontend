@@ -223,20 +223,25 @@
             {{ l10n('previous_version') }}
             <span class="caret"></span>
           </a>
-          <ul role="menu" class="dropdown-menu dropdown-menu-right annoeditor-versions">
-            <li v-for="version in annotation.hasVersion"
+          <component :is="bootstrapOpts.tags.dropdownMenu"
+            role="menu" class="version-history-dropdown-menu
+              dropdown-menu dropdown-menu-right annoeditor-versions">
+            <component :is="bootstrapOpts.tags.dropdownMenuItem"
+              v-for="version in annotation.hasVersion"
               :key="version.id"
-              :class="{'active': versionIsShown(version)}"
-              >
-              <a class="small" @click="setToVersion(version)">
-                <span class="glyphicon glyphicon-time"></span>
-                &nbsp;
-                {{ dateformat(version.created) }}
-                &nbsp;
-                <template v-if="versionIsShown(version)">({{ l10n("active_version") }})</template>
-              </a>
-            </li>
-          </ul>
+              :class="{
+                active: versionIsShown(version),
+                small: true,
+              }"
+              @click="setToVersion(version)"
+            >
+              <span class="glyphicon glyphicon-time"></span>
+              &nbsp;
+              {{ dateformat(version.created) }}
+              <template v-if="versionIsShown(version)"
+                >&nbsp; ({{ l10n("active_version") }})</template>
+            </component>
+          </component>
         </div>
 
       </div>

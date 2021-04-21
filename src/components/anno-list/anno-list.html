@@ -77,10 +77,10 @@
         'za',
       ],
     }]">
-    <ul
+    <component :is="bootstrapOpts.tags.dropdownMenu"
       role="menu" class="sort-criterion-dropdown-menu
         dropdown-menu dropdown-menu-small small sort-menu">
-      <li v-for="
+      <component :is="bootstrapOpts.tags.dropdownMenuItem" v-for="
         criterion in [].concat(...dropdown.criterionProps.map(
           prop => dropdown.criterionDirections.map(
             dir => ({ prop, dir, idname: `${prop}_${dir}` })
@@ -95,8 +95,8 @@
         :data-sort-criterion-prop="criterion.prop"
         :data-sort-criterion-direction="criterion.dir"
         :data-sort-criterion-idname="criterion.idname"
-        >{{ l10n('sort_' + criterion.idname) }}</li>
-    </ul>
+        >{{ l10n('sort_' + criterion.idname) }}</component>
+    </component>
     </template>
 
   </div>
