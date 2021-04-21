@@ -109,7 +109,6 @@ module.exports = function displayAnnotations(options={}) {
     const appDiv = document.createElement('div')
     appDiv.setAttribute('id', `${options.prefix}-app`)
     container.appendChild(appDiv)
-    const el = appDiv
 
     //
     // Event listeners
@@ -137,7 +136,7 @@ module.exports = function displayAnnotations(options={}) {
     Object.assign(storeProps.state, options)
     const store = new Vuex.Store(storeProps)
 
-    const annoapp = new Vue(Object.assign({store, el}, SidebarApp))
+    const annoapp = new Vue(Object.assign({store, el: appDiv}, SidebarApp))
 
     //
     // Store reference to the eventBus
