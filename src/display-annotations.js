@@ -75,8 +75,11 @@ module.exports = function displayAnnotations(customOptions) {
 
     const defaultOptions = {
       targetSource: window.location.href,
+      bootstrap: { version: { major: 4 } },
     };
     const options = mergeOptions(defaultOptions, customOptions);
+    SidebarApp.props.bootstrapOpts = options.bootstrap;
+    delete options.bootstrap;
 
     const SidebarApp = require('@/components/sidebar-app')
     SidebarApp.props.standalone.default = ! options.container

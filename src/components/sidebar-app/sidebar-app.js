@@ -26,6 +26,7 @@ module.exports = {
     template: require('./sidebar-app.html'),
     data() {return {
         collapsed: this.collapseInitially,
+        bootstrapOpts: this.bootstrapOpts,
     }},
     computed: {
         numberOfAnnotations() {return this.$store.getters.numberOfAnnotations},
