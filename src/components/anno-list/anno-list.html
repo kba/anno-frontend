@@ -65,18 +65,39 @@
     </button>
 
     <!-- {{ sortedBy }} -->
-    <ul class="dropdown-menu dropdown-menu-small small sort-menu" role="menu">
-
-      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'created_az'}"  @click="sort('created_az')"  > {{ l10n('sort_created_az')  }}</li >
-      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'created_za'}"  @click="sort('created_za')"  > {{ l10n('sort_created_za')  }}</li >
-      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'modified_az'}" @click="sort('modified_az')" > {{ l10n('sort_modified_az') }}</li >
-      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'modified_za'}" @click="sort('modified_za')" > {{ l10n('sort_modified_za') }}</li >
-      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'title_az'}"    @click="sort('title_az')"    > {{ l10n('sort_title_az')    }}</li >
-      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'title_za'}"    @click="sort('title_za')"    > {{ l10n('sort_title_za')    }}</li >
-      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'creator_az'}"  @click="sort('creator_az')"  > {{ l10n('sort_creator_az')  }}</li >
-      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'creator_za'}"  @click="sort('creator_za')"  > {{ l10n('sort_creator_za')  }}</li >
-
+    <template v-for="dropdown in [{
+      criterionProps: [
+        'created',
+        'modified',
+        'title',
+        'creator',
+      ],
+      criterionDirections: [
+        'az',
+        'za',
+      ],
+    }]">
+    <ul
+      role="menu" class="sort-criterion-dropdown-menu
+        dropdown-menu dropdown-menu-small small sort-menu">
+      <li v-for="
+        criterion in [].concat(...dropdown.criterionProps.map(
+          prop => dropdown.criterionDirections.map(
+            dir => ({ prop, dir, idname: `${prop}_${dir}` })
+          )
+        ))"
+        :class="{
+          btn: true,
+          'btn-xs': true,
+          'btn-primary': (sortedBy === criterion.idname),
+        }"
+        @click="sort(criterion.idname)"
+        :data-sort-criterion-prop="criterion.prop"
+        :data-sort-criterion-direction="criterion.dir"
+        :data-sort-criterion-idname="criterion.idname"
+        >{{ l10n('sort_' + criterion.idname) }}</li>
     </ul>
+    </template>
 
   </div>
 
