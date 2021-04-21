@@ -1,5 +1,6 @@
 const Vue = require('vue').default
 const Vuex = require('vuex').default
+const mergeOptions = require('merge-options')
 Vue.use(Vuex)
 const eventBus = require('@/event-bus')
 const {localizations} = require('../l10n-config.json')
@@ -70,13 +71,16 @@ const {localizations} = require('../l10n-config.json')
  * - `fetched(annotationList)`: List of annotations has been fetched from the server
  *
  */
-module.exports = function displayAnnotations(options={}) {
+module.exports = function displayAnnotations(customOptions) {
+
+    const defaultOptions = {
+      targetSource: window.location.href,
+    };
+    const options = mergeOptions(defaultOptions, customOptions);
 
     const SidebarApp = require('@/components/sidebar-app')
     SidebarApp.props.standalone.default = ! options.container
     SidebarApp.props.collapseInitially.default = !! options.collapseInitially
-
-    options.targetSource = options.targetSource || window.location.href
 
     //
     // Override l10n
