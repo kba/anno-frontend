@@ -43,23 +43,21 @@
 <script src="../../dist/anno-frontend.js"> </script>
 <script src="./fixtures.js"></script>
 <script type="text/javascript">
-
+var protoHost = location.protocol + '//' + location.hostname;
 displayAnnotations({
   // default: // bootstrap: { version: { major: 4 } },
   container: document.getElementById('anno-anchor'),
   collection: 'default',
 
-  annoEndpoint:     'http://localhost:33321/',
+  annoEndpoint:     protoHost + ':33321/',
   tokenEndpoint:    null,
-  //'http://localhost:3008/token/default',
+  // protoHost + ':3008/token/default',
   loginEndpoint:    null,
-  // 'http://localhost:3008/login?from=' + encodeURIComponent(location.href),
+  // protoHost + ':3008/login?from=' + encodeURIComponent(location.href),
   logoutEndpoint:   null,
-  // 'http://localhost:3000/auth/logout',
+  // protoHost + ':3000/auth/logout',
   targetImage:      'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png',
   targetThumbnail:  'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/200px-Ghostscript_Tiger.svg.png',
-})
-
-
+});
 </script>
 </body></html>

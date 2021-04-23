@@ -1,4 +1,5 @@
 const $ = require('jquery')
+const bootstrapCompat = require('../../bootstrap-compat');
 const _dateformat = require('dateformat')
 const eventBus = require('@/event-bus')
 const XrxUtils = require('semtonotes-utils')
@@ -199,6 +200,7 @@ module.exports = {
             highlighted: false,
             collapsed: this.collapseInitially,
             licenseInfo: require('@/../license-config.js'),
+            bootstrapOpts: bootstrapCompat.sharedConfig,
         }
     },
     methods: {

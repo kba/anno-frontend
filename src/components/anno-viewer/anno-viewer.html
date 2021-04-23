@@ -215,7 +215,8 @@
          :title="l10n('delete_anno')"/>
 
         <br>
-        <div v-if="numberOf('hasVersion') > 1" class="dropdown btn-group-xs annoeditor-versions">
+        <div v-if="numberOf('hasVersion') > 1"
+          class="dropdown btn-group-xs annoeditor-versions">
           <a class="btn btn-default dropdown-toggle"
             data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="true">
@@ -240,8 +241,8 @@
               {{ dateformat(version.created) }}
               <template v-if="versionIsShown(version)"
                 >&nbsp; ({{ l10n("active_version") }})</template>
-            </component>
-          </component>
+            </component><!-- dropdownMenuItem -->
+          </component><!-- dropdownMenu -->
         </div>
 
       </div>

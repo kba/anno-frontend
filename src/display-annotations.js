@@ -73,19 +73,19 @@ const {localizations} = require('../l10n-config.json')
  *
  */
 module.exports = function displayAnnotations(customOptions) {
+    const SidebarApp = require('@/components/sidebar-app')
 
     const defaultOptions = {
       targetSource: window.location.href,
-      bootstrap: { version: { major: 4 } },
     };
     const options = mergeOptions(defaultOptions, customOptions);
-    SidebarApp.props.bootstrapOpts = bootstrapCompat.decideOptionDefaults(
-      options.bootstrap);
+    bootstrapCompat.initialize(options.bootstrap);
     delete options.bootstrap;
 
-    const SidebarApp = require('@/components/sidebar-app')
-    SidebarApp.props.standalone.default = ! options.container
-    SidebarApp.props.collapseInitially.default = !! options.collapseInitially
+    Object.assign(SidebarApp.props, {
+      standalone: { default: !options.container },
+      collapseInitially: { default: Boolean(options.collapseInitially) },
+    });
 
     //
     // Override l10n

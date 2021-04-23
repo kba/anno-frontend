@@ -17,6 +17,7 @@
 const eventBus = require('@/event-bus')
 const HelpButton = require('@/components/help-button')
 const $ = require('jquery')
+const bootstrapCompat = require('../../bootstrap-compat');
 
 module.exports = {
     mixins: [
@@ -27,7 +28,8 @@ module.exports = {
     ],
     components: {HelpButton},
     data() {return {
-        collapsed: 'hide'
+        collapsed: 'hide',
+        bootstrapOpts: bootstrapCompat.sharedConfig,
     }},
     template: require('./anno-list.html'),
     style: require('./anno-list.scss'),

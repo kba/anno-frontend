@@ -65,39 +65,33 @@
     </button>
 
     <!-- {{ sortedBy }} -->
-    <template v-for="dropdown in [{
-      criterionProps: [
+    <component :is="bootstrapOpts.tags.dropdownMenu"
+      role="menu" class="sort-criterion-dropdown-menu
+        dropdown-menu dropdown-menu-small small sort-menu">
+      <template v-for="sortProp in [
         'created',
         'modified',
         'title',
         'creator',
-      ],
-      criterionDirections: [
-        'az',
-        'za',
-      ],
-    }]">
-    <component :is="bootstrapOpts.tags.dropdownMenu"
-      role="menu" class="sort-criterion-dropdown-menu
-        dropdown-menu dropdown-menu-small small sort-menu">
-      <component :is="bootstrapOpts.tags.dropdownMenuItem" v-for="
-        criterion in [].concat(...dropdown.criterionProps.map(
-          prop => dropdown.criterionDirections.map(
-            dir => ({ prop, dir, idname: `${prop}_${dir}` })
-          )
-        ))"
-        :class="{
-          btn: true,
-          'btn-xs': true,
-          'btn-primary': (sortedBy === criterion.idname),
-        }"
-        @click="sort(criterion.idname)"
-        :data-sort-criterion-prop="criterion.prop"
-        :data-sort-criterion-direction="criterion.dir"
-        :data-sort-criterion-idname="criterion.idname"
-        >{{ l10n('sort_' + criterion.idname) }}</component>
-    </component>
-    </template>
+      ]">
+      <component :is="bootstrapOpts.tags.dropdownMenuItem"
+        v-for="sortOrder in ['az', 'za']"
+        :key="`sort_${sortProp}_${sortOrder}`"
+        :class="[
+          'criterion',
+          'btn',
+          'btn-xs',
+          ((sortedBy === `${sortProp}_${sortOrder}`) && 'btn-primary'),
+          'sort-prop-' + sortProp,
+          'sort-order-' + sortOrder,
+        ].filter(Boolean)"
+        @click="sort(`${sortProp}_${sortOrder}`)"
+        :data-sort-prop="sortProp"
+        :data-sort-order="sortOrder"
+        >{{ l10n(`sort_${sortProp}_${sortOrder}`)
+        }}</component><!-- sortOrder -->
+      </template><!-- sortProp -->
+    </component><!-- dropdownMenu -->
 
   </div>
 
