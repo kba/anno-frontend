@@ -45,6 +45,7 @@
     "html-loader": "^0.5.5",
     "node-sass": "^4.13.0",
     "sass-loader": "^8.0.0",
+    "semtonotes-client": "0.2.3",
     "style-loader": "^1.0.1",
     "tap": "^14.10.0",
     "url-loader": "^3.0.0",
