@@ -53,6 +53,10 @@ function deploy_to () {
     )
   [ -d "$SUBDIR" ] || mkdir -- "$SUBDIR" || return $?$(
     echo "E: failed to mkdir $SUBDIR" >&2)
+  echo -n 'Upload zipball: '
+  cp --verbose --no-target-directory \
+    -- "$ZIP_ABS" "$SUBDIR"/pack.zip || return $?$(
+    echo "E: failed to upload zipball to $SUBDIR" >&2)
   ( cd "$SUBDIR" && unzip "${UNZIP_OPTS[@]}" -- "$ZIP_ABS" ) || return $?$(
     echo "E: failed to deploy to $SUBDIR" >&2)
   echo "Deployed to: $SUBDIR"
