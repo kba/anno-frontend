@@ -67,7 +67,12 @@
     <!-- {{ sortedBy }} -->
     <component :is="bootstrapOpts.tags.dropdownMenu"
       role="menu" class="sort-criterion-dropdown-menu
-        dropdown-menu dropdown-menu-small small sort-menu">
+        dropdown-menu
+        dropdown-menu-small
+        dropdown-menu-right
+        small
+        sort-menu
+        ">
       <template v-for="sortProp in [
         'created',
         'modified',
@@ -80,7 +85,8 @@
         :class="[
           'criterion',
           'btn',
-          'btn-xs',
+          'btn-sm',
+          'text-nowrap',
           ((sortedBy === `${sortProp}_${sortOrder}`) && 'btn-primary'),
           'sort-prop-' + sortProp,
           'sort-order-' + sortOrder,
@@ -88,8 +94,10 @@
         @click="sort(`${sortProp}_${sortOrder}`)"
         :data-sort-prop="sortProp"
         :data-sort-order="sortOrder"
-        >{{ l10n(`sort_${sortProp}_${sortOrder}`)
-        }}</component><!-- sortOrder -->
+        >{{ l10n(`sort_prop_${sortProp}`) }}
+          <span :title="l10n(`sort_order_word_${sortOrder}`)"
+            >{{ l10n(`sort_order_symbol_${sortOrder}`) }}</span>
+          </component><!-- sortOrder -->
       </template><!-- sortProp -->
     </component><!-- dropdownMenu -->
 
