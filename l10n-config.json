@@ -1,4 +1,4 @@
-{
+﻿{
     "defaultlang": "de",
     "langcode": {
         "en":  "en",
@@ -53,7 +53,7 @@
             "reply":               "Antworten",
             "save":                "Speichern",
             "iiif_link":           "Bildausschnitt (IIIF-Link)",
-            "showref":             "Bildbez\u00fcge anzeigen",
+            "showref":             "Bildbezüge anzeigen",
             "showrefalways":       "Immer",
             "showrefdefault":      "Standard",
             "showrefnever":        "Nie",
@@ -76,25 +76,25 @@
             "annoeditor_mode_revise": "Bearbeiten der Annotation",
             "annoeditor_mode_reply": "Antworten auf Annotation",
 
-            "add_relationlink":          "Link hinzuf\u00fcgen",
-            "delete_relationlink":       "Link l\u00f6schen",
+            "add_relationlink":          "Link hinzufügen",
+            "delete_relationlink":       "Link löschen",
             "relationlink":              "Link",
             "relationlinks":             "Links",
             "relationlink_url":          "Link (URL)",
             "relationlink_title":        "Link-Titel",
 
-            "add_semtag":          "Schlagwort hinzuf\u00fcgen",
-            "delete_semtag":       "Schlagwort l\u00f6schen",
+            "add_semtag":          "Schlagwort hinzufügen",
+            "delete_semtag":       "Schlagwort löschen",
             "semtag":              "Schlagwort",
             "semtags":             "Schlagworte",
 
-            "add_tag":             "Stichwort hinzuf\u00fcgen",
-            "delete_tag":          "Stichwort l\u00f6schen",
+            "add_tag":             "Stichwort hinzufügen",
+            "delete_tag":          "Stichwort löschen",
             "tag":                 "Stichwort",
             "tags":                "Stichworte",
 
-            "delete_anno":         "L\u00f6schen",
-            "confirm_delete":      "Sind sie sicher dass Sie die Annotation l\u00f6schen wollen?",
+            "delete_anno":         "Löschen",
+            "confirm_delete":      "Sind sie sicher dass Sie die Annotation löschen wollen?",
 
             "mint_doi":            "DOI registrieren",
 
@@ -107,10 +107,10 @@
             "http://www.w3.org/2000/01/rdf-schema#seeAlso": "siehe auch",
 
             "fmt_bold":        "Fett",
-            "fmt_size":        "Schriftgr\u00f6\u00dfe",
+            "fmt_size":        "Schriftgröße",
             "fmt_size_small":  "Klein",
             "fmt_size_normal": "Normal",
-            "fmt_size_large":  "Gro\u00df",
+            "fmt_size_large":  "Groß",
             "fmt_size_huge":   "Riesig"
 
         },
