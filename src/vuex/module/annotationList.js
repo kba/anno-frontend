@@ -30,7 +30,8 @@ const sorters = {
     creator_za: _sortAlpha('creator', -1),
 }
 
-module.exports = {
+
+const annoList = {
     state: {
         list: [],
         sortedBy: 'created_az',
@@ -78,3 +79,6 @@ module.exports = {
         },
     }
 }
+
+module.exports = annoList;
+// ^-- also found as annoApp.$store.state.annotationList
