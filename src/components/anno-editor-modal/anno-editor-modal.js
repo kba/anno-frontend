@@ -1,7 +1,3 @@
-const $ = require('jquery')
-const eventBus = require('@/event-bus')
-const HelpButton = require('@/components/help-button')
-
 /*
  * ### anno-editor-modal
  *
@@ -11,6 +7,11 @@ const HelpButton = require('@/components/help-button')
  *
  */
 
+const $ = require('jquery')
+const eventBus = require('@/event-bus')
+const HelpButton = require('@/components/help-button')
+const bootstrapCompat = require('../../bootstrap-compat');
+
 module.exports = {
     mixins: [
         require('@/mixin/l10n'),
@@ -18,6 +19,9 @@ module.exports = {
         require('@/mixin/prefix'),
     ],
     components: {HelpButton},
+    data() {return {
+      bootstrapOpts: bootstrapCompat.sharedConfig,
+    }},
     props: {
         draggable: {type: Boolean, default: true},
         resizable: {type: Boolean, default: true},
@@ -76,7 +80,7 @@ module.exports = {
     methods: {
         editMode() {return this.$store.state.editMode},
         save() {eventBus.$emit('save')},
-        remove() {eventBus.$emit('remove', this.id)},        
+        remove() {eventBus.$emit('remove', this.id)},
         discard() {eventBus.$emit('discard')},
         startHighlighting(...args) {eventBus.$emit('startHighlighting', ...args)},
         stopHighlighting(...args) {eventBus.$emit('stopHighlighting', ...args)},

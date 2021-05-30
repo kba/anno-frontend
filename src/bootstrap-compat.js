@@ -11,12 +11,14 @@ const defaultTagsByBsMajorVer = {
   '3': {
     dropdownMenu: 'ul',
     dropdownMenuItem: 'li',
+    modalHeaderTitle: 'h4',
   },
   '4': {
     dropdownMenu: 'div',
     dropdownMenuItem: 'a',
     // ul+li seems to work for BS4 as well and would be more semantic,
     // but I couldn't find official compatibility info in the BS4 docs.
+    modalHeaderTitle: 'h5',
   },
 };
 

@@ -2,10 +2,18 @@
   <ul class="nav nav-tabs">
     <li role="presentation"
       v-for="tab in tablist"
-      :class="{'active':tab.active}"
+      :class="{
+        active: tab.active,
+        'nav-item': true,
+        }"
       >
 
-        <a :href="'#' + tab.name" :aria-controls="tab.name" role="tab" data-toggle="tab" @click='clickHandler'>
+        <a :href="'#' + tab.name"
+          class="nav-link"
+          :aria-controls="tab.name"
+          role="tab"
+          data-toggle="tab"
+          @click='clickHandler'>
           {{tab.title}}
 
         <help-button v-if="tab.topic"
