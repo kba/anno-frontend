@@ -50,7 +50,7 @@
       <div class="media-body">
 
         <div>
-          <button class="btn btn-xs" v-for="aCreator of ensureArray('creator')">
+          <button class="btn btn-sm" v-for="aCreator of ensureArray('creator')">
             <template v-if="aCreator.icon">
               <img class="media-object" style="display: inline" :src="aCreator.icon" alt="Logo" width="15px" height="15px">
             </template>
@@ -65,19 +65,19 @@
             </template>
           </button>
           <button
-            class="annoeditor-date btn btn-xs"
+            class="annoeditor-date btn btn-sm"
             :title="`${l10n('Created')}: ${created}\n${l10n('Modified')}: ${modified}`">
             {{ dateformat(created) }}
           </button>
 
-          <button class="btn btn-xs"
+          <button class="btn btn-sm"
             data-toggle="popover"
             data-html="true"
             data-placement="left"
             data-focus-dismiss
             :title="l10n('purl')"
             :data-content='`
-            <button data-clipboard-text="${purl}" class="btn btn-default btn-xs">
+            <button data-clipboard-text="${purl}" class="btn btn-default btn-sm">
               <span class="fa fa-clipboard"></span>
               <span class="label label-success" style="display: none">${l10n("copied_to_clipboard")}</span>
             </button>
@@ -86,7 +86,7 @@
             <span class="glyphicon glyphicon-link"></span>
           </button>
 
-          <button class="btn btn-xs"
+          <button class="btn btn-sm"
             v-if="rights"
             data-toggle="popover"
             data-html="false"
@@ -105,7 +105,7 @@
             </template>
             <template v-else>§</template>
           </button>
-          <button class="btn btn-xs"
+          <button class="btn btn-sm"
             v-if="annotation.doi"
             data-toggle="popover"
             data-html="true"
@@ -155,13 +155,13 @@
         </div>
 
         <div v-show="iiifLink && $store.state.enableIIIF" class="annoeditor-iiif-link">
-          <button class="btn btn-xs"
+          <button class="btn btn-sm"
             data-toggle="popover"
             data-html="true"
             data-placement="left"
             :title="l10n('iiif_link')"
             :data-content='`
-            <button data-clipboard-text="${purl}" class="btn btn-default btn-xs">
+            <button data-clipboard-text="${purl}" class="btn btn-default btn-sm">
               <span class="fa fa-clipboard"></span>
               <span class="label label-success" style="display: none">${l10n("copied_to_clipboard")}</span>
             </button>
@@ -190,12 +190,12 @@
     <div class="btn-toolbar pull-right" role="toolbar" style="margin-top: 10px;">
       <div class="btn-group btn-group-xs pull-right" role="group">
         <button v-if="!annotation.doi && $auth('mintDoi', id)"
-            class="btn btn-default btn-xs"
+            class="btn btn-default btn-sm"
             data-toggle="popover"
             data-focus-dismiss
             :data-content= '`
-            <button data-click="mintDoi" class="btn btn-xs btn-success">Yes</button>
-            <button data-click="close" class="btn btn-xs btn-default">No</button>`'
+            <button data-click="mintDoi" class="btn btn-sm btn-success">Yes</button>
+            <button data-click="close" class="btn btn-sm btn-default">No</button>`'
             data-html="true"
             data-placement = "auto left"
             data-trigger = "manual"
