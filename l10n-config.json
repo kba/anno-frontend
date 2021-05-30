@@ -47,7 +47,7 @@
             "new":                 "Neue Annotation",
             "no_annotations_yet":  "Noch keine Annotationen",
             "open_all":            "Alle öffnen",
-            "previous_version":    "Alle Versionen",
+            "versions_dropdown":   "Versionen",
             "newer_version":       "Es ist eine neuere Version verfügbar.",
             "purl":                "Annotation: Persistente URL",
             "reply":               "Antworten",
