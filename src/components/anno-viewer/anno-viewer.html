@@ -1,9 +1,13 @@
 <div :id="`${prefix}-${slug}`"
-  :class="`panel panel-default annoeditor-viewer
-     ${highlighted ? 'annoeditor-highlight' : ''}
-     ${isPurl ? 'annoeditor-purl' : ''}
-     ${asReply ? 'annoeditor-reply' : ''}
-     `"
+  :class="[
+    'card',
+    'panel',
+    'panel-default',
+    'annoeditor-viewer',
+    (this.highlighted && 'annoeditor-highlight'),
+    (this.isPurl && 'annoeditor-purl'),
+    (this.asReply && 'annoeditor-reply'),
+  ].filter(Boolean)"
   v-on:mouseover.prevent="mouseenter"
   v-on:mouseleave.prevent="mouseleave">
 
