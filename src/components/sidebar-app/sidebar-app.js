@@ -13,6 +13,9 @@
  *
  *
  */
+
+const bootstrapCompat = require('../../bootstrap-compat');
+
 module.exports = {
     props: {
         collapseInitially: {type: Boolean, default: false},
@@ -26,7 +29,7 @@ module.exports = {
     template: require('./sidebar-app.html'),
     data() {return {
         collapsed: this.collapseInitially,
-        bootstrapOpts: this.bootstrapOpts,
+        bootstrapOpts: bootstrapCompat.sharedConfig,
     }},
     computed: {
         numberOfAnnotations() {return this.$store.getters.numberOfAnnotations},

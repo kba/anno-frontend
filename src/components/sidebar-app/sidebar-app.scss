@@ -36,6 +36,10 @@
   }
 }
 
+.annoeditor-sidebar[bsvermajor="4"] {
+  .badge.label:before { content: "\1F3F7  "; }
+}
+
 .modal-backdrop {
     z-index: 999 !important;
 }

@@ -23,10 +23,12 @@ const defaultTagsByBsMajorVer = {
 function thr0w(e) { throw e; }
 
 function initialize(customOpt) {
-  mergeOptions.call(cfg, customOpt);
+  Object.assign(cfg, mergeOptions.call({ ignoreUndefined: true },
+    cfg, customOpt));
   const dfTags = (defaultTagsByBsMajorVer[cfg.version.major]
     || thr0w(new Error('Unsupported bootstrap version!')));
   cfg.tags = mergeOptions(dfTags, cfg.tags);
+  Object.freeze(cfg);
 }
 
 
