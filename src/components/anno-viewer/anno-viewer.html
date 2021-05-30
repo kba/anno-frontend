@@ -77,7 +77,7 @@
             data-focus-dismiss
             :title="l10n('purl')"
             :data-content='`
-            <button data-clipboard-text="${purl}" class="btn btn-default btn-sm">
+            <button data-clipboard-text="${purl}" class="btn btn-default btn-outline-secondary btn-sm">
               <span class="fa fa-clipboard"></span>
               <span class="label label-success" style="display: none">${l10n("copied_to_clipboard")}</span>
             </button>
@@ -161,7 +161,7 @@
             data-placement="left"
             :title="l10n('iiif_link')"
             :data-content='`
-            <button data-clipboard-text="${purl}" class="btn btn-default btn-sm">
+            <button data-clipboard-text="${purl}" class="btn btn-default btn-outline-secondary btn-sm">
               <span class="fa fa-clipboard"></span>
               <span class="label label-success" style="display: none">${l10n("copied_to_clipboard")}</span>
             </button>
@@ -190,12 +190,12 @@
     <div class="btn-toolbar pull-right" role="toolbar" style="margin-top: 10px;">
       <div class="btn-group btn-group-xs pull-right" role="group">
         <button v-if="!annotation.doi && $auth('mintDoi', id)"
-            class="btn btn-default btn-sm"
+            class="btn btn-default btn-outline-secondary btn-sm"
             data-toggle="popover"
             data-focus-dismiss
             :data-content= '`
             <button data-click="mintDoi" class="btn btn-sm btn-success">Yes</button>
-            <button data-click="close" class="btn btn-sm btn-default">No</button>`'
+            <button data-click="close" class="btn btn-sm btn-default btn-outline-secondary">No</button>`'
             data-html="true"
             data-placement = "auto left"
             data-trigger = "manual"
@@ -217,7 +217,7 @@
         <br>
         <div v-if="numberOf('hasVersion') > 1"
           class="dropdown btn-group-xs annoeditor-versions">
-          <a class="btn btn-default dropdown-toggle"
+          <a class="btn btn-default btn-outline-secondary dropdown-toggle"
             data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="true">
             <span class="fa fa-history"></span>

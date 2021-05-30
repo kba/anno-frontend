@@ -9,7 +9,7 @@
     </a>
 
     <a v-if="!isLoggedIn && loginEndpoint"
-      class="btn btn-sm btn-default"
+      class="btn btn-sm btn-default btn-outline-secondary"
       :href="loginEndpoint"
       >
       {{ l10n('login') }}
@@ -52,15 +52,15 @@
 
   <div class="btn-group btn-group-vertical pull-right hidden-print" role="group">
 
-    <button v-if="collapsed && numberOfAnnotations > 0" class="btn btn-default btn-sm" @click="collapseAll('show')">
+    <button v-if="collapsed && numberOfAnnotations > 0" class="btn btn-default btn-outline-secondary btn-sm" @click="collapseAll('show')">
       <span class="fa fa-plus"></span>&nbsp;{{ l10n('open_all') }}
     </button>
 
-    <button v-if="! collapsed && numberOfAnnotations > 0" class="btn btn-default btn-sm" @click="collapseAll('hide')">
+    <button v-if="! collapsed && numberOfAnnotations > 0" class="btn btn-default btn-outline-secondary btn-sm" @click="collapseAll('hide')">
       <span class="fa fa-minus"></span>&nbsp;{{ l10n('close_all') }}
     </button>
 
-    <button v-if="numberOfAnnotations > 0" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" @click="collapseAll('hide')">
+    <button v-if="numberOfAnnotations > 0" class="btn btn-default btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown" @click="collapseAll('hide')">
       <span class="fa fa-sort"></span>&nbsp;{{ l10n('sort') }} <span class="caret"></span>
     </button>
 

@@ -163,7 +163,7 @@ module.exports = {
           ret += l10n('doi.of.annotation')
           ret += ': <br/>'
           ret += `
-            <button data-clipboard-text="https://doi.org/${toplevelDoi}" class="btn btn-default btn-sm">
+            <button data-clipboard-text="https://doi.org/${toplevelDoi}" class="btn btn-default btn-outline-secondary btn-sm">
               <span class="fa fa-clipboard"></span>
               <span class="label label-success" style="display: none">${l10n("copied_to_clipboard")}</span>
             </button>
@@ -178,7 +178,7 @@ module.exports = {
             ret += l10n('doi.of.annotation.revision')
             ret += ':<br/>'
             ret += `
-            <button data-clipboard-text="https://doi.org/${versionDoi}" class="btn btn-default btn-sm">
+            <button data-clipboard-text="https://doi.org/${versionDoi}" class="btn btn-default btn-outline-secondary btn-sm">
               <span class="fa fa-clipboard"></span>
               <span class="label label-success" style="display: none">${l10n("copied_to_clipboard")}</span>
             </button>
