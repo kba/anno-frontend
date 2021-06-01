@@ -4,15 +4,18 @@ const path = require('path')
 module.exports = {
     entry: "./entry.js",
     devtool: 'source-map',
-    node: {fs: 'empty'},
+    // node: {fs: 'empty'},
     // target: 'node',
     output: {
         path: __dirname + "/dist",
         filename: `anno-frontend.js`,
     },
+    optimization: {
+        moduleIds: 'deterministic',
+    },
     devServer: {
         publicPath: '/dist/',
-        compress: true
+        compress: true,
     },
     externals: {
         'jquery': "$",
@@ -29,7 +32,8 @@ module.exports = {
     resolve: {
         alias: {
             '@': path.join(__dirname, 'src'),
-            'vue$': 'vue/dist/vue.esm.js',
+            // 'vue$': 'vue/dist/vue.esm.js',
+            'vue$': 'vuejs-debug-traverse-210506-pmb/vue.esm.js',
             'vuex$': 'vuex/dist/vuex.esm.js',
             'quill$': 'quill/dist/quill.min.js',
             // 'axios': 'axios/dist/axios.min.js',

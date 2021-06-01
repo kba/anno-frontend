@@ -172,5 +172,9 @@ module.exports = function displayAnnotations(customOptions) {
     //
     // Return the app for event emitting
     //
+    if (options.exportAppAsWindowProp) {
+      window[options.exportAppAsWindowProp] = annoapp;
+    }
+    if (options.onAppReady) { options.onAppReady(annoapp); }
     return annoapp
 }
