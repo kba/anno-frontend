@@ -1,9 +1,13 @@
 <div :id="`${prefix}-${slug}`"
-  :class="`panel panel-default annoeditor-viewer
-     ${highlighted ? 'annoeditor-highlight' : ''}
-     ${isPurl ? 'annoeditor-purl' : ''}
-     ${asReply ? 'annoeditor-reply' : ''}
-     `"
+  :class="[
+    'card',
+    'panel',
+    'panel-default',
+    'annoeditor-viewer',
+    (this.highlighted && 'annoeditor-highlight'),
+    (this.isPurl && 'annoeditor-purl'),
+    (this.asReply && 'annoeditor-reply'),
+  ].filter(Boolean)"
   v-on:mouseover.prevent="mouseenter"
   v-on:mouseleave.prevent="mouseleave">
 
@@ -50,7 +54,7 @@
       <div class="media-body">
 
         <div>
-          <button class="btn btn-xs" v-for="aCreator of ensureArray('creator')">
+          <button class="btn btn-sm" v-for="aCreator of ensureArray('creator')">
             <template v-if="aCreator.icon">
               <img class="media-object" style="display: inline" :src="aCreator.icon" alt="Logo" width="15px" height="15px">
             </template>
@@ -65,19 +69,19 @@
             </template>
           </button>
           <button
-            class="annoeditor-date btn btn-xs"
+            class="annoeditor-date btn btn-sm"
             :title="`${l10n('Created')}: ${created}\n${l10n('Modified')}: ${modified}`">
             {{ dateformat(created) }}
           </button>
 
-          <button class="btn btn-xs"
+          <button class="btn btn-sm"
             data-toggle="popover"
             data-html="true"
             data-placement="left"
             data-focus-dismiss
             :title="l10n('purl')"
             :data-content='`
-            <button data-clipboard-text="${purl}" class="btn btn-default btn-xs">
+            <button data-clipboard-text="${purl}" class="btn btn-default btn-outline-secondary btn-sm">
               <span class="fa fa-clipboard"></span>
               <span class="label label-success" style="display: none">${l10n("copied_to_clipboard")}</span>
             </button>
@@ -86,7 +90,7 @@
             <span class="glyphicon glyphicon-link"></span>
           </button>
 
-          <button class="btn btn-xs"
+          <button class="btn btn-sm"
             v-if="rights"
             data-toggle="popover"
             data-html="false"
@@ -105,7 +109,7 @@
             </template>
             <template v-else>§</template>
           </button>
-          <button class="btn btn-xs"
+          <button class="btn btn-sm"
             v-if="annotation.doi"
             data-toggle="popover"
             data-html="true"
@@ -141,7 +145,7 @@
         </template>
 
         <div class="annoeditor-tags">
-          <span class="annoeditor-tag label label-default" v-for="tagBody in simpleTagBodies">
+          <span class="annoeditor-tag label label-default badge badge-secondary" v-for="tagBody in simpleTagBodies">
             <span class="glyphicon glyphicon-tag"></span> {{ tagBody.value || tagBody.label }}
           </span>
         </div>
@@ -155,13 +159,13 @@
         </div>
 
         <div v-show="iiifLink && $store.state.enableIIIF" class="annoeditor-iiif-link">
-          <button class="btn btn-xs"
+          <button class="btn btn-sm"
             data-toggle="popover"
             data-html="true"
             data-placement="left"
             :title="l10n('iiif_link')"
             :data-content='`
-            <button data-clipboard-text="${purl}" class="btn btn-default btn-xs">
+            <button data-clipboard-text="${purl}" class="btn btn-default btn-outline-secondary btn-sm">
               <span class="fa fa-clipboard"></span>
               <span class="label label-success" style="display: none">${l10n("copied_to_clipboard")}</span>
             </button>
@@ -188,14 +192,14 @@
       </div>
     </transition>
     <div class="btn-toolbar pull-right" role="toolbar" style="margin-top: 10px;">
-      <div class="btn-group btn-group-xs pull-right" role="group">
+      <div class="btn-group btn-group-sm pull-right" role="group">
         <button v-if="!annotation.doi && $auth('mintDoi', id)"
-            class="btn btn-default btn-xs"
+            class="btn btn-default btn-outline-secondary btn-sm"
             data-toggle="popover"
             data-focus-dismiss
             :data-content= '`
-            <button data-click="mintDoi" class="btn btn-xs btn-success">Yes</button>
-            <button data-click="close" class="btn btn-xs btn-default">No</button>`'
+            <button data-click="mintDoi" class="btn btn-sm btn-success">Yes</button>
+            <button data-click="close" class="btn btn-sm btn-default btn-outline-secondary">No</button>`'
             data-html="true"
             data-placement = "auto left"
             data-trigger = "manual"
@@ -211,27 +215,33 @@
         <bootstrap-button btn-class="default" @click="reply" font-awesome="reply" v-if="$auth('create', id)">
           {{ l10n('comment') }}
         </bootstrap-button>
-        <bootstrap-button btn-class="danger" @click="remove" font-awesome="trash-o" v-if="$auth('remove', id)"
-         :title="l10n('delete_anno')"/>
-
-        <br>
-        <div v-if="numberOf('hasVersion') > 1"
-          class="dropdown btn-group-xs annoeditor-versions">
-          <a class="btn btn-default dropdown-toggle"
+        <div
+          v-if="numberOf('hasVersion') >= 1"
+          class="
+          dropdown
+          btn-group-sm
+          version-history-dropdown-trigger
+          ">
+          <a class="btn btn-default btn-outline-secondary dropdown-toggle"
             data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="true">
             <span class="fa fa-history"></span>
-            {{ l10n('previous_version') }}
+            {{ l10n('versions_dropdown') }} ({{ numberOf('hasVersion') }})
             <span class="caret"></span>
           </a>
           <component :is="bootstrapOpts.tags.dropdownMenu"
-            role="menu" class="version-history-dropdown-menu
-              dropdown-menu dropdown-menu-right annoeditor-versions">
+            role="menu" class="
+              version-history-dropdown-menu
+              dropdown-menu
+              dropdown-menu-right
+              small
+              ">
             <component :is="bootstrapOpts.tags.dropdownMenuItem"
               v-for="version in annotation.hasVersion"
               :key="version.id"
               :class="{
                 active: versionIsShown(version),
+                'text-nowrap': true,
                 small: true,
               }"
               @click="setToVersion(version)"
@@ -242,16 +252,18 @@
               <template v-if="versionIsShown(version)"
                 >&nbsp; ({{ l10n("active_version") }})</template>
             </component><!-- dropdownMenuItem -->
-          </component><!-- dropdownMenu -->
-        </div>
+          </component><!-- version-history-dropdown-menu -->
+        </div><!-- version-history-dropdown-trigger -->
+
+        <bootstrap-button btn-class="danger" @click="remove" font-awesome="trash-o" v-if="$auth('remove', id)"
+         :title="l10n('delete_anno')"/>
 
       </div>
-    </div>
-
-    <div style="clear: both; margin-bottom: 2px;"></div>
+      <div class="toolbar-end-clear" style="clear: both;"></div>
+    </div><!-- btn-toolbar -->
 
     <template v-if="numberOf('hasReply') > 0">
-
+      <div class="comment-separator" style="margin-bottom: 2px;"></div>
       <anno-viewer
         v-for="reply in annotation.hasReply"
         :key="reply.id"

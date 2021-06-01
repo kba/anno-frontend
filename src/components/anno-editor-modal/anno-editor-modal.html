@@ -3,32 +3,52 @@
     <div class="modal-content">
       <div class="modal-header">
 
-        <button type="button" class="close" aria-label="Close" @click="discard"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="close"
+          v-if="bootstrapOpts.version.major < 4"
+          data-dismiss="modal"
+          aria-label="Close"
+          @click="discard"
+          ><span aria-hidden="true">&times;</span>
+        </button>
 
         <!-- <h4>{{ l10n('annoeditor') }}</h4> -->
-        <h4 v-if="editMode === 'create'">
+        <component :is="bootstrapOpts.tags.modalHeaderTitle"
+          class="modal-title"
+          v-if="editMode === 'create'">
           {{ l10n(`annoeditor_mode_create`) }}
-        </h4>
-        <h4 v-if="editMode === 'revise'">
+        </component>
+        <component :is="bootstrapOpts.tags.modalHeaderTitle"
+          class="modal-title"
+          v-if="editMode === 'revise'">
           {{ l10n(`annoeditor_mode_revise`) }}
           <a
             @mouseenter="startHighlighting(id)"
             @mouseleave="stopHighlighting(id)"
             >{{ purl(id) }}</a>
-        </h4>
-        <h4 v-if="editMode === 'reply'">
+        </component>
+        <component :is="bootstrapOpts.tags.modalHeaderTitle"
+          class="modal-title"
+          v-if="editMode === 'reply'">
           {{ l10n(`annoeditor_mode_reply`) }}
           <a
             @mouseenter="startHighlighting(replyTo)"
             @mouseleave="stopHighlighting(replyTo)"
             >{{ purl(replyTo) }}</a>
-        </h4>
+        </component>
 
         <div class="pull-right">
           <bootstrap-button btn-class="primary" @click="save">
             {{ l10n('save') }}
           </bootstrap-button>
         </div>
+
+        <button type="button" class="close"
+          v-if="bootstrapOpts.version.major >= 4"
+          data-dismiss="modal"
+          aria-label="Close"
+          @click="discard"
+          ><span aria-hidden="true">&times;</span>
+        </button>
 
         <div style="clear: both;"></div>
 

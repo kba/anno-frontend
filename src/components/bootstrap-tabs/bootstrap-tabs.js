@@ -20,13 +20,11 @@ module.exports = {
       helpUrlManual: {type: String, required: false},
     },
     mounted() {
-        this.$children.forEach( c => {
-            this.tablist.push({
-                name: c.name,
-                title: c.title,
-                active: c.active,
-                topic: c.topic,
-            })
-        })
+      this.tablist = this.$children.map(c => ({
+          name: c.name,
+          title: c.title,
+          active: c.active,
+          topic: c.topic,
+      }))
     }
 }

@@ -1,7 +1,7 @@
 <div class="annoeditor-list">
   <div class="btn-group pull-left hidden-print" role="group">
     <a v-if="isLoggedIn && enableLogoutButton"
-      class="btn btn-xs btn-warning"
+      class="btn btn-sm btn-warning"
       @click.stop="logout"
       :href="tokenDecoded.sub"
       >
@@ -9,7 +9,7 @@
     </a>
 
     <a v-if="!isLoggedIn && loginEndpoint"
-      class="btn btn-xs btn-default"
+      class="btn btn-sm btn-default btn-outline-secondary"
       :href="loginEndpoint"
       >
       {{ l10n('login') }}
@@ -23,13 +23,13 @@
       />
 
     <button v-if="$auth('create', targetSource)"
-      class="btn btn-xs btn-success"
+      class="btn btn-sm btn-success"
       @click="create"
       >
       {{ l10n('new') }}
     </button>
 
-    <a class="btn btn-xs btn-danger"
+    <a class="btn btn-sm btn-danger"
       :href="requestEndpoint"
       v-if="isLoggedIn && ! $auth('create', targetSource)"
       >
@@ -52,15 +52,15 @@
 
   <div class="btn-group btn-group-vertical pull-right hidden-print" role="group">
 
-    <button v-if="collapsed && numberOfAnnotations > 0" class="btn btn-default btn-xs" @click="collapseAll('show')">
+    <button v-if="collapsed && numberOfAnnotations > 0" class="btn btn-default btn-outline-secondary btn-sm" @click="collapseAll('show')">
       <span class="fa fa-plus"></span>&nbsp;{{ l10n('open_all') }}
     </button>
 
-    <button v-if="! collapsed && numberOfAnnotations > 0" class="btn btn-default btn-xs" @click="collapseAll('hide')">
+    <button v-if="! collapsed && numberOfAnnotations > 0" class="btn btn-default btn-outline-secondary btn-sm" @click="collapseAll('hide')">
       <span class="fa fa-minus"></span>&nbsp;{{ l10n('close_all') }}
     </button>
 
-    <button v-if="numberOfAnnotations > 0" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" @click="collapseAll('hide')">
+    <button v-if="numberOfAnnotations > 0" class="btn btn-default btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown" @click="collapseAll('hide')">
       <span class="fa fa-sort"></span>&nbsp;{{ l10n('sort') }} <span class="caret"></span>
     </button>
 
@@ -106,22 +106,19 @@
     <div style="clear: both;"></div>
 
 
-    <div style="text-align: left; margin: 5px; margin-top: 0;">
-
-      <div class="panel-group">
-        <anno-viewer v-for="annotation in list" :key="annotation.id"
-          :annotation="annotation"
-          :purl-template="purlTemplate"
-          :purl-id="purlId"
-          :as-reply=false
-          :image-width="$store.state.targetImageWidth"
-          :image-height="$store.state.targetImageHeight"
-          :thumb-stroke-color="$store.state.thumbStrokeColor"
-          :thumb-fill-color="$store.state.thumbStrokeColor"
-          :iiif-url-template="$store.state.iiifUrlTemplate"
-          >
-        </anno-viewer>
-      </div>
+    <div class="panel-group">
+      <anno-viewer v-for="annotation in list" :key="annotation.id"
+        :annotation="annotation"
+        :purl-template="purlTemplate"
+        :purl-id="purlId"
+        :as-reply=false
+        :image-width="$store.state.targetImageWidth"
+        :image-height="$store.state.targetImageHeight"
+        :thumb-stroke-color="$store.state.thumbStrokeColor"
+        :thumb-fill-color="$store.state.thumbStrokeColor"
+        :iiif-url-template="$store.state.iiifUrlTemplate"
+        >
+      </anno-viewer>
     </div>
 
     <anno-editor-modal ref='modal-editor' :editor-id="`${prefix}-modal-editor`" />
