@@ -11,7 +11,10 @@
 </head><body>
 
 <div class="container-fluid"><div class="row"><div class="col-md-12">
-  <div id="anno-anchor"></div>
+  <div id="anno-app-container"></div>
+  <p id="tests-toolbar-bottom">
+    <input type="button" value="Load fixture annotations">
+  </p>
 </div></div></div>
 
 <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
@@ -27,7 +30,12 @@
 <style>
   @import url("../../node_modules/bootstrap3/dist/css/bootstrap.min.css");
   @import url("../../node_modules/font-awesome/css/font-awesome.min.css");
+
+  @import url("tests.defaults.css");
+  @import url("../../.git/@/config-override/tests.css");
+  @import url("../../../anno-local/config-override/tests.css");
 </style>
+
 <script src="../../node_modules/bootstrap3/dist/js/bootstrap.min.js"></script>
 <script src="../../node_modules/quill/dist/quill.js"></script>
 <script src="../../node_modules/axios/dist/axios.js"></script>
@@ -41,7 +49,6 @@
 <script type="text/javascript">
 displayAnnotations(Object.assign({}, window.annoServerCfg, window.annoTestCfg, {
   bootstrap: { version: { major: 3 } },
-  container: document.getElementById('anno-anchor'),
 }));
 </script>
 </body></html>

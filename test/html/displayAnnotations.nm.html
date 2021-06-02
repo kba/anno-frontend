@@ -19,7 +19,10 @@
 </head><body>
 
 <div class="container-fluid"><div class="row"><div class="col-md-12">
-  <div id="anno-anchor"></div>
+  <div id="anno-app-container"></div>
+  <p id="tests-toolbar-bottom">
+    <input type="button" value="Load fixture annotations">
+  </p>
 </div></div></div>
 
 <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
@@ -35,6 +38,10 @@
 <style>
   @import url("../../node_modules/bootstrap/dist/css/bootstrap.min.css");
   @import url("../../node_modules/font-awesome/css/font-awesome.min.css");
+
+  @import url("tests.defaults.css");
+  @import url("../../.git/@/config-override/tests.css");
+  @import url("../../../anno-local/config-override/tests.css");
 </style>
 <!-- [2021-04-16] Do not load popper.js separately. It fails with
   "TypeError: Popper__default.default is not a constructor".
@@ -53,7 +60,6 @@
 <script type="text/javascript">
 displayAnnotations(Object.assign({}, window.annoServerCfg, window.annoTestCfg, {
   // default: // bootstrap: { version: { major: 4 } },
-  container: document.getElementById('anno-anchor'),
 }));
 </script>
 </body></html>

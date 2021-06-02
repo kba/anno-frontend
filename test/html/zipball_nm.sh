@@ -7,7 +7,7 @@ function zipball_nm () {
   local SELFPATH="$(readlink -m -- "$BASH_SOURCE"/..)"
   cd -- "$SELFPATH"/../.. || return $?
 
-  local ZIP_FN='test.nm.snapshot.zip'
+  local ZIP_FN='tests.nm.snapshot.zip'
   local NM_HTML=(
     test/html/*.nm.html
     )
@@ -15,8 +15,13 @@ function zipball_nm () {
   readarray -t NM_DEPS < <(
     grep -hoPe '"(\.*/)*node_modules/[^"]+' -- "${NM_HTML[@]}" \
     | sed -re 's~^["./]+~~' | sort --version-sort --unique)
-  local TEST_DEPS=()
-  readarray -t TEST_DEPS < <(find test/ -type f -name '*.js')
+  local TEST_DEPS=(
+    -type f
+    '(' -name '*.js'
+      -o -name '*.css'
+      ')'
+    )
+  readarray -t TEST_DEPS < <(find test/ "${TEST_DEPS[@]}")
 
   local PACK_FILES=(
     "${NM_HTML[@]}"
