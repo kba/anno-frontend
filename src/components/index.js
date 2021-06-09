@@ -1,4 +1,4 @@
-const component = {
+const components = {
 
     // helpers
     'bootstrap-button':  require('./bootstrap-button'),
@@ -24,7 +24,7 @@ const component = {
 }
 
 function registerAll(Vue) {
-    Object.keys(component).forEach(name => Vue.component(name, component[name]))
+  Object.entries(components).forEach(kv => Vue.component(...kv))
 }
 
 module.exports = registerAll
