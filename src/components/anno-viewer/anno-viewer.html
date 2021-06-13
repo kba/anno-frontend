@@ -11,18 +11,18 @@
   v-on:mouseover.prevent="mouseenter"
   v-on:mouseleave.prevent="mouseleave">
 
-  <div v-if="!asReply"
-    class="panel-heading"
-    @click="collapse('toggle')"
-    >
-    <h4 class="panel-title">
+  <div v-if="!asReply" class="panel-heading">
+    <h4 class="panel-title" @click="collapse('toggle')">
+      <anno-viewer-thumbnail-svg
+        :svgTarget="this.svgTarget"
+        class="pull-right"
+        />
       <a role="button">
         <span class="fa fa-caret-right" v-show="collapsed"></span>
         <span class="fa fa-caret-down" v-show="!collapsed"></span>
         {{ title }}
       </a>
     </h4>
-    <anno-viewer-thumbnail-svg :svgTarget="this.svgTarget" />
   </div>
 
   <div class="panel-body" role="tabpanel" v-show="!collapsed">
