@@ -26,11 +26,8 @@
   </div>
 
   <div class="panel-body" role="tabpanel" v-show="!collapsed">
-
     <div class="media" style="height: auto;">
-
       <div class="media-body">
-
         <div>
           <button class="btn btn-sm" v-for="aCreator of ensureArray('creator')">
             <template v-if="aCreator.icon">
@@ -262,6 +259,6 @@
         :iiif-url-template="iiifUrlTemplate"
         />
 
-      </template>
-    </div>
+    </template>
+  </div><!-- /panel-body -->
 </div>
