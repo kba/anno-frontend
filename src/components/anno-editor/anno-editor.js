@@ -66,10 +66,10 @@ module.exports = {
     },
     methods: {
         save() {
-            const anno = this.$store.state.editing
+            const anno = this.$store.state.editing;
             if (!anno.title && this.editMode == 'create') {
-                window.alert("A title is required")
-                return
+                return window.alert(this.l10n('missing_required_field')
+                  + ' ' + this.l10n('annofield_title'));
             }
             const cb = (err, newAnno) => {
                 if (err) {
