@@ -13,10 +13,12 @@
 
   <div v-if="!asReply" class="panel-heading">
     <h4 class="panel-title" @click="collapse('toggle')">
+      <!-- 2021-06-10 temp. disable to reduce error log spam
       <anno-viewer-thumbnail-svg
         :svgTarget="this.svgTarget"
         class="pull-right"
         />
+      -->
       <a role="button">
         <span class="fa fa-caret-right" v-show="collapsed"></span>
         <span class="fa fa-caret-down" v-show="!collapsed"></span>
