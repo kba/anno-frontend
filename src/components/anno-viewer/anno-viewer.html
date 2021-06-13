@@ -169,8 +169,11 @@
       <strong>{{ l10n('mint_doi') }} Error:</strong> {{mintDoiError}}
       </div>
     </transition>
-    <div class="btn-toolbar pull-right" role="toolbar" style="margin-top: 10px;">
-      <div class="btn-group btn-group-sm pull-right" role="group">
+    <div role="toolbar"
+      class="btn-toolbar pull-right"
+      style="margin-top: 10px;">
+      <div role="group"
+        class="btn-group btn-group-sm pull-right">
         <button v-if="!annotation.doi && $auth('mintDoi', id)"
             class="btn btn-default btn-outline-secondary btn-sm"
             data-toggle="popover"
@@ -233,8 +236,13 @@
           </component><!-- version-history-dropdown-menu -->
         </div><!-- version-history-dropdown-trigger -->
 
-        <bootstrap-button btn-class="danger" @click="remove" font-awesome="trash-o" v-if="$auth('remove', id)"
-         :title="l10n('delete_anno')"/>
+        <bootstrap-button
+          @click="remove"
+          v-if="$auth('remove', id)"
+          :title="l10n('delete_anno')"
+          btn-class="danger"
+          font-awesome="trash-o"
+          />
 
       </div>
       <div class="toolbar-end-clear" style="clear: both;"></div>
