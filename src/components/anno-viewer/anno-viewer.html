@@ -209,20 +209,20 @@
             <span class="caret"></span>
           </a>
           <component :is="bootstrapOpts.tags.dropdownMenu"
-            role="menu" class="
-              version-history-dropdown-menu
-              dropdown-menu
-              dropdown-menu-right
-              small
-              ">
+            role="menu" :class="[
+              'version-history-dropdown-menu',
+              'dropdown-menu',
+              'dropdown-menu-right',
+              'small',
+              ]">
             <component :is="bootstrapOpts.tags.dropdownMenuItem"
               v-for="version in annotation.hasVersion"
               :key="version.id"
-              :class="{
-                active: versionIsShown(version),
-                'text-nowrap': true,
-                small: true,
-              }"
+              :class="[
+                (versionIsShown(version) && 'active'),
+                'text-nowrap',
+                'small',
+              ].filter(Boolean)"
               @click="setToVersion(version)"
             >
               <span class="glyphicon glyphicon-time"></span>
