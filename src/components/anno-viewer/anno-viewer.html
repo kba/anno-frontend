@@ -157,7 +157,8 @@
 
     <!-- navigation -->
 
-    <div style="clear: both; margin-bottom: 2px;"></div>
+    <div class="navigation-separator"
+      style="clear: both; margin-bottom: 2px;"></div>
     <transition name="fade">
       <div class="alert alert-danger fade" :class="{in: mintDoiError}" v-if="mintDoiError" @click="mintDoiError = null">
       <button type="button" class="close" aria-label="Close">
