@@ -8,6 +8,7 @@ const components = {
     // viewing
     'anno-list':         require('./anno-list'),
     'anno-viewer':       require('./anno-viewer'),
+    'anno-viewer-thumbnail-svg': require('./anno-viewer-thumbnail-svg'),
 
     // editing
     'anno-editor-modal':   require('./anno-editor-modal'),

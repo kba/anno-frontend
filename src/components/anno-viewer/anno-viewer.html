@@ -22,21 +22,7 @@
         {{ title }}
       </a>
     </h4>
-    <div v-if="svgTarget" class="annoeditor-thumbnail-wrapper">
-      <xrx-vue
-        ref="thumbnail"
-        class="annoeditor-thumbnail"
-        initial-mode="Disabled"
-        :show-toolbar="false"
-        :enable-thumb="false"
-        :initial-image="svgTarget.source"
-        :grouped="true"
-        :initial-svg="svgTarget.selector.value"
-        :xrx-style="{strokeColor: thumbStrokeColor, fillColor: thumbFillColor}"
-        :width="36"
-        :height="36"
-        />
-    </div>
+    <anno-viewer-thumbnail-svg :svgTarget="this.svgTarget" />
   </div>
   <!-- <div v-else -->
   <!--   class="panel-heading" -->
