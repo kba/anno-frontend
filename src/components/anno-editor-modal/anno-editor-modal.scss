@@ -1,3 +1,7 @@
+.modal-body {
+  overflow: auto; /* <-- Defend footer buttons against oversize content. */
+}
+
 .draggable {
     .modal-header {
         cursor: move
