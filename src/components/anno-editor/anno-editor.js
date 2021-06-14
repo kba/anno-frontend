@@ -1,4 +1,5 @@
 const eventBus      = require('@/event-bus')
+const getOwn        = require('getown')
 
 /*
  * ### anno-editor
@@ -71,7 +72,8 @@ module.exports = {
                 return window.alert(this.l10n('missing_required_field')
                   + ' ' + this.l10n('annofield_title'));
             }
-            const cb = (err, newAnno) => {
+
+            function whenSaved(err, newAnno) {
                 if (err) {
                     console.error("Error saving annotation", err)
                     return
@@ -81,9 +83,19 @@ module.exports = {
                 eventBus.$emit('close-editor')
             }
 
-                 if (this.editMode === 'create') this.api.create(anno, cb)
-            else if (this.editMode === 'reply')  this.api.reply(anno.replyTo, anno, cb)
-            else if (this.editMode === 'revise') this.api.revise(anno.id, anno, cb)
+            const { editMode, api } = this;
+            const legacyPreArgs = getOwn({
+              // :TODO: Improve API so these are no longer required. [ubgl:136]
+              create: [],
+              reply:  [anno.replyTo],
+              revise: [anno.id],
+            }, editMode);
+            if (!legacyPreArgs) {
+              throw new Error('Unsupported editMode: ' + editMode);
+            }
+            api[editMode].call(api, ...legacyPreArgs, anno, whenSaved);
+            // ^- .call probably required because the API seems to
+            //    really be "this" broken.
         },
 
         loadSvg() {
