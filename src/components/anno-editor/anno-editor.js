@@ -36,9 +36,10 @@ module.exports = {
         eventBus.$on('discard', this.discard)
         eventBus.$on('save', this.save)
         eventBus.$on('open-editor', () => {
-            if (this.targetImage) {
-                this.zoneEditor.reset()
-                this.zoneEditor.loadImage(this.targetImage)
+            const { targetImage, zoneEditor } = this;
+            if (zoneEditor) {
+              zoneEditor.reset();
+              if (targetImage) { zoneEditor.loadImage(targetImage); }
             }
         })
     },
