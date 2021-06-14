@@ -8,6 +8,9 @@
       + 'f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png'),
   };
 
+  cfg.targetSource = ('http://anno.test/' + location.pathname.replace(/^\S+\//,
+    '').replace(/\.\S+$/, ''));
+
   cfg.targetThumbnail = cfg.targetImage.replace(/\/1024px-/g, '/200px-');
 
   function appendFixtureAnnots() {
