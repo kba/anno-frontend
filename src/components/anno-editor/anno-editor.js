@@ -110,17 +110,14 @@ module.exports = {
         },
 
         remove(annotation) {
-            if (window.confirm(this.l10n("confirm_delete"))) {
-                this.api.delete(annotation.id, (err) => {
-                    if (err) {
-                        console.error(err)
-                    } else {
-                        console.log('removed', annotation)
-                        eventBus.$emit('removed', annotation)
-                        this.$store.dispatch('fetchList')
-                    }
-                })
-            }
+          if (!window.confirm(this.l10n('confirm_delete'))) { return; }
+          const annoId = annotation.id;
+          this.api.delete(annoId, (err) => {
+            if (err) { return console.error(err); }
+            console.debug('removed', annoId);
+            eventBus.$emit('removed', annoId);
+            this.$store.dispatch('fetchList');
+          });
         },
 
         create(annotation) {
