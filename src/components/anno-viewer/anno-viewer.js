@@ -135,6 +135,23 @@ module.exports = {
         semanticTagBodies()  {return semanticTagBody.all(this.annotation)},
         relationLinkBodies() {return relationLinkBody.all(this.annotation)},
         svgTarget()          {return svgSelectorResource.first(this.annotation)},
+
+        problemsWarningText() {
+          const anno = (this.annotation || false);
+          const { l10n } = this;
+          const probs = [];
+          (function checkExpectedProps(keys) {
+            const miss = l10n('missing_required_field') + ' ';
+            keys.forEach(function check(p) {
+              if (!anno[p]) { probs.push(miss + p); }
+            });
+          }([
+            'id',
+          ]));
+          if (!probs.length) { return ''; }
+          return l10n('error:') + ' ' + probs.join('; ');
+        },
+
         purl()               {return this.purlTemplate
                 ? this.purlTemplate.replace('{{ slug }}', this.id.replace(/.*\//, ''))
                 : this.id},
