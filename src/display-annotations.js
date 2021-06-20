@@ -101,7 +101,8 @@ module.exports = function displayAnnotations(customOptions) {
     //
     // Create a container element if none was given
     //
-    let container = options.container
+    let container = options.container;
+    delete options.container;
     if (typeof container === 'string') {
       container = container.replace(/^…/, options.prefix);
       container = document.getElementById(container);
