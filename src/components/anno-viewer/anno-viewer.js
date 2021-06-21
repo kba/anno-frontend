@@ -1,4 +1,5 @@
 const $ = require('jquery')
+const getOwn = require('getown')
 const bootstrapCompat = require('../../bootstrap-compat');
 const eventBus = require('@/event-bus')
 const XrxUtils = require('semtonotes-utils')
@@ -152,9 +153,20 @@ module.exports = {
           return l10n('error:') + ' ' + probs.join('; ');
         },
 
-        purl()               {return this.purlTemplate
-                ? this.purlTemplate.replace('{{ slug }}', this.id.replace(/.*\//, ''))
-                : this.id},
+        purl() {
+          const { id, purlTemplate } = this;
+          if (!id) { return ''; }
+          if (!purlTemplate) { return id; }
+          const slots = {
+            slug: String(id || '').split(/\//).slice(-1)[0],
+            // :TODO: ^- Improved formula for original behavior, but shouldn't
+            //    this actually be this.slug()? [ubhd:148]
+          };
+          function getSlot(m, k) { return getOwn(slots, k, m); }
+          const purl = purlTemplate.replace(/\{{2}\s*(\w+)\s*\}{2}/g, getSlot);
+          return purl;
+        },
+
         slug() {
             if (!this.annotation.id) return 'unsaved-annotation-' + Date.now()
             return this.annotation.id.replace(/[^A-Za-z0-9]/g, '')
