@@ -1,13 +1,13 @@
-const axios = require('axios')
-const {collectIds} = require('@kba/anno-util')
-const apiFactory = require('../api')
-const jwtDecode = require('jwt-decode')
-const eventBus = require('../event-bus')
+const axios = require('axios');
+const {collectIds} = require('@kba/anno-util');
+const jwtDecode = require('jwt-decode');
+const isFunc = require('is-fn');
 
-const editing = require('./module/editing')
-const annotationList = require('./module/annotationList')
-
-const state = require('./state')
+const apiFactory = require('../api');
+const eventBus = require('../event-bus');
+const editing = require('./module/editing');
+const annotationList = require('./module/annotationList');
+const state = require('./state');
 
 function isExpired(token) {return (token.exp < Date.now() / 1000)}
 
@@ -63,6 +63,15 @@ module.exports = {
             state.editMode = editMode
         },
 
+        INJECTED_MUTATION(state, mutationSpec) {
+          const [mutaFunc, ...mutaArgs] = mutationSpec;
+          console.debug('INJECTED_MUTATION go!',
+            { state: JSON.parse(JSON.stringify(state)), mutaFunc, mutaArgs });
+          mutaFunc(state, ...mutaArgs);
+          console.debug('INJECTED_MUTATION done',
+            { state: JSON.parse(JSON.stringify(state)), mutaFunc, mutaArgs });
+        },
+
         ENABLE_CACHE_BUSTER(state) {state.cacheBusterEnabled = true},
 
         DISABLE_CACHE_BUSTER(state) {state.cacheBusterEnabled = false}
@@ -114,6 +123,11 @@ module.exports = {
                     }
                 })
             })
+        },
+
+        async runInjectedFunc(vuexApi, func) {
+          console.debug('runInjectedFunc', { vuexApi, func });
+          return func(vuexApi);
         },
 
         /*

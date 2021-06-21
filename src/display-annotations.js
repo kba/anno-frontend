@@ -7,6 +7,7 @@ const eventBus = require('./event-bus')
 const bootstrapCompat = require('./bootstrap-compat')
 const decideDefaultOptions = require('./default-config');
 const {localizations} = require('../l10n-config.json')
+const externalRequest = require('./externalRequest')
 
 /**
  * ### `displayAnnotations(options)`
@@ -171,5 +172,6 @@ module.exports = function displayAnnotations(customOptions) {
       window[options.exportAppAsWindowProp] = annoapp;
     }
     if (options.onAppReady) { options.onAppReady(annoapp); }
+    annoapp.externalRequest = externalRequest.bind(null, annoapp);
     return annoapp
 }
