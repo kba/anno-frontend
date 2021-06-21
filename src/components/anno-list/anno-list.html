@@ -104,23 +104,22 @@
 
   </div>
 
-    <div style="clear: both;"></div>
+  <div style="clear: both;"></div>
 
-
-    <div class="panel-group">
-      <anno-viewer v-for="annotation in list" :key="annotation.id"
-        :annotation="annotation"
-        :purl-template="purlTemplate"
-        :purl-id="purlId"
-        :as-reply=false
-        :image-width="$store.state.targetImageWidth"
-        :image-height="$store.state.targetImageHeight"
-        :thumb-stroke-color="$store.state.thumbStrokeColor"
-        :thumb-fill-color="$store.state.thumbStrokeColor"
-        :iiif-url-template="$store.state.iiifUrlTemplate"
-        >
-      </anno-viewer>
-    </div>
+  <div class="panel-group">
+    <anno-viewer v-for="annotation in list" :key="annotation.id"
+      :annotation="annotation"
+      :purl-template="purlTemplate"
+      :purl-id="purlId"
+      :as-reply=false
+      :image-width="$store.state.targetImageWidth"
+      :image-height="$store.state.targetImageHeight"
+      :thumb-stroke-color="$store.state.thumbStrokeColor"
+      :thumb-fill-color="$store.state.thumbStrokeColor"
+      :iiif-url-template="$store.state.iiifUrlTemplate"
+      >
+    </anno-viewer>
+  </div>
 
     <anno-editor-modal ref='modal-editor' :editor-id="`${prefix}-modal-editor`" />
 </div>
