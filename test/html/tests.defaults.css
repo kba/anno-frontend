@@ -1,0 +1,6 @@
+﻿@charset "UTF-8";
+/* -*- coding: UTF-8, tab-width: 2 -*- */
+
+#tests-toolbar-bottom { margin: 1em; }
+#tests-toolbar-bottom input[type="button"],
+#tests-toolbar-bottom button { color: black; background-color: gainsboro; }

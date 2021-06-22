@@ -12,11 +12,14 @@
   addRecurs(['canvas_', 'childs_', 1]);
 
   function customTraverse(val, seen, pathKeys, parentPathVals, tooDeep) {
-    var recurs;
     if (parentPathVals.includes(val)) { return; }
+    function pkj(n) { return pathKeys.slice(-n).join(' '); }
+    if (pkj(4) === 'thumb vsm_ listenerKey_ src') {
+      return tooDeep.abortSilently;
+    }
+    if (pkj(4) === '0 vm $store _vm') { return tooDeep.abortSilently(); }
     if (pathKeys.length >= skipRecurs.cmpLength) {
-      recurs = pathKeys.slice(-skipRecurs.cmpLength).join(' ');
-      if (skipRecurs.includes(recurs)) { return; }
+      if (skipRecurs.includes(pkj(skipRecurs.cmpLength))) { return; }
     }
     return origTrav(val, seen, pathKeys, parentPathVals, tooDeep);
   }
@@ -26,7 +29,7 @@
 
 
   dbg = {
-    maxDepth: 32,
+    maxDepth: 128,
     initCustomTraverse: function init(trav) {
       origTrav = trav.dive;
       trav.dive = customTraverse;

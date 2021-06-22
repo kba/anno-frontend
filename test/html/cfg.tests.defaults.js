@@ -2,26 +2,31 @@
 /* -*- tab-width: 2 -*- */
 (function () {
   'use strict';
-  var cfg = {
+  var jq = window.jQuery, cfg = {
     exportAppAsWindowProp: 'annoApp',
     targetImage: ('https://upload.wikimedia.org/wikipedia/commons/thumb/'
       + 'f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png'),
   };
 
+  cfg.targetSource = ('http://anno.test/' + location.pathname.replace(/^\S+\//,
+    '').replace(/\.\S+$/, ''));
+
   cfg.targetThumbnail = cfg.targetImage.replace(/\/1024px-/g, '/200px-');
 
-  function appendFixtureAnnots(app) {
-    var fixt = window.annotations;
+  function appendFixtureAnnots() {
+    var fixt = window.annotations, al;
     if (!fixt) { return; }
-    app.eventBus.$once('fetched', function () {
-      var al = app.$store.state.annotationList;
-      al.list = al.list.concat(fixt);
-    });
+    al = window.annoApp.$store.state.annotationList;
+    al.list = al.list.concat(fixt);
   }
 
-  cfg.onAppReady = function ready(app) {
-    appendFixtureAnnots(app);
-  };
+  jq('#tests-toolbar-bottom input[type=button]').each(function guessId(i, e) {
+    if (e.id) { return i; }
+    e.id = e.value.toLowerCase().match(/[a-z]+/g).join('-');
+  });
+  jq('#load-fixture-annotations')[0].onclick = appendFixtureAnnots;
+
+  // cfg.onAppReady = function ready() {};
 
   window.annoTestCfg = cfg;
 }());

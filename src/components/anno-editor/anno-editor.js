@@ -1,4 +1,5 @@
 const eventBus      = require('@/event-bus')
+const getOwn        = require('getown')
 
 /*
  * ### anno-editor
@@ -36,9 +37,10 @@ module.exports = {
         eventBus.$on('discard', this.discard)
         eventBus.$on('save', this.save)
         eventBus.$on('open-editor', () => {
-            if (this.targetImage) {
-                this.zoneEditor.reset()
-                this.zoneEditor.loadImage(this.targetImage)
+            const { targetImage, zoneEditor } = this;
+            if (zoneEditor) {
+              zoneEditor.reset();
+              if (targetImage) { zoneEditor.loadImage(targetImage); }
             }
         })
     },
@@ -65,12 +67,13 @@ module.exports = {
     },
     methods: {
         save() {
-            const anno = this.$store.state.editing
+            const anno = this.$store.state.editing;
             if (!anno.title && this.editMode == 'create') {
-                window.alert("A title is required")
-                return
+                return window.alert(this.l10n('missing_required_field')
+                  + ' ' + this.l10n('annofield_title'));
             }
-            const cb = (err, newAnno) => {
+
+            function whenSaved(err, newAnno) {
                 if (err) {
                     console.error("Error saving annotation", err)
                     return
@@ -80,9 +83,19 @@ module.exports = {
                 eventBus.$emit('close-editor')
             }
 
-                 if (this.editMode === 'create') this.api.create(anno, cb)
-            else if (this.editMode === 'reply')  this.api.reply(anno.replyTo, anno, cb)
-            else if (this.editMode === 'revise') this.api.revise(anno.id, anno, cb)
+            const { editMode, api } = this;
+            const legacyPreArgs = getOwn({
+              // :TODO: Improve API so these are no longer required. [ubgl:136]
+              create: [],
+              reply:  [anno.replyTo],
+              revise: [anno.id],
+            }, editMode);
+            if (!legacyPreArgs) {
+              throw new Error('Unsupported editMode: ' + editMode);
+            }
+            api[editMode].call(api, ...legacyPreArgs, anno, whenSaved);
+            // ^- .call probably required because the API seems to
+            //    really be "this" broken.
         },
 
         loadSvg() {
@@ -96,18 +109,15 @@ module.exports = {
             eventBus.$emit('close-editor')
         },
 
-        remove(annotation) {
-            if (window.confirm(this.l10n("confirm_delete"))) {
-                this.api.delete(annotation.id, (err) => {
-                    if (err) {
-                        console.error(err)
-                    } else {
-                        console.log('removed', annotation)
-                        eventBus.$emit('removed', annotation)
-                        this.$store.dispatch('fetchList')
-                    }
-                })
-            }
+        remove(annoOrId) {
+          if (!window.confirm(this.l10n('confirm_delete'))) { return; }
+          const annoId = (annoOrId.id || annoOrId);
+          this.api.delete(annoId, (err) => {
+            if (err) { return console.error(err); }
+            console.debug('removed', annoId);
+            eventBus.$emit('removed', annoId);
+            this.$store.dispatch('fetchList');
+          });
         },
 
         create(annotation) {

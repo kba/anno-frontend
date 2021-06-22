@@ -11,48 +11,25 @@
   v-on:mouseover.prevent="mouseenter"
   v-on:mouseleave.prevent="mouseleave">
 
-  <div v-if="!asReply"
-    class="panel-heading"
-    @click="collapse('toggle')"
-    >
-    <h4 class="panel-title">
+  <div v-if="!asReply" class="panel-heading">
+    <h4 class="panel-title" @click="collapse('toggle')">
+      <!-- 2021-06-10 temp. disable to reduce error log spam
+      <anno-viewer-thumbnail-svg
+        :svgTarget="this.svgTarget"
+        class="pull-right"
+        />
+      -->
       <a role="button">
         <span class="fa fa-caret-right" v-show="collapsed"></span>
         <span class="fa fa-caret-down" v-show="!collapsed"></span>
         {{ title }}
       </a>
     </h4>
-    <div v-if="svgTarget" class="annoeditor-thumbnail-wrapper">
-      <xrx-vue
-        ref="thumbnail"
-        class="annoeditor-thumbnail"
-        initial-mode="Disabled"
-        :show-toolbar="false"
-        :enable-thumb="false"
-        :initial-image="svgTarget.source"
-        :grouped="true"
-        :initial-svg="svgTarget.selector.value"
-        :xrx-style="{strokeColor: thumbStrokeColor, fillColor: thumbFillColor}"
-        :width="36"
-        :height="36"
-        />
-    </div>
   </div>
-  <!-- <div v-else -->
-  <!--   class="panel-heading" -->
-  <!--   aria-expanded="true" -->
-  <!--   @click="collapse('toggle')" -->
-  <!--   > -->
-  <!--   [> <span class="small">{{ title }}</span> <] -->
-  <!--   [> <h5 class="panel-title"> {{ title }} </h5> <] -->
-  <!-- </div> -->
 
   <div class="panel-body" role="tabpanel" v-show="!collapsed">
-
     <div class="media" style="height: auto;">
-
       <div class="media-body">
-
         <div>
           <button class="btn btn-sm" v-for="aCreator of ensureArray('creator')">
             <template v-if="aCreator.icon">
@@ -182,7 +159,8 @@
 
     <!-- navigation -->
 
-    <div style="clear: both; margin-bottom: 2px;"></div>
+    <div class="navigation-separator"
+      style="clear: both; margin-bottom: 2px;"></div>
     <transition name="fade">
       <div class="alert alert-danger fade" :class="{in: mintDoiError}" v-if="mintDoiError" @click="mintDoiError = null">
       <button type="button" class="close" aria-label="Close">
@@ -191,8 +169,11 @@
       <strong>{{ l10n('mint_doi') }} Error:</strong> {{mintDoiError}}
       </div>
     </transition>
-    <div class="btn-toolbar pull-right" role="toolbar" style="margin-top: 10px;">
-      <div class="btn-group btn-group-sm pull-right" role="group">
+    <div role="toolbar"
+      class="btn-toolbar pull-right"
+      style="margin-top: 10px;">
+      <div role="group"
+        class="btn-group btn-group-sm pull-right">
         <button v-if="!annotation.doi && $auth('mintDoi', id)"
             class="btn btn-default btn-outline-secondary btn-sm"
             data-toggle="popover"
@@ -230,20 +211,20 @@
             <span class="caret"></span>
           </a>
           <component :is="bootstrapOpts.tags.dropdownMenu"
-            role="menu" class="
-              version-history-dropdown-menu
-              dropdown-menu
-              dropdown-menu-right
-              small
-              ">
+            role="menu" :class="[
+              'version-history-dropdown-menu',
+              'dropdown-menu',
+              'dropdown-menu-right',
+              'small',
+              ]">
             <component :is="bootstrapOpts.tags.dropdownMenuItem"
               v-for="version in annotation.hasVersion"
               :key="version.id"
-              :class="{
-                active: versionIsShown(version),
-                'text-nowrap': true,
-                small: true,
-              }"
+              :class="[
+                (versionIsShown(version) && 'active'),
+                'text-nowrap',
+                'small',
+              ].filter(Boolean)"
               @click="setToVersion(version)"
             >
               <span class="glyphicon glyphicon-time"></span>
@@ -255,12 +236,17 @@
           </component><!-- version-history-dropdown-menu -->
         </div><!-- version-history-dropdown-trigger -->
 
-        <bootstrap-button btn-class="danger" @click="remove" font-awesome="trash-o" v-if="$auth('remove', id)"
-         :title="l10n('delete_anno')"/>
+        <bootstrap-button
+          @click="remove"
+          v-if="$auth('remove', id)"
+          :title="l10n('delete_anno')"
+          btn-class="danger"
+          font-awesome="trash-o"
+          />
 
       </div>
-      <div class="toolbar-end-clear" style="clear: both;"></div>
-    </div><!-- btn-toolbar -->
+    </div><!-- role="toolbar" -->
+    <div class="toolbar-end-clear" style="clear: both;"></div>
 
     <template v-if="numberOf('hasReply') > 0">
       <div class="comment-separator" style="margin-bottom: 2px;"></div>
@@ -276,6 +262,6 @@
         :iiif-url-template="iiifUrlTemplate"
         />
 
-      </template>
-    </div>
+    </template>
+  </div><!-- /panel-body -->
 </div>

@@ -7,16 +7,20 @@ function zipball_nm () {
   local SELFPATH="$(readlink -m -- "$BASH_SOURCE"/..)"
   cd -- "$SELFPATH"/../.. || return $?
 
-  local ZIP_FN='test.nm.snapshot.zip'
+  local ZIP_FN='tests.nm.snapshot.zip'
   local NM_HTML=(
     test/html/*.nm.html
     )
   local NM_DEPS=()
-  readarray -t NM_DEPS < <(
-    grep -hoPe '"(\.*/)*node_modules/[^"]+' -- "${NM_HTML[@]}" \
-    | sed -re 's~^["./]+~~' | sort --version-sort --unique)
-  local TEST_DEPS=()
-  readarray -t TEST_DEPS < <(find test/ -type f -name '*.js')
+  find_nm_deps || return $?
+
+  local TEST_DEPS=(
+    -type f
+    '(' -name '*.js'
+      -o -name '*.css'
+      ')'
+    )
+  readarray -t TEST_DEPS < <(find test/ "${TEST_DEPS[@]}")
 
   local PACK_FILES=(
     "${NM_HTML[@]}"
@@ -60,6 +64,64 @@ function deploy_to () {
   ( cd "$SUBDIR" && unzip "${UNZIP_OPTS[@]}" -- "$ZIP_ABS" ) || return $?$(
     echo "E: failed to deploy to $SUBDIR" >&2)
   echo "Deployed to: $SUBDIR"
+}
+
+
+function find_nm_deps () {
+  local RGX='"(\.*/)*node_modules/($\
+    |@/anno-common|$\
+    |(@æ*/|)æ+)/'
+  RGX="${RGX//$'\n'/}"
+  RGX="${RGX//æ/[a-z0-9_-]}"
+  local PKGS=()
+  readarray -t PKGS < <(grep -hoPe "$RGX" -- "${NM_HTML[@]}" \
+    | sed -re 's~^["./]+~~' | sort --version-sort --unique)
+  for PKG in "${PKGS[@]}"; do
+    refine_one_nm_dep "$PKG" || return $?
+  done
+  local N_FOUND="${#NM_DEPS[@]}"
+  [ "$N_FOUND" -ge 10 ] || return 3$(
+    echo "E: $FUNCNAME: found suspiciously few ($N_FOUND)" >&2)
+  # printf '%s\n' "${NM_DEPS[@]}"; return 8
+}
+
+
+function refine_one_nm_dep () {
+  local DEP="${1%/}"
+  local ITEM=
+  for ITEM in dist; do
+    ITEM="$DEP/$ITEM"
+    [ -d "$ITEM" ] || continue
+    NM_DEPS+=( "$ITEM" )
+    return 0
+  done
+
+  case "${DEP##*/}" in
+
+    anno-common )
+      NM_DEPS+=( "$DEP"/anno-webpack/dist );;
+
+    font-awesome )
+      NM_DEPS+=(
+        "$DEP"/css
+        "$DEP"/fonts
+        );;
+
+    jquery-ui )
+      NM_DEPS+=(
+        "$DEP"/themes/base
+        "$DEP"/ui/*.js
+        # "$DEP"/ui/effects/
+        # "$DEP"/ui/i18n/*-de.js
+        # ui/i18n/*-en-US.js doesn't exist, probably because it's the default.
+        # "$DEP"/ui/widgets/
+        );;
+
+    semtonotes-client )
+      NM_DEPS+=( "$DEP"/*.min.js );;
+
+    * ) echo "E: What to pack for $DEP?" >&2; return 8;;
+  esac
 }
 
 

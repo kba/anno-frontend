@@ -76,6 +76,8 @@ module.exports = function displayAnnotations(customOptions) {
     const SidebarApp = require('@/components/sidebar-app')
 
     const defaultOptions = {
+      prefix: 'anno-app-',
+      container: '…container',
       targetSource: window.location.href,
     };
     const options = mergeOptions(defaultOptions, customOptions);
@@ -101,22 +103,20 @@ module.exports = function displayAnnotations(customOptions) {
     }
 
     //
-    // Set the prefix for IDs
-    //
-    if (!options.prefix)
-        options.prefix = `anno-${Date.now()}`
-
-    //
     // Create a container element if none was given
     //
     let container = options.container
+    if (typeof container === 'string') {
+      container = container.replace(/^…/, options.prefix);
+      container = document.getElementById(container);
+    }
     if (!container) {
         container = document.createElement('div')
-        container.setAttribute('id', `${options.prefix}-container`)
+        container.setAttribute('id', options.prefix + 'container')
         document.querySelector('body').appendChild(container)
     }
     const appDiv = document.createElement('div')
-    appDiv.setAttribute('id', `${options.prefix}-app`)
+    appDiv.setAttribute('id', options.prefix + 'app')
     container.appendChild(appDiv)
 
     //

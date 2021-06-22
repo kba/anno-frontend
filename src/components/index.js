@@ -1,4 +1,4 @@
-const component = {
+const components = {
 
     // helpers
     'bootstrap-button':  require('./bootstrap-button'),
@@ -8,6 +8,7 @@ const component = {
     // viewing
     'anno-list':         require('./anno-list'),
     'anno-viewer':       require('./anno-viewer'),
+    // 'anno-viewer-thumbnail-svg': require('./anno-viewer-thumbnail-svg'),
 
     // editing
     'anno-editor-modal':   require('./anno-editor-modal'),
@@ -24,7 +25,7 @@ const component = {
 }
 
 function registerAll(Vue) {
-    Object.keys(component).forEach(name => Vue.component(name, component[name]))
+  Object.entries(components).forEach(kv => Vue.component(...kv))
 }
 
 module.exports = registerAll

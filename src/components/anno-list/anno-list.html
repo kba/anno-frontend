@@ -84,10 +84,10 @@
         :key="`sort_${sortProp}_${sortOrder}`"
         :class="[
           'criterion',
-          'btn',
-          'btn-sm',
+          bootstrapOpts.tags.snowflakes.annoListSortMenu.clsAll,
           'text-nowrap',
-          ((sortedBy === `${sortProp}_${sortOrder}`) && 'btn-primary'),
+          ((sortedBy === `${sortProp}_${sortOrder}`) &&
+            bootstrapOpts.tags.snowflakes.annoListSortMenu.clsChosen),
           'sort-prop-' + sortProp,
           'sort-order-' + sortOrder,
         ].filter(Boolean)"

@@ -25,6 +25,7 @@
     "clipboard": "^1.7.1",
     "dateformat": "^2.2.0",
     "font-awesome": "^4.7.0",
+    "getown": "^1.0.0",
     "jquery": "^3.6.0",
     "jquery-ui": "^1.12.1",
     "jwt-decode": "^2.2.0",
