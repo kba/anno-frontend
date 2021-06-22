@@ -118,11 +118,14 @@ module.exports = {
         remove(annoOrId) {
           if (!window.confirm(this.l10n('confirm_delete'))) { return; }
           const annoId = (annoOrId.id || annoOrId);
-          this.api.delete(annoId, (err) => {
+          const self = this;
+          const { api, $store } = self;
+          api.delete(annoId, (err) => {
             if (err) { return console.error(err); }
-            console.debug('removed', annoId);
+            console.debug('API confirms anno as removed:', annoId);
             eventBus.$emit('removed', annoId);
-            this.$store.dispatch('fetchList');
+            $store.dispatch('fetchList');
+            self.discard();
           });
         },
 
