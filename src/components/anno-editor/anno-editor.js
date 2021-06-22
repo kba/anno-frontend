@@ -109,9 +109,9 @@ module.exports = {
             eventBus.$emit('close-editor')
         },
 
-        remove(annotation) {
+        remove(annoOrId) {
           if (!window.confirm(this.l10n('confirm_delete'))) { return; }
-          const annoId = annotation.id;
+          const annoId = (annoOrId.id || annoOrId);
           this.api.delete(annoId, (err) => {
             if (err) { return console.error(err); }
             console.debug('removed', annoId);
