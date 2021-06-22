@@ -67,10 +67,17 @@ module.exports = {
     },
     methods: {
         save() {
-            const anno = this.$store.state.editing;
-            if (!anno.title && this.editMode == 'create') {
-                return window.alert(this.l10n('missing_required_field')
-                  + ' ' + this.l10n('annofield_title'));
+            const {
+              $store,
+              api,
+              editMode,
+              l10n,
+            } = this;
+
+            const anno = $store.state.editing;
+            if (!anno.title && editMode == 'create') {
+                return window.alert(l10n('missing_required_field')
+                  + ' ' + l10n('annofield_title'));
             }
 
             function whenSaved(err, newAnno) {
@@ -78,12 +85,11 @@ module.exports = {
                     console.error("Error saving annotation", err)
                     return
                 }
-                this.$store.dispatch('fetchList')
-                this.$store.commit('RESET_ANNOTATION')
+                $store.dispatch('fetchList')
+                $store.commit('RESET_ANNOTATION')
                 eventBus.$emit('close-editor')
             }
 
-            const { editMode, api } = this;
             const legacyPreArgs = getOwn({
               // :TODO: Improve API so these are no longer required. [ubgl:136]
               create: [],
