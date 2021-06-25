@@ -1,15 +1,9 @@
-<a v-if="elem === 'a'"
+<component :is="(elem || 'button')"
   role="button"
   :class="`btn btn-${btnClass} btn-${btnSize}`" :title="title" @click="$emit('click', $event)">
-  <span v-if="glyphicon" :class="'glyphicon glyphicon-'+glyphicon"></span>
-  <span v-else-if="fontAwesome" :class="'fa fa-'+fontAwesome"></span>
+  <i v-if="iconFa" :class="'fa fa-' + iconFa"></i>
+  <i v-if="iconText" class="icon">{{ iconText }}</i>
+  <slot name="icon-custom" />
   <img v-if="src" :src="src" :alt="alt" />
   <slot></slot>
-</a>
-<button  v-else
-  :class="`btn btn-${btnClass} btn-${btnSize}`" :title="title" @click="$emit('click', $event)">
-  <span v-if="glyphicon" :class="'glyphicon glyphicon-'+glyphicon"></span>
-  <span v-else-if="fontAwesome" :class="'fa fa-'+fontAwesome"></span>
-  <img v-if="src" :src="src" :alt="alt" />
-  <slot></slot>
-</button>
+</component>

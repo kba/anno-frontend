@@ -31,12 +31,13 @@
     <div class="media" style="height: auto;">
       <div class="media-body">
         <div>
-          <button class="btn btn-sm" v-for="aCreator of ensureArray('creator')">
+          <button v-for="aCreator of ensureArray('creator')"
+            class="btn btn-sm anno-creator-icon">
             <template v-if="aCreator.icon">
               <img class="media-object" style="display: inline" :src="aCreator.icon" alt="Logo" width="15px" height="15px">
             </template>
             <template v-else>
-              <span class="glyphicon glyphicon-user"></span>
+              <i class="fa fa-user"></i>
             </template>
             <template v-if="aCreator.displayName">
               {{ aCreator.displayName }}
@@ -64,7 +65,7 @@
             </button>
             <a href="${purl}">${purl.replace(/\//g, "/<wbr>")}</a>
             `'>
-            <span class="glyphicon glyphicon-link"></span>
+            <i class="fa fa-link"></i>
           </button>
 
           <button class="btn btn-sm"
@@ -94,7 +95,7 @@
             data-focus-dismiss
             :title="l10n('doi')"
             :data-content="doiPopup">
-            <span class="glyphicon glyphicon-link"></span> DOI
+            <i class="fa fa-link"></i> DOI
           </button>
 
         </div>
@@ -114,7 +115,7 @@
           <ul>
             <li v-for="relationlinkBody in relationLinkBodies">
               <a :href="relationlinkBody.id || relationlinkBody.source">
-                <!-- <span class="glyphicon glyphicon-tag"></span> -->
+                <!-- i class="fa fa-tag"></i -->
                 {{ relationlinkBody.value || relationlinkBody.label }}
               </a>
             </li>
@@ -123,14 +124,16 @@
 
         <div class="annoeditor-tags">
           <span class="annoeditor-tag label label-default badge badge-secondary" v-for="tagBody in simpleTagBodies">
-            <span class="glyphicon glyphicon-tag"></span> {{ tagBody.value || tagBody.label }}
+            <i class="fa fa-tag"></i>
+            {{ tagBody.value || tagBody.label }}
           </span>
         </div>
 
         <div class="annoeditor-tags">
           <a :href="semtagBody.id || semtagBody.source" v-for="semtagBody in semanticTagBodies">
             <span class="annoeditor-tag label label-primary">
-              <span class="glyphicon glyphicon-tag"></span> {{ semtagBody.value || semtagBody.label }}
+              <i class="fa fa-tag"></i>
+              {{ semtagBody.value || semtagBody.label }}
             </span>
           </a>
         </div>
@@ -148,7 +151,7 @@
             </button>
             <a href="${iiifLink}">${iiifLink.replace(/([\/,])/g, (_, x) => x + "<wbr>")}</a>
             `'>
-            <span class="glyphicon glyphicon-link"></span>
+            <i class="fa fa-link"></i>
             {{ l10n('iiif_link') }}
           </button>
         </div>
@@ -162,11 +165,12 @@
     <div class="navigation-separator"
       style="clear: both; margin-bottom: 2px;"></div>
     <transition name="fade">
-      <div class="alert alert-danger fade" :class="{in: mintDoiError}" v-if="mintDoiError" @click="mintDoiError = null">
-      <button type="button" class="close" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <strong>{{ l10n('mint_doi') }} Error:</strong> {{mintDoiError}}
+      <div v-if="mintDoiError" class="alert alert-danger fade in"
+        @click="mintDoiError = null">
+        <button type="button" class="close" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <strong>{{ l10n('mint_doi') }} Error:</strong> {{mintDoiError}}
       </div>
     </transition>
     <div role="toolbar"
@@ -187,13 +191,17 @@
             data-container = "body"
             @click="showMintDoiPopover"
             >
-            <span class="glyphicon glyphicon-link"></span>
+            <i class="fa fa-institution"></i>
             {{ l10n('mint_doi') }}
         </button>
-        <bootstrap-button btn-class="default" @click="revise" font-awesome="pencil" v-if="$auth('revise', id)">
+        <bootstrap-button btn-class="default" @click="revise"
+          icon-fa="pencil"
+          v-if="$auth('revise', id)">
           {{ l10n('edit') }}
         </bootstrap-button>
-        <bootstrap-button btn-class="default" @click="reply" font-awesome="reply" v-if="$auth('create', id)">
+        <bootstrap-button btn-class="default" @click="reply"
+          icon-fa="reply"
+          v-if="$auth('create', id)">
           {{ l10n('comment') }}
         </bootstrap-button>
         <div
@@ -227,7 +235,7 @@
               ].filter(Boolean)"
               @click="setToVersion(version)"
             >
-              <span class="glyphicon glyphicon-time"></span>
+              <i class="fa fa-calendar"></i>
               &nbsp;
               {{ dateformat(version.created) }}
               <template v-if="versionIsShown(version)"
@@ -241,7 +249,7 @@
           v-if="$auth('remove', id)"
           :title="l10n('delete_anno')"
           btn-class="danger"
-          font-awesome="trash-o"
+          icon-fa="trash-o"
           />
 
       </div>
