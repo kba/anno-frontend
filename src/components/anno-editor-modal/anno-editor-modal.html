@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
 
-        <div class="top-right-buttons" class="pull-right"
+        <div class="top-right-buttons pull-right"
           v-if="bootstrapOpts.version.major < 4">
           <bootstrap-button btn-class="primary" @click="save"
             icon-fa="save">
@@ -41,7 +41,7 @@
             >{{ purl(replyTo) }}</a>
         </component>
 
-        <div class="top-right-buttons" class="ml-auto"
+        <div class="top-right-buttons ml-auto"
           v-if="bootstrapOpts.version.major >= 4">
           <bootstrap-button @click="save"
             btn-class="primary"
