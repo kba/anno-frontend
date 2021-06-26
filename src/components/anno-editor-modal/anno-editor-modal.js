@@ -85,7 +85,6 @@ module.exports = {
 
     },
     methods: {
-        editMode() {return this.$store.state.editMode},
         save() {eventBus.$emit('save')},
         remove() {eventBus.$emit('remove', this.id)},
         discard() {eventBus.$emit('discard')},
