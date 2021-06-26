@@ -8,7 +8,8 @@
     },
     "localizations": {
 
-        "de":                      {
+        "de": {
+            "error:": "Fehler:",
             "doi": "DOI",
             "doi.of.annotation": "DOI der Annotation",
             "doi.of.annotation.revision": "DOI der Annotation in dieser Version",
@@ -117,6 +118,7 @@
         },
 
         "en": {
+            "error:": "Error:",
             "doi": "DOI",
             "doi.of.annotation": "DOI of the annotation",
             "doi.of.annotation.revision": "DOI of this revision of the annotation",

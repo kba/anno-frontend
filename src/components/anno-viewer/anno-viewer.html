@@ -165,12 +165,15 @@
     <div class="navigation-separator"
       style="clear: both; margin-bottom: 2px;"></div>
     <transition name="fade">
-      <div v-if="mintDoiError" class="alert alert-danger fade in"
+      <div v-if="mintDoiError"
+        class="alert alert-danger fade in"
         @click="mintDoiError = null">
         <button type="button" class="close" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <strong>{{ l10n('mint_doi') }} Error:</strong> {{mintDoiError}}
+        <strong class="mintdoi-error-intro">{{ l10n('error:')
+          }} {{ l10n('mint_doi') }}:</strong>
+        <span class="mintdoi-errmsg">{{mintDoiError}}</span>
       </div>
     </transition>
     <div role="toolbar"
