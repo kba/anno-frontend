@@ -3,13 +3,18 @@
     <div class="modal-content">
       <div class="modal-header">
 
-        <button type="button" class="close"
-          v-if="bootstrapOpts.version.major < 4"
-          data-dismiss="modal"
-          aria-label="Close"
-          @click="discard"
-          ><span aria-hidden="true">&times;</span>
-        </button>
+        <div class="top-right-buttons" class="pull-right"
+          v-if="bootstrapOpts.version.major < 4">
+          <bootstrap-button btn-class="primary" @click="save"
+            icon-fa="save">
+            {{ l10n('save') }}
+          </bootstrap-button>
+          <bootstrap-button btn-class="close" @click="discard"
+            data-dismiss="modal"
+            aria-label="Close"
+            icon-fa="close"
+            />
+        </div>
 
         <!-- <h4>{{ l10n('annoeditor') }}</h4> -->
         <component :is="bootstrapOpts.tags.modalHeaderTitle"
@@ -36,19 +41,19 @@
             >{{ purl(replyTo) }}</a>
         </component>
 
-        <div class="pull-right">
-          <bootstrap-button btn-class="primary" @click="save">
+        <div class="top-right-buttons" class="ml-auto"
+          v-if="bootstrapOpts.version.major >= 4">
+          <bootstrap-button @click="save"
+            btn-class="primary"
+            icon-fa="save">
             {{ l10n('save') }}
           </bootstrap-button>
+          <bootstrap-button btn-class="close" @click="discard"
+            data-dismiss="modal"
+            aria-label="Close"
+            icon-fa="close"
+            />
         </div>
-
-        <button type="button" class="close"
-          v-if="bootstrapOpts.version.major >= 4"
-          data-dismiss="modal"
-          aria-label="Close"
-          @click="discard"
-          ><span aria-hidden="true">&times;</span>
-        </button>
 
         <div style="clear: both;"></div>
 
@@ -61,16 +66,20 @@
       <div class="modal-footer">
 
         <div class="pull-left">
-          <bootstrap-button btn-class="danger" @click="remove" v-if="$auth('remove', id) && editMode === 'revise'">
+          <bootstrap-button btn-class="danger" @click="remove"
+            icon-fa="trash-o"
+            v-if="$auth('remove', id) && editMode === 'revise'">
             {{ l10n('delete_anno') }}
           </bootstrap-button>
         </div>
 
-        <bootstrap-button data-dismiss="modal" @click="discard">
+        <bootstrap-button data-dismiss="modal" @click="discard"
+          icon-fa="close">
           {{ l10n('discard') }}
         </bootstrap-button>
 
-        <bootstrap-button btn-class="primary" @click="save">
+        <bootstrap-button btn-class="primary" @click="save"
+          icon-fa="save">
           {{ l10n('save') }}
         </bootstrap-button>
 

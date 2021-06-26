@@ -13,8 +13,8 @@ module.exports = {
     props: {
         title:       String,
         prefix:      {type: String, default: 'ubhdannoprefix_zoneeditor'},
-        glyphicon:   String,
-        fontAwesome: String,
+        iconText:    String,    // for using Unicode as icons
+        iconFa:      String,
         src:         String,
         alt:         String,
         clickTarget: {type: Object},
