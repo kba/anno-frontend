@@ -197,12 +197,15 @@
             <i class="fa fa-link"></i>
             {{ l10n('mint_doi') }}
         </button>
-        <bootstrap-button btn-class="default" @click="revise"
+        <bootstrap-button @click="revise"
+          btn-class="default btn-outline-secondary"
           icon-fa="pencil"
           v-if="$auth('revise', id)">
           {{ l10n('edit') }}
         </bootstrap-button>
-        <bootstrap-button btn-class="default" @click="reply"
+        <bootstrap-button
+          @click="reply"
+          btn-class="default btn-outline-secondary"
           icon-fa="reply"
           v-if="$auth('create', id)">
           {{ l10n('comment') }}
@@ -235,6 +238,7 @@
                 (versionIsShown(version) && 'active'),
                 'text-nowrap',
                 'small',
+                'btn-outline-secondary',
               ].filter(Boolean)"
               @click="setToVersion(version)"
             >
@@ -251,7 +255,7 @@
           @click="remove"
           v-if="$auth('remove', id)"
           :title="l10n('delete_anno')"
-          btn-class="danger"
+          btn-class="danger btn-outline-secondary"
           icon-fa="trash-o"
           />
 
