@@ -1,10 +1,8 @@
 const $ = require('jquery')
 const bootstrapCompat = require('../../bootstrap-compat');
-const _dateformat = require('dateformat')
 const eventBus = require('@/event-bus')
 const XrxUtils = require('semtonotes-utils')
 const {
-    numberOf,
     ensureArray,
 } = require('@kba/anno-util')
 const {
@@ -54,10 +52,11 @@ module.exports = {
     template: require('./anno-viewer.html'),
     style:    require('./anno-viewer.scss'),
     mixins: [
-        require('@/mixin/l10n'),
-        require('@/mixin/auth'),
-        require('@/mixin/prefix'),
-        require('@/mixin/api')
+      require('../../mixin/api'),
+      require('../../mixin/auth'),
+      require('../../mixin/dateFmt'),
+      require('../../mixin/l10n'),
+      require('../../mixin/prefix'),
     ],
     props: {
         annotation: {type: Object, required: true},
@@ -128,9 +127,7 @@ module.exports = {
   },
     computed: {
         id()                 {return this.annotation.id},
-        created()            {return this._created ? this._created : this.annotation.created},
         creator()            {return this.annotation.creator},
-        modified()           {return this.annotation.modified},
         title()              {return this.annotation.title},
         rights()             {return this.annotation.rights},
         firstHtmlBody()      {return textualHtmlBody.first(this.annotation)},
@@ -194,7 +191,6 @@ module.exports = {
         return {
             mintDoiError: null,
             showMintDoiError: null,
-            _created: null,
             iiifLink: '',
             currentVersion: this.initialAnnotation,
             highlighted: false,
@@ -267,12 +263,9 @@ module.exports = {
         },
         stopHighlighting()   {this.highlighted = false},
         toggleHighlighting() {this.highlighted = ! this.highlighted},
-
-        dateformat(date=new Date()) {return date ? _dateformat(date, this.l10n('dateformat')) : ''},
         collapse(collapseState) {
             this.collapsed = collapseState === 'toggle' ? ! this.collapsed : collapseState === 'hide'
         },
-        numberOf(k) {return numberOf(this.annotation, k)},
         ensureArray(k) {
           const anno = JSON.parse(JSON.stringify(this.annotation))
           ensureArray(anno, k)

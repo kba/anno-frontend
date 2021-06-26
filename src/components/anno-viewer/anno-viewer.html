@@ -48,8 +48,9 @@
           </button>
           <button
             class="annoeditor-date btn btn-sm"
-            :title="`${l10n('Created')}: ${created}\n${l10n('Modified')}: ${modified}`">
-            {{ dateformat(created) }}
+            :title="`${l10n('Created')}: ${annotation.created
+              }\n${l10n('Modified')}: ${annotation.modified}`">
+            {{ dateFmt(annotation.created) }}
           </button>
 
           <button class="btn btn-sm"
@@ -101,7 +102,7 @@
         </div>
 
         <div class="well old_version" v-show="isOlderVersion()">
-          {{ l10n('version_from') }} {{ dateformat(created) }}
+          {{ l10n('version_from') }} {{ dateFmt(annotation.created) }}
           <br/>
           <a @click="setToVersion(newestVersion)">{{ l10n('newer_version') }}</a>
         </div>
@@ -210,46 +211,6 @@
           v-if="$auth('create', id)">
           {{ l10n('comment') }}
         </bootstrap-button>
-        <div
-          v-if="numberOf('hasVersion') >= 1"
-          class="
-          dropdown
-          btn-group-sm
-          version-history-dropdown-trigger
-          ">
-          <a class="btn btn-default btn-outline-secondary dropdown-toggle"
-            data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="true">
-            <span class="fa fa-history"></span>
-            {{ l10n('versions_dropdown') }} ({{ numberOf('hasVersion') }})
-            <span class="caret"></span>
-          </a>
-          <component :is="bootstrapOpts.tags.dropdownMenu"
-            role="menu" :class="[
-              'version-history-dropdown-menu',
-              'dropdown-menu',
-              'dropdown-menu-right',
-              'small',
-              ]">
-            <component :is="bootstrapOpts.tags.dropdownMenuItem"
-              v-for="version in annotation.hasVersion"
-              :key="version.id"
-              :class="[
-                (versionIsShown(version) && 'active'),
-                'text-nowrap',
-                'small',
-                'btn-outline-secondary',
-              ].filter(Boolean)"
-              @click="setToVersion(version)"
-            >
-              <i class="fa fa-calendar"></i>
-              &nbsp;
-              {{ dateformat(version.created) }}
-              <template v-if="versionIsShown(version)"
-                >&nbsp; ({{ l10n("active_version") }})</template>
-            </component><!-- dropdownMenuItem -->
-          </component><!-- version-history-dropdown-menu -->
-        </div><!-- version-history-dropdown-trigger -->
 
         <bootstrap-button
           @click="remove"
@@ -259,11 +220,16 @@
           icon-fa="trash-o"
           />
 
-      </div>
+      </div><!-- .btn-group -->
+
+      <anno-viewer-versions-dropdown
+        :anno="annotation"
+        :on-select-version="this.setToVersion.bind(this)"
+        />
     </div><!-- role="toolbar" -->
     <div class="toolbar-end-clear" style="clear: both;"></div>
 
-    <template v-if="numberOf('hasReply') > 0">
+    <template v-if="(annotation.hasReply || false).length">
       <div class="comment-separator" style="margin-bottom: 2px;"></div>
       <anno-viewer
         v-for="reply in annotation.hasReply"
