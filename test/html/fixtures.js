@@ -9,11 +9,27 @@ window.annotations = [
       { motivation: 'linking', label: 'Metavariables', id: 'http://gnd.info/12345', }
     ],
     target: 'http://foo.bar',
-    modified: "2017-03-22 22:00:00",
+    created:  "2017-03-01T10:00:00Z",
+    modified: "2017-03-22T22:05:00Z",
     hasVersion: [
-      { id: 'https://anno.ub.uni-heidelberg.de/123-rev1', title: 'Tset anontatio', modified: "2017-03-01 10:00:00", doi: "10.1234/123~1"},
-      { title: 'Tset annotatio', id: 'https://anno.ub.uni-heidelberg.de/123-rev2', modified: "2017-03-11 11:00:00", doi: "10.1234/123~2"},
-      { title: 'Test annotation', id: 'https://anno.ub.uni-heidelberg.de/123-rev3', modified: "2017-03-22 22:00:00", doi: "10.1234/123~3" }
+      { title: 'Tset anontatio',
+        id: 'https://anno.ub.uni-heidelberg.de/123-rev1',
+        created:  "2017-03-01T10:00:00Z",
+        modified: "2017-03-01T10:05:00Z",
+        doi: "10.1234/123~1"
+      },
+      { title: 'Tset annotatio (fixed typo)',
+        id: 'https://anno.ub.uni-heidelberg.de/123-rev2',
+        created:  "2017-03-01T11:00:00Z",
+        modified: "2017-03-11T11:05:00Z",
+        doi: "10.1234/123~2"
+      },
+      { title: 'Test annotation (fixed 2nd typo)',
+        id: 'https://anno.ub.uni-heidelberg.de/123-rev3',
+        created:  "2017-03-22T22:00:00Z",
+        modified: "2017-03-22T22:05:00Z",
+        doi: "10.1234/123~3"
+      }
     ],
     hasReply: [
       {
