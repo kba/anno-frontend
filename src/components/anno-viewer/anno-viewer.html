@@ -217,12 +217,14 @@
           @click="remove"
           v-if="$auth('remove', id)"
           :title="l10n('delete_anno')"
-          btn-class="danger btn-outline-secondary"
+          btn-class="outline-danger"
           icon-fa="trash-o"
           />
 
       </div><!-- .btn-group -->
 
+      <span class="versions-dropdown-spacer"
+        style="margin-left: 0.5em;"></span>
       <anno-viewer-versions-dropdown
         :anno="annotation"
         :on-select-version="this.setToVersion.bind(this)"
