@@ -48,8 +48,9 @@
           </button>
           <button
             class="annoeditor-date btn btn-sm"
-            :title="`${l10n('Created')}: ${created}\n${l10n('Modified')}: ${modified}`">
-            {{ dateformat(created) }}
+            :title="`${l10n('Created')}: ${annotation.created
+              }\n${l10n('Modified')}: ${annotation.modified}`">
+            {{ dateFmt(annotation.created) }}
           </button>
 
           <button class="btn btn-sm"
@@ -101,7 +102,7 @@
         </div>
 
         <div class="well old_version" v-show="isOlderVersion()">
-          {{ l10n('version_from') }} {{ dateformat(created) }}
+          {{ l10n('version_from') }} {{ dateFmt(annotation.created) }}
           <br/>
           <a @click="setToVersion(newestVersion)">{{ l10n('newer_version') }}</a>
         </div>
@@ -165,12 +166,15 @@
     <div class="navigation-separator"
       style="clear: both; margin-bottom: 2px;"></div>
     <transition name="fade">
-      <div v-if="mintDoiError" class="alert alert-danger fade in"
+      <div v-if="mintDoiError"
+        class="alert alert-danger fade in"
         @click="mintDoiError = null">
         <button type="button" class="close" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <strong>{{ l10n('mint_doi') }} Error:</strong> {{mintDoiError}}
+        <strong class="mintdoi-error-intro">{{ l10n('error:')
+          }} {{ l10n('mint_doi') }}:</strong>
+        <span class="mintdoi-errmsg">{{mintDoiError}}</span>
       </div>
     </transition>
     <div role="toolbar"
@@ -191,72 +195,41 @@
             data-container = "body"
             @click="showMintDoiPopover"
             >
-            <i class="fa fa-institution"></i>
+            <i class="fa fa-link"></i>
             {{ l10n('mint_doi') }}
         </button>
-        <bootstrap-button btn-class="default" @click="revise"
+        <bootstrap-button @click="revise"
+          btn-class="default btn-outline-secondary"
           icon-fa="pencil"
           v-if="$auth('revise', id)">
           {{ l10n('edit') }}
         </bootstrap-button>
-        <bootstrap-button btn-class="default" @click="reply"
+        <bootstrap-button
+          @click="reply"
+          btn-class="default btn-outline-secondary"
           icon-fa="reply"
           v-if="$auth('create', id)">
           {{ l10n('comment') }}
         </bootstrap-button>
-        <div
-          v-if="numberOf('hasVersion') >= 1"
-          class="
-          dropdown
-          btn-group-sm
-          version-history-dropdown-trigger
-          ">
-          <a class="btn btn-default btn-outline-secondary dropdown-toggle"
-            data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="true">
-            <span class="fa fa-history"></span>
-            {{ l10n('versions_dropdown') }} ({{ numberOf('hasVersion') }})
-            <span class="caret"></span>
-          </a>
-          <component :is="bootstrapOpts.tags.dropdownMenu"
-            role="menu" :class="[
-              'version-history-dropdown-menu',
-              'dropdown-menu',
-              'dropdown-menu-right',
-              'small',
-              ]">
-            <component :is="bootstrapOpts.tags.dropdownMenuItem"
-              v-for="version in annotation.hasVersion"
-              :key="version.id"
-              :class="[
-                (versionIsShown(version) && 'active'),
-                'text-nowrap',
-                'small',
-              ].filter(Boolean)"
-              @click="setToVersion(version)"
-            >
-              <i class="fa fa-calendar"></i>
-              &nbsp;
-              {{ dateformat(version.created) }}
-              <template v-if="versionIsShown(version)"
-                >&nbsp; ({{ l10n("active_version") }})</template>
-            </component><!-- dropdownMenuItem -->
-          </component><!-- version-history-dropdown-menu -->
-        </div><!-- version-history-dropdown-trigger -->
 
         <bootstrap-button
           @click="remove"
           v-if="$auth('remove', id)"
           :title="l10n('delete_anno')"
-          btn-class="danger"
+          btn-class="danger btn-outline-secondary"
           icon-fa="trash-o"
           />
 
-      </div>
+      </div><!-- .btn-group -->
+
+      <anno-viewer-versions-dropdown
+        :anno="annotation"
+        :on-select-version="this.setToVersion.bind(this)"
+        />
     </div><!-- role="toolbar" -->
     <div class="toolbar-end-clear" style="clear: both;"></div>
 
-    <template v-if="numberOf('hasReply') > 0">
+    <template v-if="(annotation.hasReply || false).length">
       <div class="comment-separator" style="margin-bottom: 2px;"></div>
       <anno-viewer
         v-for="reply in annotation.hasReply"

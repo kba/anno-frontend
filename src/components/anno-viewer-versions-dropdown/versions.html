@@ -1,0 +1,41 @@
+<div class="version-history-dropdown-trigger
+    dropdown
+    btn-group-sm
+  "
+  :data-n-versions="versionsList.length"
+  >
+  <a class="btn btn-default btn-outline-secondary dropdown-toggle"
+    data-toggle="dropdown"
+    aria-haspopup="true" aria-expanded="true">
+    <span class="fa fa-history"></span>
+    {{ (versionsList.length === 1) ? l10n('versions_dropdown_only')
+      : `${l10n('versions_dropdown_more')} (${versionsList.length - 1})` }}
+    <span class="caret"></span>
+  </a>
+  <component :is="bootstrapOpts.tags.dropdownMenu"
+    role="menu" :class="[
+      'version-history-dropdown-menu',
+      'dropdown-menu',
+      'dropdown-menu-right',
+      'small',
+      ]">
+    <component :is="bootstrapOpts.tags.dropdownMenuItem"
+      v-for="version in versionsList"
+      :key="version.id"
+      :class="[
+        ((version.created === anno.created) && 'active'),
+        'text-nowrap',
+        'small',
+        'btn-outline-secondary',
+        'dropdown-item',
+      ].filter(Boolean)"
+      @click="onSelectVersion(version)"
+    >
+      <i class="fa fa-calendar"></i>
+      &nbsp;
+      {{ dateFmt(version.created) }}
+      <template v-if="version.created === anno.created"
+        >&nbsp; ({{ l10n("active_version") }})</template>
+    </component><!-- dropdownMenuItem -->
+  </component><!-- version-history-dropdown-menu -->
+</div><!-- version-history-dropdown-trigger -->
