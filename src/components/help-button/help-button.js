@@ -3,6 +3,7 @@ function replaceTemplates(str, ctx) {
     return ctx[name]
   })
 }
+
 module.exports = {
 
   template: require('./help-button.html'),
@@ -12,22 +13,6 @@ module.exports = {
     url() {return replaceTemplates(this.helpUrlTemplate, this)},
     topicTitle() {return this.title ? this.title : this.topic},
     manualUrl() {return replaceTemplates(this.helpUrlManual, this)},
-    divClasses() {
-      return {
-        'panel': true,
-        'panel-primary': true,
-        'slide-out': ! this.visible,
-        'slide-in': this.visible,
-      }
-    },
-    btnClasses() {
-      return {
-        'btn': true,
-        'btn-primary': true,
-        'help-button': true,
-        [`btn-${this.size}`]: true
-      }
-    },
   },
 
   data() {return {
@@ -39,10 +24,10 @@ module.exports = {
     language:        {type: String, required: false, default: 'de'},
     topic:           {type: String, required: true},
     title:           {type: String, required: false},
+    triggerCls:      {type: String, default: ''},
     buttonLabel:     {type: String, default: ''},
     helpUrlTemplate: {type: String, required: true},
     helpUrlManual:   {type: String, required: false},
-    size:            {type: String, required: false, default: 'xs'},
   },
 
   methods: {

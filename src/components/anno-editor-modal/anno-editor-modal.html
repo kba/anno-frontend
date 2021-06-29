@@ -1,6 +1,6 @@
 <div class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg draggable" role="document">
-    <div class="modal-content">
+    <div id="anno-editor-modal-content" class="modal-content">
       <div class="modal-header">
 
         <div class="top-right-buttons pull-right"
@@ -60,12 +60,12 @@
 
         <div style="clear: both;"></div>
 
-      </div>
+      </div><!-- .modal-header -->
+
       <div class="modal-body">
-
         <anno-editor ref='editor'/>
-
       </div>
+
       <div class="modal-footer">
 
         <div class="pull-left">
@@ -91,7 +91,8 @@
           {{ l10n('save') }}
         </bootstrap-button>
 
-      </div>
+      </div><!-- .modal-footer -->
+
     </div>
   </div>
 </div>

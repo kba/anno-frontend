@@ -1,25 +1,25 @@
-<span class="help-button" style="
-  padding: 0;
-  margin: 0;
-  border: 0;
-  ">
-  <a
-    v-show="buttonLabel"
-    :class="btnClasses"
+<span class="help-button">
+  <a class="help-button-trigger"
     @click.stop="togglePopover()"
-    style="vertical-align: top"
     >
-    {{ buttonLabel }}
+    <span v-if="!buttonLabel" :class="[
+        'label',
+        'label-default',
+        'badge',
+        'btn-primary',
+        'default-help-icon',
+      ]">
+      <span class="fa fa-info"></span></span>
+    <slot name="custom-icon" />
+    <span v-if="buttonLabel" class="textlabel">{{ buttonLabel }}</span>
   </a>
-  <a
-    v-show="! buttonLabel"
-    :class="btnClasses"
-    @click.stop="togglePopover()"
-    style="vertical-align: top"
-    >
-    <span class="fa fa-info"></span>
-  </a>
-  <div :class="divClasses">
+  <div :class="[
+      'card',
+      'panel',
+      'panel-primary',
+      (visible ? 'slide-in' : 'slide-out'),
+      'help-button-content-wrapper',
+    ]">
     <div class="panel-heading" @click.stop="dismiss">
       {{ title }}
       <button class="close">
@@ -35,7 +35,7 @@
       </button>
     </div>
     <div class="panel-body">
-      Loading ...
+      … ⌛ …
     </div>
   </div>
 </span>
