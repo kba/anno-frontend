@@ -30,9 +30,10 @@
   <div class="panel-body" role="tabpanel" v-show="!collapsed">
     <div class="media" style="height: auto;">
       <div class="media-body">
-        <div>
+        <div role="group"
+          class="btn-group btn-group-sm">
           <button v-for="aCreator of ensureArray('creator')"
-            class="btn btn-sm anno-creator-icon">
+            class="btn btn-sm anno-creator-icon btn-outline-secondary">
             <template v-if="aCreator.icon">
               <img class="media-object" style="display: inline" :src="aCreator.icon" alt="Logo" width="15px" height="15px">
             </template>
@@ -47,13 +48,13 @@
             </template>
           </button>
           <button
-            class="annoeditor-date btn btn-sm"
+            class="annoeditor-date btn btn-sm btn-outline-secondary"
             :title="`${l10n('Created')}: ${annotation.created
               }\n${l10n('Modified')}: ${annotation.modified}`">
             {{ dateFmt(annotation.created) }}
           </button>
 
-          <button class="btn btn-sm"
+          <button class="btn btn-sm btn-outline-secondary"
             data-toggle="popover"
             data-html="true"
             data-placement="left"
@@ -69,7 +70,7 @@
             <i class="fa fa-link"></i>
           </button>
 
-          <button class="btn btn-sm"
+          <button class="btn btn-sm btn-outline-secondary"
             v-if="rights"
             data-toggle="popover"
             data-html="false"
@@ -88,7 +89,7 @@
             </template>
             <template v-else>§</template>
           </button>
-          <button class="btn btn-sm"
+          <button class="btn btn-sm btn-outline-secondary"
             v-if="annotation.doi"
             data-toggle="popover"
             data-html="true"
@@ -99,7 +100,7 @@
             <i class="fa fa-link"></i> DOI
           </button>
 
-        </div>
+        </div><!-- .btn-group -->
 
         <div class="well old_version" v-show="isOlderVersion()">
           {{ l10n('version_from') }} {{ dateFmt(annotation.created) }}
@@ -140,7 +141,7 @@
         </div>
 
         <div v-show="iiifLink && $store.state.enableIIIF" class="annoeditor-iiif-link">
-          <button class="btn btn-sm"
+          <button class="btn btn-sm btn-outline-secondary"
             data-toggle="popover"
             data-html="true"
             data-placement="left"
@@ -169,7 +170,7 @@
       <div v-if="mintDoiError"
         class="alert alert-danger fade in"
         @click="mintDoiError = null">
-        <button type="button" class="close" aria-label="Close">
+        <button type="button" class="close btn-outline-secondary" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
         <strong class="mintdoi-error-intro">{{ l10n('error:')
@@ -216,12 +217,14 @@
           @click="remove"
           v-if="$auth('remove', id)"
           :title="l10n('delete_anno')"
-          btn-class="danger btn-outline-secondary"
+          btn-class="outline-danger"
           icon-fa="trash-o"
           />
 
       </div><!-- .btn-group -->
 
+      <span class="versions-dropdown-spacer"
+        style="margin-left: 0.5em;"></span>
       <anno-viewer-versions-dropdown
         :anno="annotation"
         :on-select-version="this.setToVersion.bind(this)"
