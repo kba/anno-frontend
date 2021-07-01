@@ -1,6 +1,7 @@
 <div class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg draggable" role="document">
     <div id="anno-editor-modal-content" class="modal-content">
+
       <div class="modal-header">
 
         <div class="top-right-buttons pull-right"
@@ -78,9 +79,8 @@
         </div>
 
         <bootstrap-button @click="discard"
-          btn-class="close"
+          btn-class="close btn-outline-secondary"
           data-dismiss="modal"
-          btn-class="outline-secondary"
           aria-label="Close"
           icon-fa="close">
           {{ l10n('discard') }}
