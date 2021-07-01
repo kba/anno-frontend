@@ -16,16 +16,26 @@
 }
 
 .help-button {
-  > a {
-    color: white !important;
+  padding: 0;
+  margin: 0;
+  border-width: 0;
 
-    &:hover {
-      cursor: help;
+  & > a {
+    vertical-align: top;
+    cursor: help;
+
+    &, &:hover {
+      color: inherit;
+      text-decoration: none;
     }
 
-    &> span {
+    & > .default-help-icon {
+      color: white;
+      background-color: cadetblue;
       border-radius: 50%;
       line-height: 1;
+      width: 1.6em; height: 1.6em;
+      vertical-align: middle;
     }
   }
 

@@ -1,41 +1,20 @@
-<span class="help-button" style="
-  padding: 0;
-  margin: 0;
-  border: 0;
-  ">
-  <a
-    v-show="buttonLabel"
-    :class="btnClasses"
-    @click.stop="togglePopover()"
-    style="vertical-align: top"
+<span class="help-button"
+  :data-topic="topic"
+  >
+  <a class="help-button-trigger"
+    :href="helpUrl"
+    target="_blank"
+    @click.stop
     >
-    {{ buttonLabel }}
+    <span v-if="!buttonLabel" :class="[
+        'label',
+        'label-default',
+        'badge',
+        'btn-primary',
+        'default-help-icon',
+      ]">
+      <span class="fa fa-info"></span></span>
+    <slot name="custom-icon" />
+    <span v-if="buttonLabel" class="textlabel">{{ buttonLabel }}</span>
   </a>
-  <a
-    v-show="! buttonLabel"
-    :class="btnClasses"
-    @click.stop="togglePopover()"
-    style="vertical-align: top"
-    >
-    <span class="fa fa-info"></span>
-  </a>
-  <div :class="divClasses">
-    <div class="panel-heading" @click.stop="dismiss">
-      {{ title }}
-      <button class="close">
-        <span @click.stop="dismiss">&times;</span>
-      </button>
-      <button class="close">
-        <a v-if="helpUrlManual"
-          class="pull-right"
-          :href="manualUrl"
-          target="_blank">
-          <span class="fa fa-link"></span>
-        </a>
-      </button>
-    </div>
-    <div class="panel-body">
-      Loading ...
-    </div>
-  </div>
 </span>
