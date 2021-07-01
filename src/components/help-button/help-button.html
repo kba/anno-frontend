@@ -1,6 +1,10 @@
-<span class="help-button">
+<span class="help-button"
+  :data-topic="topic"
+  >
   <a class="help-button-trigger"
-    @click.stop="togglePopover()"
+    :href="helpUrl"
+    target="_blank"
+    @click.stop
     >
     <span v-if="!buttonLabel" :class="[
         'label',
@@ -13,29 +17,4 @@
     <slot name="custom-icon" />
     <span v-if="buttonLabel" class="textlabel">{{ buttonLabel }}</span>
   </a>
-  <div :class="[
-      'card',
-      'panel',
-      'panel-primary',
-      (visible ? 'slide-in' : 'slide-out'),
-      'help-button-content-wrapper',
-    ]">
-    <div class="panel-heading" @click.stop="dismiss">
-      {{ title }}
-      <button class="close">
-        <span @click.stop="dismiss">&times;</span>
-      </button>
-      <button class="close">
-        <a v-if="helpUrlManual"
-          class="pull-right"
-          :href="manualUrl"
-          target="_blank">
-          <span class="fa fa-link"></span>
-        </a>
-      </button>
-    </div>
-    <div class="panel-body">
-      … ⌛ …
-    </div>
-  </div>
 </span>
