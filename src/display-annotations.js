@@ -2,7 +2,8 @@ const Vue = require('vue').default
 const Vuex = require('vuex').default
 const mergeOptions = require('merge-options')
 Vue.use(Vuex)
-const eventBus = require('@/event-bus')
+const SidebarApp = require('./components/sidebar-app')
+const eventBus = require('./event-bus')
 const bootstrapCompat = require('./bootstrap-compat')
 const decideDefaultOptions = require('./default-config');
 const {localizations} = require('../l10n-config.json')
@@ -74,8 +75,6 @@ const {localizations} = require('../l10n-config.json')
  *
  */
 module.exports = function displayAnnotations(customOptions) {
-    const SidebarApp = require('@/components/sidebar-app')
-
     const options = mergeOptions(decideDefaultOptions(), customOptions);
     bootstrapCompat.initialize(options.bootstrap);
     delete options.bootstrap;
