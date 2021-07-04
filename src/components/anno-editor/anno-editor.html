@@ -3,12 +3,27 @@
   :help-url-manual="l10n('help.url.manual')"
 >
 
-  <bootstrap-tab :name="`${prefix}-${editorId}-tab-comment`" :title="l10n('comment_tab')" :active="true"
+  <bootstrap-tab :name="`${prefix}-${editorId}-tab-comment`"
+    :title="l10n('comment_tab')" :active="true"
     topic='html'
     >
     <html-editor
       editor-id="`${prefix}-${editorId}-html-editor`"
-      />
+      >
+      <section slot="extra-bodyparts-top">
+        <input
+          :placeholder="l10n('annofield_title')
+            + (titleRequired ? ` (${l10n('required_field')})` : '')"
+          v-model="title"
+          class="form-control"
+          type="text"
+          :required="titleRequired"
+          >
+      </section>
+      <section slot="extra-bodyparts-bottom">
+        <anno-editor-licenses />
+      </section>
+    </html-editor>
   </bootstrap-tab>
 
   <bootstrap-tab

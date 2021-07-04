@@ -18,9 +18,6 @@ module.exports = {
         require('@/mixin/l10n'),
         require('@/mixin/prefix'),
     ],
-    data() {return {
-      licenseInfo: require('@/../license-config')
-    }},
     style: require('./html-editor.scss'),
     template: require('./html-editor.html'),
     mounted() {
@@ -72,13 +69,6 @@ module.exports = {
                 return firstHtmlBody && firstHtmlBody.value ? firstHtmlBody.value : ''
             },
             set (content) {this.$store.commit('SET_HTML_BODY_VALUE', content)},
-        },
-        title: {
-            get () {return this.$store.state.editing.title},
-            set (value) {this.$store.commit('SET_TITLE', value)}
-        },
-        titleRequired() {
-            return ! this.$store.state.editing.replyTo
         },
     },
 
