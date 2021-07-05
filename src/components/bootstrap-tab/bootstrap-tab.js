@@ -6,5 +6,7 @@ module.exports = {
         active: {type: [Boolean, String], default:false},
         name:   {type: String, required: true},
         topic:  {type: String, required: false},
+        tabCls:   {type: String, required: false},
+        paneCls:  {type: String, required: false},
     }
 }

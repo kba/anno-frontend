@@ -2,10 +2,11 @@
   <ul class="nav nav-tabs">
     <li role="presentation"
       v-for="tab in tablist"
-      :class="{
-        active: tab.active,
-        'nav-item': true,
-        }"
+      :class="[
+        'nav-item',
+        (tab.active && 'active'),
+        tab.tabCls,
+      ].filter(Boolean)"
       >
 
         <a :href="'#' + tab.name"
