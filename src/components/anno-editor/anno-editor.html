@@ -86,4 +86,14 @@
       />
   </bootstrap-tab>
 
+  <bootstrap-tab
+    :name="`${prefix}-${editorId}-tab-debug`"
+    :title="'⚙'"
+    tab-cls="ml-auto secret debug-panel-tab"
+    >
+    <anno-editor-debug-panel
+      :annot="$store.state.editing"
+      />
+  </bootstrap-tab>
+
 </bootstrap-tabs>

@@ -4,3 +4,5 @@
 #tests-toolbar-bottom { margin: 1em; }
 #tests-toolbar-bottom input[type="button"],
 #tests-toolbar-bottom button { color: black; background-color: gainsboro; }
+
+.annoeditor-bootstrap-tabs .nav > li.debug-panel-tab { display: flex; }

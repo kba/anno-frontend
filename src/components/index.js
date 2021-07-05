@@ -12,7 +12,8 @@ const components = {
     // 'anno-viewer-thumbnail-svg': require('./anno-viewer-thumbnail-svg'),
 
     // editing
-    'anno-editor-licenses':   require('./anno-editor-licenses'),
+    'anno-editor-debug-panel':    require('./anno-editor-debug-panel'),
+    'anno-editor-licenses':       require('./anno-editor-licenses'),
     'anno-editor-modal':   require('./anno-editor-modal'),
     'anno-editor':         require('./anno-editor'),
     'html-editor':         require('./html-editor'),
