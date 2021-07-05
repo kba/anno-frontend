@@ -3,7 +3,10 @@
 (function () {
   'use strict';
   var jq = window.jQuery, cfg = {
+
     exportAppAsWindowProp: 'annoApp',
+    // ^- In production, rather save the result of displayAnnotations.
+
     targetImage: ('https://upload.wikimedia.org/wikipedia/commons/thumb/'
       + 'f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png'),
   };
