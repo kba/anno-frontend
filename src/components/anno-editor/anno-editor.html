@@ -10,7 +10,7 @@
     <html-editor
       editor-id="`${prefix}-${editorId}-html-editor`"
       >
-      <section slot="extra-bodyparts-top">
+      <template slot="extra-bodyparts-top">
         <input
           :placeholder="l10n('annofield_title')
             + (titleRequired ? ` (${l10n('required_field')})` : '')"
@@ -19,10 +19,10 @@
           type="text"
           :required="titleRequired"
           >
-      </section>
-      <section slot="extra-bodyparts-bottom">
+      </template>
+      <template slot="extra-bodyparts-bottom">
         <anno-editor-licenses />
-      </section>
+      </template>
     </html-editor>
   </bootstrap-tab>
 

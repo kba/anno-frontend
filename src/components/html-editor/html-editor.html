@@ -1,6 +1,8 @@
 <div class="card panel panel-default annoeditor-html-editor">
   <div class="panel-body">
-    <slot name="extra-bodyparts-top"></slot>
+    <section class="extra-bodyparts-top">
+      <slot name="extra-bodyparts-top"></slot>
+    </section>
 
     <div ref="toolbar">
       <button :title="l10n('fmt_bold')" class="ql-bold"></button>
@@ -33,6 +35,8 @@
     </div>
     <div ref="editor"></div>
 
-    <slot name="extra-bodyparts-bottom"></slot>
+    <section class="extra-bodyparts-bottom">
+      <slot name="extra-bodyparts-bottom"></slot>
+    </section>
   </div>
 </div>
