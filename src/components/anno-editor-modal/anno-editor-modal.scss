@@ -1,9 +1,8 @@
-.modal-body {
-  overflow: auto; /* <-- Defend footer buttons against oversize content. */
-}
-
 .draggable {
-    .modal-header {
-        cursor: move
-    }
+  .modal-header {
+    cursor: move;
+  }
+  .modal-footer {
+    z-index: 5;
+  }
 }
