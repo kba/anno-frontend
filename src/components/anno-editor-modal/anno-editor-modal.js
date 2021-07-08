@@ -36,12 +36,19 @@ module.exports = {
         replyTo()      {return this.$store.state.editing.replyTo},
         editor()       {return this.$refs['editor']},
     },
-    created() {
-        eventBus.$on('open-editor', () => this.show())
-        eventBus.$on('close-editor', () => this.hide())
-    },
-    mounted() {
 
+    created() {
+      const modal = this;
+      eventBus.$on('open-editor', function openEditor() {
+        modal.show();
+      });
+      eventBus.$on('close-editor', function closeEditor() {
+        modal.$store.commit('SET_EDIT_MODE', '');
+        modal.hide();
+      });
+    },
+
+    mounted() {
         const dialogEl = this.$el.querySelector('.modal-dialog')
         const contentEl = this.$el.querySelector('.modal-content')
 
@@ -78,7 +85,6 @@ module.exports = {
 
     },
     methods: {
-        editMode() {return this.$store.state.editMode},
         save() {eventBus.$emit('save')},
         remove() {eventBus.$emit('remove', this.id)},
         discard() {eventBus.$emit('discard')},

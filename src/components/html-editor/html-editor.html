@@ -1,16 +1,8 @@
 <div class="card panel panel-default annoeditor-html-editor">
-  <div class="panel-heading">
-    <div style="display: flex">
-      <input
-      :placeholder="l10n('annofield_title') + (titleRequired ? ` (${l10n('required_field')})` : '')"
-      v-model="title"
-      class="form-control"
-      type="text"
-      :required="titleRequired"
-      >
-    </div>
-  </div>
   <div class="panel-body">
+    <section class="extra-bodyparts-top">
+      <slot name="extra-bodyparts-top"></slot>
+    </section>
 
     <div ref="toolbar">
       <button :title="l10n('fmt_bold')" class="ql-bold"></button>
@@ -43,30 +35,8 @@
     </div>
     <div ref="editor"></div>
 
-    <div class="row">
-      <div class="col-sm-1">
-        <label class="license-label" for="license-select">{{ l10n('License') }}</label>
-      </div>
-      <div class="col-sm-11">
-        <form id="license-select" class="form">
-          <div class="btn-group" data-toggle="buttons">
-            <label
-              data-toggle="popover"
-              data-trigger="hover"
-              data-placement="top"
-              v-for="(license, licenseName) in licenseInfo"
-              :key="licenseName"
-              :title="l10n(license.title)"
-              :data-content="l10n(license.author_desc)"
-              @click="$store.commit('SET_RIGHTS', license.url)"
-              :class="{'btn': 1, 'btn-default btn-outline-secondary': 1, 'active': $store.state.editing.rights === license.url}">
-              <!-- <pre>{{ licenseName }}</pre> -->
-              <!-- <pre>{{ license }}</pre> -->
-              <img :src="license.img_88x31"/>
-            </label>
-          </div>
-        </form>
-      </div>
-    </div>
+    <section class="extra-bodyparts-bottom">
+      <slot name="extra-bodyparts-bottom"></slot>
+    </section>
   </div>
 </div>

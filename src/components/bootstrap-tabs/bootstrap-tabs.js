@@ -1,4 +1,10 @@
-const HelpButton = require('@/components/help-button')
+const loPick = require('lodash.pick');
+
+const HelpButton = require('../help-button');
+const BsTabComponent = require('../bootstrap-tab');
+
+const bsTabPropNames = Object.keys(BsTabComponent.props);
+
 
 module.exports = {
     mixins: [require('@/mixin/l10n')],
@@ -16,15 +22,11 @@ module.exports = {
         }
     },
     props: {
-      helpUrlTemplate: {type: String, required: true},
-      helpUrlManual: {type: String, required: false},
+      helpUrlTemplate:  {type: String, required: true},
+      helpUrlManual:    {type: String, required: false},
     },
     mounted() {
-      this.tablist = this.$children.map(c => ({
-          name: c.name,
-          title: c.title,
-          active: c.active,
-          topic: c.topic,
-      }))
+      this.tablist = this.$children.map(c => loPick(c, bsTabPropNames));
+      console.debug('tabList:', JSON.parse(JSON.stringify(this.tablist)));
     }
 }

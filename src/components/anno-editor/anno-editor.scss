@@ -30,3 +30,14 @@
 #anno_annotations h4 {
   font-size: 13px;
 }
+
+
+.annoeditor-bootstrap-tabs .nav > li.secret {
+  display: none;
+}
+
+.panel-body .row { margin: 0; }
+
+.annoeditor-html-editor > .panel-body {
+  overflow-y: auto; /* Workaround for overly-tall HTML editor */
+}
