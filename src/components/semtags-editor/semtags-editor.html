@@ -3,6 +3,17 @@
     {{ l10n('semtags') }}
   </div -->
   <div class="panel-body">
+    <div class="row buttons"
+      v-show="semanticTagBodies.length >= 1"
+      >
+      <div class="col-md-12">
+        <bootstrap-button
+          btn-class="success"
+          icon-fa="plus"
+          @click="addSemanticTag"
+          >{{ l10n('add_semtag') }}</bootstrap-button>
+      </div>
+    </div><!-- .row.buttons -->
     <div class="row semtag" v-for="(body, bodyIndex) in semanticTagBodies">
       <div class="col-md-9">
         <input
@@ -25,11 +36,13 @@
       </div>
     </div><!-- .row.semtag -->
     <div class="row buttons">
-      <bootstrap-button
-        btn-class="success"
-        icon-fa="plus"
-        @click="addSemanticTag"
-        >{{ l10n('add_semtag') }}</bootstrap-button>
+      <div class="col-md-12">
+        <bootstrap-button
+          btn-class="success"
+          icon-fa="plus"
+          @click="addSemanticTag"
+          >{{ l10n('add_semtag') }}</bootstrap-button>
+      </div>
     </div><!-- .row.buttons -->
   </div>
 </div>
