@@ -3,26 +3,26 @@
     {{ l10n('semtags') }}
   </div -->
   <div class="panel-body">
-      <div class="row" v-for="(body, bodyIndex) in semanticTagBodies">
-        <div class="col-md-9">
-          <input
-            :data-body-index="bodyIndex"
-            required
-            autocomplete
-            type="text"
-            class="form-control semtag-value"
-            :value="body.value"
-            :placeholder="l10n('semtag')"
-          />
-        </div>
-        <div class="col-md-3">
-          <bootstrap-button
-            btn-class="danger"
-            icon-fa="trash-o"
-            @click="removeBody(body)">
-            {{ l10n('delete_semtag') }}
-          </bootstrap-button>
-        </div>
+    <div class="row" v-for="(body, bodyIndex) in semanticTagBodies">
+      <div class="col-md-9">
+        <input
+          :data-body-index="bodyIndex"
+          required
+          autocomplete
+          type="text"
+          class="form-control semtag-value"
+          :value="body.value"
+          :placeholder="l10n('semtag')"
+        />
+      </div>
+      <div class="col-md-3">
+        <bootstrap-button
+          btn-class="danger"
+          icon-fa="trash-o"
+          @click="removeBody(body)">
+          {{ l10n('delete_semtag') }}
+        </bootstrap-button>
+      </div>
     </div>
     <bootstrap-button
       btn-class="success"
