@@ -23,9 +23,10 @@
       class="btn btn-sm btn-default btn-outline-secondary"
       />
 
-    <button v-if="$auth('create', targetSource)"
-      class="btn btn-sm btn-success"
-      @click="create"
+    <button @click="create"
+      v-if="$store.state.offerCreateNewAnnotationButton
+        && $auth('create', targetSource)"
+      class="btn btn-sm btn-success create-new-annotation-button"
       >
       {{ l10n('new') }}
     </button>

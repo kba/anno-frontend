@@ -10,8 +10,14 @@
 <div class="topic" data-topic="appcfg">
   <h3>AnnoApp Config</h3>
   <dl>
-    <dt>targetSource</dt>
-    <dd>{{ $store.state.targetSource }}</dd>
+    <template v-for="prop in [
+      'targetFragment',
+      'targetImage',
+      'targetSource',
+    ]">
+    <dt :key="'dt:' + prop">{{ prop }}:</dt>
+    <dd :key="'dd:' + prop">{{ $store.state[prop] }}</dd>
+    </template>
   </dl>
 </div><!-- .chapter -->
 
@@ -19,8 +25,12 @@
 <div class="topic" data-topic="annot">
   <h3>Annotation</h3>
   <dl>
-    <dt>target</dt>
-    <dd>{{ annot.target }}</dd>
+    <template v-for="prop in [
+      'target',
+    ]">
+    <dt :key="'dt:' + prop">{{ prop }}:</dt>
+    <dd :key="'dd:' + prop">{{ annot[prop] }}</dd>
+    </template>
   </dl>
 </div><!-- .chapter -->
 

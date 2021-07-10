@@ -5,6 +5,8 @@ const getOwn = require('getown');
 
 const eventBus = require('./event-bus');
 
+const hasOwn = Function.call.bind(Object.prototype.hasOwnProperty);
+
 
 const EX = async function externalRequest(annoApp, action, ...args) {
   const impl = getOwn(EX, 'do' + action);
@@ -19,19 +21,26 @@ const EX = async function externalRequest(annoApp, action, ...args) {
 
 Object.assign(EX, {
 
-  async doCreateAnnotationForTargetSource(vuexApi, opt) {
-    console.log('createAnnotationForTargetSource:', { vuexApi, opt });
+  async doConfigureTargetAndCreateAnnotation(vuexApi, param) {
     const { state, commit } = this.vuexApi;
     if (state.editMode) {
       const err = new Error('Editor busy');
       err.name = 'ANNO_EDITOR_BUSY';
       throw err;
     }
-    const { targetSource } = opt;
-    if (!targetSource) { throw new Error('targetSource missing!'); }
-    commit('INJECTED_MUTATION', [Object.assign, { targetSource }]);
+    const updCfg = {
+      targetFragment: null,
+      targetImage: null,
+    };
+    Object.keys(param).forEach(function copy(key) {
+      if (hasOwn(updCfg, key)) {
+        updCfg[key] = param[key];
+      } else {
+        throw new Error('Unsupported target option: ' + key);
+      }
+    });
+    commit('INJECTED_MUTATION', [Object.assign, updCfg]);
     eventBus.$emit('create');
-    console.log('createAnnotationForTargetSource:', 'Creation requested.');
   },
 
 });

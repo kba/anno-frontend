@@ -23,6 +23,9 @@ function decide() {
     language,
     prefix: 'anno-app-',
     targetSource: window.location.href,
+    offerCreateNewAnnotationButton: true,
+    targetImage: null,
+    targetFragment: null,
   };
   return cfg;
 };
