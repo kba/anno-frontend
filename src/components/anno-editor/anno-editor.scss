@@ -32,13 +32,12 @@
 }
 
 
-.annoeditor-bootstrap-tabs .nav > li.secret {
-  display: none;
+.annoeditor-bootstrap-tabs {
+
+  .nav > li.secret { display: none; }
+
 }
 
-.annoeditor-bootstrap-tabs .panel-body .row {
-  margin: 0.25em 0;
-}
 
 .annoeditor-html-editor > .panel-body {
   overflow-y: auto; /* Workaround for overly-tall HTML editor */
