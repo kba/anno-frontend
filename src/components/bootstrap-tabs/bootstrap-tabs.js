@@ -1,32 +1,24 @@
-const loPick = require('lodash.pick');
+const jQuery = require('jquery');
 
 const HelpButton = require('../help-button');
-const BsTabComponent = require('../bootstrap-tab');
-
-const bsTabPropNames = Object.keys(BsTabComponent.props);
-
 
 module.exports = {
-    mixins: [require('@/mixin/l10n')],
-    template: require('./bootstrap-tabs.html'),
-    style: require('./bootstrap-tabs.scss'),
-    components: {HelpButton},
-    data() {
-        return {
-            tablist: []
-        }
+  mixins: [
+    require('@/mixin/l10n'),
+  ],
+  template: require('./bootstrap-tabs.html'),
+  style: require('./bootstrap-tabs.scss'),
+  components: {
+    HelpButton,
+  },
+  methods: {
+    tabPanesAsVueElements() {
+      const tabContainer = jQuery(this.$el).find('.tab-content:first')[0];
+      return this.$children.filter(c => (c.$el.parentNode === tabContainer));
     },
-    methods: {
-        clickHandler(ev) {
-            this.$emit('shown.bs.tab', ev)
-        }
-    },
-    props: {
-      helpUrlTemplate:  {type: String, required: true},
-      helpUrlManual:    {type: String, required: false},
-    },
-    mounted() {
-      this.tablist = this.$children.map(c => loPick(c, bsTabPropNames));
-      console.debug('tabList:', JSON.parse(JSON.stringify(this.tablist)));
-    }
-}
+  },
+  props: {
+    helpUrlTemplate:  {type: String, required: true},
+    helpUrlManual:    {type: String, required: false},
+  },
+};
