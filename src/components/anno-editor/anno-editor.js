@@ -1,6 +1,3 @@
-const eventBus      = require('@/event-bus')
-const getOwn        = require('getown')
-
 /*
  * ### anno-editor
  *
@@ -15,6 +12,11 @@ const getOwn        = require('getown')
  * - `removed(id)`: Annotation `id` was removed
  *
  */
+
+const eventBus = require('../../event-bus');
+const getOwn = require('getown');
+const jQuery = require('jquery');
+const BootstrapTab = require('bootstrap').Tab;
 
 module.exports = {
     mixins: [
@@ -37,11 +39,13 @@ module.exports = {
         eventBus.$on('discard', this.discard)
         eventBus.$on('save', this.save)
         eventBus.$on('open-editor', () => {
-            const { targetImage, zoneEditor } = this;
+            const editor = this;
+            const { targetImage, zoneEditor } = editor;
             if (zoneEditor) {
               zoneEditor.reset();
               if (targetImage) { zoneEditor.loadImage(targetImage); }
             }
+            setTimeout(() => editor.switchToFirstTab(), 1);
         })
     },
     mounted() {
@@ -80,6 +84,13 @@ module.exports = {
 
     },
     methods: {
+
+        switchToFirstTab() {
+          const sel = 'ul.nav-tabs > li > a.nav-link:first';
+          const domEl = jQuery(this.$el).find(sel)[0];
+          if (domEl) { (new BootstrapTab(domEl)).show(); }
+        },
+
         save() {
             const {
               $store,
