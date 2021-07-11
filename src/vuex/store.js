@@ -1,7 +1,6 @@
 const axios = require('axios');
 const {collectIds} = require('@kba/anno-util');
 const jwtDecode = require('jwt-decode');
-const isFunc = require('is-fn');
 
 const apiFactory = require('../api');
 const eventBus = require('../event-bus');
