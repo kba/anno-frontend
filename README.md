@@ -119,7 +119,7 @@ Loading `ubhd-anno.js` binds a class `UBHDAnnoApp` to `window`.
 
 `UBHDAnnoApp` can be instantiated to an object `app` with a set of [config options](#config-options).
 
-`app` has a method 
+`app` has a method
 
 App is a Vue app, component structure:
 
@@ -214,7 +214,7 @@ To `scp` it to serv42: `make deploy`.
 
 
 
-## Javascript API 
+## Javascript API
 
 These are generated from the source files.
 
