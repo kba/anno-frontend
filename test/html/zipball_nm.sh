@@ -8,6 +8,12 @@ function zipball_nm () {
   cd -- "$SELFPATH"/../.. || return $?
 
   local ZIP_FN='tests.nm.snapshot.zip'
+
+  case " $* " in
+    *' PD '* | \
+    *' pack '* ) webpack -d || return $?;;
+  esac
+
   local NM_HTML=(
     test/html/*.nm.html
     )
@@ -33,6 +39,7 @@ function zipball_nm () {
   mv --verbose --target-directory="$SELFPATH" -- "$ZIP_FN" || return $?
 
   case " $* " in
+    *' PD '* | \
     *' deploy '* ) deploy_to '.git/@/htdocs' .htaccess || return $?;;
   esac
 }
