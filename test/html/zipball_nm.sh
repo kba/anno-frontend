@@ -114,16 +114,6 @@ function refine_one_nm_dep () {
         "$DEP"/fonts
         );;
 
-    jquery-ui )
-      NM_DEPS+=(
-        "$DEP"/themes/base
-        "$DEP"/ui/*.js
-        # "$DEP"/ui/effects/
-        # "$DEP"/ui/i18n/*-de.js
-        # ui/i18n/*-en-US.js doesn't exist, probably because it's the default.
-        # "$DEP"/ui/widgets/
-        );;
-
     semtonotes-client )
       NM_DEPS+=( "$DEP"/*.min.js );;
 

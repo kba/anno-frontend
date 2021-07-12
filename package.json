@@ -1,7 +1,6 @@
-{
+{ "name": "anno-frontend",
   "private": true,
-  "name": "anno-frontend",
-  "version": "0.3.3",
+  "version": "0.3.2107121820",
   "description": "Frontend for @kba/anno",
   "main": "entry.js",
   "scripts": {
@@ -27,7 +26,6 @@
     "font-awesome": "^4.7.0",
     "getown": "^1.0.0",
     "jquery": "^3.6.0",
-    "jquery-ui": "^1.12.1",
     "jwt-decode": "^2.2.0",
     "lodash.pick": "^4.4.0",
     "merge-options": "^3.0.4",
