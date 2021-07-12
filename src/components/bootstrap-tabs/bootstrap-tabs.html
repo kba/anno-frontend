@@ -1,7 +1,7 @@
 <div class="annoeditor-bootstrap-tabs">
   <ul class="nav nav-tabs">
     <li role="presentation"
-      v-for="tab in tablist"
+      v-for="tab in tabPanesAsVueElements()"
       :class="[
         'nav-item',
         (tab.active && 'active'),
@@ -14,15 +14,15 @@
           :aria-controls="tab.name"
           role="tab"
           data-toggle="tab"
-          @click='clickHandler'>
+          >
           {{tab.title}}
 
-        <help-button v-if="tab.topic"
-          :topic="tab.topic"
-          :title="tab.title"
-          :help-url-template="helpUrlTemplate"
-          :help-url-manual="helpUrlManual"
-          />
+          <help-button v-if="tab.topic"
+            :topic="tab.topic"
+            :title="tab.title"
+            :help-url-template="helpUrlTemplate"
+            :help-url-manual="helpUrlManual"
+            />
 
         </a>
 

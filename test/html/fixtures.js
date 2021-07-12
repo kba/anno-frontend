@@ -105,7 +105,7 @@ window.annotations = [
   },
 
   {
-    id: null,
+    id: 'urn:uuid:61d7018a-8582-4c4c-9704-74e5ac3340f0',
     creator: 'john',
     title: 'Anno mit Anwo 2',
     body: [

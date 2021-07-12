@@ -23,9 +23,10 @@
       class="btn btn-sm btn-default btn-outline-secondary"
       />
 
-    <button v-if="$auth('create', targetSource)"
-      class="btn btn-sm btn-success"
-      @click="create"
+    <button @click="create"
+      v-if="$store.state.offerCreateNewAnnotationButton
+        && $auth('create', targetSource)"
+      class="btn btn-sm btn-success create-new-annotation-button"
       >
       {{ l10n('new') }}
     </button>
@@ -104,23 +105,24 @@
 
   </div>
 
-    <div style="clear: both;"></div>
+  <div style="clear: both;"></div>
 
+  <div class="panel-group">
+    <anno-viewer v-for="annotation in list" :key="annotation.id"
+      :annotation="annotation"
+      :purl-template="purlTemplate"
+      :purl-id="purlId"
+      :as-reply=false
+      :image-width="$store.state.targetImageWidth"
+      :image-height="$store.state.targetImageHeight"
+      :thumb-stroke-color="$store.state.thumbStrokeColor"
+      :thumb-fill-color="$store.state.thumbStrokeColor"
+      :iiif-url-template="$store.state.iiifUrlTemplate"
+      >
+    </anno-viewer>
+  </div>
 
-    <div class="panel-group">
-      <anno-viewer v-for="annotation in list" :key="annotation.id"
-        :annotation="annotation"
-        :purl-template="purlTemplate"
-        :purl-id="purlId"
-        :as-reply=false
-        :image-width="$store.state.targetImageWidth"
-        :image-height="$store.state.targetImageHeight"
-        :thumb-stroke-color="$store.state.thumbStrokeColor"
-        :thumb-fill-color="$store.state.thumbStrokeColor"
-        :iiif-url-template="$store.state.iiifUrlTemplate"
-        >
-      </anno-viewer>
-    </div>
-
+  <div class="anno-editor-modal-wrapper">
     <anno-editor-modal ref='modal-editor' :editor-id="`${prefix}-modal-editor`" />
+  </div>
 </div>

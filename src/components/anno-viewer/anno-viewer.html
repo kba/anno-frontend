@@ -22,6 +22,11 @@
       <a role="button">
         <span class="fa fa-caret-right" v-show="collapsed"></span>
         <span class="fa fa-caret-down" v-show="!collapsed"></span>
+        <span v-if="this.problemsWarningText" class="
+          anno-editor-error
+          anno-error-annotation-problems
+          danger
+          ">⚠ {{ this.problemsWarningText }} ⚠</span>
         {{ title }}
       </a>
     </h4>
@@ -30,10 +35,13 @@
   <div class="panel-body" role="tabpanel" v-show="!collapsed">
     <div class="media" style="height: auto;">
       <div class="media-body">
+
         <div role="group"
-          class="btn-group btn-group-sm">
+          class="btn-group btn-group-sm
+            anno-editor-anno-body-buttonbar-top">
           <button v-for="aCreator of ensureArray('creator')"
-            class="btn btn-sm anno-creator-icon btn-outline-secondary">
+            class="btn btn-sm btn-outline-secondary
+              anno-creator-icon">
             <template v-if="aCreator.icon">
               <img class="media-object" style="display: inline" :src="aCreator.icon" alt="Logo" width="15px" height="15px">
             </template>

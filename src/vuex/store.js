@@ -1,7 +1,6 @@
 const axios = require('axios');
 const {collectIds} = require('@kba/anno-util');
 const jwtDecode = require('jwt-decode');
-const isFunc = require('is-fn');
 
 const apiFactory = require('../api');
 const eventBus = require('../event-bus');
@@ -10,6 +9,7 @@ const annotationList = require('./module/annotationList');
 const state = require('./state');
 
 function isExpired(token) {return (token.exp < Date.now() / 1000)}
+function jsonDeepCopy(x) { return JSON.parse(JSON.stringify(x)); }
 
 module.exports = {
     strict: process.env.NODE_ENV != 'production',
@@ -65,11 +65,11 @@ module.exports = {
 
         INJECTED_MUTATION(state, mutationSpec) {
           const [mutaFunc, ...mutaArgs] = mutationSpec;
-          console.debug('INJECTED_MUTATION go!',
-            { state: JSON.parse(JSON.stringify(state)), mutaFunc, mutaArgs });
+          // console.debug('INJECTED_MUTATION go!',
+          //   { state: jsonDeepCopy(state), mutaFunc, mutaArgs });
           mutaFunc(state, ...mutaArgs);
-          console.debug('INJECTED_MUTATION done',
-            { state: JSON.parse(JSON.stringify(state)), mutaFunc, mutaArgs });
+          // console.debug('INJECTED_MUTATION done',
+          //   { state: jsonDeepCopy(state), mutaFunc, mutaArgs });
         },
 
         ENABLE_CACHE_BUSTER(state) {state.cacheBusterEnabled = true},
