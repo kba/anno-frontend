@@ -120,13 +120,17 @@
 
         <div v-if="firstHtmlBody" v-html="firstHtmlBody.value"></div>
 
-        <template v-if="relationLinkBodies && relationLinkBodies.length > 0">
+        <template v-if="(relationLinkBodies || false).length > 0">
           <h5><span class="fa fa-link">&nbsp;</span>{{ l10n('relationlinks') }}</h5>
           <ul>
-            <li v-for="relationlinkBody in relationLinkBodies">
-              <a :href="relationlinkBody.id || relationlinkBody.source">
+            <li v-for="rlb in relationLinkBodies">
+              <a :href="rlb.id || rlb.source">
                 <!-- i class="fa fa-tag"></i -->
-                {{ relationlinkBody.value || relationlinkBody.label }}
+                {{
+                  rlb.value
+                  || rlb.label
+                  || rlb.source
+                }}
               </a>
             </li>
           </ul>
