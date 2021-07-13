@@ -14,7 +14,8 @@ const components = {
     // editing
     'anno-editor-debug-panel':    require('./anno-editor-debug-panel'),
     'anno-editor-licenses':       require('./anno-editor-licenses'),
-    'anno-editor-modal':   require('./anno-editor-modal'),
+    'anno-editor-modal':          require('./anno-editor-modal'),
+    'anno-editor-rows-addable':   require('./anno-editor-rows-addable'),
     'anno-editor':         require('./anno-editor'),
     'html-editor':         require('./html-editor'),
     'semtags-editor':      require('./semtags-editor'),

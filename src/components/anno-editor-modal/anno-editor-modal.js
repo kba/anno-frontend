@@ -22,10 +22,6 @@ module.exports = {
     data() {return {
       bootstrapOpts: bootstrapCompat.sharedConfig,
     }},
-    props: {
-        draggable: {type: Boolean, default: true},
-        resizable: {type: Boolean, default: true},
-    },
     template: require('./anno-editor-modal.html'),
     style:    require('./anno-editor-modal.scss'),
     computed: {
@@ -48,42 +44,6 @@ module.exports = {
       });
     },
 
-    mounted() {
-        const dialogEl = this.$el.querySelector('.modal-dialog')
-        const contentEl = this.$el.querySelector('.modal-content')
-
-        if (this.draggable) {
-            let jQuery = $
-            if (typeof jQuery().draggable !== 'function') jQuery = window.jQuery
-            if (!jQuery || typeof jQuery().draggable !== 'function')
-                console.error("draggable modal editor requires jquery ui")
-            else {
-                jQuery(dialogEl).draggable({
-                    handle: '.modal-header'
-                })
-                dialogEl.classList.add('draggable')
-            }
-        }
-
-        if (this.resizable) {
-            let jQuery = $
-            if (typeof jQuery().resizable !== 'function') jQuery = window.jQuery
-            if (!jQuery || typeof jQuery().resizable !== 'function')
-                console.error("resizable modal editor requires jquery ui")
-            else {
-                jQuery(contentEl).resizable({
-                    alsoResize: ".modal-dialog",
-                    minHeight: 300,
-                    minWidth: 300
-                })
-                contentEl.classList.add('resizable')
-                $(this.$el).on('show.bs.modal', function () {
-                    $(this).find('.modal-body').css({'max-height': '100%'})
-                })
-            }
-        }
-
-    },
     methods: {
         save() {eventBus.$emit('save')},
         remove() {eventBus.$emit('remove', this.id)},

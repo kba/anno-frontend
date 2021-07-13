@@ -1,33 +1,38 @@
-<div class="card panel panel-default annoeditor-semtags-editor">
-  <div class="panel-heading">
-    {{ l10n('semtags') }}
-  </div>
-  <div class="panel-body">
-      <div class="row" v-for="(body, bodyIndex) in semanticTagBodies">
-        <div class="col-md-9">
-          <input
-            :data-body-index="bodyIndex"
-            required
-            autocomplete
-            type="text"
-            class="form-control semtag-value"
-            :value="body.value"
-            :placeholder="l10n('semtag')"
-          />
-        </div>
-        <div class="col-md-3">
-          <bootstrap-button
-            btn-class="danger"
-            icon-fa="trash-o"
-            @click="removeBody(body)">
-            {{ l10n('delete_semtag') }}
-          </bootstrap-button>
-        </div>
-    </div>
+<anno-editor-rows-addable
+  class="annoeditor-semtags-editor"
+  :number-of-rows="semanticTagBodies.length"
+  >
+
+  <template slot="buttons">
     <bootstrap-button
       btn-class="success"
       icon-fa="plus"
       @click="addSemanticTag"
       >{{ l10n('add_semtag') }}</bootstrap-button>
-  </div>
-</div>
+  </template>
+
+  <div class="row semtag" v-for="(body, bodyIndex) in semanticTagBodies">
+    <div class="col-md-9">
+      <input
+        :data-body-index="bodyIndex"
+        required
+        autocomplete
+        type="text"
+        class="form-control semtag-value"
+        :value="body.value"
+        :placeholder="l10n('semtag')"
+      />
+    </div>
+    <div class="col-md-3">
+      <bootstrap-button
+        btn-class="danger"
+        icon-fa="trash-o"
+        @click="removeBody(body)">
+        {{ l10n('delete_semtag') }}
+      </bootstrap-button>
+    </div>
+  </div><!-- .row.semtag -->
+
+  <div class="bonanza-dropdown-spacer"><s></s></div>
+
+</anno-editor-rows-addable>

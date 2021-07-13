@@ -15,6 +15,7 @@
   function chkIsGlobal(val, key) { return ((val === window[key]) && key); }
 
   function customTraverse(val, seen, pathKeys, parentPathVals, tooDeep) {
+    // console.debug('customTraverse', pathKeys);
     if (parentPathVals.includes(val)) { return; }
     var tmp = (chkIsGlobal(val, 'window')
       || chkIsGlobal(val, 'document'));
@@ -34,7 +35,7 @@
     if (pkj(4) === 'thumb vsm_ listenerKey_ src') {
       return tooDeep.abortSilently;
     }
-    if (pkj(4) === '0 vm $store _vm') { return tooDeep.abortSilently(); }
+    if (pkj(3) === 'vm $store _vm') { return tooDeep.abortSilently(); }
     if (pathKeys.length >= skipRecurs.cmpLength) {
       if (skipRecurs.includes(pkj(skipRecurs.cmpLength))) { return; }
     }

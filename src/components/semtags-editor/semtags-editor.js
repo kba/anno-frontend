@@ -16,7 +16,10 @@ module.exports = {
         require('@/mixin/l10n'),
     ],
     template: require('./semtags-editor.html'),
-    style:    require('./bonanza.sass'),
+    style: [
+        require('./bonanza.sass'),
+        require('./semtags-editor.scss'),
+    ],
     computed: {
         semanticTagBodies() {return this.$store.getters.semanticTagBodies},
         language() {return this.$store.state.language},
