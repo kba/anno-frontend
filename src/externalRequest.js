@@ -21,7 +21,7 @@ const EX = async function externalRequest(annoApp, action, ...args) {
 
 Object.assign(EX, {
 
-  async doConfigureTargetAndCreateAnnotation(vuexApi, param) {
+  async doConfigureTargetAndComposeAnnotation(vuexApi, param) {
     const { state, commit } = this.vuexApi;
     if (state.editMode) {
       const err = new Error('Editor busy');

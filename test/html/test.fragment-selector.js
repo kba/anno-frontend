@@ -25,7 +25,7 @@
   form.elements.frag.value = 'frag-ex1';
 
   form.onsubmit = function submitted() {
-    const action = 'ConfigureTargetAndCreateAnnotation';
+    const action = 'ConfigureTargetAndComposeAnnotation';
     const params = { targetFragment: form.elements.frag.value };
     function onSuccess() { console.debug(action + ': success'); }
     // eslint-disable-next-line no-alert
