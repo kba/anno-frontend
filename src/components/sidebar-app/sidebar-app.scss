@@ -26,13 +26,28 @@
     }
   }
 
-  .annoeditor-sidebar-no-annotations {
-    background: #fee;
-    & > div {
-      width: 50%;
-      margin: 0 auto;
-      padding: 1em 0;
+  .annoeditor-sidebar-body {
+
+    .msgbox {
+      margin: 1em 0;
+      background-color: linen;
+      border: 1px solid wheat;
+
+      & p {
+        margin: 1ex;
+      }
+
+      &.error {
+        background-color: mistyrose;
+        border-color: tomato;
+      }
+
+      &.empty > .msg {
+        margin-left: 20%;
+        margin-right: 20%;
+      }
     }
+
   }
 }
 
