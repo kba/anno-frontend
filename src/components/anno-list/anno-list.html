@@ -35,7 +35,8 @@
       :href="requestEndpoint"
       v-if="isLoggedIn && ! $auth('create', targetSource)"
       >
-      {{ l10n('not_enough_rights') }}
+      {{ l10n('annoeditor_mode_create') }}:
+      {{ l10n('not_authorized') }}
     </a>
 
   <help-button v-show="isLoggedIn && ! $auth('create', targetSource)"
