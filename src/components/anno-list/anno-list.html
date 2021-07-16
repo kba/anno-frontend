@@ -1,4 +1,6 @@
-<div class="annoeditor-list">
+<div class="annoeditor-list"
+  :data-number-of-annots="list.length"
+  >
   <div class="btn-group pull-left hidden-print" role="group">
     <a v-if="isLoggedIn && enableLogoutButton"
       class="btn btn-sm btn-warning"
@@ -35,7 +37,8 @@
       :href="requestEndpoint"
       v-if="isLoggedIn && ! $auth('create', targetSource)"
       >
-      {{ l10n('not_enough_rights') }}
+      {{ l10n('annoeditor_mode_create') }}:
+      {{ l10n('not_authorized') }}
     </a>
 
   <help-button v-show="isLoggedIn && ! $auth('create', targetSource)"
@@ -52,7 +55,10 @@
 
   </div>
 
-  <div class="btn-group btn-group-vertical pull-right hidden-print" role="group">
+  <div class="btn-group
+    pull-right
+    hidden-print
+    " role="group">
 
     <button v-if="collapsed && numberOfAnnotations > 0" class="btn btn-default btn-outline-secondary btn-sm" @click="collapseAll('show')">
       <span class="fa fa-plus"></span>&nbsp;{{ l10n('open_all') }}
@@ -107,7 +113,8 @@
 
   <div style="clear: both;"></div>
 
-  <div class="panel-group">
+  <div class="panel-group annot-list">
+    <slot name="annot-list-empty" v-if="!list.length" />
     <anno-viewer v-for="annotation in list" :key="annotation.id"
       :annotation="annotation"
       :purl-template="purlTemplate"

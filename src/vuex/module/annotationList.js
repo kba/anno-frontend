@@ -31,11 +31,17 @@ const sorters = {
 }
 
 
+const ERR_NO_FETCH_ATTEMPT = ('Fetching has not been triggered'
+  + ', probably because some earlier initialization failed.');
+
+
 const annoList = {
     state: {
         list: [],
         sortedBy: 'created_az',
         allCollaped: 'false',
+        fetching: false,
+        fetchFailed: new Error(ERR_NO_FETCH_ATTEMPT),
     },
     getters: {
         numberOfAnnotations(state) {return state.list.length},
@@ -70,8 +76,15 @@ const annoList = {
         //     })
         // },
 
+        ANNOLIST_UPDATE_STATE(state, upd) {
+          // console.debug('ANNOLIST_UPDATE_STATE():', upd, state);
+          Object.assign(state, upd);
+        },
+
         REPLACE_LIST(state, list) {
-            state.list = list
+            state.fetching = false;
+            state.fetchFailed = false;
+            state.list = list;
         },
 
         ADD_TO_LIST(state, v) {

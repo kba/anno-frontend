@@ -1,4 +1,3 @@
-const axios = require('axios');
 const {collectIds} = require('@kba/anno-util');
 const jwtDecode = require('jwt-decode');
 
@@ -8,8 +7,10 @@ const editing = require('./module/editing');
 const annotationList = require('./module/annotationList');
 const state = require('./state');
 
-function isExpired(token) {return (token.exp < Date.now() / 1000)}
-function jsonDeepCopy(x) { return JSON.parse(JSON.stringify(x)); }
+const fetchToken = require('./fetchers/fetchToken.js');
+const fetchList = require('./fetchers/fetchList.js');
+
+// function jsonDeepCopy(x) { return JSON.parse(JSON.stringify(x)); }
 
 module.exports = {
     strict: process.env.NODE_ENV != 'production',
@@ -72,43 +73,12 @@ module.exports = {
           //   { state: jsonDeepCopy(state), mutaFunc, mutaArgs });
         },
 
-        ENABLE_CACHE_BUSTER(state) {state.cacheBusterEnabled = true},
-
-        DISABLE_CACHE_BUSTER(state) {state.cacheBusterEnabled = false}
-
     },
 
     actions: {
 
-        fetchToken({state, commit, dispatch}) {
-            return new Promise((resolve, reject) => {
-                let token = window.sessionStorage.getItem('anno-token')
-                if (token) {
-                    if (isExpired(token)) {
-                        commit('DELETE_TOKEN')
-                    } else {
-                        // const {sub} = jwtDecode(token)
-                        commit('SET_TOKEN', token)
-                        return resolve()
-                    }
-                }
-                axios.get(state.tokenEndpoint, {
-                    // maxRedirects: 0, // does not work in the browser
-                    withCredentials: 1, // without it, xhr won't set cookies for CORS
-                }).then(resp => {
-                    const token = resp.data
-                    try {
-                        // const {sub} = jwtDecode(token)
-                        commit('SET_TOKEN', token)
-                        dispatch('fetchList')
-                        resolve()
-                    } catch (err) {
-                        commit('DELETE_TOKEN')
-                        reject("NO_TOKEN")
-                    }
-                }).catch(reject)
-            })
-        },
+      fetchToken,
+      fetchList,
 
         fetchAcl({state, commit, getters}) {
             return new Promise((resolve, reject) => {
@@ -128,36 +98,6 @@ module.exports = {
         async runInjectedFunc(vuexApi, func) {
           console.debug('runInjectedFunc', { vuexApi, func });
           return func(vuexApi);
-        },
-
-        /*
-         * Cache-busting to get around 304 with changed schemes
-         * https://gitlab.ub.uni-heidelberg.de/DWork/Presentation/issues/75
-         */
-
-        fetchList({state, commit, dispatch}) {
-            return new Promise((resolve, reject) => {
-                const query = {'$target': state.targetSource}
-                if (state.cacheBusterEnabled) {
-                    query._cacheBuster = Date.now()
-                }
-                // console.log("Search", query)
-                apiFactory(state).search(query, (err, list) => {
-                    if (err && !state.cacheBusterEnabled) {
-                        // console.log("Initial fail, try busting cache")
-                        commit('ENABLE_CACHE_BUSTER')
-                        dispatch('fetchList')
-                    } else if (err) {
-                        console.log("Failed even with cache busting. much sadness :(")
-                        reject(err)
-                    } else {
-                        commit('DISABLE_CACHE_BUSTER')
-                        commit('REPLACE_LIST', list)
-                        eventBus.$emit('fetched', list)
-                        resolve(dispatch('fetchAcl'))
-                    }
-                })
-            })
         },
 
         logout({state, commit}) {

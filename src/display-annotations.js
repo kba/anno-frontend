@@ -1,7 +1,10 @@
-const Vue = require('vue').default
-const Vuex = require('vuex').default
-const mergeOptions = require('merge-options')
+const Vue = require('vue').default;
+const Vuex = require('vuex').default;
+const mergeOptions = require('merge-options');
+const pEachSeries = require('p-each-series').default;
+
 Vue.use(Vuex)
+
 const SidebarApp = require('./components/sidebar-app')
 const eventBus = require('./event-bus')
 const bootstrapCompat = require('./bootstrap-compat')
@@ -159,12 +162,21 @@ module.exports = function displayAnnotations(customOptions) {
     //
     // Kick off fetching tokens/list/ACL rules
     //
-    annoapp.$store.dispatch('fetchToken')
-        .then(annoapp.$store.dispatch('fetchList'))
-        .catch(err => {
-            // console.error("Error with initial fetchToken/fetchList", err)
-            annoapp.eventBus.$emit('error', err)
-        })
+    setTimeout(async function init() {
+      pEachSeries([
+        'fetchToken',
+        'fetchList',
+        'fetchAcl',
+      ], async function dare(phase) {
+        try {
+          await annoapp.$store.dispatch(phase);
+        } catch (err) {
+          err.appInitPhase = phase;
+          err.message += '; phase: ' + phase;
+          annoapp.eventBus.$emit('error', err);
+        }
+      });
+    }, 1);
 
     //
     // Return the app for event emitting
@@ -174,5 +186,5 @@ module.exports = function displayAnnotations(customOptions) {
     }
     if (options.onAppReady) { options.onAppReady(annoapp); }
     annoapp.externalRequest = externalRequest.bind(null, annoapp);
-    return annoapp
+    return annoapp;
 }

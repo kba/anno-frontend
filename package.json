@@ -1,4 +1,5 @@
-{ "name": "anno-frontend",
+{
+  "name": "anno-frontend",
   "private": true,
   "version": "0.3.2107121820",
   "description": "Frontend for @kba/anno",
@@ -29,6 +30,8 @@
     "jwt-decode": "^2.2.0",
     "lodash.pick": "^4.4.0",
     "merge-options": "^3.0.4",
+    "p-each-series": "^3.0.0",
+    "pify": "^5.0.0",
     "querystring": "^0.2.0",
     "quill": "^1.3.7",
     "semtonotes-utils": "^0.2.0",
