@@ -24,14 +24,23 @@
 
 <div class="topic" data-topic="annot">
   <h3>Annotation</h3>
-  <dl>
-    <template v-for="prop in [
-      'target',
-    ]">
-    <dt :key="'dt:' + prop">{{ prop }}:</dt>
-    <dd :key="'dd:' + prop">{{ annot[prop] }}</dd>
-    </template>
-  </dl>
+  <div class="annot-json">
+    <div class="btn-group toolbar">
+      <input type="button" class="
+        btn btn-sm btn-default btn-outline-secondary
+        dump" value="✍"
+        @click="redumpAnnotJson">
+      <input type="button" class="
+        btn btn-sm btn-default btn-outline-secondary
+        load" value="⏎"
+        @click="importAnnotJson">
+    </div>
+    <textarea ref="annotJsonTxa"
+      :key="'annotJsonDump@' + this.annotJsonRedumped"
+      class="annot-json-dump"
+      >{{ JSON.stringify(annot, null, 2
+        ).replace(/((?:^|\n +)[\{\[])\n +/g, '$1 ') + '\n' }}</textarea>
+  </div>
 </div><!-- .chapter -->
 
 

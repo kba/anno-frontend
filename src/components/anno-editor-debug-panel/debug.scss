@@ -12,4 +12,30 @@
     margin-left: 2em;
   }
 
+  textarea {
+    width: 100%;
+    height: 5em;
+    resize: vertical;
+    font-family: monospace;
+    font-size: 90%;
+    overflow: scroll;
+  }
+
+  .annot-json {
+
+    position: relative;
+
+    .toolbar {
+      position: absolute;
+      right: 0;
+      bottom: 100%;
+    }
+
+    textarea {
+      font-size: 70%;
+      height: 20em;
+    }
+
+  }
+
 }

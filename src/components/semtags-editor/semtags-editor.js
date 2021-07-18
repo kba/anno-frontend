@@ -21,7 +21,9 @@ module.exports = {
         require('./semtags-editor.scss'),
     ],
     computed: {
-        semanticTagBodies() {return this.$store.getters.semanticTagBodies},
+        semanticTagBodies() {
+          return (this.$store.getters.semanticTagBodies || [])
+        },
         language() {return this.$store.state.language},
     },
     updated() {
