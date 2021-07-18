@@ -5,12 +5,24 @@
   const { annoApp } = window;
   // ^- see exportAppAsWindowProp in cfg.tests.defaults.js
 
+  const imgRadios = [
+    annoApp.$store.state.targetImage,
+  ].filter(Boolean).concat('').map(function imgFmt(url, idx) {
+    const htmlUrl = url.replace(/[<>"']/g, encodeURI).replace(/&/g, '&amp;');
+    const caption = htmlUrl.split(/\//).slice(-1)[0].replace(/^\d+px-/, '');
+    return ('\n      <label><input type="radio" name="image" value="'
+      + htmlUrl + (idx ? '' : '" checked="checked') + '"> '
+      + (caption || '(keines)') + '</label>');
+  }).join('');
+
   const { jQuery } = window;
   const chap = jQuery(`
   <chapter><form action="about+nope://" method="get"><aside><fieldset>
     <legend>Fragment Selector Test</legend>
     <p><input type="submit" value="Beginne Entwurf"> für targetFragment:
-      <tt>#</tt><input type="text" name="frag" size="50" value="">
+      <tt>#</tt><input type="text" name="frag" size="20" value="">
+    </p>
+    <p>und Bilddatei:${imgRadios}
     </p>
     <p>Beispiel-Abschnittte:
       <span id="frag-ex1">Hier <a href="#frag-ex1">ein</a> Test,</span>
@@ -26,7 +38,11 @@
 
   form.onsubmit = function submitted() {
     const action = 'ConfigureTargetAndComposeAnnotation';
-    const params = { targetFragment: form.elements.frag.value };
+    const params = {
+      targetImage: (form.elements.image.value || null),
+      targetFragment: (form.elements.frag.value || null),
+    };
+
     function onSuccess() { console.debug(action + ': success'); }
     // eslint-disable-next-line no-alert
     function onFail(err) { window.alert('Error: ' + action + ': ' + err); }
