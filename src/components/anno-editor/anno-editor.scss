@@ -42,3 +42,24 @@
 .annoeditor-html-editor > .panel-body {
   overflow-y: auto; /* Workaround for overly-tall HTML editor */
 }
+
+.annoeditor-svg-zones-editor {
+
+  .xrx-toolbar {
+    background-color: whitesmoke;
+    border: 1px solid silver;
+    margin: -1px; margin-bottom: 2px;
+
+    .input-group {
+      padding: 0 5px;
+      border: inherit;
+      border-top-width: 0;
+      border-left-width: 0;
+      border-bottom-width: 0;
+
+      span.input-group-addon { display: none; }
+    }
+
+  }
+
+}
