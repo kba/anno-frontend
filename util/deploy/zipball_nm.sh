@@ -8,6 +8,7 @@ function zipball_nm () {
   cd -- "$SELFPATH"/../.. || return $?
 
   local ZIP_FN='tests.nm.snapshot.zip'
+  local TESTS_DIR='test/html'
 
   case " $* " in
     *' PD '* | \
@@ -15,7 +16,7 @@ function zipball_nm () {
   esac
 
   local NM_HTML=(
-    test/html/*.nm.html
+    "$TESTS_DIR"/*.nm.html
     )
   local NM_DEPS=()
   find_nm_deps || return $?
@@ -33,10 +34,11 @@ function zipball_nm () {
     "${NM_DEPS[@]}"
     dist/
     "${TEST_DEPS[@]}"
+    util/deploy/
     )
 
   zip -r9 "$ZIP_FN" -- "${PACK_FILES[@]}" || return $?
-  mv --verbose --target-directory="$SELFPATH" -- "$ZIP_FN" || return $?
+  mv --verbose --target-directory="$TESTS_DIR" -- "$ZIP_FN" || return $?
 
   case " $* " in
     *' PD '* | \
@@ -50,7 +52,7 @@ function deploy_to () {
   local CHECK_FILE="$1"; shift
   [ -z "$CHECK_FILE" ] || CHECK_FILE="$DEST_DIR/$CHECK_FILE"
 
-  local ZIP_ABS="$SELFPATH/$ZIP_FN"
+  local ZIP_ABS="$PWD/$TESTS_DIR/$ZIP_FN"
   local HASH="$(sha1sum --binary -- "$ZIP_ABS")"
   HASH="${HASH:0:8}"
   [ -n "$HASH" ] || return 4$(echo "E: failed to checksum $ZIP_ABS" >&2)
