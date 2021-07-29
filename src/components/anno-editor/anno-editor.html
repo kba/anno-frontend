@@ -3,13 +3,12 @@
   ref='tablist'
   :help-url-template="l10n('help.url.template')"
   :help-url-manual="l10n('help.url.manual')"
-  :key="'tabs@' + this.rerenderTimestamp"
 >
 
   <bootstrap-tab :name="`${prefix}-${editorId}-tab-comment`"
     :title="l10n('comment_tab')"
     topic='html'
-    ref="comment_text"
+    ref="commentTextTab"
     >
     <html-editor
       :editor-id="`${prefix}-${editorId}-html-editor`"

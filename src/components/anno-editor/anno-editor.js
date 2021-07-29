@@ -17,6 +17,8 @@ const eventBus = require('../../event-bus');
 const getOwn = require('getown');
 const jQuery = require('jquery');
 
+function soon(f) { return setTimeout(f, 1); }
+
 module.exports = {
     mixins: [
         require('@/mixin/l10n'),
@@ -44,11 +46,10 @@ module.exports = {
               zoneEditor.reset();
               if (targetImage) { zoneEditor.loadImage(targetImage); }
             }
-            setTimeout(() => editor.switchToFirstTab(), 1);
+            soon(() => editor.$refs.tablist.switchToNthTab(1));
         })
     },
     mounted() {
-      window.anEd = this;
         if (this.targetImage) {
             this.zoneEditor.$on('load-image', () => {
                 this.loadSvg()
@@ -84,12 +85,6 @@ module.exports = {
 
     },
     methods: {
-
-        switchToFirstTab() {
-          const sel = 'ul.nav-tabs > li > a.nav-link:first';
-          const domEl = jQuery(this.$el).find(sel)[0];
-          console.debug('switch to tab:', domEl);
-        },
 
         save() {
             const {
