@@ -18,7 +18,8 @@ module.exports = {
     },
   },
   props: {
-    helpUrlTemplate:  {type: String, required: true},
-    helpUrlManual:    {type: String, required: false},
+    helpUrlTemplate:    { type: String, required: true },
+    helpUrlManual:      { type: String },
+    rerenderTimestamp:  { type: Number, default: 0 },
   },
 };

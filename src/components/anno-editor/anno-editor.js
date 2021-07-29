@@ -16,7 +16,6 @@
 const eventBus = require('../../event-bus');
 const getOwn = require('getown');
 const jQuery = require('jquery');
-const BootstrapTab = require('bootstrap').Tab;
 
 module.exports = {
     mixins: [
@@ -49,6 +48,7 @@ module.exports = {
         })
     },
     mounted() {
+      window.anEd = this;
         if (this.targetImage) {
             this.zoneEditor.$on('load-image', () => {
                 this.loadSvg()
@@ -88,7 +88,7 @@ module.exports = {
         switchToFirstTab() {
           const sel = 'ul.nav-tabs > li > a.nav-link:first';
           const domEl = jQuery(this.$el).find(sel)[0];
-          if (domEl) { (new BootstrapTab(domEl)).show(); }
+          console.debug('switch to tab:', domEl);
         },
 
         save() {
