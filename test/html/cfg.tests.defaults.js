@@ -17,10 +17,12 @@
   cfg.targetThumbnail = cfg.targetImage.replace(/\/1024px-/g, '/200px-');
 
   function appendFixtureAnnots() {
-    var fixt = window.annotations, al;
+    var fixt = window.annotations;
     if (!fixt) { return; }
-    al = window.annoApp.$store.state.annotationList;
-    al.list = al.list.concat(fixt);
+    window.annoApp.$store.commit('INJECTED_MUTATION', [function append(state) {
+      var alSt = state.annotationList;
+      alSt.list = alSt.list.concat(fixt);
+    }]);
   }
 
   jq('#tests-toolbar-bottom input[type=button]').each(function guessId(i, e) {
