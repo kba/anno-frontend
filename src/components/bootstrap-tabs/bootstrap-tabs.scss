@@ -1,8 +1,12 @@
 .annoeditor-bootstrap-tabs {
-  .nav > li {
+
+  .nav-tabs > .nav-item {
     display: flex;
 
+    &.active > .nav-link { background-color: var(--light); }
+
     a.help-button {
+      margin-left: 0.5ex;
       background-color: #31b0d5;
       border-color: #269abc;
       border-radius: 100%;
@@ -10,4 +14,5 @@
       width: 1.6em;
     }
   }
+
 }

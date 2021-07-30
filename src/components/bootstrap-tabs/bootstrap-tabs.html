@@ -1,10 +1,9 @@
 <div class="annoeditor-bootstrap-tabs">
-  <ul class="nav nav-tabs">
+  <ul ref="tabs" class="nav nav-tabs">
     <li role="presentation"
       v-for="tab in tabPanesAsVueElements()"
       :class="[
         'nav-item',
-        (tab.active && 'active'),
         tab.tabCls,
       ].filter(Boolean)"
       >
@@ -28,7 +27,7 @@
 
     </li>
   </ul>
-  <div class="tab-content">
+  <div ref="panesContainer" class="tab-content">
     <slot></slot>
   </div>
 </div>

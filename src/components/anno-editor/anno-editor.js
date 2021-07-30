@@ -16,7 +16,8 @@
 const eventBus = require('../../event-bus');
 const getOwn = require('getown');
 const jQuery = require('jquery');
-const BootstrapTab = require('bootstrap').Tab;
+
+function soon(f) { return setTimeout(f, 1); }
 
 module.exports = {
     mixins: [
@@ -45,7 +46,7 @@ module.exports = {
               zoneEditor.reset();
               if (targetImage) { zoneEditor.loadImage(targetImage); }
             }
-            setTimeout(() => editor.switchToFirstTab(), 1);
+            soon(() => editor.$refs.tablist.switchToNthTab(1));
         })
     },
     mounted() {
@@ -84,12 +85,6 @@ module.exports = {
 
     },
     methods: {
-
-        switchToFirstTab() {
-          const sel = 'ul.nav-tabs > li > a.nav-link:first';
-          const domEl = jQuery(this.$el).find(sel)[0];
-          if (domEl) { (new BootstrapTab(domEl)).show(); }
-        },
 
         save() {
             const {
