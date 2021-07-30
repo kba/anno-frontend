@@ -3,8 +3,6 @@
   .nav-tabs > .nav-item {
     display: flex;
 
-    &.active > .nav-link { background-color: var(--light); }
-
     a.help-button {
       margin-left: 0.5ex;
       background-color: #31b0d5;
@@ -15,4 +13,17 @@
     }
   }
 
+}
+
+#annoeditor-sidebar[bsvermajor="3"] {
+  --light: whitesmoke;
+  .annoeditor-bootstrap-tabs .nav-tabs {
+    & > .nav-item.active > .nav-link { background-color: var(--light); }
+  }
+}
+
+#annoeditor-sidebar[bsvermajor="4"] {
+  .annoeditor-bootstrap-tabs .nav-tabs {
+    & > .nav-item > .nav-link.active { background-color: var(--light); }
+  }
 }
