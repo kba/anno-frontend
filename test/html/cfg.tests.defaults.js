@@ -9,6 +9,9 @@
 
     targetImage: ('https://upload.wikimedia.org/wikipedia/commons/thumb/'
       + 'f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png'),
+
+    acl: { '*': { '*': true } },
+
   };
 
   cfg.targetSource = ('http://anno.test/' + location.pathname.replace(/^\S+\//,
@@ -17,6 +20,7 @@
   cfg.targetThumbnail = cfg.targetImage.replace(/\/1024px-/g, '/200px-');
 
   function appendFixtureAnnots() {
+    // window.annoApp.$store.commit('CHANGE_ACL', { '*': { '*': true } });
     var fixt = window.annotations;
     if (!fixt) { return; }
     window.annoApp.$store.commit('INJECTED_MUTATION', [function append(state) {
