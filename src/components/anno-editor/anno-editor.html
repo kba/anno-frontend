@@ -32,7 +32,7 @@
   <bootstrap-tab
     :name="`${prefix}-${editorId}-tab-zones`"
     :title="l10n('zones')"
-    v-if="targetImage"
+    :visible="Boolean(targetImage)"
     topic='zones'
     >
     <xrx-vue
@@ -49,7 +49,7 @@
   <bootstrap-tab
     :name="`${prefix}-${editorId}-tab-tags`"
     :title="l10n('tags')"
-    v-if="enableTabTags"
+    :visible="Boolean(enableTabTags)"
     topic="tags"
     >
     <tags-editor/>

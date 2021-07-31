@@ -7,5 +7,6 @@ module.exports = {
         topic:  {type: String, required: false},
         tabCls:   {type: String, required: false},
         paneCls:  {type: String, required: false},
+        visible:  { type: Boolean, default: true },
     }
 }

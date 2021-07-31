@@ -95,8 +95,11 @@ const mutations = {
     },
 
     RESET_ANNOTATION(state) {
-        Object.keys(state).forEach(k => state[k] = null)
-        Object.assign(state, initialState())
+        Object.keys(state).forEach(function reset(key) {
+          state[key] = null;    // trigger potential setter
+          delete state[key];
+        });
+        Object.assign(state, initialState());
     },
 
     SET_REPLY_TO(state, v) {

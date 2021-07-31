@@ -2,6 +2,7 @@
   <ul ref="tabs" class="nav nav-tabs">
     <li role="presentation"
       v-for="tab in tabPanesAsVueElements()"
+      v-if="tab.visible"
       :class="[
         'nav-item',
         tab.tabCls,
