@@ -296,9 +296,13 @@ module.exports = {
             this.collapsed = collapseState === 'toggle' ? ! this.collapsed : collapseState === 'hide'
         },
         ensureArray(k) {
-          const anno = JSON.parse(JSON.stringify(this.annotation))
-          ensureArray(anno, k)
-          return anno[k]
+          // :TODO: Figure out what exactly this is supposed to do,
+          //    then simplify so we can omit the tmp container.
+          const orig = this.annotation[k];
+          const copy = (orig && jsonDeepCopy(orig));
+          const tmp = { val: copy };
+          ensureArray(tmp, 'val');
+          return tmp.val;
         },
         setToVersion(newState) {
           ;[
