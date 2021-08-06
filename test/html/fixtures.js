@@ -192,4 +192,81 @@ window.annotations = [
       },
     ],
   },
+
+  { id: 'https://anno.ub.uni-heidelberg.de/fragmentAnno1',
+    title: 'zu Fragment 1 (Test)',
+    body: { format: 'text/html', type: 'TextualBody', value: '1' },
+    collection: 'default',
+    created: '2021-08-06T21:46:49.036Z',
+    modified: '2021-08-06T21:46:49.036Z',
+    rights: 'https://creativecommons.org/licenses/by/4.0/',
+    target: {
+      selector: [
+        {
+          type: 'FragmentSelector',
+          value: 'frag-ex1',
+        },
+      ],
+      source: 'http://anno.test/displayAnnotations',
+    },
+    type: ['Annotation'],
+  },
+
+  { id: 'https://anno.ub.uni-heidelberg.de/fragmentAnno2a',
+    title: 'zu Fragment 2 (noch)',
+    body: { format: 'text/html', type: 'TextualBody', value: '2a' },
+    collection: 'default',
+    created: '2021-08-06T21:46:49.036Z',
+    modified: '2021-08-06T21:46:49.036Z',
+    rights: 'https://creativecommons.org/licenses/by/4.0/',
+    target: {
+      selector: [
+        {
+          type: 'FragmentSelector',
+          value: 'frag-ex2',
+        },
+      ],
+      source: 'http://anno.test/displayAnnotations',
+    },
+    type: ['Annotation'],
+  },
+
+  { id: 'https://anno.ub.uni-heidelberg.de/fragmentAnno2b',
+    title: 'zu Fragment 2 (doch)',
+    body: { format: 'text/html', type: 'TextualBody', value: '2b' },
+    collection: 'default',
+    created: '2021-08-06T21:46:49.036Z',
+    modified: '2021-08-06T21:46:49.036Z',
+    rights: 'https://creativecommons.org/licenses/by/4.0/',
+    target: {
+      selector: [
+        {
+          type: 'FragmentSelector',
+          value: 'frag-ex2',
+        },
+      ],
+      source: 'http://anno.test/displayAnnotations',
+    },
+    type: ['Annotation'],
+  },
+
+  { id: 'https://anno.ub.uni-heidelberg.de/fragmentAnno3',
+    title: 'zu Fragment 3 (Dinge)',
+    body: { format: 'text/html', type: 'TextualBody', value: '3' },
+    collection: 'default',
+    created: '2021-08-06T21:46:49.036Z',
+    modified: '2021-08-06T21:46:49.036Z',
+    rights: 'https://creativecommons.org/licenses/by/4.0/',
+    target: {
+      selector: [
+        {
+          type: 'FragmentSelector',
+          value: 'frag-ex3',
+        },
+      ],
+      source: 'http://anno.test/displayAnnotations',
+    },
+    type: ['Annotation'],
+  },
+
 ];
