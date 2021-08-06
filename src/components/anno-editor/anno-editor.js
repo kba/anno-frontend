@@ -33,13 +33,18 @@ module.exports = {
     },
     created() {
         // TODO Move these to store maybe??
+        const editorOpenCssClass = 'has-annoeditor-showing';
         eventBus.$on('create', this.create)
         eventBus.$on('reply', this.reply)
         eventBus.$on('revise', this.revise)
         eventBus.$on('remove', this.remove)
         eventBus.$on('discard', this.discard)
         eventBus.$on('save', this.save)
+        eventBus.$on('close-editor', () => {
+          document.body.classList.remove(editorOpenCssClass);
+        });
         eventBus.$on('open-editor', () => {
+            document.body.classList.add(editorOpenCssClass);
             const editor = this;
             const { targetImage, zoneEditor } = editor;
             if (zoneEditor) {

@@ -24,7 +24,10 @@
     </p>
     <p>und Bilddatei:${imgRadios}
     </p>
-    <p>Beispiel-Abschnittte:
+    <style type="text/css">
+      body.has-annoeditor-showing .fragment-examples span { display: block; }
+    </style>
+    <p class="fragment-examples">Beispiel-Abschnittte:
       <span id="frag-ex1">Hier <a href="#frag-ex1">ein</a> Test,</span>
       <span id="frag-ex2">und <a href="#frag-ex2">noch einer</a>. Doch</span>
       <span id="frag-ex3">aller <a href="#frag-ex3">guten Dinge</a>
