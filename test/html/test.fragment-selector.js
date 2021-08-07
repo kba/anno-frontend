@@ -2,6 +2,33 @@
 /* eslint-env browser */
 'use strict';
 (function installEarly() {
+  const cfg = window.annoTestCfg;
+
+  function setUniqueCssClassByDomId(cls, domElemId) {
+    const olds = Array.from(document.getElementsByClassName(cls));
+    olds.forEach(el => el.classList.remove(cls));
+    const cur = (domElemId && document.getElementById(domElemId));
+    if (cur) { cur.classList.add(cls); }
+  }
+
+  cfg.targetFragmentButtonTitle = 'Absatz hervorheben';
+
+  Object.assign(cfg.events, {
+
+    targetFragmentButtonClicked(ev) {
+      const fragId = ev.fragment;
+      setUniqueCssClassByDomId('jumped-to', fragId);
+      window.location.hash = '#' + fragId;
+    },
+
+    mouseenter(ev) {
+      const fragId = ev.dataApi('findTargetFragment');
+      setUniqueCssClassByDomId('hovering', fragId);
+    },
+    mouseleave() { setUniqueCssClassByDomId('hovering'); },
+
+  });
+
   return { then(f) { window.jQuery().ready(f); } };
 }()).then(function installLate() {
   const { annoApp } = window;
@@ -28,6 +55,8 @@
     </p>
     <style type="text/css">
       body.has-annoeditor-showing .fragment-examples span { display: block; }
+      .fragment-examples .jumped-to { background-color: khaki; }
+      .fragment-examples .hovering { background-color: lightgreen; }
     </style>
     <p class="fragment-examples">Beispiel-Abschnittte:
       <span id="frag-ex1">Hier <a href="#frag-ex1">ein</a> Test,</span>
