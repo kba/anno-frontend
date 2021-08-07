@@ -1,7 +1,9 @@
 ﻿/* -*- tab-width: 2 -*- */
 /* eslint-env browser */
 'use strict';
-(function install() {
+(function installEarly() {
+  return { then(f) { window.jQuery().ready(f); } };
+}()).then(function installLate() {
   const { annoApp } = window;
   // ^- see exportAppAsWindowProp in cfg.tests.defaults.js
 
@@ -57,4 +59,4 @@
   };
 
   chap.appendTo('body');
-}());
+});
