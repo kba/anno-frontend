@@ -12,6 +12,7 @@
 
     acl: { '*': { '*': true } },
 
+    events: {},
   };
 
   cfg.targetSource = ('http://anno.test/' + location.pathname.replace(/^\S+\//,

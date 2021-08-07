@@ -14,6 +14,9 @@ const {
     svgSelectorResource
 } = require('@kba/anno-queries')
 
+const bindDataApi = require('./dataApi.js');
+
+
 /**
  * ### anno-viewer
  *
@@ -48,6 +51,8 @@ const {
  * - `setToVersion`: Reset the currently edited annotation to the revision passed
  */
 
+function jsonDeepCopy(x) { return JSON.parse(JSON.stringify(x)); }
+
 module.exports = {
     name: 'anno-viewer', // necessary for nesting
     template: require('./anno-viewer.html'),
@@ -73,7 +78,8 @@ module.exports = {
         thumbFillColor: {type: String, default: '#090'},
     },
   beforeCreate() {
-    this.toplevelDoi = this.$options.propsData.annotation.doi
+    this.toplevelDoi = this.$options.propsData.annotation.doi;
+    this.dataApi = bindDataApi(this);
   },
   mounted() {
     this.iiifLink = this._iiifLink()
@@ -136,6 +142,8 @@ module.exports = {
         semanticTagBodies()  {return semanticTagBody.all(this.annotation)},
         relationLinkBodies() {return relationLinkBody.all(this.annotation)},
         svgTarget()          {return svgSelectorResource.first(this.annotation)},
+
+        targetFragment() { return (this.dataApi('findTargetFragment') || ''); },
 
         problemsWarningText() {
           const anno = (this.annotation || false);
@@ -232,6 +240,28 @@ module.exports = {
         revise()     {return eventBus.$emit('revise', this.annotation)},
         reply()      {return eventBus.$emit('reply',  this.annotation)},
         remove()     {return eventBus.$emit('remove', this.annotation)},
+
+        makeEventContext() {
+          const viewer = this;
+          return {
+            id: viewer.id,
+            domElem: viewer.$el,
+            dataApi: viewer.dataApi,
+            getVueBoundAnno() { return viewer.annotation; },
+            getAnnoJson() { return jsonDeepCopy(viewer.annotation); },
+          };
+        },
+
+        targetFragmentButtonClicked() {
+          const ev = {
+            ...this.makeEventContext(),
+            fragment: this.targetFragment,
+            button: this.$refs.targetFragmentButton,
+          };
+          // console.debug('emit fragmentButtonClicked:', ev);
+          eventBus.$emit('targetFragmentButtonClicked', ev);
+        },
+
         showMintDoiPopover(event) {
           const vm = this
           const popoverTrigger = $(event.target)
@@ -278,12 +308,12 @@ module.exports = {
           })
         },
         mouseenter() {
-            this.startHighlighting()
-            eventBus.$emit("mouseenter", this.id)
+            this.startHighlighting();
+            eventBus.$emit('mouseenter', this.makeEventContext());
         },
         mouseleave() {
-            this.stopHighlighting()
-            eventBus.$emit("mouseleave", this.id)
+            this.stopHighlighting();
+            eventBus.$emit('mouseleave', this.makeEventContext());
         },
 
         startHighlighting(expand)  {
@@ -296,9 +326,13 @@ module.exports = {
             this.collapsed = collapseState === 'toggle' ? ! this.collapsed : collapseState === 'hide'
         },
         ensureArray(k) {
-          const anno = JSON.parse(JSON.stringify(this.annotation))
-          ensureArray(anno, k)
-          return anno[k]
+          // :TODO: Figure out what exactly this is supposed to do,
+          //    then simplify so we can omit the tmp container.
+          const orig = this.annotation[k];
+          const copy = (orig && jsonDeepCopy(orig));
+          const tmp = { val: copy };
+          ensureArray(tmp, 'val');
+          return tmp.val;
         },
         setToVersion(newState) {
           ;[

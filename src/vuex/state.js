@@ -21,6 +21,7 @@ module.exports = {
   collection: null,
   token: null,
   acl: null,
+  targetFragmentButtonTitle: null,
 
   editMode: null,
 

@@ -33,13 +33,18 @@ module.exports = {
     },
     created() {
         // TODO Move these to store maybe??
+        const editorOpenCssClass = 'has-annoeditor-showing';
         eventBus.$on('create', this.create)
         eventBus.$on('reply', this.reply)
         eventBus.$on('revise', this.revise)
         eventBus.$on('remove', this.remove)
         eventBus.$on('discard', this.discard)
         eventBus.$on('save', this.save)
+        eventBus.$on('close-editor', () => {
+          document.body.classList.remove(editorOpenCssClass);
+        });
         eventBus.$on('open-editor', () => {
+            document.body.classList.add(editorOpenCssClass);
             const editor = this;
             const { targetImage, zoneEditor } = editor;
             if (zoneEditor) {
@@ -150,11 +155,24 @@ module.exports = {
         },
 
         create(annotation) {
-            this.$store.commit('SET_EDIT_MODE', 'create')
-            this.$store.commit('RESET_ANNOTATION')
-            this.$store.commit('SET_COLLECTION', this.$store.state.collection)
-            this.$store.commit('ADD_TARGET', this.targetSource)
-            eventBus.$emit('open-editor')
+          const editor = this;
+          const { commit, state } = editor.$store;
+          commit('SET_EDIT_MODE', 'create')
+          commit('RESET_ANNOTATION')
+          commit('SET_COLLECTION', this.$store.state.collection)
+          const tgtSpec = {
+            source: this.targetSource,
+          };
+          const tgtSels = [];
+          if (state.targetFragment) {
+            tgtSels.push({
+              type: 'FragmentSelector',
+              value: state.targetFragment,
+            });
+          }
+          if (tgtSels.length) { tgtSpec.selector = tgtSels; }
+          commit('ADD_TARGET', tgtSpec);
+          eventBus.$emit('open-editor')
         },
 
         reply(annotation) {

@@ -8,8 +8,10 @@
     (this.isPurl && 'annoeditor-purl'),
     (this.asReply && 'annoeditor-reply'),
   ].filter(Boolean)"
-  v-on:mouseover.prevent="mouseenter"
-  v-on:mouseleave.prevent="mouseleave">
+  v-on:mouseover.stop="mouseenter"
+  v-on:mouseleave.stop="mouseleave"
+  :data-target-fragment="targetFragment"
+  >
 
   <div v-if="!asReply" class="panel-heading">
     <h4 class="panel-title" @click="collapse('toggle')">
@@ -110,6 +112,18 @@
             <i class="fa fa-link"></i> DOI
           </button>
 
+          <button class="btn btn-sm btn-outline-secondary
+            frag-sel-btn
+            "
+            v-if="targetFragment"
+            :title="this.$store.state.targetFragmentButtonTitle"
+            ref="targetFragmentButton"
+            @click.stop="targetFragmentButtonClicked"
+            >
+            <i class="fa fa-indent"></i>
+            {{ targetFragment }}
+          </button>
+
         </div><!-- .btn-group -->
 
         <div class="well old_version" v-show="isOlderVersion()">
@@ -120,7 +134,9 @@
 
         <h4 class="media-heading" v-if="asReply">{{ title }}</h4>
 
-        <div v-if="firstHtmlBody" v-html="firstHtmlBody.value"></div>
+        <div v-if="firstHtmlBody"
+          class="first-html-body"
+          v-html="firstHtmlBody.value"></div>
 
         <template v-if="(relationLinkBodies || false).length > 0">
           <h5><span class="fa fa-link">&nbsp;</span>{{ l10n('relationlinks') }}</h5>
