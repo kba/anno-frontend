@@ -3,10 +3,13 @@
 
 const getOwn = require('getown');
 
-const eventBus = require('./event-bus');
+const mixins = [
+  /* eslint-disable global-require */
 
-const hasOwn = Function.call.bind(Object.prototype.hasOwnProperty);
+  require('./configureTargetAndComposeAnnotation.js'),
 
+  /* eslint-enable global-require */
+];
 
 const EX = async function externalRequest(annoApp, action, ...args) {
   const impl = getOwn(EX, 'do' + action);
@@ -19,31 +22,7 @@ const EX = async function externalRequest(annoApp, action, ...args) {
 };
 
 
-Object.assign(EX, {
-
-  async doConfigureTargetAndComposeAnnotation(vuexApi, param) {
-    const { state, commit } = this.vuexApi;
-    if (state.editMode) {
-      const err = new Error('Editor busy');
-      err.name = 'ANNO_EDITOR_BUSY';
-      throw err;
-    }
-    const updCfg = {
-      targetFragment: null,
-      targetImage: null,
-    };
-    Object.keys(param).forEach(function copy(key) {
-      if (hasOwn(updCfg, key)) {
-        updCfg[key] = param[key];
-      } else {
-        throw new Error('Unsupported target option: ' + key);
-      }
-    });
-    commit('INJECTED_MUTATION', [Object.assign, updCfg]);
-    eventBus.$emit('create');
-  },
-
-});
+Object.assign(EX, ...mixins);
 
 
 module.exports = EX;
