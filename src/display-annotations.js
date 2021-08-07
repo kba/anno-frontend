@@ -10,7 +10,7 @@ const eventBus = require('./event-bus')
 const bootstrapCompat = require('./bootstrap-compat')
 const decideDefaultOptions = require('./default-config');
 const {localizations} = require('../l10n-config.json')
-const externalRequest = require('./externalRequest')
+const externalRequest = require('./xrq/externalRequest.js')
 
 /**
  * ### `displayAnnotations(options)`
