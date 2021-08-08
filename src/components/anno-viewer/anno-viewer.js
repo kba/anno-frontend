@@ -1,7 +1,5 @@
 const $ = require('jquery')
 const getOwn = require('getown')
-const bootstrapCompat = require('../../bootstrap-compat');
-const eventBus = require('@/event-bus')
 const XrxUtils = require('semtonotes-utils')
 const {
     ensureArray,
@@ -14,7 +12,9 @@ const {
     svgSelectorResource
 } = require('@kba/anno-queries')
 
-const bindDataApi = require('./dataApi.js');
+const bootstrapCompat = require('../../bootstrap-compat');
+const eventBus = require('../../event-bus');
+const bindDataApi = require('./dataApi');
 
 
 /**

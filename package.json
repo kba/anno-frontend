@@ -34,6 +34,7 @@
     "pify": "^5.0.0",
     "querystring": "^0.2.0",
     "quill": "^1.3.7",
+    "require-mjs-autoprefer-default-export-pmb": "^0.1.0",
     "semtonotes-utils": "^0.2.0",
     "vuex": "^3.6.2"
   },
