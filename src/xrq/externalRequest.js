@@ -7,6 +7,7 @@ const mixins = [
   /* eslint-disable global-require */
 
   require('./configureTargetAndComposeAnnotation.js'),
+  require('./highlightByTargetSelector.js'),
 
   /* eslint-enable global-require */
 ];
