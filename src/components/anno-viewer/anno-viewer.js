@@ -253,7 +253,7 @@ module.exports = {
         makeEventContext() {
           const viewer = this;
           return {
-            id: viewer.id,
+            annoId: viewer.id,
             domElem: viewer.$el,
             dataApi: viewer.dataApi,
             getVueBoundAnno() { return viewer.annotation; },
