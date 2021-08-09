@@ -1,0 +1,16 @@
+{ "name": "annoDataApi",
+  "type": "module",
+  "exports": "ada.mjs",
+  "main": "ada.mjs",
+  "eslintConfig": { "extends": "nodejs-pmb" },
+
+  "dependencies": {
+  },
+  "browser": {
+  },
+  "devDependencies": {
+  },
+
+
+  "npm vs. BOM = Unexpected token": "-*- coding: UTF-8 -*-"
+}

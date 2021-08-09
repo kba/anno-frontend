@@ -193,7 +193,7 @@ window.annotations = [
     ],
   },
 
-  { id: 'https://anno.ub.uni-heidelberg.de/fragmentAnno1',
+  { id: 'http://anno.test/anno/fragmentAnno1',
     title: 'zu Fragment 1 (Test)',
     body: { format: 'text/html', type: 'TextualBody', value: '1' },
     collection: 'default',
@@ -212,7 +212,7 @@ window.annotations = [
     type: ['Annotation'],
   },
 
-  { id: 'https://anno.ub.uni-heidelberg.de/fragmentAnno2a',
+  { id: 'http://anno.test/anno/fragmentAnno2a',
     title: 'zu Fragment 2 (noch)',
     body: { format: 'text/html', type: 'TextualBody', value: '2a' },
     collection: 'default',
@@ -231,7 +231,7 @@ window.annotations = [
     type: ['Annotation'],
   },
 
-  { id: 'https://anno.ub.uni-heidelberg.de/fragmentAnno2b',
+  { id: 'http://anno.test/anno/fragmentAnno2b',
     title: 'zu Fragment 2 (doch)',
     body: { format: 'text/html', type: 'TextualBody', value: '2b' },
     collection: 'default',
@@ -250,7 +250,7 @@ window.annotations = [
     type: ['Annotation'],
   },
 
-  { id: 'https://anno.ub.uni-heidelberg.de/fragmentAnno3',
+  { id: 'http://anno.test/anno/fragmentAnno3',
     title: 'zu Fragment 3 (Dinge)',
     body: { format: 'text/html', type: 'TextualBody', value: '3' },
     collection: 'default',

@@ -1,6 +1,8 @@
 ﻿@charset "UTF-8";
 /* -*- coding: UTF-8, tab-width: 2 -*- */
 
+#anno-app-sidebar { float: left; width: 40%; margin: 1em; margin-right: 2em; }
+
 #tests-toolbar-bottom { margin: 1em; }
 #tests-toolbar-bottom input[type="button"],
 #tests-toolbar-bottom button { color: black; background-color: gainsboro; }

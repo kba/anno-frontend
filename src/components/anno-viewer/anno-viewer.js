@@ -1,7 +1,5 @@
 const $ = require('jquery')
 const getOwn = require('getown')
-const bootstrapCompat = require('../../bootstrap-compat');
-const eventBus = require('@/event-bus')
 const XrxUtils = require('semtonotes-utils')
 const {
     ensureArray,
@@ -14,7 +12,9 @@ const {
     svgSelectorResource
 } = require('@kba/anno-queries')
 
-const bindDataApi = require('./dataApi.js');
+const bootstrapCompat = require('../../bootstrap-compat');
+const eventBus = require('../../event-bus');
+const bindDataApi = require('./dataApi');
 
 
 /**
@@ -82,10 +82,12 @@ module.exports = {
     this.dataApi = bindDataApi(this);
   },
   mounted() {
-    this.iiifLink = this._iiifLink()
+    const viewer = this;
+
+    viewer.iiifLink = viewer._iiifLink();
     // Show popover with persistent URL
     const Clipboard = require('clipboard')
-    Array.from(this.$el.querySelectorAll('[data-toggle="popover"]')).forEach(popoverTrigger => {
+    Array.from(viewer.$el.querySelectorAll('[data-toggle="popover"]')).forEach(popoverTrigger => {
       $(popoverTrigger).popover({trigger: 'click'})
       $(popoverTrigger).on('shown.bs.popover', () => {
         const popoverDiv = document.getElementById(popoverTrigger.getAttribute("aria-describedby"))
@@ -117,20 +119,27 @@ module.exports = {
 
     // React to highlighting events startHighlighting / stopHighlighting / toggleHighlighting
     ;['start', 'stop', 'toggle'].forEach(state => {
-      const method = `${state}Highlighting`
-      eventBus.$on(method, (id, expand) => {if (id == this.id) this[method](expand)})
+      const methodName = `${state}Highlighting`;
+      // console.debug('reg $on', { methodName, ourId: viewer.id, elem: viewer.$el });
+      eventBus.$on(methodName, function manageHighlight(subjectId, expand) {
+        const ourId = viewer.id;
+        // console.debug('$on cb', { methodName, ourId, subjectId });
+        if (!ourId) { return; } // early init
+        if (subjectId !== ourId) { return; }
+        viewer[methodName](expand);
+      });
     })
 
     // Expand this annotation
     eventBus.$on('expand', (id) => {
-      if (id !== this.id) return
-      this.collapse(false)
-      const rootId = this.id.replace(/[~\.][~\.0-9]+$/, '')
+      if (id !== viewer.id) return
+      viewer.collapse(false)
+      const rootId = viewer.id.replace(/[~\.][~\.0-9]+$/, '')
       if (rootId !== id) eventBus.$emit('expand', rootId)
     })
 
-    this.toplevelCreated = this.annotation.modified
-    this.setToVersion(this.newestVersion)
+    viewer.toplevelCreated = viewer.annotation.modified;
+    viewer.setToVersion(viewer.newestVersion);
   },
     computed: {
         id()                 {return this.annotation.id},
@@ -244,7 +253,7 @@ module.exports = {
         makeEventContext() {
           const viewer = this;
           return {
-            id: viewer.id,
+            annoId: viewer.id,
             domElem: viewer.$el,
             dataApi: viewer.dataApi,
             getVueBoundAnno() { return viewer.annotation; },
