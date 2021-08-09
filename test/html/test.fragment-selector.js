@@ -67,6 +67,27 @@
   </aside></fieldset></form></chapter>
   `);
 
+  async function setHighlightByFragment(fragmentId) {
+    const values = {};
+    if (fragmentId) {
+      values[fragmentId] = true; // highlight this fragment
+    }
+    try {
+      await window.annoApp.externalRequest('HighlightByTargetSelector', {
+        selector: 'fragment',
+        values,
+        others: false, // un-highlight all others
+      });
+    } catch (err) {
+      console.error('AnnoApp was unable to highlight #', fragmentId, err);
+    }
+  }
+
+  chap.find('.fragment-examples span').click(function onClick(ev) {
+    const spanElem = jQuery(ev.target).closest('span')[0];
+    setHighlightByFragment(spanElem.id);
+  });
+
   const form = chap.find('form')[0];
   form.elements.frag.value = 'frag-ex1';
 
