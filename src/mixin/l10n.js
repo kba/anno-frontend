@@ -1,12 +1,21 @@
-const {langcode, defaultlang} = require('../../l10n-config.json')
+const getOwn = require('getown');
 
-function l10n(lang, text, localizations) {
-    lang = langcode[lang] ? langcode[lang] : defaultlang
-    return localizations[lang][text] !== undefined
-        ? localizations[lang][text]
-        : localizations[defaultlang][text] !== undefined
-            ? localizations[defaultlang][text]
-            : text
+const l10nCfg = require('../../l10n-config.json');
+const langCodesMap = l10nCfg.langcode;
+const dfLangCode = l10nCfg.defaultlang;
+
+
+function l10n(bestLang, vocKey, localizations, fallback) {
+    const normalizedBestLangCode = getOwn(langCodesMap, bestLang);
+    const bestLangDict = getOwn(localizations, normalizedBestLangCode);
+    const bestVoc = getOwn(bestLangDict, vocKey);
+    if (bestVoc) { return bestVoc; }
+
+    const dfLangDict = getOwn(localizations, dfLangCode);
+    const dfLangVoc = getOwn(dfLangDict, vocKey);
+    if (dfLangVoc) { return dfLangVoc; }
+    if (fallback !== undefined) { return fallback; }
+    return vocKey;
 }
 
 /**
@@ -40,10 +49,11 @@ function l10n(lang, text, localizations) {
 module.exports = {
 
     methods: {
-        l10n(text) {return l10n(
+        l10n(text, fallback) {return l10n(
           this.$store.state.language,
           text,
           this.$store.state.localizations,
+          fallback
         )}
     },
     _l10n: l10n,
