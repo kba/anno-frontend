@@ -18,6 +18,7 @@ const helpUrlTemplate = [
 
 function decide() {
   const cfg = {
+    // For bootstrap default config see ./bootstrap-compat.js.
     container: '…container',
     helpUrlTemplate,
     language,

@@ -3,7 +3,7 @@
 
 const mergeOptions = require('merge-options');
 
-const cfg = {
+const cfg = { // Default config. will be updated in-place later.
   version: { major: 4 },
 };
 
