@@ -76,6 +76,7 @@ module.exports = {
         iiifUrlTemplate: {type: String, default: null},
         thumbStrokeColor: {type: String, default: '#090'},
         thumbFillColor: {type: String, default: '#090'},
+        acceptEmptyAnnoId: { type: Boolean, default: false },
     },
   beforeCreate() {
     this.toplevelDoi = this.$options.propsData.annotation.doi;
@@ -155,17 +156,23 @@ module.exports = {
         targetFragment() { return (this.dataApi('findTargetFragment') || ''); },
 
         problemsWarningText() {
-          const anno = (this.annotation || false);
-          const { l10n } = this;
+          const viewer = this;
+          const anno = (viewer.annotation || false);
+          const { l10n } = viewer;
           const probs = [];
-          (function checkExpectedProps(keys) {
+
+          (function checkExpectedProps() {
+            const expected = [
+              'title',
+              (viewer.acceptEmptyAnnoId ? null : 'id'),
+            ];
             const miss = l10n('missing_required_field') + ' ';
-            keys.forEach(function check(p) {
-              if (!anno[p]) { probs.push(miss + p); }
+            expected.forEach(function check(prop) {
+              if (!prop) { return; }
+              if (anno[prop]) { return; }
+              probs.push(miss + l10n('annofield_' + prop, prop));
             });
-          }([
-            'id',
-          ]));
+          }());
           if (!probs.length) { return ''; }
           return l10n('error:') + ' ' + probs.join('; ');
         },
