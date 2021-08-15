@@ -27,6 +27,10 @@
         :data-license-details="JSON.stringify(licInfo, null, 2)"
         >
         <img :src="licInfo.img_88x31"/>
+        <del>
+          <input type="radio" name="dummy-radio-button"><!--
+            Our legacy code doesn't care, but BS4 expects this. -->
+        </del>
       </label>
     </div><!-- .btn-group -->
   </div><!-- .licInfo-selection-col -->

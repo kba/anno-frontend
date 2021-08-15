@@ -6,7 +6,9 @@ module.exports = {
     require('../../mixin/l10n'),
     require('../../mixin/prefix'),
   ],
+
   template: require('./licenses.html'),
+  style: require('./style.scss'),
 
   data() { return {
     licensesInfo,
