@@ -12,10 +12,11 @@ const {
     svgSelectorResource
 } = require('@kba/anno-queries')
 
-const bootstrapCompat = require('../../bootstrap-compat');
-const eventBus = require('../../event-bus');
-const bindDataApi = require('./dataApi');
-
+const bootstrapCompat = require('../../bootstrap-compat.js');
+const eventBus = require('../../event-bus.js');
+const bindDataApi = require('./dataApi.js');
+const popoverHelper = require('../../popover-helper.js');
+const clipboardHelper = require('../../clipboard-helper.js');
 
 /**
  * ### anno-viewer
@@ -86,24 +87,22 @@ module.exports = {
     const viewer = this;
 
     viewer.iiifLink = viewer._iiifLink();
-    // Show popover with persistent URL
-    const Clipboard = require('clipboard')
-    Array.from(viewer.$el.querySelectorAll('[data-toggle="popover"]')).forEach(popoverTrigger => {
-      $(popoverTrigger).popover({trigger: 'click'})
-      $(popoverTrigger).on('shown.bs.popover', () => {
-        const popoverDiv = document.getElementById(popoverTrigger.getAttribute("aria-describedby"))
-        if (!popoverDiv)
-          return
-        Array.from(popoverDiv.querySelectorAll("[data-clipboard-text]")).forEach(clipboardTrigger => {
-          const clip = new Clipboard(clipboardTrigger)
-          clip.on('success', () => {
-            const $successLabel = $(clipboardTrigger.querySelector(".label-success"))
-            $successLabel.show()
-            setTimeout(() => $successLabel.hide(), 2000)
-          })
-        })
-      })
-    })
+
+    // Set up popovers, e.g. for persistent URL
+    popoverHelper.install(viewer.$el, {
+      trigger: 'click',
+      on: {
+        popup(ev) {
+          const contentTemplate = viewer.$refs.purlPopupContent;
+          const pBody = ev.popupBody;
+          pBody.innerHTML = contentTemplate.innerHTML;
+          console.debug('purl popup!', pBody);
+          clipboardHelper.setupButtons(pBody, {
+            successLabelElem: $(pBody).find('.label-success')[0],
+          });
+        },
+      },
+    });
 
     if (!window.annoInstalledPopoverHandler) {
       // Dismiss all popovers with the 'data-focus-dismiss' attribute whenever user clicks outside of the popup divs
@@ -190,6 +189,8 @@ module.exports = {
           const purl = purlTemplate.replace(/\{{2}\s*(\w+)\s*\}{2}/g, getSlot);
           return purl;
         },
+
+        wbrPurl() { return this.purl.replace(/([\/?&]+)/g, '\u200b$1'); },
 
         slug() {
             if (!this.annotation.id) return 'unsaved-annotation-' + Date.now()

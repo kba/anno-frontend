@@ -16,8 +16,8 @@
  */
 const eventBus = require('@/event-bus')
 const HelpButton = require('@/components/help-button')
-const $ = require('jquery')
 const bootstrapCompat = require('../../bootstrap-compat');
+const popoverHelper = require('../../popover-helper.js');
 
 module.exports = {
     mixins: [
@@ -43,7 +43,7 @@ module.exports = {
         this.collapseAll(this.collapsed ? 'hide' : 'show')
 
         // enable popovers
-        $('[data-toggle="popover"]', this.$el).popover()
+        popoverHelper.install(this.$el);
 
         // Sort the list initially and after every fetch
         this.sort()
