@@ -6,6 +6,7 @@
     justify-content: flex-end;
 
     &, & .btn-group {
+      float: right; /* <-- required for the .btn-group in BS3 */
       display: inline-block;
       text-align: right;
     }
