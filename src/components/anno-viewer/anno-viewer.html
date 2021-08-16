@@ -45,7 +45,7 @@
             anno-editor-anno-body-buttonbar-top">
 
           <button v-for="aCreator of ensureArray('creator')"
-            class="btn btn-sm btn-outline-secondary
+            class="btn btn-sm btn-secondary
               anno-creator-icon">
             <template v-if="aCreator.icon">
               <img class="media-object" style="display: inline" :src="aCreator.icon" alt="Logo" width="15px" height="15px">
@@ -62,13 +62,13 @@
           </button>
 
           <button
-            class="annoeditor-date btn btn-sm btn-outline-secondary"
+            class="annoeditor-date btn btn-sm btn-secondary"
             :title="`${l10n('Created')}: ${annotation.created
               }\n${l10n('Modified')}: ${annotation.modified}`">
             {{ dateFmt(annotation.created) }}
           </button>
 
-          <button class="btn btn-sm btn-outline-secondary"
+          <button class="btn btn-sm btn-secondary"
             data-toggle="popover"
             data-html="true"
             data-placement="top"
@@ -89,7 +89,7 @@
             <a :href="purl">{{ wbrPurl }}</a>
           </div>
 
-          <button class="btn btn-sm btn-outline-secondary"
+          <button class="btn btn-sm btn-secondary"
             v-show="Boolean(rights)"
             data-toggle="popover"
             data-html="false"
@@ -108,7 +108,7 @@
             </template>
             <template v-else>§</template>
           </button>
-          <button class="btn btn-sm btn-outline-secondary"
+          <button class="btn btn-sm btn-secondary"
             v-if="annotation.doi"
             data-toggle="popover"
             data-html="true"
@@ -119,7 +119,7 @@
             <i class="fa fa-link"></i> DOI
           </button>
 
-          <button class="btn btn-sm btn-outline-secondary
+          <button class="btn btn-sm btn-secondary
             frag-sel-btn
             "
             v-if="targetFragment"
@@ -161,14 +161,14 @@
           </ul>
         </template>
 
-        <div class="annoeditor-tags">
+        <div class="annoeditor-tags simple-tags">
           <span class="annoeditor-tag label label-default badge badge-secondary" v-for="tagBody in simpleTagBodies">
             <i class="fa fa-tag"></i>
             {{ tagBody.value || tagBody.label }}
           </span>
         </div>
 
-        <div class="annoeditor-tags">
+        <div class="annoeditor-tags semantic-tags">
           <a :href="semtagBody.id || semtagBody.source" v-for="semtagBody in semanticTagBodies">
             <span class="annoeditor-tag label label-primary">
               <i class="fa fa-tag"></i>
@@ -178,7 +178,7 @@
         </div>
 
         <div v-show="iiifLink && $store.state.enableIIIF" class="annoeditor-iiif-link">
-          <button class="btn btn-sm btn-outline-secondary"
+          <button class="btn btn-sm btn-link"
             data-toggle="popover"
             data-html="true"
             data-placement="left"

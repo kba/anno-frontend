@@ -22,6 +22,22 @@
     }
   }
 
+  & > .panel-heading {
+    background: #e8e8e8;
+    color: black;
+  }
+
+  .anno-editor-anno-body-buttonbar-top {
+
+    margin-bottom: 1ex;
+
+    .btn-secondary {
+      background-color: #f0f0f0;
+      color: black;
+    }
+
+  }
+
   &.annoeditor-highlight {
     & > .panel-heading {
       background: #990000;
