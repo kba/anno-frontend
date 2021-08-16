@@ -1,0 +1,15 @@
+.annoeditor-sidebar {
+
+  .hidden { display: none; }
+
+  .btn-toolbar.pull-right {
+    justify-content: flex-end;
+
+    &, & .btn-group {
+      display: inline-block;
+      text-align: right;
+    }
+
+  }
+
+}

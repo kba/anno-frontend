@@ -26,8 +26,12 @@ module.exports = {
         require('@/mixin/prefix'),
         require('@/mixin/l10n'),
     ],
-    style: require('./sidebar-app.scss'),
+
     template: require('./sidebar-app.html'),
+    style: [
+      require('./sidebar-app.scss'),
+      require('./bootstrap-tweaks.scss'),
+    ],
 
     data() {return {
         collapsed: this.collapseInitially,

@@ -219,7 +219,7 @@
       class="btn-toolbar pull-right"
       style="margin-top: 10px;">
       <div role="group"
-        class="btn-group btn-group-sm pull-right">
+        class="btn-group btn-group-sm">
         <button v-if="!annotation.doi && $auth('mintDoi', id)"
             class="btn btn-default btn-outline-secondary btn-sm"
             data-toggle="popover"
@@ -260,9 +260,8 @@
 
       </div><!-- .btn-group -->
 
-      <span class="versions-dropdown-spacer"
-        style="margin-left: 0.5em;"></span>
       <anno-viewer-versions-dropdown
+        class="ml-1"
         :anno="annotation"
         :on-select-version="this.setToVersion.bind(this)"
         />
