@@ -1,4 +1,5 @@
 const licensesInfo = require('../../../license-config.js');
+const popoverHelper = require('../../popover-helper.js');
 
 module.exports = {
 
@@ -15,9 +16,7 @@ module.exports = {
   } },
 
   mounted() {
-    $(this.$el).find('[data-toggle="popover"]').popover({
-      container: '#annoeditor-license-select',
-    });
+    popoverHelper.install(this.$el);
   },
 
 };

@@ -1,4 +1,3 @@
-const $ = require('jquery')
 const quill = require('quill/dist/quill.js')
 require('style-loader!css-loader!quill/dist/quill.snow.css')
 
@@ -21,9 +20,6 @@ module.exports = {
     style: require('./html-editor.scss'),
     template: require('./html-editor.html'),
     mounted() {
-        $('[data-toggle="popover"]', this.$el).popover({
-            container: '#license-select'
-        })
         const {l10n} = this
         this.quill = new quill(this.$refs.editor, {
             modules: {
