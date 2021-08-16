@@ -269,7 +269,7 @@
     <div class="toolbar-end-clear" style="clear: both;"></div>
 
     <template v-if="(annotation.hasReply || false).length">
-      <div class="comment-separator" style="margin-bottom: 2px;"></div>
+      <div class="comment-separator"></div>
       <anno-viewer
         v-for="reply in annotation.hasReply"
         :key="reply.id"
