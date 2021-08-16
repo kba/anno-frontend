@@ -76,21 +76,21 @@
             :title="l10n('purl')"
             >
             <i class="fa fa-link"></i>
+            <div ref="purlPopupContent"
+              data-popup-template-for="purl"
+              class="hidden">
+              <button class="btn btn-default btn-outline-secondary btn-sm"
+                :data-clipboard-text="purl">
+                <span class="fa fa-clipboard"></span>
+                <span class="label label-success" style="display: none;"
+                  >{{ l10n('copied_to_clipboard') }}</span>
+              </button>
+              <a :href="purl">{{ wbrPurl }}</a>
+            </div>
           </button>
-          <div ref="purlPopupContent"
-            data-popup-template-for="purl"
-            class="hidden">
-            <button class="btn btn-default btn-outline-secondary btn-sm"
-              :data-clipboard-text="purl">
-              <span class="fa fa-clipboard"></span>
-              <span class="label label-success" style="display: none;"
-                >{{ l10n('copied_to_clipboard') }}</span>
-            </button>
-            <a :href="purl">{{ wbrPurl }}</a>
-          </div>
 
           <button class="btn btn-sm btn-secondary"
-            v-show="Boolean(rights)"
+            v-if="Boolean(rights)"
             data-toggle="popover"
             data-html="false"
             data-focus-dismiss
