@@ -10,6 +10,7 @@ const components = {
     'anno-viewer':       require('./anno-viewer'),
     'anno-viewer-versions-dropdown': require('./anno-viewer-versions-dropdown'),
     // 'anno-viewer-thumbnail-svg': require('./anno-viewer-thumbnail-svg'),
+    'clipboard-copy-button': require('./clipboard-copy-button'),
 
     // editing
     'anno-editor-debug-panel':    require('./anno-editor-debug-panel'),

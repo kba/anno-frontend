@@ -15,6 +15,7 @@ const EX = {
     const triggers = Array.from(baseElem.querySelectorAll(
       '[data-clipboard-text]'));
     // console.debug('Clipboard buttons:', baseElem, 'setup:', opts, triggers);
+    if (!triggers.length) { throw new Error('Found no clipboard buttons!'); }
     triggers.forEach(trig => EX.setupOneTrigger(trig, updatedOpts));
   },
 
@@ -23,15 +24,15 @@ const EX = {
     const opts = { ...oldOpts, ...updatedOpts };
     trig[EX.optProp] = opts;
     if (trig[EX.mgrProp]) {
-      console.debug('Clipboard trigger:', trig, 'updated:', opts);
+      // console.debug('Clipboard trigger:', trig, 'updated:', opts);
       return;
     }
     const mgr = new Clipboard(trig);
-    console.debug('Clipboard trigger:', trig, 'set up:', opts, { mgr });
+    // console.debug('Clipboard trigger:', trig, 'set up:', opts, { mgr });
     trig[EX.mgrProp] = mgr;
     const sxsElem = opts.successLabelElem;
     mgr.on('success', function sxs(evSxs) {
-      console.debug('Clipboard success!', { evSxs, sxsElem });
+      // console.debug('Clipboard success!', { evSxs, sxsElem });
       if (sxsElem) {
         const transition = 'fast';
         jQuery(sxsElem).show(transition).delay(2e3).hide(transition);
