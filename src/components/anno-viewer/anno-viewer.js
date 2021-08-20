@@ -55,37 +55,40 @@ const clipboardHelper = require('../../clipboard-helper.js');
 function jsonDeepCopy(x) { return JSON.parse(JSON.stringify(x)); }
 
 module.exports = {
-    name: 'anno-viewer', // necessary for nesting
-    template: require('./anno-viewer.html'),
-    style:    require('./anno-viewer.scss'),
-    mixins: [
-      require('../../mixin/api'),
-      require('../../mixin/auth'),
-      require('../../mixin/dateFmt'),
-      require('../../mixin/l10n'),
-      require('../../mixin/prefix'),
-    ],
-    props: {
-        annotation: {type: Object, required: true},
-        purlTemplate: {type: String, required: false},
-        purlId: {type: String, required: false},
-        // Controls whether comment is collapsible or not
-        asReply: {type: Boolean, default: false},
-        collapseInitially: {type: Boolean, default: false},
-        imageWidth: {type: Number, default: -1},
-        imageHeight: {type: Number, default: -1},
-        iiifUrlTemplate: {type: String, default: null},
-        thumbStrokeColor: {type: String, default: '#090'},
-        thumbFillColor: {type: String, default: '#090'},
-        acceptEmptyAnnoId: { type: Boolean, default: false },
-    },
+  name: 'anno-viewer', // necessary for nesting
+  template: require('./anno-viewer.html'),
+  style:    require('./anno-viewer.scss'),
+
+  mixins: [
+    require('../../mixin/api'),
+    require('../../mixin/auth'),
+    require('../../mixin/dateFmt'),
+    require('../../mixin/l10n'),
+    require('../../mixin/prefix'),
+  ],
+
+  props: {
+    annotation: {type: Object, required: true},
+    purlTemplate: {type: String, required: false},
+    purlId: {type: String, required: false},
+    // Controls whether comment is collapsible or not
+    asReply: {type: Boolean, default: false},
+    collapseInitially: {type: Boolean, default: false},
+    imageWidth: {type: Number, default: -1},
+    imageHeight: {type: Number, default: -1},
+    iiifUrlTemplate: {type: String, default: null},
+    thumbStrokeColor: {type: String, default: '#090'},
+    thumbFillColor: {type: String, default: '#090'},
+    acceptEmptyAnnoId: { type: Boolean, default: false },
+  },
+
   beforeCreate() {
     this.toplevelDoi = this.$options.propsData.annotation.doi;
     this.dataApi = bindDataApi(this);
   },
+
   mounted() {
     const viewer = this;
-
     viewer.iiifLink = viewer._iiifLink();
 
     // Set up popovers, e.g. for persistent URL
@@ -141,6 +144,7 @@ module.exports = {
     viewer.toplevelCreated = viewer.annotation.modified;
     viewer.setToVersion(viewer.newestVersion);
   },
+
     computed: {
         id()                 {return this.annotation.id},
         creator()            {return this.annotation.creator},
@@ -351,27 +355,54 @@ module.exports = {
           ensureArray(tmp, 'val');
           return tmp.val;
         },
-        setToVersion(newState) {
-          ;[
+
+        setToVersion(updates) {
+          const viewer = this;
+          /*
+            Usually we'd expect the function switchVersionInplace
+            below to have a "state" argument and modify data inside
+            that. Our annotation would be buried deeply somewhere in
+            there in the anno-list, and we'd have to find it by ID
+            or something.
+
+            Except when the viewer is used in the editor preview, of
+            course. So we'd have to track our viewer's pedigree, too.
+
+            The proper way would be to not modify the annotation in
+            place, but rather have a abstraction layer that shows data
+            from the selected version. That would require a major
+            rewrite though, and extensive testing for whether all
+            elements are updated properly.
+
+            Fortunately, in current vuex (v3.6.2), we can ignore the
+            mutation function's arguments and just use our shortcut,
+            because it points to the same object:
+          */
+          const deepStateAnnoShortcut = viewer.annotation;
+          const affectedProps = [
             'body',
             'created',
             'modified',
             'target',
             'title',
             'doi',
-          ].map(prop => {
-            Object.assign(this.annotation, {
-              [prop]: newState[prop]
-            })
-          })
-          // eventBus.$emit('setToVersion', this.annotation)
+          ];
+          function switchVersionInplace() {
+            affectedProps.forEach(function updateInplace(key) {
+              deepStateAnnoShortcut[key] = updates[key];
+            });
+          }
+          viewer.$store.commit('INJECTED_MUTATION', [switchVersionInplace]);
         },
+
         isOlderVersion()     {
           return this.newestVersion.created !== this.annotation.created
         },
+
         versionIsShown(version) {
           return version.created === this.created
         },
+
         _iiifLink() {
             if (! this.svgTarget || this.imageHeight <= 0 || this.imageWidth <= 0 || ! this.iiifUrlTemplate) {
                 // console.error("Could not determine width / height of img")
@@ -402,4 +433,8 @@ module.exports = {
             return this.iiifUrlTemplate.replace(`{{ iiifRegion }}`, `pct:${x},${y},${w},${h}`)
         },
     },
+
+  mutations: {
+  },
+
 }
