@@ -55,34 +55,38 @@ const clipboardHelper = require('../../clipboard-helper.js');
 function jsonDeepCopy(x) { return JSON.parse(JSON.stringify(x)); }
 
 module.exports = {
-    name: 'anno-viewer', // necessary for nesting
-    template: require('./anno-viewer.html'),
-    style:    require('./anno-viewer.scss'),
-    mixins: [
-      require('../../mixin/api'),
-      require('../../mixin/auth'),
-      require('../../mixin/dateFmt'),
-      require('../../mixin/l10n'),
-      require('../../mixin/prefix'),
-    ],
-    props: {
-        annotation: {type: Object, required: true},
-        purlTemplate: {type: String, required: false},
-        purlId: {type: String, required: false},
-        // Controls whether comment is collapsible or not
-        asReply: {type: Boolean, default: false},
-        collapseInitially: {type: Boolean, default: false},
-        imageWidth: {type: Number, default: -1},
-        imageHeight: {type: Number, default: -1},
-        iiifUrlTemplate: {type: String, default: null},
-        thumbStrokeColor: {type: String, default: '#090'},
-        thumbFillColor: {type: String, default: '#090'},
-        acceptEmptyAnnoId: { type: Boolean, default: false },
-    },
+  name: 'anno-viewer', // necessary for nesting
+  template: require('./anno-viewer.html'),
+  style:    require('./anno-viewer.scss'),
+
+  mixins: [
+    require('../../mixin/api'),
+    require('../../mixin/auth'),
+    require('../../mixin/dateFmt'),
+    require('../../mixin/l10n'),
+    require('../../mixin/prefix'),
+  ],
+
+  props: {
+    annotation: {type: Object, required: true},
+    purlTemplate: {type: String, required: false},
+    purlId: {type: String, required: false},
+    // Controls whether comment is collapsible or not
+    asReply: {type: Boolean, default: false},
+    collapseInitially: {type: Boolean, default: false},
+    imageWidth: {type: Number, default: -1},
+    imageHeight: {type: Number, default: -1},
+    iiifUrlTemplate: {type: String, default: null},
+    thumbStrokeColor: {type: String, default: '#090'},
+    thumbFillColor: {type: String, default: '#090'},
+    acceptEmptyAnnoId: { type: Boolean, default: false },
+  },
+
   beforeCreate() {
     this.toplevelDoi = this.$options.propsData.annotation.doi;
     this.dataApi = bindDataApi(this);
   },
+
   mounted() {
     const viewer = this;
 
@@ -351,6 +355,7 @@ module.exports = {
           ensureArray(tmp, 'val');
           return tmp.val;
         },
+
         setToVersion(newState) {
           ;[
             'body',
@@ -366,12 +371,15 @@ module.exports = {
           })
           // eventBus.$emit('setToVersion', this.annotation)
         },
+
         isOlderVersion()     {
           return this.newestVersion.created !== this.annotation.created
         },
+
         versionIsShown(version) {
           return version.created === this.created
         },
+
         _iiifLink() {
             if (! this.svgTarget || this.imageHeight <= 0 || this.imageWidth <= 0 || ! this.iiifUrlTemplate) {
                 // console.error("Could not determine width / height of img")
