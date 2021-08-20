@@ -89,7 +89,6 @@ module.exports = {
 
   mounted() {
     const viewer = this;
-
     viewer.iiifLink = viewer._iiifLink();
 
     // Set up popovers, e.g. for persistent URL
@@ -145,6 +144,7 @@ module.exports = {
     viewer.toplevelCreated = viewer.annotation.modified;
     viewer.setToVersion(viewer.newestVersion);
   },
+
     computed: {
         id()                 {return this.annotation.id},
         creator()            {return this.annotation.creator},
@@ -356,20 +356,43 @@ module.exports = {
           return tmp.val;
         },
 
-        setToVersion(newState) {
-          ;[
+        setToVersion(updates) {
+          const viewer = this;
+          /*
+            Usually we'd expect the function switchVersionInplace
+            below to have a "state" argument and modify data inside
+            that. Our annotation would be buried deeply somewhere in
+            there in the anno-list, and we'd have to find it by ID
+            or something.
+
+            Except when the viewer is used in the editor preview, of
+            course. So we'd have to track our viewer's pedigree, too.
+
+            The proper way would be to not modify the annotation in
+            place, but rather have a abstraction layer that shows data
+            from the selected version. That would require a major
+            rewrite though, and extensive testing for whether all
+            elements are updated properly.
+
+            Fortunately, in current vuex (v3.6.2), we can ignore the
+            mutation function's arguments and just use our shortcut,
+            because it points to the same object:
+          */
+          const deepStateAnnoShortcut = viewer.annotation;
+          const affectedProps = [
             'body',
             'created',
             'modified',
             'target',
             'title',
             'doi',
-          ].map(prop => {
-            Object.assign(this.annotation, {
-              [prop]: newState[prop]
-            })
-          })
-          // eventBus.$emit('setToVersion', this.annotation)
+          ];
+          function switchVersionInplace() {
+            affectedProps.forEach(function updateInplace(key) {
+              deepStateAnnoShortcut[key] = updates[key];
+            });
+          }
+          viewer.$store.commit('INJECTED_MUTATION', [switchVersionInplace]);
         },
 
         isOlderVersion()     {
@@ -410,4 +433,8 @@ module.exports = {
             return this.iiifUrlTemplate.replace(`{{ iiifRegion }}`, `pct:${x},${y},${w},${h}`)
         },
     },
+
+  mutations: {
+  },
+
 }
