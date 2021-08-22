@@ -1,20 +1,18 @@
-<span class="help-button"
+<a class="btn btn-sm btn-default btn-outline-secondary
+    help-button"
   :data-topic="topic"
+  :href="helpUrl"
+  target="_blank"
+  @click.stop
   >
-  <a class="help-button-trigger"
-    :href="helpUrl"
-    target="_blank"
-    @click.stop
-    >
-    <span v-if="!buttonLabel" :class="[
-        'label',
-        'label-default',
-        'badge',
-        'btn-primary',
-        'default-help-icon',
-      ]">
-      <span class="fa fa-info"></span></span>
-    <slot name="custom-icon" />
-    <span v-if="buttonLabel" class="textlabel">{{ buttonLabel }}</span>
-  </a>
-</span>
+  <span v-if="!buttonLabel" :class="[
+      'label',
+      'label-default',
+      'badge',
+      'btn-primary',
+      'default-help-icon',
+    ]">
+    <span class="fa fa-info"></span></span>
+  <slot name="custom-icon" />
+  <span v-if="buttonLabel" class="textlabel">{{ buttonLabel }}</span>
+</a>

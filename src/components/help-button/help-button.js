@@ -10,7 +10,6 @@ module.exports = {
 
   props: {
     topic:        { type: String, required: true },
-    triggerCls:   { type: String, default: '' },
     buttonLabel:  { type: String, default: '' },
   },
 
