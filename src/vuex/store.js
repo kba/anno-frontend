@@ -22,7 +22,11 @@ module.exports = {
     getters: {
 
         isLoggedIn(state) {
-            return state.token && jwtDecode(state.token).sub
+            const fake = (state.acl || false)['debug:override:isLoggedIn'];
+            if (fake || (fake === false)) { return fake; }
+            const { token } = state;
+            if (!token) { return false; }
+            return Boolean((jwtDecode(state.token) || false).sub);
         },
 
         tokenDecoded(state) {
@@ -40,14 +44,13 @@ module.exports = {
     mutations: {
 
         CHANGE_ACL(state, rules) {
-            state.acl = state.acl || {}
-            Object.assign(state.acl, rules)
-            eventBus.$emit('updatedPermissions')
+            state.acl = Object.assign({}, state.acl, rules);
+            eventBus.$emit('updatedPermissions');
         },
 
         EMPTY_ACL(state) {
-            state.acl = {}
-            eventBus.$emit('updatedPermissions')
+            state.acl = {};
+            eventBus.$emit('updatedPermissions');
         },
 
         SET_TOKEN(state, token) {

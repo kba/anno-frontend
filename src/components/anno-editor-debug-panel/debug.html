@@ -19,29 +19,29 @@
     <dd :key="'dd:' + prop">{{ $store.state[prop] }}</dd>
     </template>
   </dl>
-</div><!-- .chapter -->
+</div>
 
 
 <div class="topic" data-topic="annot">
   <h3>Annotation</h3>
-  <div class="annot-json">
-    <div class="btn-group toolbar">
-      <input type="button" class="
-        btn btn-sm btn-default btn-outline-secondary
-        dump" value="✍"
-        @click="redumpAnnotJson">
-      <input type="button" class="
-        btn btn-sm btn-default btn-outline-secondary
-        load" value="⏎"
-        @click="importAnnotJson">
-    </div>
-    <textarea ref="annotJsonTxa"
-      :key="'annotJsonDump@' + this.annotJsonRedumped"
-      class="annot-json-dump"
-      >{{ JSON.stringify(annot, null, 2
-        ).replace(/((?:^|\n +)[\{\[])\n +/g, '$1 ') + '\n' }}</textarea>
-  </div>
-</div><!-- .chapter -->
+  <json-export-import-field class="jsondump-annot" path="editing" />
+</div>
+
+
+<div class="topic" data-topic="annot">
+  <h3>ACL / Login override</h3>
+  <json-export-import-field class="jsondump-acl" path="acl"
+    :extraButtons="[
+      { c: '🚫', n: 'Clear ACL', f: updateAcl, a: null },
+      { c: '✨', n: 'Grant all', f: updateAcl,
+        a: { '*': { '*': true } } },
+      { c: '📛', n: 'Force logged-in', f: updateAcl,
+        a: { ['debug:override:isLoggedIn']: true } },
+      { c: '👽', n: 'Force logged-out', f: updateAcl,
+        a: { ['debug:override:isLoggedIn']: false } },
+    ]"
+    />
+</div>
 
 
 </section>

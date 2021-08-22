@@ -61,6 +61,15 @@
     hidden-print
     " role="group">
 
+    <button class="btn btn-sm
+      pull-right
+      debug-feature
+      debug-button-force-compose
+      "
+      @click="create"
+      >⚙
+    </button>
+
     <button v-if="collapsed && numberOfAnnotations > 0" class="btn btn-default btn-outline-secondary btn-sm" @click="collapseAll('show')">
       <span class="fa fa-plus"></span>&nbsp;{{ l10n('open_all') }}
     </button>
