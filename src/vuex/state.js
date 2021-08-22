@@ -34,4 +34,6 @@ module.exports = {
 
   language: defaultLang,
   localizations,
+
+  uiDebugMode: false,
 }

@@ -11,5 +11,3 @@ body > chapter aside {
   float: left; margin: 2em;
   border: 1px solid grey; padding: 1ex 1em;
 }
-
-.annoeditor-bootstrap-tabs .nav > li.debug-panel-tab { display: flex; }

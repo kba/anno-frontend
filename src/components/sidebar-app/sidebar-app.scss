@@ -1,3 +1,7 @@
+.annoeditor-sidebar:not(.ui-debug-mode-on) {
+  .debug-feature { display: none !important; }
+}
+
 .annoeditor-sidebar {
 
   &.annoeditor-sidebar-standalone {
