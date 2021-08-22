@@ -2,6 +2,12 @@
 
   .hidden { display: none; }
 
+  a.btn-danger:link,
+  a.btn-danger:visited,
+  a.btn-danger {
+    color: mistyrose;
+  }
+
   .btn-toolbar.pull-right {
     justify-content: flex-end;
 

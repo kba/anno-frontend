@@ -6,11 +6,17 @@ const helpTopicsNamingSchemeVersion = '210701';
 
 module.exports = {
 
+  mixins: [
+    /* eslint-disable global-require */
+    require('../../mixin/l10n'),
+  ],
+
   template: require('./help-button.html'),
   style: require('./help-button.scss'),
 
   props: {
     topic:        { type: String, required: true },
+    title:        { type: String, default: '' },
     buttonLabel:  { type: String, default: '' },
   },
 
@@ -18,7 +24,9 @@ module.exports = {
 
     helpUrl() {
       const { state } = this.$store;
-      let url = String(state.helpUrlTemplate || 'about:blank');
+      let url = String(state.helpUrlTemplate
+        || this.l10n('help.url.template')
+        || 'about:blank');
       url = url.replace(/%hl/g, encodeURIComponent(state.language));
       url = url.replace(/%nv/g, helpTopicsNamingSchemeVersion);
       url = url.replace(/%ht/g, encodeURIComponent(this.topic));

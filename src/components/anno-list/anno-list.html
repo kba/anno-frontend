@@ -1,58 +1,65 @@
-<div class="annoeditor-list"
+<div :class="[
+  'annoeditor-list',
+  `access-${isLoggedIn ? 'logged-in' : 'guest'}`,
+  ]"
   :data-number-of-annots="list.length"
   >
   <div class="btn-group pull-left hidden-print" role="group">
-    <a v-if="isLoggedIn && enableLogoutButton"
-      class="btn btn-sm btn-warning"
-      @click.stop="logout"
-      :href="tokenDecoded.sub"
-      >
-      {{ l10n('logout') }}
-    </a>
+    <template v-if="isLoggedIn">
+      <a v-if="enableLogoutButton"
+        class="btn btn-sm btn-warning"
+        @click.stop="logout"
+        :href="tokenDecoded.sub"
+        >
+        {{ l10n('logout') }}
+      </a>
+    </template><!-- logged in -->
+    <template v-else><!-- guest access -->
+      <a v-if="loginEndpoint"
+        class="btn btn-sm btn-default btn-outline-secondary
+          login-button"
+        :href="loginEndpoint"
+        >
+        {{ l10n('login') }}
+      </a>
+      <help-button
+        :button-label="l10n('register')"
+        :title="l10n('register')"
+        topic="popover-not-registered"
+        class="btn btn-sm btn-default btn-outline-secondary"
+        />
+    </template><!-- guest access -->
 
-    <a v-if="!isLoggedIn && loginEndpoint"
-      class="btn btn-sm btn-default btn-outline-secondary
-        login-button"
-      :href="loginEndpoint"
-      >
-      {{ l10n('login') }}
-    </a>
-
-    <help-button v-if="!isLoggedIn"
-      :help-url-template="l10n('help.url.template')"
-      :button-label="l10n('register')"
-      :title="l10n('register')"
-      topic="popover-not-registered"
-      class="btn btn-sm btn-default btn-outline-secondary"
-      />
-
-    <button @click="create"
-      v-if="$store.state.offerCreateNewAnnotationButton
-        && $auth('create', targetSource)"
-      class="btn btn-sm btn-success create-new-annotation-button"
-      >
-      {{ l10n('new') }}
-    </button>
-
-    <a class="btn btn-sm btn-danger"
-      :href="requestEndpoint"
-      v-if="isLoggedIn && ! $auth('create', targetSource)"
-      >
-      {{ l10n('annoeditor_mode_create') }}:
-      {{ l10n('not_authorized') }}
-    </a>
-
-  <help-button v-show="isLoggedIn && ! $auth('create', targetSource)"
-    :help-url-template="l10n('help.url.template')"
-    :title="l10n('popover-not-authorized')"
-    topic="popover-not-authorized"
-    />
-
-  <help-button v-show="isLoggedIn && $auth('create', targetSource)"
-    :help-url-template="l10n('help.url.template')"
-    :title="l10n('popover-logged-in')"
-    topic="popover-logged-in"
-    />
+    <template v-if="$store.state.offerCreateNewAnnotationButton">
+      <template v-if="$auth('create', targetSource)">
+        <button class="btn btn-sm
+          btn-success
+          create-new-annotation-button"
+          @click="create"
+          >
+          {{ l10n('new') }}
+        </button>
+        <template v-if="isLoggedIn">
+          <!-- authorized AND logged in -->
+          <help-button topic="popover-logged-in" />
+        </template><!-- logged in but no access -->
+      </template><!-- authorized -->
+      <template v-else><!-- not authorized -->
+        <a class="btn btn-sm
+          btn-danger
+          create-new-annotation-button"
+          :href="requestEndpoint"
+          target="_blank"
+          >
+          {{ l10n('annoeditor_mode_create') }}:
+          {{ l10n('not_authorized') }}
+        </a>
+        <template v-if="isLoggedIn">
+          <!-- not authorized even though we're logged in -->
+          <help-button topic="popover-not-authorized" />
+        </template><!-- logged in but no access -->
+      </template><!-- not authorized -->
+    </template><!-- offerCreateNewAnnotationButton -->
 
   </div>
 

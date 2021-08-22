@@ -4,6 +4,7 @@
   :href="helpUrl"
   target="_blank"
   @click.stop
+  :title="title || l10n(topic)"
   >
   <span v-if="!buttonLabel" :class="[
       'label',
@@ -12,7 +13,8 @@
       'btn-primary',
       'default-help-icon',
     ]">
-    <span class="fa fa-info"></span></span>
+    <span class="fa fa-info"></span>
+  </span><!-- no buttonLabel -->
   <slot name="custom-icon" />
   <span v-if="buttonLabel" class="textlabel">{{ buttonLabel }}</span>
 </a>
