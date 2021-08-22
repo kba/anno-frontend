@@ -243,8 +243,9 @@
       class="btn-toolbar pull-right"
       >
       <div role="group"
-        class="btn-group btn-group-sm">
-        <button v-if="!annotation.doi && $auth('mintDoi', id)"
+        class="btn-group btn-group-sm"
+
+        ><button v-if="!annotation.doi && $auth('mintDoi', id)"
             class="btn btn-default btn-outline-secondary btn-sm"
             data-toggle="popover"
             data-focus-dismiss
@@ -259,36 +260,39 @@
             >
             <i class="fa fa-link"></i>
             {{ l10n('mint_doi') }}
-        </button>
-        <bootstrap-button @click="revise"
+        </button
+
+        ><bootstrap-button @click="revise"
           btn-class="default btn-outline-secondary"
           icon-fa="pencil"
           v-if="$auth('revise', id)">
           {{ l10n('edit') }}
-        </bootstrap-button>
-        <bootstrap-button
+        </bootstrap-button
+
+        ><bootstrap-button
           @click="reply"
           btn-class="default btn-outline-secondary"
           icon-fa="reply"
           v-if="$auth('create', id)">
           {{ l10n('comment') }}
-        </bootstrap-button>
+        </bootstrap-button
 
-        <bootstrap-button
+        ><bootstrap-button
           @click="remove"
           v-if="$auth('remove', id)"
           :title="l10n('delete_anno')"
           btn-class="outline-danger"
           icon-fa="trash-o"
+        </bootstrap-button
+
+        ><anno-viewer-versions-dropdown
+          class="ml-1"
+          :anno="annotation"
+          :on-select-version="this.setToVersion.bind(this)"
           />
 
       </div><!-- .btn-group -->
 
-      <anno-viewer-versions-dropdown
-        class="ml-1"
-        :anno="annotation"
-        :on-select-version="this.setToVersion.bind(this)"
-        />
     </div><!-- role="toolbar" -->
     <div class="toolbar-end-clear" style="clear: both;"></div>
 
