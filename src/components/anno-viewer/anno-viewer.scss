@@ -15,9 +15,15 @@
     color: black;
   }
 
-  .anno-editor-anno-body-buttonbar-top {
+  .btn-toolbar {
+    .btn-group {
+      margin-top: 0.5ex;
+    }
 
-    margin-bottom: 1ex;
+    margin-bottom: 0.5ex;
+  }
+
+  .anno-editor-anno-body-buttonbar-top {
 
     .btn {
       &.btn-secondary:not(.active) {
@@ -38,6 +44,8 @@
     }
 
   }
+
+
 
   &.annoeditor-highlight {
     & > .panel-heading {
@@ -146,10 +154,19 @@
     }
   }
 
+  .anno-editor-anno-body-buttonbar-bottom {
+
+    & > .btn-group {
+      margin-top: 10px;
+    }
+
+  }
+
 }
 
 .annoeditor-viewer {
 
   .comment-separator { margin-bottom: 1ex; }
+  .navigation-separator { clear: both; margin-bottom: 2px; }
 
 }

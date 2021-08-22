@@ -38,101 +38,106 @@
     class="card-body panel-body"
     v-show="!collapsed">
     <div class="media" style="height: auto;">
+
       <div class="media-body">
+        <div role="toolbar"
+          class="btn-toolbar
+            anno-editor-anno-body-buttonbar-top
+          "
+          >
+          <div role="group"
+            class="btn-group btn-group-sm">
 
-        <div role="group"
-          class="btn-group btn-group-sm
-            anno-editor-anno-body-buttonbar-top">
+            <button class="btn btn-sm btn-secondary
+              btn-abused-for-infotext
+              anno-creators
+              ">
+              <template v-for="aCreator of creatorsList">
+                <span class="anno-creator">
+                  <template v-if="aCreator.icon">
+                    <img class="media-object" style="display: inline"
+                      :src="aCreator.icon" alt="Logo" width="15px" height="15px">
+                  </template>
+                  <template v-else>
+                    <i class="fa fa-user"></i>
+                  </template>
+                  <span class="name">{{
+                    aCreator.displayName || aCreator
+                  }}</span>,
+                </span>
+              </template>
+              <template v-if="!creatorsList.length">
+                <span class="no-creator">
+                  <i class="fa fa-user-secret"></i>
+                  {{ l10n('creator_none') }},
+                </span>
+              </template>
+            </button>
+            <!-- 2021-08-20, Waterfox: Time must be its own button because
+              title=… on a <time> tag inside a <button> tag had no effect. -->
+            <button class="btn btn-sm btn-secondary
+              btn-abused-for-infotext
+              anno-creation-time
+              "
+              :title="[
+                (l10n('Created') + ': ' + dateFmt(annotation.created)),
+                (l10n('Modified') + ': ' + dateFmt(annotation.modified)),
+              ].join('\n')"
+              ><time class="created-at"
+                :datetime="annotation.created"
+                >{{
+                  dateFmt(annotation.created)
+                    || l10n('date_time_unknown')
+                  }}</time>
+            </button>
 
-          <button class="btn btn-sm btn-secondary
-            btn-abused-for-infotext
-            anno-creators
-            ">
-            <template v-for="aCreator of creatorsList">
-              <span class="anno-creator">
-                <template v-if="aCreator.icon">
-                  <img class="media-object" style="display: inline"
-                    :src="aCreator.icon" alt="Logo" width="15px" height="15px">
-                </template>
-                <template v-else>
-                  <i class="fa fa-user"></i>
-                </template>
-                <span class="name">{{
-                  aCreator.displayName || aCreator
-                }}</span>,
-              </span>
-            </template>
-            <template v-if="!creatorsList.length">
-              <span class="no-creator">
-                <i class="fa fa-user-secret"></i>
-                {{ l10n('creator_none') }},
-              </span>
-            </template>
-          </button>
-          <!-- 2021-08-20, Waterfox: Time must be its own button because
-            title=… on a <time> tag inside a <button> tag had no effect. -->
-          <button class="btn btn-sm btn-secondary
-            btn-abused-for-infotext
-            anno-creation-time
-            "
-            :title="[
-              (l10n('Created') + ': ' + dateFmt(annotation.created)),
-              (l10n('Modified') + ': ' + dateFmt(annotation.modified)),
-            ].join('\n')"
-            ><time class="created-at"
-              :datetime="annotation.created"
-              >{{
-                dateFmt(annotation.created)
-                  || l10n('date_time_unknown')
-                }}</time>
-          </button>
+            <button class="btn btn-sm btn-secondary"
+              @click="toggleDetailBar"
+              data-detailbar="purl"
+              :title="l10n('purl')"
+              >
+              <i class="fa fa-link"></i>
+            </button>
 
-          <button class="btn btn-sm btn-secondary"
-            @click="toggleDetailBar"
-            data-detailbar="purl"
-            :title="l10n('purl')"
-            >
-            <i class="fa fa-link"></i>
-          </button>
+            <button class="btn btn-sm btn-secondary"
+              @click="toggleDetailBar"
+              data-detailbar="license"
+              :title="l10n('License') + ': ' + licenseTitleOrUnknown"
+              >
+              <template v-if="currentLicense.img_64x64">
+                <img class="license-icon"
+                  :src="currentLicense.img_64x64"
+                  :alt="licenseTitleOrUnknown"
+                  >
+              </template>
+              <template v-else>?§?</template>
+            </button>
 
-          <button class="btn btn-sm btn-secondary"
-            @click="toggleDetailBar"
-            data-detailbar="license"
-            :title="l10n('License') + ': ' + licenseTitleOrUnknown"
-            >
-            <template v-if="currentLicense.img_64x64">
-              <img class="license-icon"
-                :src="currentLicense.img_64x64"
-                :alt="licenseTitleOrUnknown"
-                >
-            </template>
-            <template v-else>?§?</template>
-          </button>
+            <button class="btn btn-sm btn-secondary"
+              v-if="annotation.doi"
+              data-toggle="popover"
+              data-html="true"
+              data-placement="left"
+              data-focus-dismiss
+              :title="l10n('doi')"
+              :data-content="doiPopup">
+              <i class="fa fa-link"></i> DOI
+            </button>
 
-          <button class="btn btn-sm btn-secondary"
-            v-if="annotation.doi"
-            data-toggle="popover"
-            data-html="true"
-            data-placement="left"
-            data-focus-dismiss
-            :title="l10n('doi')"
-            :data-content="doiPopup">
-            <i class="fa fa-link"></i> DOI
-          </button>
+            <button class="btn btn-sm btn-secondary
+              frag-sel-btn
+              "
+              v-if="targetFragment"
+              :title="this.$store.state.targetFragmentButtonTitle"
+              ref="targetFragmentButton"
+              @click.stop="targetFragmentButtonClicked"
+              >
+              <i class="fa fa-indent"></i>
+              {{ targetFragment }}
+            </button>
 
-          <button class="btn btn-sm btn-secondary
-            frag-sel-btn
-            "
-            v-if="targetFragment"
-            :title="this.$store.state.targetFragmentButtonTitle"
-            ref="targetFragmentButton"
-            @click.stop="targetFragmentButtonClicked"
-            >
-            <i class="fa fa-indent"></i>
-            {{ targetFragment }}
-          </button>
-
-        </div><!-- .btn-group -->
+          </div><!-- .btn-group -->
+        </div><!-- role="toolbar" -->
 
         <div ref="detailbars" class="detailbars">
 
@@ -215,14 +220,13 @@
           </button>
         </div>
 
-      </div>
+      </div><!-- class="media-body -->
 
     </div>
 
     <!-- navigation -->
 
-    <div class="navigation-separator"
-      style="clear: both; margin-bottom: 2px;"></div>
+    <div class="navigation-separator"></div>
     <transition name="fade">
       <div v-if="mintDoiError"
         class="alert alert-danger fade in"
@@ -237,7 +241,7 @@
     </transition>
     <div role="toolbar"
       class="btn-toolbar pull-right"
-      style="margin-top: 10px;">
+      >
       <div role="group"
         class="btn-group btn-group-sm">
         <button v-if="!annotation.doi && $auth('mintDoi', id)"
