@@ -46,21 +46,27 @@ module.exports = {
         eventBus.$on('open-editor', () => {
             document.body.classList.add(editorOpenCssClass);
             const editor = this;
+            soon(() => editor.$refs.tablist.switchToNthTab(1));
+
             const { targetImage, zoneEditor } = editor;
             if (zoneEditor) {
-              zoneEditor.reset();
-              if (targetImage) { zoneEditor.loadImage(targetImage); }
+              try {
+                zoneEditor.reset();
+                if (targetImage) { zoneEditor.loadImage(targetImage); }
+              } catch (zoneEditErr) {
+                console.error('Zone editor init failure:', zoneEditErr);
+              }
             }
-            soon(() => editor.$refs.tablist.switchToNthTab(1));
         })
     },
     mounted() {
         if (this.targetImage) {
+            const { thumbnail } = this.$refs.preview.$refs;
             this.zoneEditor.$on('load-image', () => {
                 this.loadSvg()
                 this.zoneEditor.$on('svg-changed', svg => {
-                    this.$refs.preview.$refs.thumbnail.reset()
-                    this.$refs.preview.$refs.thumbnail.loadSvg(this.svgTarget.selector.value)
+                    thumbnail.reset()
+                    thumbnail.loadSvg(this.svgTarget.selector.value)
                 })
             })
         }
