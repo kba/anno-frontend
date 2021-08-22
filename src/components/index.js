@@ -13,7 +13,6 @@ const components = {
     'clipboard-copy-button': require('./clipboard-copy-button'),
 
     // editing
-    'anno-editor-debug-panel':    require('./anno-editor-debug-panel'),
     'anno-editor-licenses':       require('./anno-editor-licenses'),
     'anno-editor-modal':          require('./anno-editor-modal'),
     'anno-editor-rows-addable':   require('./anno-editor-rows-addable'),
@@ -23,6 +22,10 @@ const components = {
     'relationlink-editor': require('./relationlink-editor'),
     'tags-editor':         require('./tags-editor'),
     'xrx-vue':             require('@kba/xrx-vue').XrxVue,
+
+    // debugging
+    'anno-editor-debug-panel':    require('./anno-editor-debug-panel'),
+    'json-export-import-field':   require('./json-export-import-field'),
 
     // apps
     'sidebar-app':       require('./sidebar-app')

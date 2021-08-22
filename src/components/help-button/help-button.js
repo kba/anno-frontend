@@ -1,5 +1,6 @@
 ﻿/* -*- tab-width: 2 -*- */
 'use strict';
+/* eslint-disable global-require */
 
 const helpTopicsNamingSchemeVersion = '210701';
 
