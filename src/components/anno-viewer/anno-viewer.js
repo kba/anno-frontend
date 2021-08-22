@@ -1,9 +1,6 @@
-const $ = require('jquery')
-const getOwn = require('getown')
-const XrxUtils = require('semtonotes-utils')
-const {
-    ensureArray,
-} = require('@kba/anno-util')
+const jQuery = require('jquery');
+const getOwn = require('getown');
+const XrxUtils = require('semtonotes-utils');
 const {
     relationLinkBody,
     textualHtmlBody,
@@ -16,7 +13,8 @@ const bootstrapCompat = require('../../bootstrap-compat.js');
 const eventBus = require('../../event-bus.js');
 const bindDataApi = require('./dataApi.js');
 const popoverHelper = require('../../popover-helper.js');
-const clipboardHelper = require('../../clipboard-helper.js');
+const licensesByUrl = require('../../license-helper.js').byUrl;
+
 
 /**
  * ### anno-viewer
@@ -55,32 +53,33 @@ const clipboardHelper = require('../../clipboard-helper.js');
 function jsonDeepCopy(x) { return JSON.parse(JSON.stringify(x)); }
 
 module.exports = {
-  name: 'anno-viewer', // necessary for nesting
-  template: require('./anno-viewer.html'),
-  style:    require('./anno-viewer.scss'),
+    name: 'anno-viewer', // necessary for nesting
 
-  mixins: [
-    require('../../mixin/api'),
-    require('../../mixin/auth'),
-    require('../../mixin/dateFmt'),
-    require('../../mixin/l10n'),
-    require('../../mixin/prefix'),
-  ],
+    template: require('./anno-viewer.html'),
+    style:    require('./anno-viewer.scss'),
 
-  props: {
-    annotation: {type: Object, required: true},
-    purlTemplate: {type: String, required: false},
-    purlId: {type: String, required: false},
-    // Controls whether comment is collapsible or not
-    asReply: {type: Boolean, default: false},
-    collapseInitially: {type: Boolean, default: false},
-    imageWidth: {type: Number, default: -1},
-    imageHeight: {type: Number, default: -1},
-    iiifUrlTemplate: {type: String, default: null},
-    thumbStrokeColor: {type: String, default: '#090'},
-    thumbFillColor: {type: String, default: '#090'},
-    acceptEmptyAnnoId: { type: Boolean, default: false },
-  },
+    mixins: [
+      require('../../mixin/api'),
+      require('../../mixin/auth'),
+      require('../../mixin/dateFmt'),
+      require('../../mixin/l10n'),
+      require('../../mixin/prefix'),
+    ],
+
+    props: {
+        annotation: {type: Object, required: true},
+        purlTemplate: {type: String, required: false},
+        purlId: {type: String, required: false},
+        // Controls whether comment is collapsible or not
+        asReply: {type: Boolean, default: false},
+        collapseInitially: {type: Boolean, default: false},
+        imageWidth: {type: Number, default: -1},
+        imageHeight: {type: Number, default: -1},
+        iiifUrlTemplate: {type: String, default: null},
+        thumbStrokeColor: {type: String, default: '#090'},
+        thumbFillColor: {type: String, default: '#090'},
+        acceptEmptyAnnoId: { type: Boolean, default: false },
+    },
 
   beforeCreate() {
     this.toplevelDoi = this.$options.propsData.annotation.doi;
@@ -89,36 +88,8 @@ module.exports = {
 
   mounted() {
     const viewer = this;
+
     viewer.iiifLink = viewer._iiifLink();
-
-    // Set up popovers, e.g. for persistent URL
-    popoverHelper.install(viewer.$el, {
-      trigger: 'click',
-      on: {
-        popup(ev) {
-          const contentTemplate = viewer.$refs.purlPopupContent;
-          const pBody = ev.popupBody;
-          pBody.innerHTML = contentTemplate.innerHTML;
-          console.debug('purl popup!', pBody);
-          clipboardHelper.setupButtons(pBody, {
-            successLabelElem: $(pBody).find('.label-success')[0],
-          });
-        },
-      },
-    });
-
-    if (!window.annoInstalledPopoverHandler) {
-      // Dismiss all popovers with the 'data-focus-dismiss' attribute whenever user clicks outside of the popup divs
-      $('body').on('click', function (e) {
-        if (
-          !(e.target.getAttribute('data-toggle') === 'popover' || $(e.target).parents('[data-toggle="popover"]').length > 0)
-          && $(e.target).parents('.popover.in').length === 0
-        ) {
-          $('[data-toggle="popover"][data-focus-dismiss]').popover('hide')
-        }
-      })
-      window.annoInstalledPopoverHandler = true
-    }
 
     // React to highlighting events startHighlighting / stopHighlighting / toggleHighlighting
     ;['start', 'stop', 'toggle'].forEach(state => {
@@ -147,9 +118,7 @@ module.exports = {
 
     computed: {
         id()                 {return this.annotation.id},
-        creator()            {return this.annotation.creator},
         title()              {return this.annotation.title},
-        rights()             {return this.annotation.rights},
         firstHtmlBody()      {return textualHtmlBody.first(this.annotation)},
         simpleTagBodies()    {return simpleTagBody.all(this.annotation)},
         semanticTagBodies()  {return semanticTagBody.all(this.annotation)},
@@ -157,6 +126,23 @@ module.exports = {
         svgTarget()          {return svgSelectorResource.first(this.annotation)},
 
         targetFragment() { return (this.dataApi('findTargetFragment') || ''); },
+
+        creatorsList() {
+          const { creator } = this.annotation;
+          if (!creator) { return []; }
+          return [].concat(creator).filter(Boolean);
+        },
+
+        currentLicense() {
+          const licUrl = this.annotation.rights;
+          return licInfo = (licensesByUrl.get(licUrl) || false);
+          return licInfo;
+        },
+
+        licenseTitleOrUnknown() {
+          return (this.currentLicense.title
+            || this.l10n('license_unknown'));
+        },
 
         problemsWarningText() {
           const viewer = this;
@@ -253,7 +239,6 @@ module.exports = {
             currentVersion: this.initialAnnotation,
             highlighted: false,
             collapsed: this.collapseInitially,
-            licenseInfo: require('@/../license-config.js'),
             bootstrapOpts: bootstrapCompat.sharedConfig,
         }
     },
@@ -311,6 +296,7 @@ module.exports = {
           }
           popoverTrigger.popover('toggle')
         },
+
         mintDoi() {
           // TODO It would be much nicer to implement a Vuex store action
           const api = this.api
@@ -345,15 +331,6 @@ module.exports = {
         toggleHighlighting() {this.highlighted = ! this.highlighted},
         collapse(collapseState) {
             this.collapsed = collapseState === 'toggle' ? ! this.collapsed : collapseState === 'hide'
-        },
-        ensureArray(k) {
-          // :TODO: Figure out what exactly this is supposed to do,
-          //    then simplify so we can omit the tmp container.
-          const orig = this.annotation[k];
-          const copy = (orig && jsonDeepCopy(orig));
-          const tmp = { val: copy };
-          ensureArray(tmp, 'val');
-          return tmp.val;
         },
 
         setToVersion(updates) {
@@ -432,9 +409,25 @@ module.exports = {
             ;[x, y, w, h] = [x, y, w, h].map(_ => _ / scale * 100)
             return this.iiifUrlTemplate.replace(`{{ iiifRegion }}`, `pct:${x},${y},${w},${h}`)
         },
+
+        toggleDetailBar(ev) {
+          const viewer = this;
+          const trigger = jQuery(ev.target).closest('button');
+          const barName = trigger.data('detailbar');
+          if (!barName) { throw new Error('No detailbar name'); }
+          const detBars = viewer.$refs.detailbars;
+          const openCls = 'active';
+          const barElem = detBars.querySelector('.detailbar-' + barName);
+          if (!barElem) { throw new Error('No such detailbar: ' + barName); }
+          const wasOpen = trigger.hasClass(openCls);
+          const buttonAndBar = jQuery([trigger[0], barElem]);
+          // console.debug('toggleDetailBar', barName, wasOpen, buttonAndBar);
+          if (wasOpen) {
+            buttonAndBar.removeClass(openCls);
+          } else {
+            buttonAndBar.addClass(openCls);
+          }
+        },
+
     },
-
-  mutations: {
-  },
-
 }

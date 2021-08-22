@@ -13,4 +13,18 @@
 
   }
 
+  .btn.btn-abused-for-infotext {
+    &:not(:disabled):not(.disabled),
+    & {
+      cursor: text;
+      -webkit-user-select: text;
+      -moz-user-select: text;
+      -ms-user-select: text;
+      user-select: text;
+    }
+    &:focus, &:active {
+      box-shadow: none;
+    }
+  }
+
 }

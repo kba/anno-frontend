@@ -44,70 +44,71 @@
           class="btn-group btn-group-sm
             anno-editor-anno-body-buttonbar-top">
 
-          <button v-for="aCreator of ensureArray('creator')"
-            class="btn btn-sm btn-secondary
-              anno-creator-icon">
-            <template v-if="aCreator.icon">
-              <img class="media-object" style="display: inline" :src="aCreator.icon" alt="Logo" width="15px" height="15px">
+          <button class="btn btn-sm btn-secondary
+            btn-abused-for-infotext
+            anno-creators
+            ">
+            <template v-for="aCreator of creatorsList">
+              <span class="anno-creator">
+                <template v-if="aCreator.icon">
+                  <img class="media-object" style="display: inline"
+                    :src="aCreator.icon" alt="Logo" width="15px" height="15px">
+                </template>
+                <template v-else>
+                  <i class="fa fa-user"></i>
+                </template>
+                <span class="name">{{
+                  aCreator.displayName || aCreator
+                }}</span>,
+              </span>
             </template>
-            <template v-else>
-              <i class="fa fa-user"></i>
-            </template>
-            <template v-if="aCreator.displayName">
-              {{ aCreator.displayName }}
-            </template>
-            <template v-else>
-              {{ aCreator }}
+            <template v-if="!creatorsList.length">
+              <span class="no-creator">
+                <i class="fa fa-user-secret"></i>
+                {{ l10n('creator_none') }},
+              </span>
             </template>
           </button>
-
-          <button
-            class="annoeditor-date btn btn-sm btn-secondary"
-            :title="`${l10n('Created')}: ${annotation.created
-              }\n${l10n('Modified')}: ${annotation.modified}`">
-            {{ dateFmt(annotation.created) }}
+          <!-- 2021-08-20, Waterfox: Time must be its own button because
+            title=… on a <time> tag inside a <button> tag had no effect. -->
+          <button class="btn btn-sm btn-secondary
+            btn-abused-for-infotext
+            anno-creation-time
+            "
+            :title="[
+              (l10n('Created') + ': ' + dateFmt(annotation.created)),
+              (l10n('Modified') + ': ' + dateFmt(annotation.modified)),
+            ].join('\n')"
+            ><time class="created-at"
+              :datetime="annotation.created"
+              >{{
+                dateFmt(annotation.created)
+                  || l10n('date_time_unknown')
+                }}</time>
           </button>
 
           <button class="btn btn-sm btn-secondary"
-            data-toggle="popover"
-            data-html="true"
-            data-placement="top"
-            data-focus-dismiss
+            @click="toggleDetailBar"
+            data-detailbar="purl"
             :title="l10n('purl')"
             >
             <i class="fa fa-link"></i>
-            <div ref="purlPopupContent"
-              data-popup-template-for="purl"
-              class="hidden">
-              <button class="btn btn-default btn-outline-secondary btn-sm"
-                :data-clipboard-text="purl">
-                <span class="fa fa-clipboard"></span>
-                <span class="label label-success" style="display: none;"
-                  >{{ l10n('copied_to_clipboard') }}</span>
-              </button>
-              <a :href="purl">{{ wbrPurl }}</a>
-            </div>
           </button>
 
           <button class="btn btn-sm btn-secondary"
-            v-if="Boolean(rights)"
-            data-toggle="popover"
-            data-html="false"
-            data-focus-dismiss
-            data-placement="left"
-            :title="l10n('License')"
-            :data-content='
-            rights === licenseInfo.cc_zero.url ? l10n(licenseInfo.cc_zero.user_desc)
-            : rights === licenseInfo.cc_by.url ? l10n(licenseInfo.cc_by.user_desc)
-            : rights'>
-            <template v-if="rights === licenseInfo.cc_zero.url">
-              <img style="width: 14px; height: 14px;" :src="licenseInfo.cc_zero.img_64x64"/>
+            @click="toggleDetailBar"
+            data-detailbar="license"
+            :title="l10n('License') + ': ' + licenseTitleOrUnknown"
+            >
+            <template v-if="currentLicense.img_64x64">
+              <img class="license-icon"
+                :src="currentLicense.img_64x64"
+                :alt="licenseTitleOrUnknown"
+                >
             </template>
-            <template v-else-if="rights === licenseInfo.cc_by.url">
-              <img style="width: 14px; height: 14px;" :src="licenseInfo.cc_by.img_64x64"/>
-            </template>
-            <template v-else>§</template>
+            <template v-else>?§?</template>
           </button>
+
           <button class="btn btn-sm btn-secondary"
             v-if="annotation.doi"
             data-toggle="popover"
@@ -132,6 +133,25 @@
           </button>
 
         </div><!-- .btn-group -->
+
+        <div ref="detailbars" class="detailbars">
+
+          <dl class="detailbar-purl"><dt>
+            <clipboard-copy-button
+              class="pull-right"
+              :cliptext="purl" />
+            {{ l10n('purl') }}:
+          </dt><dd>
+            <a :href="purl">{{ wbrPurl }}</a>
+          </dd></dl>
+
+          <dl class="detailbar-license"><dt>
+            {{ l10n('License') }}: {{ licenseTitleOrUnknown }}
+          </dt><dd>
+            {{ l10n(currentLicense.user_desc) }}
+          </dd></dl>
+
+        </div><!-- .detailbars -->
 
         <div class="well old_version" v-show="isOlderVersion()">
           {{ l10n('version_from') }} {{ dateFmt(annotation.created) }}
