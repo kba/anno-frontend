@@ -34,13 +34,13 @@ module.exports = {
     },
 
     created() {
-      const modal = this;
+      const vueDialog = this;
       eventBus.$on('open-editor', function openEditor() {
-        modal.show();
+        vueDialog.show();
       });
       eventBus.$on('close-editor', function closeEditor() {
-        modal.$store.commit('SET_EDIT_MODE', '');
-        modal.hide();
+        vueDialog.$store.commit('SET_EDIT_MODE', '');
+        vueDialog.hide();
       });
     },
 
@@ -52,7 +52,9 @@ module.exports = {
         stopHighlighting(...args) {eventBus.$emit('stopHighlighting', ...args)},
 
         show(annotation) {
-            $(this.$el).modal({
+            const vueDialog = this;
+            const topDomElem = vueDialog.$el;
+            $(topDomElem).modal({
                 keyboard: false,
                 backdrop: 'static',
             })
