@@ -45,6 +45,7 @@
         </template><!-- logged in but no access -->
       </template><!-- authorized -->
       <template v-else><!-- not authorized -->
+        <!--
         <a class="btn btn-sm
           btn-danger
           create-new-annotation-button"
@@ -54,6 +55,7 @@
           {{ l10n('annoeditor_mode_create') }}:
           {{ l10n('not_authorized') }}
         </a>
+        -->
         <template v-if="isLoggedIn">
           <!-- not authorized even though we're logged in -->
           <help-button topic="popover-not-authorized" />
