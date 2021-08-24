@@ -1,27 +1,27 @@
 .annoeditor-list {
-  .panel-group {
-    margin-bottom: 0;
-    & > .panel {
-      margin-top: 0 !important;
+
+  .anno-list-buttonbar-top {
+
+    margin-top: 5px;
+
+    .panel-group {
+      margin-bottom: 0;
+      & > .panel {
+        margin-top: 0 !important;
+      }
     }
-  }
-  .sort-menu {
-    & > li {
-      display: block;
-      text-align: left;
+
+    .sort-menu {
+      & > li {
+        display: block;
+        text-align: left;
+      }
     }
+
   }
 
   .annot-list {
     margin: 1em 0;
   }
 
-  .annoeditor-info-button {
-    border-radius: 50%;
-    margin-left: 5px;
-    height: 16px;
-    line-height: 1;
-    width: 16px;
-    padding-top: 1px;
-  }
 }

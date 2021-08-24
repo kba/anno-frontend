@@ -4,7 +4,11 @@
   ]"
   :data-number-of-annots="list.length"
   >
-  <div class="btn-group pull-left hidden-print" role="group">
+  <div class="btn-group
+    anno-list-buttonbar-top
+    pull-left
+    hidden-print
+    " role="group">
     <template v-if="isLoggedIn">
       <a v-if="enableLogoutButton"
         class="btn btn-sm btn-warning"
@@ -66,6 +70,7 @@
   </div>
 
   <div class="btn-group
+    anno-list-buttonbar-top
     pull-right
     hidden-print
     " role="group">
