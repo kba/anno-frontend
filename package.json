@@ -44,6 +44,7 @@
     "@babel/core": "^7.7.4",
     "@babel/plugin-transform-runtime": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
+    "absdir": "^1.0.6",
     "babel-loader": "^8.0.6",
     "bootstrap": "^4.6.0",
     "bootstrap3": "^3.3.5",
@@ -58,8 +59,9 @@
     "url-loader": "^3.0.0",
     "vue": "^2.6.12",
     "vuejs-debug-traverse-210506-pmb": "git+https://github.com/mk-pmb/vuejs-debug-traverse-210506-pmb-js.git",
-    "webpack": "^5.36.2",
+    "webpack": "^5.51.1",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.10.3"
+    "webpack-dev-server": "^3.10.3",
+    "webpack-shell-plugin-next": "^2.2.2"
   }
 }

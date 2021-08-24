@@ -1,13 +1,42 @@
-const webpack = require('webpack')
-const path = require('path')
+const webpack = require('webpack');
+const path = require('path');
+const absPath = require('absdir')(module, '.');
+
+const WebpackShellPlugin = require('webpack-shell-plugin-next');
+
+const shellPluginOpts = {};
+const shellPluginEvents = [
+  'onBeforeBuild',
+  'onBuildStart',
+  'onBuildError',
+  'onBuildEnd',
+  'onBuildExit',
+  'onWatchRun',
+  'onDoneWatch',
+  'onBeforeNormalRun',
+  'onAfterDone',
+];
+shellPluginEvents.forEach(function registerHook(ev) {
+  const hookCmd = ('./util/webpack-hooks.sh '
+    + ev.replace(/([A-Z])/g, '_$1').toLowerCase());
+  shellPluginOpts[ev] = {
+    scripts: [hookCmd],
+    blocking: true,
+    parallel: false,
+  };
+});
+
 
 module.exports = {
     entry: "./entry.js",
     devtool: 'source-map',
     // node: {fs: 'empty'},
     // target: 'node',
+    plugins: [
+      new WebpackShellPlugin(shellPluginOpts),
+    ],
     output: {
-        path: __dirname + "/dist",
+        path: absPath('dist'),
         filename: `anno-frontend.js`,
     },
     optimization: {
