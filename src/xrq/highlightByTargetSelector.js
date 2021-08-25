@@ -30,8 +30,8 @@ async function doHighlightByTargetSelector(vuexApi, param) {
   // console.debug('hlBySel:', selector, matcher, values, others, annos);
   const matchedAnnoIds = {
     yes:    new Set(),  // highlighted by explicit match
-    no:     new Set(),  // un-highlighted by explicit non-match
-    other:  new Set(),  // matcher couldn't decide
+    no:     new Set(),  // un-highlighted by explicit match
+    other:  new Set(),  // not matched by any rule
   };
   annos.forEach(function check(anno) {
     const aid = anno.id;
