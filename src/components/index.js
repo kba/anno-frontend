@@ -1,9 +1,12 @@
+const vue2Teleport = require('vue2-teleport').default;
+
 const components = {
 
     // helpers
     'bootstrap-button':  require('./bootstrap-button'),
     'bootstrap-tab':     require('./bootstrap-tab'),
     'bootstrap-tabs':    require('./bootstrap-tabs'),
+    'teleport':          vue2Teleport,
 
     // viewing
     'anno-list':         require('./anno-list'),
