@@ -72,12 +72,14 @@
     if (fragmentId) {
       values[fragmentId] = true; // highlight this fragment
     }
+    const xrq = window.annoApp.externalRequest;
     try {
-      await window.annoApp.externalRequest('HighlightByTargetSelector', {
+      const report = await xrq('HighlightByTargetSelector', {
         selector: 'fragment',
         values,
         others: false, // un-highlight all others
       });
+      console.debug('Highlighted annotations:', report);
     } catch (err) {
       console.error('AnnoApp was unable to highlight #', fragmentId, err);
     }
