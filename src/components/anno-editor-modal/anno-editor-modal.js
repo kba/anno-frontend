@@ -53,8 +53,8 @@ module.exports = {
 
         show(annotation) {
             const vueDialog = this;
-            const topDomElem = vueDialog.$el;
-            $(topDomElem).modal({
+            const dialogDomElem = vueDialog.$refs.annoEditorDialog;
+            $(dialogDomElem).modal({
                 keyboard: false,
                 backdrop: 'static',
             })
