@@ -116,9 +116,9 @@ module.exports = {
                     console.error("Error saving annotation", err)
                     return
                 }
-                $store.dispatch('fetchList')
                 $store.commit('RESET_ANNOTATION')
                 eventBus.$emit('close-editor')
+                $store.dispatch('fetchList')
             }
 
             const legacyPreArgs = getOwn({

@@ -51,15 +51,21 @@ module.exports = {
         startHighlighting(...args) {eventBus.$emit('startHighlighting', ...args)},
         stopHighlighting(...args) {eventBus.$emit('stopHighlighting', ...args)},
 
-        show(annotation) {
-            const vueDialog = this;
-            const dialogDomElem = vueDialog.$refs.annoEditorDialog;
-            $(dialogDomElem).modal({
-                keyboard: false,
-                backdrop: 'static',
-            })
+        updateModal(opt) {
+          const vueDialog = this;
+          const dialogDomElem = vueDialog.$refs.annoEditorDialog;
+          $(dialogDomElem).modal(opt);
         },
-        hide() {$(this.$el).modal('hide')},
+
+        show(annotation) {
+          this.updateModal({
+            keyboard: false,
+            backdrop: 'static',
+          });
+        },
+
+        hide() { this.updateModal('hide'); },
+
         purl(id) {
             return (this.purlTemplate && id)
                 ? this.purlTemplate
