@@ -50,6 +50,7 @@
     "babel-loader": "^8.0.6",
     "bootstrap": "^4.6.0",
     "bootstrap3": "^3.3.5",
+    "browserslist": "^4.17.0",
     "css-loader": "^3.2.0",
     "file-loader": "^5.0.2",
     "html-loader": "^0.5.5",
