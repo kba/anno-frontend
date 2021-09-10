@@ -105,19 +105,29 @@ jq().ready(function installLate() {
   panel.addForm(`
     <p class="fragment-multi">Mehrere Abschnittte:
       <input type="text" size="20" name="frags"
-        placeholder="(mit Leerzeichen getrennt)"
-        value="frag-ex1 frag-ex2"
-        ><input type="submit" value="hervorheben">
+        value="frag-ex1 frag-ex2 dummy"
+        placeholder="(mit Leerzeichen getrennt)">
+      <select size="1" name="state">
+        <option value="true">hervorheben</option>
+        <option value="false">nicht mehr</option>
+        <option value="null">unverändert</option>
+      </select>
+      <input type="submit" value="🚀">
     </p>
   `, function setup(form) {
     form.on('submit', function multiHighlight() {
       const values = {};
+      const state = JSON.parse(form.elements.state.value);
       form.elements.frags.value.replace(/\S+/g,
-        function addValue(m) { values[m] = true; });
+        function addValue(m) { values[m] = state; });
       testUtil.verboseXrq('HighlightByTargetSelector', {
         selector: 'fragment',
         values,
-        others: false, // un-highlight all others
+      }).then((report) => {
+        const fragsFound = Array.from(report.matchedSelectors.fragment.keys());
+        testUtil.alert('Matched ' + fragsFound.length + '/'
+          + Object.keys(values).length + ' fragments: '
+          + fragsFound.sort().join(' '));
       });
       return false;
     });
