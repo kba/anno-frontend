@@ -13,8 +13,8 @@ const selectorMatchers = {
 
   fragment(values, anno) {
     const fragId = annoDataApi.findTargetFragment(anno);
-    if (!fragId) { return undefined; }
-    return getOwn(values, fragId);
+    if (!fragId) { return null; }
+    return { isMatch: getOwn(values, fragId), value: fragId };
   },
 
 };
@@ -33,23 +33,36 @@ async function doHighlightByTargetSelector(vuexApi, param) {
     no:     new Set(),  // un-highlighted by explicit match
     other:  new Set(),  // not matched by any rule
   };
+  const matchedValues = new Map();
   annos.forEach(function check(anno) {
     const aid = anno.id;
     if (!aid) { return; }
-    let m = matcher(values, anno);
-    if (m === undefined) {
-      m = others;
+    const m = matcher(values, anno);
+    let { isMatch } = (m || false);
+    if (isMatch === undefined) {
+      isMatch = others;
       matchedAnnoIds.other.add(aid);
     } else {
-      matchedAnnoIds[m ? 'yes' : 'no'].add(aid);
+      matchedAnnoIds[isMatch ? 'yes' : 'no'].add(aid);
+      const { value } = m;
+      let reasons = matchedValues.get(value);
+      if (!reasons) {
+        reasons = new Map();
+        matchedValues.set(value, reasons);
+      }
+      reasons.set(aid, m);
     }
-    if (typeof m !== 'boolean') { return; }
-    const ev = (m ? 'startHighlighting' : 'stopHighlighting');
+    if (typeof isMatch !== 'boolean') { return; }
+    const ev = (isMatch ? 'startHighlighting' : 'stopHighlighting');
     eventBus.$emit(ev, aid);
   });
   const report = {
     matchedAnnoIds: loMapValues(matchedAnnoIds,
       ids => (ids.size ? Array.from(ids.values()).sort() : false)),
+    matchedSelectors: {
+      // ^-- Planning ahead for supporting multiple selectors.
+      [selector]: matchedValues,
+    },
   };
   return report;
 }

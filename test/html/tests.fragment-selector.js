@@ -1,6 +1,11 @@
-﻿/* -*- tab-width: 2 -*- */
+﻿// -*- coding: utf-8, tab-width: 2 -*-
 /* eslint-env browser */
 'use strict';
+
+const { testUtil } = window;
+const jq = window.jQuery;
+
+
 (function installEarly() {
   const cfg = window.annoTestCfg;
 
@@ -28,11 +33,13 @@
     mouseleave() { setUniqueCssClassByDomId('hovering'); },
 
   });
+}());
 
-  return { then(f) { window.jQuery().ready(f); } };
-}()).then(function installLate() {
+
+jq().ready(function installLate() {
   const { annoApp } = window;
   // ^- see exportAppAsWindowProp in cfg.tests.defaults.js
+  const panel = testUtil.addTestsPanel('Fragment Selector Test');
 
   const imgRadios = [
     annoApp.$store.state.targetImage,
@@ -44,15 +51,26 @@
       + (caption || '(keines)') + '</label>');
   }).join('');
 
-  const { jQuery } = window;
-  const chap = jQuery(`
-  <chapter><form action="about+nope://" method="get"><aside><fieldset>
-    <legend>Fragment Selector Test</legend>
+
+  panel.addForm(`
     <p><input type="submit" value="Beginne Entwurf"> für targetFragment:
       <tt>#</tt><input type="text" name="frag" size="20" value="">
     </p>
-    <p>und Bilddatei:${imgRadios}
-    </p>
+    <p>und Bilddatei: ${imgRadios}</p>
+  `, function setup(form) {
+    const fel = form.elements;
+    fel.frag.value = 'frag-ex1';
+    form.on('submit', function submitted() {
+      testUtil.verboseXrq('ConfigureTargetAndComposeAnnotation', {
+        targetImage: (fel.image.value || null),
+        targetFragment: (fel.frag.value || null),
+      });
+      return false;
+    });
+  });
+
+
+  panel.addForm(`
     <style type="text/css">
       body.has-annoeditor-showing .fragment-examples span { display: block; }
       .fragment-examples .jumped-to { background-color: khaki; }
@@ -64,51 +82,54 @@
       <span id="frag-ex3">aller <a href="#frag-ex3">guten Dinge</a>
         sind drei.</span>
     </p>
-  </aside></fieldset></form></chapter>
-  `);
-
-  async function setHighlightByFragment(fragmentId) {
-    const values = {};
-    if (fragmentId) {
-      values[fragmentId] = true; // highlight this fragment
-    }
-    const xrq = window.annoApp.externalRequest;
-    try {
-      const report = await xrq('HighlightByTargetSelector', {
+  `, function setup(form) {
+    async function setHighlightByFragment(fragmentId) {
+      const values = {};
+      if (fragmentId) {
+        values[fragmentId] = true; // highlight this fragment
+      }
+      testUtil.verboseXrq('HighlightByTargetSelector', {
         selector: 'fragment',
         values,
         others: false, // un-highlight all others
       });
-      console.debug('Highlighted annotations:', report);
-    } catch (err) {
-      console.error('AnnoApp was unable to highlight #', fragmentId, err);
     }
-  }
 
-  chap.find('.fragment-examples span').click(function onClick(ev) {
-    const spanElem = jQuery(ev.target).closest('span')[0];
-    setHighlightByFragment(spanElem.id);
+    form.find('.fragment-examples span').click(function onClick(ev) {
+      const spanElem = jq(ev.target).closest('span')[0];
+      setHighlightByFragment(spanElem.id);
+    });
   });
 
-  const form = chap.find('form')[0];
-  form.elements.frag.value = 'frag-ex1';
 
-  form.onsubmit = function submitted() {
-    const action = 'ConfigureTargetAndComposeAnnotation';
-    const params = {
-      targetImage: (form.elements.image.value || null),
-      targetFragment: (form.elements.frag.value || null),
-    };
-
-    function onSuccess() { console.debug(action + ': success'); }
-    // eslint-disable-next-line no-alert
-    function onFail(err) { window.alert('Error: ' + action + ': ' + err); }
-
-    const xrqPromise = annoApp.externalRequest(action, params);
-    xrqPromise.then(onSuccess, onFail);
-
-    return false;
-  };
-
-  chap.appendTo('body');
+  panel.addForm(`
+    <p class="fragment-multi">Mehrere Abschnittte:
+      <input type="text" size="20" name="frags"
+        value="frag-ex1 frag-ex2 dummy"
+        placeholder="(mit Leerzeichen getrennt)">
+      <select size="1" name="state">
+        <option value="true">hervorheben</option>
+        <option value="false">nicht mehr</option>
+        <option value="null">unverändert</option>
+      </select>
+      <input type="submit" value="🚀">
+    </p>
+  `, function setup(form) {
+    form.on('submit', function multiHighlight() {
+      const values = {};
+      const state = JSON.parse(form.elements.state.value);
+      form.elements.frags.value.replace(/\S+/g,
+        function addValue(m) { values[m] = state; });
+      testUtil.verboseXrq('HighlightByTargetSelector', {
+        selector: 'fragment',
+        values,
+      }).then((report) => {
+        const fragsFound = Array.from(report.matchedSelectors.fragment.keys());
+        testUtil.alert('Matched ' + fragsFound.length + '/'
+          + Object.keys(values).length + ' fragments: '
+          + fragsFound.sort().join(' '));
+      });
+      return false;
+    });
+  });
 });
