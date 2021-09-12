@@ -84,7 +84,7 @@ const mutations = {
 
     REPLACE_ANNOTATION(state, newState) {
         Object.keys(state).forEach(k => {
-            if (newState[k]) Vue.set(state,  k, newState[k])
+            if (newState[k]) Vue.set(state, k, newState[k])
             else state[k] = null
         })
     },
@@ -131,7 +131,7 @@ const mutations = {
         ensureArray(addTo, prop)
         addTo[prop].splice(0, addTo[prop].length)
         value.forEach(v => {
-            console.log(addTo)
+            console.debug('SET_RELATIONLINK_PROP: addTo:', addTo)
             add(addTo, prop, v)
         })
     },
@@ -147,7 +147,7 @@ const mutations = {
         ensureArray(addTo, prop)
         addTo[prop].splice(0, addTo[prop].length)
         value.forEach(v => {
-            console.log(addTo)
+            console.debug('SET_SEMTAG_PROP: addTo:', addTo)
             add(addTo, prop, v)
         })
     },
