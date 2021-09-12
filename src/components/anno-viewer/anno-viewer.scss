@@ -18,9 +18,15 @@
   .btn-toolbar {
     .btn-group {
       margin-top: 0.5ex;
-    }
 
-    margin-bottom: 0.5ex;
+      .btn-group {
+        margin-top: 0;
+      }
+
+      .btn {
+        margin-bottom: 0.5ex;
+      }
+    }
   }
 
   .anno-editor-anno-body-buttonbar-top {
