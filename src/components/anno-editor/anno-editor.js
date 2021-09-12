@@ -166,9 +166,6 @@ module.exports = {
           commit('SET_EDIT_MODE', 'create')
           commit('RESET_ANNOTATION')
           commit('SET_COLLECTION', this.$store.state.collection)
-          const tgtSpec = {
-            source: this.targetSource,
-          };
           const tgtSels = [];
           if (state.targetFragment) {
             tgtSels.push({
@@ -176,7 +173,24 @@ module.exports = {
               value: state.targetFragment,
             });
           }
-          if (tgtSels.length) { tgtSpec.selector = tgtSels; }
+          const tgtSpec = {};
+          if (tgtSels.length) {
+            // Using any selector(s) means our target is must be a
+            // Specific Resource (ch 4):
+            tgtSpec.source = this.targetSource;
+            if (tgtSels.length === 1) {
+              tgtSpec.selector = tgtSels[0];
+            } else {
+              tgtSpec.selector = tgtSels;
+            }
+          } else {
+            // No selector means our target is most likely
+            // an External Web Resources (ch 3.2.1) or Segment
+            // thereof (ch 3.2.3):
+            tgtSpec.id = this.targetSource;
+            // Specifying the type is optional (ch 3.2.2 Classes).
+          }
+
           commit('ADD_TARGET', tgtSpec);
           eventBus.$emit('open-editor')
         },
