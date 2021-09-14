@@ -1,28 +1,19 @@
-.annoeditor-bootstrap-tabs {
+.annoeditor-global-css .annoeditor-bootstrap-tabs {
 
   .nav-tabs > .nav-item {
     display: flex;
-
-    a.help-button {
-      margin-left: 0.5ex;
-      background-color: #31b0d5;
-      border-color: #269abc;
-      border-radius: 100%;
-      height: 1.6em;
-      width: 1.6em;
-    }
   }
 
 }
 
-#annoeditor-sidebar[bsvermajor="3"] {
+.annoeditor-global-css[bsvermajor="3"] {
   --light: whitesmoke;
   .annoeditor-bootstrap-tabs .nav-tabs {
     & > .nav-item.active > .nav-link { background-color: var(--light); }
   }
 }
 
-#annoeditor-sidebar[bsvermajor="4"] {
+.annoeditor-global-css[bsvermajor="4"] {
   .annoeditor-bootstrap-tabs .nav-tabs {
     & > .nav-item > .nav-link.active { background-color: var(--light); }
   }
