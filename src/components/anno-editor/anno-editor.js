@@ -44,32 +44,43 @@ module.exports = {
           document.body.classList.remove(editorOpenCssClass);
         });
         eventBus.$on('open-editor', () => {
-            document.body.classList.add(editorOpenCssClass);
-            const editor = this;
-            soon(() => editor.$refs.tablist.switchToNthTab(1));
+          document.body.classList.add(editorOpenCssClass);
+          const editor = this;
+          soon(() => editor.$refs.tablist.switchToNthTab(1));
 
-            const { targetImage, zoneEditor } = editor;
-            if (zoneEditor) {
-              try {
+          const { targetImage, zoneEditor } = editor;
+          if (zoneEditor) {
+            try {
+              if (zoneEditor.shouldHaveHadAnyImageEverBefore) {
+                // Without an image loaded, the first reset() call would
+                // log a confusing error message about the image not having
+                // been loaded yet.
+                // :TODO: Fix upstream.
                 zoneEditor.reset();
-                if (targetImage) { zoneEditor.loadImage(targetImage); }
-              } catch (zoneEditErr) {
-                console.error('Zone editor init failure:', zoneEditErr);
               }
+              if (targetImage) {
+                zoneEditor.shouldHaveHadAnyImageEverBefore = true;
+                zoneEditor.loadImage(targetImage);
+              }
+            } catch (zoneEditErr) {
+              console.error('Zone editor init failure:', zoneEditErr);
             }
+          }
         })
     },
     mounted() {
-        if (this.targetImage) {
-            const { thumbnail } = this.$refs.preview.$refs;
-            this.zoneEditor.$on('load-image', () => {
-                this.loadSvg()
-                this.zoneEditor.$on('svg-changed', svg => {
-                    thumbnail.reset()
-                    thumbnail.loadSvg(this.svgTarget.selector.value)
-                })
-            })
-        }
+      const editor = this;
+      const { targetImage, zoneEditor } = editor;
+      if (targetImage) {
+        const { thumbnail } = editor.$refs.preview.$refs;
+        zoneEditor.$on('load-image', () => {
+          editor.loadSvg();
+        });
+        zoneEditor.$on('svg-changed', svg => {
+          thumbnail.reset();
+          thumbnail.loadSvg(editor.svgTarget.selector.value);
+        });
+      }
     },
     computed: {
         id()              {return this.$store.state.editing.id},
