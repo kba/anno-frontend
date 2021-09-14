@@ -91,6 +91,19 @@ module.exports = {
         svgTarget()       {return this.$store.getters.svgTarget},
         zoneEditor()      {return this.$refs.zoneEditor},
 
+        stubbedAnnotationForPreview() {
+          const editor = this;
+          const orig = editor.$store.state.editing;
+          // const { l10n } = editor;
+          const now = (new Date()).toLocaleString();
+          const ann = {
+            created: now,
+            modified: now,
+            ...orig,
+          };
+          return ann;
+        },
+
         editMode: {
           get() {return this.$store.state.editMode},
           set(newVal) { this.$store.commit('SET_EDIT_MODE', newVal); },
