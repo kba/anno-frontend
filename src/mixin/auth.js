@@ -34,7 +34,8 @@ function checkAuth(cond, id) {
     // return authApiError('No ID given for ACL check, condition=' + cond);
     return false;
   }
-  const { acl } = this.$store.state;
+  const annoApp = this;
+  const { acl } = annoApp.$store.state;
   if (!acl) {
     // console.warn("Not logged in")
     return false;

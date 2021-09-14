@@ -127,6 +127,9 @@ Currently, these are supported:
   Deprecated.
   Fired when the list of annotations has been fetched from the server.
 
+- `updatedPermissions`:
+  Fires when the user's permissions have been modified.
+
 
 <!-- END-RENDER -->
 
