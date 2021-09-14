@@ -84,7 +84,6 @@ module.exports = {
     },
     computed: {
         id()              {return this.$store.state.editing.id},
-        stateDump()       {return this.$store.state},
         targetImage()     {return this.$store.state.targetImage},
         targetThumbnail() {return this.$store.state.targetThumbnail},
         targetSource()    {return this.$store.state.targetSource},
