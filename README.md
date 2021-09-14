@@ -65,10 +65,10 @@
    `{$target:options.targetSource}`
 4) dispatches a `fetchAcl` action to retrieve the resp. permissions
 5) starts a Vue App with a single [`<sidebar-app>`](#sidebar-app)
-6) Returns the Vue.App which should be kept around (e.g. as window.annoapp)
-   and on whose `eventBus` listeners can be added `$on` and which can emit
-   events with `$emit`
+6) Returns the Vue.App which should be kept around (e.g. as window.annoapp).
+
 #### Options
+- `events`: Event handlers. See chapter `events` below.
 - `container`: Container element to hold the annotation sidebar/modal
 - `language`: Language for l10n. Currently: `en`/`eng` or `de`/`deu` (Default)
 - `collection`: Anno Collection
@@ -92,22 +92,41 @@
 - `isLoggedIn`: Function or boolean to designate whether the user is already
   logged in. No login button will be shown in that case, token will still be
   retrieved unless found
+- `targetFragmentButtonTitle`: Hover title (not caption) of the Fragment
+  Identifier button. Usually, this should be a description of what the
+  `targetFragmentButtonClicked` event handler does.
+
+
+
 #### Methods
 ##### `startHighlighting(annoId, open)`
-Highlight the annotation with `id` annoId
+Deprecated. Use `.externalRequest('HighlightByTargetSelector', …)` instead.
 
 ##### `stopHighlighting(annoId)`
-Stop highlighting the annotation with `id` annoId
+Deprecated. Use `.externalRequest('HighlightByTargetSelector', …)` instead.
+
 ##### `expand(annoId)`
 Open thread tree to reveal anno with id `annoId`
 
+
 #### Events
 
-Either listen/emit via app.eventBus and/or provide listeners as `events` option
+The `events` option to `displayAnnotation` may hold a dictionary object
+that may define event handlers (event name &rarr; function).
+Currently, these are supported:
 
-- `mouseover(annoId)`: $on this to catch when an annotation is hovered in the list
-- `mouseleave(annoId)`: $on this to catch when an annotation is un-hovered in the list
-- `fetched(annotationList)`: List of annotations has been fetched from the server
+- `mouseover`, `mouseleave`:
+  Fired when the mouse pointer hovers/unhovers an annotation.
+  For details, see the anno-viewer component documentation.
+
+- `targetFragmentButtonClicked`:
+  Fired when the Fragment Identifier button is clicked.
+  For details, see the anno-viewer component documentation.
+
+- `fetched`:
+  Deprecated.
+  Fired when the list of annotations has been fetched from the server.
+
 
 <!-- END-RENDER -->
 
