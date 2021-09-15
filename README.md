@@ -99,6 +99,7 @@
 - `targetFragmentButtonTitle`: Hover title (not caption) of the Fragment
   Identifier button. Usually, this should be a description of what the
   `targetFragmentButtonClicked` event handler does.
+- `modalTeleportTarget`: ???
 
 
 
