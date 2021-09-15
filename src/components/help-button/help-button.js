@@ -18,6 +18,7 @@ module.exports = {
     topic:        { type: String, required: true },
     title:        { type: String, default: '' },
     buttonLabel:  { type: String, default: '' },
+    bootstrapBtnCls:  { type: [String, null], default: 'outline-secondary' },
   },
 
   computed: {

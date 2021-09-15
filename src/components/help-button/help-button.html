@@ -1,5 +1,8 @@
-<a class="btn btn-sm btn-default
-    help-button"
+<a :class="[
+    'btn btn-sm btn-default',
+    (bootstrapBtnCls && ('btn-' + bootstrapBtnCls)),
+    'help-button',
+  ].filter(Boolean).join(' ')"
   :data-topic="topic"
   :href="helpUrl"
   target="_blank"
