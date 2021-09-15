@@ -75,6 +75,10 @@
 - `targetSource`: The target of the annotation. Defaults to `window.location.href`
 - `targetImage`: The image if any, to annotate on this page
 - `targetThumbnail`: Thumbnail view of the image. Defaults to `options.targetImage`
+- `thumbStrikeColor`: ???
+- `thumbFillColor`: ???
+- `enableIIIF`: Show IIIF-Image-URL (rectangular section that encloses all SVG zones of an annotation)
+- `iiifUrlTemplate`: Template for the IIIF-Image-URL 
 - `annotationList`: Options for the list display
   - `sortedBy`:     Sort key: `created_az`, `created_za` or `title_az`
   - `allCollapsed`: Collapse (`true`) or expand (`false`) all annotations
@@ -156,7 +160,7 @@ App is a Vue app, component structure:
       * `SemtagsEditor`
       * `Preview`
 
-### Integration into serv7
+### Example
 
 ```js
 $(function() {
