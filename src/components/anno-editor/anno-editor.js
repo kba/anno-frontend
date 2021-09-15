@@ -128,6 +128,10 @@ module.exports = {
               l10n,
             } = this;
 
+            if (editMode === 'create') {
+              if (!window.confirm(l10n('confirm_publish'))) { return; }
+            }
+
             const anno = $store.state.editing;
             if (!anno.title && editMode == 'create') {
                 return window.alert(l10n('missing_required_field')

@@ -11,11 +11,6 @@
 
         <div class="top-right-buttons pull-right"
           v-if="bootstrapOpts.version.major < 4">
-          <bootstrap-button @click="save"
-            btn-class="primary"
-            icon-fa="save">
-            {{ l10n('save') }}
-          </bootstrap-button>
           <bootstrap-button @click="discard"
             btn-class="close"
             data-dismiss="modal"
@@ -51,11 +46,6 @@
 
         <div class="top-right-buttons ml-auto text-nowrap"
           v-if="bootstrapOpts.version.major >= 4">
-          <bootstrap-button @click="save"
-            btn-class="primary"
-            icon-fa="save">
-            {{ l10n('save') }}
-          </bootstrap-button>
           <bootstrap-button @click="discard"
             btn-class="close"
             data-dismiss="modal"
@@ -92,8 +82,8 @@
         </bootstrap-button>
 
         <bootstrap-button btn-class="primary" @click="save"
-          icon-fa="save">
-          {{ l10n('save') }}
+          icon-fa="paper-plane">
+          {{ l10n('publish') }}
         </bootstrap-button>
 
       </div><!-- .modal-footer -->
