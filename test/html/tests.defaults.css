@@ -11,3 +11,5 @@ body > chapter aside {
   float: left; margin: 2em;
   border: 1px solid grey; padding: 1ex 1em;
 }
+
+body > chapter aside > fieldset { position: relative; }

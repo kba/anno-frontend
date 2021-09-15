@@ -66,10 +66,13 @@ Object.assign(tu, {
 
   addTestsPanel(title) {
     const chap = jq('<chapter><aside><fieldset><legend>');
-    chap.find('legend').text(title);
+    const headline = chap.find('legend');
+    headline.text(title);
     chap.appendTo('body');
     const inner = chap.find('fieldset');
     Object.assign(inner, {
+
+      headline,
 
       addForm(html, init) {
         const form = jq('<form>');
