@@ -164,35 +164,55 @@ App is a Vue app, component structure:
 
 ```js
 $(function() {
-  const base = `http://digi.ub.uni-heidelberg.de`
-  const targetImage = img_zoomst[`${projectname}_${pagename}`][0].url
-  const targetSource = `${base}/${digipath}/${projectname}/${pagename}`
-  const targetThumbnail = `${targetSource}/_thumb_image`
-  window.annoapp = displayAnnotations({
+    const {annocolor} = app.canvasTheme.colorScheme
+    const {largestResolution} = app
+    const targetImage = largestResolution.url
+    const targetImageWidth = parseInt(largestResolution.width)
+    const targetImageHeight = parseInt(largestResolution.height)
+    const targetThumbnail = `${window.location.protocol}//${window.location.host}/${pathname}/${projectname}/${pagename}/_thumb_image`
 
-    // Metadata
-    targetSource,
-    targetImage,
-    targetThumbnail,
+    let iiifUrlTemplate = 'http://digi.ub.uni-heidelberg.de/iiif/2/' + projectname + '%3A' + targetImage.replace(/.*\//, '') + '/{{ iiifRegion }}/full/0/default.jpg'
+    let enableIIIF = digiMeta.no_oai != 1
 
-    // Language
-    language: lang,
+    let activeAnnos = {}
+    
+    window.annoapp = displayAnnotations(Object.assign({}, commonOptions, {
 
-    // Determine login & such
-    annoEndpoint:  'http://serv42.ub.uni-heidelberg.de/kba/anno',
-    tokenEndpoint: 'https://digi.ub.uni-heidelberg.de/cgi-bin/token',
-    loginEndpoint:  document.querySelector('a#login') ? document.querySelector('a#login').href : null,
-    logoutEndpoint: null,
-    isLoggedIn:     !! document.querySelector('span#user').innerHTML.match(/(Abmelden|Logout)</),
+      // Metadata
+      targetImage,
+      targetImageWidth,
+      targetImageHeight,
+      thumbStrokeColor: annocolor,
+      thumbFillColor: annocolor,
+      iiifUrlTemplate,
+      targetThumbnail,
+      enableIIIF,
 
-    events: {
-      fetched(list)  { window.drawAllPolygons(list)     },
-      mouseenter(id) { window.drawAllPolygons(null, id) },
-      mouseleave(id) { window.drawAllPolygons()         },
-      error(err)     { console.error(err)               },
-    }
+      events: {
+        fetched(list) {
+          app.drawAllPolygons(list)
+          document.querySelector(".annoNumber").innerHTML = '&nbsp;' + list.length
+          if (list.length > 0) {
+            document.querySelector(".annobutton").classList.add('btn-danger')
+            if (DigiLayout.rightColumnShown === 'initial') {DigiLayout.showRightColumn(true)}
+          }
+          setTimeout(() => DigiEncoding.searchHighlight({context: container}), 100)
+        },
+        setToVersion() {
+          app.drawAllPolygons(null)
+        },
+        mouseenter(id) {
+          activeAnnos[id] = true
+          app.drawAllPolygons(null, Object.keys(activeAnnos))
+        },
+        mouseleave(id) {
+          delete activeAnnos[id]
+          app.drawAllPolygons(null, Object.keys(activeAnnos))
+        },
+        error,
+      }
 
-  })
+    }))
 })
 ```
 
