@@ -15,7 +15,6 @@
  */
 
 const eventBus = require('../../event-bus');
-const bootstrapCompat = require('../../bootstrap-compat');
 
 module.exports = {
     props: {
@@ -23,8 +22,9 @@ module.exports = {
         standalone: {type: Boolean, default: false},
     },
     mixins: [
-        require('@/mixin/prefix'),
-        require('@/mixin/l10n'),
+        require('../../mixin/l10n.js'),
+        require('../../mixin/prefix.js'),
+        require('../../mixin/toplevel-css.js'),
     ],
 
     template: require('./sidebar-app.html'),
@@ -35,7 +35,6 @@ module.exports = {
 
     data() {return {
         collapsed: this.collapseInitially,
-        bootstrapOpts: bootstrapCompat.sharedConfig,
         msgBoxes: [],
     }},
 

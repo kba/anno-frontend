@@ -1,12 +1,10 @@
 <div id="annoeditor-sidebar"
   :class="[
-    'annoeditor-global-css',
+    ...decideTopLevelCssClasses(),
     'annoeditor-sidebar',
     (standalone && 'annoeditor-sidebar-standalone'),
     `annoeditor-sidebar-${collapsed ? 'collapsed' : 'open'}`,
-    `ui-debug-mode-${$store.state.uiDebugMode ? 'on' : 'off'}`,
     ].filter(Boolean)"
-  :bsvermajor="bootstrapOpts.version.major"
   :data-number-of-annotations="numberOfAnnotations"
   >
   <div class="annoeditor-sidebar-toggle" @click="toggle" v-if="standalone">

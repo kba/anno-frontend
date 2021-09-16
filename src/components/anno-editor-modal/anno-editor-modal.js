@@ -14,9 +14,10 @@ const bootstrapCompat = require('../../bootstrap-compat');
 
 module.exports = {
     mixins: [
-        require('@/mixin/l10n'),
-        require('@/mixin/auth'),
-        require('@/mixin/prefix'),
+        require('../../mixin/auth.js'),
+        require('../../mixin/l10n.js'),
+        require('../../mixin/prefix.js'),
+        require('../../mixin/toplevel-css.js'),
     ],
     components: {HelpButton},
     data() {return {
