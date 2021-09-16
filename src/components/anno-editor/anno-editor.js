@@ -96,6 +96,7 @@ module.exports = {
           // const { l10n } = editor;
           const now = (new Date()).toLocaleString();
           const ann = {
+            creator: this.l10n('generic_author_name'),
             created: now,
             modified: now,
             ...orig,
