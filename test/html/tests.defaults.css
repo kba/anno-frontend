@@ -8,8 +8,10 @@
 #tests-toolbar-bottom button { color: black; background-color: gainsboro; }
 
 body > chapter aside {
-  float: left; margin: 2em;
+  float: right; margin: 2em;
   border: 1px solid grey; padding: 1ex 1em;
 }
 
 body > chapter aside > fieldset { position: relative; }
+body > chapter aside > fieldset label { margin: 0; margin-left: 1ex; }
+body > chapter aside > fieldset p { margin: 0.5em 0; }

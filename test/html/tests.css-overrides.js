@@ -11,33 +11,40 @@ jq().ready(function installLate() {
     <div class="pull-right" style="position: relative;"><input
       type="submit" value="apply"
       class="btn btn-default btn-sm btn-outline-secondary"
-      style="position: absolute; right: 0; bottom: 1ex;">
+      style="position: absolute; right: 0; bottom: 1em;">
     </div>
-    <textarea name="txa" cols="60" rows="15" wrap="off"
+    <p>Container max-width: ${[
+      '20em',
+      '30em',
+      '40em',
+      'unset',
+    ].map(v => ('<label><input type="radio" name="appMaxWidth" value="'
+      + v + '"> ' + v + '</label>')).join(' ')}</p>
+    <p><textarea name="txa" cols="60" rows="2" wrap="off"
       style="border: 1px solid silver; overflow: scroll; resize: both;
         font-family: monospace; font-size: 85%;"
-      ></textarea><style type="text/css"></style>
+      ></textarea><style type="text/css"></style></p>
   `, function setup(form) {
     const { txa } = form.elements;
+    function fv(n) { return form.elements[n].value; }
     const dest = txa.nextElementSibling;
-    form.on('submit', function upd() {
-      dest.innerHTML = txa.value;
-      console.debug(dest, txa.value);
-      return false;
-    });
+    function upd() {
+      let css = `
+        #anno-app-container { max-width: ${fv('appMaxWidth')}; }
+        `;
+      form.find('input[type=checkbox]').each((idx, ckb) => {
+        if (!ckb.checked) { return; }
+        const slots = jq(ckb).closest('p').find('input[type=text]').toArray();
+        const add = ckb.value.replace(/¤/g, () => slots.shift().value);
+        css += add + '\n';
+      });
+      css += txa.value;
+      dest.innerHTML = css.trim();
+    }
+    form.on('submit', () => { upd(); return false; });
+    form.on('click', 'input[type="checkbox"],input[type="radio"]', upd);
     txa.value = `
-      #anno-app-container { max-width: 20em; }
-
-      .media-body,
-      .btn-toolbar,
-      .btn-group,
-      fx#maxw100 { max-width: 100%; overflow: auto; }
-
-      .anno-editor-anno-body-buttonbar-top .btn {
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
       `.replace(/^ {6}/mg, '').trim() + '\n';
+    txa.rows = (+(txa.value.match(/\n/g) || false).length || 0) + 2;
   });
 });

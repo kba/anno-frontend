@@ -49,7 +49,7 @@
             <button class="btn btn-sm btn-secondary
               btn-abused-for-infotext
               anno-creators
-              ">
+              "><span class="button-caption">
               <template v-for="aCreator of creatorsList">
                 <span class="anno-creator">
                   <template v-if="aCreator.icon">
@@ -70,6 +70,7 @@
                   {{ l10n('creator_none') }},
                 </span>
               </template>
+              </span><!-- .button-caption -->
             </button>
             <!-- 2021-08-20, Waterfox: Time must be its own button because
               title=… on a <time> tag inside a <button> tag had no effect. -->
@@ -81,12 +82,14 @@
                 (l10n('Created') + ': ' + dateFmt(annotation.created)),
                 (l10n('Modified') + ': ' + dateFmt(annotation.modified)),
               ].join('\n')"
+              ><span class="button-caption"
               ><time class="created-at"
                 :datetime="annotation.created"
                 >{{
                   dateFmt(annotation.created)
                     || l10n('date_time_unknown')
                   }}</time>
+              </span><!-- .button-caption -->
             </button>
 
             <button class="btn btn-sm btn-secondary"
