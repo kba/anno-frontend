@@ -16,8 +16,11 @@
   }
 
   .btn-toolbar {
+    max-width: 100%; overflow: auto;
+
     .btn-group {
       margin-top: 0.5ex;
+      max-width: 100%; overflow: auto;
 
       .btn-group {
         margin-top: 0;
@@ -45,6 +48,19 @@
       &.anno-creation-time {
         border-left-width: 0 !important;
         padding-left: 0 !important;
+      }
+
+      .button-caption {
+        /*
+          [2021-09-17] Try to limit text to one line. From all the
+          approaches listed on https://css-tricks.com/line-clampin/ ,
+          this one seems to be the least bad one.
+        */
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
 
     }
@@ -114,6 +130,7 @@
 
     & .media-body {
 
+      max-width: 100%; overflow: auto;
       padding: 5px;
 
       & > h4 {
