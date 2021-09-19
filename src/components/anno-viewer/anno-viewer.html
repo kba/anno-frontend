@@ -47,9 +47,11 @@
             class="btn-group btn-group-sm">
 
             <button class="btn btn-sm btn-secondary
-              btn-abused-for-infotext
               anno-creators
-              "><span class="button-caption">
+              "
+              @click="toggleDetailBar"
+              data-detailbar="creators"
+              ><span class="button-caption" ref="creatorsList">
               <template v-for="aCreator of creatorsList">
                 <span class="anno-creator">
                   <template v-if="aCreator.icon">
@@ -61,13 +63,13 @@
                   </template>
                   <span class="name">{{
                     aCreator.displayName || aCreator
-                  }}</span>,
+                  }}</span><span class="list-sep">,</span>
                 </span>
               </template>
               <template v-if="!creatorsList.length">
                 <span class="no-creator">
                   <i class="fa fa-user-secret"></i>
-                  {{ l10n('creator_none') }},
+                  {{ l10n('creator_none') }}
                 </span>
               </template>
               </span><!-- .button-caption -->
@@ -75,15 +77,17 @@
             <!-- 2021-08-20, Waterfox: Time must be its own button because
               title=… on a <time> tag inside a <button> tag had no effect. -->
             <button class="btn btn-sm btn-secondary
-              btn-abused-for-infotext
               anno-creation-time
               "
               :title="[
                 (l10n('Created') + ': ' + dateFmt(annotation.created)),
                 (l10n('Modified') + ': ' + dateFmt(annotation.modified)),
               ].join('\n')"
-              ><span class="button-caption"
-              ><time class="created-at"
+              @click="toggleDetailBar"
+              data-detailbar="creation-date"
+              ><span class="button-caption">
+              <i class="fa fa-calendar"></i>
+              <time class="created-at"
                 :datetime="annotation.created"
                 >{{
                   dateFmt(annotation.created)
@@ -141,6 +145,18 @@
         </div><!-- role="toolbar" -->
 
         <div ref="detailbars" class="detailbars">
+
+          <dl class="detailbar-creators"><dt>
+            {{ l10n('anno_created_by') }}:
+          </dt><dd html-src-ref="creatorsList">
+          </dd></dl>
+
+          <dl class="detailbar-creation-date">
+            <dt>{{ l10n('Created') }}:</dt>
+            <dd>{{ dateFmt(annotation.created) }}</dd>
+            <dt>{{ l10n('Modified') }}:</dt>
+            <dd>{{ dateFmt(annotation.modified) }}</dd>
+          </dl>
 
           <dl class="detailbar-purl"><dt>
             <clipboard-copy-button

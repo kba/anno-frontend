@@ -1,4 +1,3 @@
-const jQuery = require('jquery');
 const getOwn = require('getown');
 const XrxUtils = require('semtonotes-utils');
 const {
@@ -14,6 +13,7 @@ const eventBus = require('../../event-bus.js');
 const bindDataApi = require('./dataApi.js');
 const popoverHelper = require('../../popover-helper.js');
 const licensesByUrl = require('../../license-helper.js').byUrl;
+const toggleDetailBar = require('./toggleDetailBar.js');
 
 
 /**
@@ -243,6 +243,8 @@ module.exports = {
         }
     },
     methods: {
+        toggleDetailBar,
+
         revise()     {return eventBus.$emit('revise', this.annotation)},
         reply()      {return eventBus.$emit('reply',  this.annotation)},
         remove()     {return eventBus.$emit('remove', this.annotation)},
@@ -408,25 +410,6 @@ module.exports = {
             ;[y, h] = [y, h].map(_ => _ / this.imageHeight)
             ;[x, y, w, h] = [x, y, w, h].map(_ => _ / scale * 100)
             return this.iiifUrlTemplate.replace(`{{ iiifRegion }}`, `pct:${x},${y},${w},${h}`)
-        },
-
-        toggleDetailBar(ev) {
-          const viewer = this;
-          const trigger = jQuery(ev.target).closest('button');
-          const barName = trigger.data('detailbar');
-          if (!barName) { throw new Error('No detailbar name'); }
-          const detBars = viewer.$refs.detailbars;
-          const openCls = 'active';
-          const barElem = detBars.querySelector('.detailbar-' + barName);
-          if (!barElem) { throw new Error('No such detailbar: ' + barName); }
-          const wasOpen = trigger.hasClass(openCls);
-          const buttonAndBar = jQuery([trigger[0], barElem]);
-          // console.debug('toggleDetailBar', barName, wasOpen, buttonAndBar);
-          if (wasOpen) {
-            buttonAndBar.removeClass(openCls);
-          } else {
-            buttonAndBar.addClass(openCls);
-          }
         },
 
     },
