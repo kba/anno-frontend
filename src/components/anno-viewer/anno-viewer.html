@@ -153,9 +153,9 @@
 
           <dl class="detailbar-creation-date">
             <dt>{{ l10n('Created') }}:</dt>
-            <dd>{{ dateFmt(annotation.created) }}</dd>
+            <dd>{{ dateFmt(annotation.created) || '&nbsp;' }}</dd>
             <dt>{{ l10n('Modified') }}:</dt>
-            <dd>{{ dateFmt(annotation.modified) }}</dd>
+            <dd>{{ dateFmt(annotation.modified) || '&nbsp;' }}</dd>
           </dl>
 
           <dl class="detailbar-purl"><dt>
