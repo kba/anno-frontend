@@ -92,11 +92,11 @@ module.exports = {
 
         stubbedAnnotationForPreview() {
           const editor = this;
+          const { l10n } = editor;
           const orig = editor.$store.state.editing;
-          // const { l10n } = editor;
-          const now = (new Date()).toLocaleString();
+          const now = Date.now();
           const ann = {
-            creator: this.l10n('generic_author_name'),
+            creator: l10n('generic_author_name'),
             created: now,
             modified: now,
             ...orig,

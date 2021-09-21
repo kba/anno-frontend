@@ -4,6 +4,10 @@ const absPath = require('absdir')(module, '.');
 
 const WebpackShellPlugin = require('webpack-shell-plugin-next');
 
+const sourceMapOpts = {
+};
+
+
 const shellPluginOpts = {};
 const shellPluginEvents = [
   'onBeforeBuild',
@@ -29,10 +33,11 @@ shellPluginEvents.forEach(function registerHook(ev) {
 
 module.exports = {
     entry: "./entry.js",
-    devtool: 'source-map',
+    devtool: false,
     // node: {fs: 'empty'},
     // target: 'node',
     plugins: [
+      new webpack.SourceMapDevToolPlugin(sourceMapOpts),
       new WebpackShellPlugin(shellPluginOpts),
     ],
     output: {
