@@ -17,7 +17,7 @@
     v-show="!standalone || !collapsed">
     <!-- <span class="fa fa-comments"></span> -->
     <!-- <span class="fa fa-toggle-off" v-show="collapsed" @click="toggle"></span> -->
-    <!-- {{ l10n('Annotations') }} -->
+
     <div v-if="msgBoxes.length" class="msgboxes">
       <div v-for="box in msgBoxes"
         :class="[
@@ -33,7 +33,8 @@
         </div>
         <p class="msg">{{ box.msg }}</p>
       </div>
-    </div>
+    </div><!-- .msgboxes -->
+
     <anno-list ref="annoList">
       <div v-if="noAnnotsReason"
         slot="annot-list-empty"
