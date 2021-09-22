@@ -3,10 +3,12 @@
 'use strict';
 
 const tu = {};
-window.testUtil = tu;
-
 const jq = window.jQuery;
 
+Object.assign(window, {
+  testUtil: tu,
+  jc(x) { return JSON.parse(JSON.stringify(x)); },
+});
 
 Object.assign(tu, {
 
