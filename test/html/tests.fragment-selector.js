@@ -2,10 +2,6 @@
 /* eslint-env browser */
 'use strict';
 
-const { testUtil } = window;
-const jq = window.jQuery;
-
-
 (function installEarly() {
   const cfg = window.annoTestCfg;
 
@@ -36,8 +32,12 @@ const jq = window.jQuery;
 }());
 
 
-jq().ready(function installLate() {
-  const { annoApp } = window;
+window.jQuery().ready(function installLate() {
+  const {
+    annoApp,
+    testUtil,
+  } = window;
+  const jq = window.jQuery;
   // ^- see exportAppAsWindowProp in cfg.tests.defaults.js
   const panel = testUtil.addTestsPanel('Fragment Selector Test');
 

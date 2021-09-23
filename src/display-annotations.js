@@ -79,6 +79,7 @@ const externalRequest = require('./xrq/externalRequest.js')
  *
  */
 module.exports = function displayAnnotations(customOptions) {
+    // console.debug('displayAnnotations: customOptions =', customOptions);
     const options = mergeOptions(decideDefaultOptions(), customOptions);
     bootstrapCompat.initialize(options.bootstrap);
     delete options.bootstrap;
@@ -113,28 +114,38 @@ module.exports = function displayAnnotations(customOptions) {
     if (!container) {
         container = document.createElement('div')
         container.setAttribute('id', options.prefix + 'container')
-        document.querySelector('body').appendChild(container)
+        document.body.appendChild(container);
     }
     const appDiv = document.createElement('div')
     appDiv.setAttribute('id', options.prefix + 'app')
-    container.appendChild(appDiv)
+    container.appendChild(appDiv);
 
     //
     // Event listeners
     //
-    const eventListeners = options.events ? options.events : {}
-    Object.keys(eventListeners).forEach(event => {
-        // console.log(`Binding "${event}" event on`, eventBus, 'to', eventListeners[event])
-        eventBus.$on(event, (...args) => eventListeners[event](...args))
-    })
-    delete options.events
+    (function installEvents() {
+      const { events } = options;
+      delete options.events;
+      if (!events) { return; }
+      Object.entries(events).forEach(function install([evName, evHandler]) {
+        eventBus.$on(evName, evHandler);
+      });
+    }());
 
-    // These options can also be functions to be called to produce the value now
-    ;['token', 'collection', 'isLoggedIn', 'loginEndpoint', 'logoutEndpoint'].forEach(fn => {
-        if (typeof options[fn] === 'function') {
-            options[fn] = options[fn]()
-        }
-    })
+    (function evaluateFactoryOptions(optNames) {
+      // These options can also be functions to be called to produce
+      // the value now.
+      optNames.forEach(function check(key) {
+        const oldValue = options[key];
+        if (typeof oldValue === 'function') { options[key] = oldValue(); }
+      });
+    }([
+      'token',
+      'collection',
+      'isLoggedIn',
+      'loginEndpoint',
+      'logoutEndpoint',
+    ]));
 
     //
     // Set up the store

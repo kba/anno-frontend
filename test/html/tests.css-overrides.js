@@ -2,10 +2,9 @@
 /* eslint-env browser */
 'use strict';
 
-const { testUtil } = window;
-const jq = window.jQuery;
-
-jq().ready(function installLate() {
+window.jQuery().ready(function installLate() {
+  const { testUtil } = window;
+  const jq = window.jQuery;
   const panel = testUtil.addTestsPanel('Custom CSS Overrides');
   panel.addForm(`
     <div class="pull-right" style="position: relative;"><input

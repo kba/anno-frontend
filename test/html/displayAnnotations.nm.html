@@ -57,11 +57,13 @@
 <script src="../../dist/anno-frontend.dev.js"> </script>
 <script src="./fixtures.js"></script>
 
-<script type="module" src="tests.util.js"></script>
-<script type="module" src="tests.fragment-selector.js"></script>
-<script type="module" src="tests.css-overrides.js"></script>
+<!--  ATTN: Don't load test code with type="module", as this would make
+            it run deferred, after displayAnnotations(). -->
+<script src="tests.util.js"></script>
+<script src="tests.fragment-selector.js"></script>
+<script src="tests.css-overrides.js"></script>
 
-<script type="text/javascript">
+<script>
 displayAnnotations(Object.assign({}, window.annoServerCfg, window.annoTestCfg, {
   // default: // bootstrap: { version: { major: 4 } },
   // targetImage: null,
