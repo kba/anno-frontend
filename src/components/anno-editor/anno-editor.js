@@ -13,9 +13,10 @@
  *
  */
 
-const eventBus = require('../../event-bus');
 const getOwn = require('getown');
-const jQuery = require('jquery');
+
+const eventBus = require('../../event-bus.js');
+const validateEditorFields = require('./validateEditorFields.js');
 
 function soon(f) { return setTimeout(f, 1); }
 
@@ -122,21 +123,19 @@ module.exports = {
     methods: {
 
         save() {
+            const editor = this;
             const {
               $store,
               api,
               editMode,
               l10n,
-            } = this;
+            } = editor;
+            const anno = $store.state.editing;
+
+            if (!validateEditorFields(editor)) { return; }
 
             if (editMode === 'create') {
               if (!window.confirm(l10n('confirm_publish'))) { return; }
-            }
-
-            const anno = $store.state.editing;
-            if (!anno.title && editMode == 'create') {
-                return window.alert(l10n('missing_required_field')
-                  + ' ' + l10n('annofield_title'));
             }
 
             function whenSaved(err, newAnno) {

@@ -131,7 +131,7 @@ const mutations = {
         ensureArray(addTo, prop)
         addTo[prop].splice(0, addTo[prop].length)
         value.forEach(v => {
-            console.debug('SET_RELATIONLINK_PROP: addTo:', addTo)
+            // console.debug('SET_RELATIONLINK_PROP: addTo:', addTo)
             add(addTo, prop, v)
         })
     },
@@ -147,7 +147,7 @@ const mutations = {
         ensureArray(addTo, prop)
         addTo[prop].splice(0, addTo[prop].length)
         value.forEach(v => {
-            console.debug('SET_SEMTAG_PROP: addTo:', addTo)
+            // console.debug('SET_SEMTAG_PROP: addTo:', addTo)
             add(addTo, prop, v)
         })
     },

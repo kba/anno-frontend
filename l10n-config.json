@@ -89,6 +89,8 @@
             "annoeditor_mode_revise": "Bearbeiten der Annotation",
             "annoeditor_mode_reply": "Antworten auf Annotation",
 
+            "generic_list_item_add_short": "Hinzuf.",
+
             "add_relationlink":          "Link hinzufügen",
             "delete_relationlink":       "Link löschen",
             "relationlink":              "Link",
@@ -100,6 +102,8 @@
             "delete_semtag":       "Schlagwort löschen",
             "semtag":              "Schlagwort",
             "semtags":             "Schlagworte",
+            "semtag_no_source": "Bitte wählen Sie einen Katalog-Eintrag aus der Vorschlagliste.",
+            "semtag_no_source_for": "Unvollständige Schlagwort-Angabe, bitte wählen Sie einen Katalog-Eintrag für folgendes Schlagwort:",
 
             "add_tag":             "Stichwort hinzufügen",
             "delete_tag":          "Stichwort löschen",
@@ -212,6 +216,10 @@
             "delete_semtag":       "Delete Semantic Tag",
             "semtag":              "Semantic Tag",
             "semtags":             "Semantic Tags",
+            "semtag_no_source": "Please choose a catalog entry from the suggestion list.",
+            "semtag_no_source_for": "Incomplete semantic tag data, please choose a catalog entry for this tag:",
+
+            "generic_list_item_add_short": "Add",
 
             "add_relationlink":          "Add Link",
             "delete_relationlink":       "Delete Link",

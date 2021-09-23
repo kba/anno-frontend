@@ -1,6 +1,9 @@
 <component :is="(elem || 'button')"
   role="button"
-  :class="`btn btn-${btnClass} btn-${btnSize}`" :title="title" @click="$emit('click', $event)">
+  :class="`btn text-nowrap btn-${btnClass} btn-${btnSize}`"
+  :title="title"
+  @click="$emit('click', $event)"
+  >
   <i v-if="iconFa" :class="'fa fa-' + iconFa"></i>
   <i v-if="iconText" class="icon">{{ iconText }}</i>
   <slot name="icon-custom" />

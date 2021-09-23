@@ -4,24 +4,38 @@
   >
 
   <template slot="buttons">
+    <!-- input
+      required
+      autocomplete
+      type="text"
+      class="form-control semtag-value"
+      :placeholder="l10n('add_semtag')"
+    / -->
     <bootstrap-button
-      btn-class="success"
+      btn-class="success ml-2"
       icon-fa="plus"
       @click="addSemanticTag"
-      >{{ l10n('add_semtag') }}</bootstrap-button>
+      >{{
+        /* l10n('generic_list_item_add_short') */
+        l10n('add_semtag')
+      }}</bootstrap-button>
   </template>
 
   <div class="row semtag" v-for="(body, bodyIndex) in semanticTagBodies">
     <div class="col-md-9">
       <input
+        class="form-control semtag-value"
         :data-body-index="bodyIndex"
+        :data-anno-body-value="body.value"
+        :data-sem-source="body.source"
         required
         autocomplete
         type="text"
-        class="form-control semtag-value"
         :value="body.value"
         :placeholder="l10n('semtag')"
       />
+      <div class="no-source text-danger"
+        >↑⚠ {{ l10n('semtag_no_source') }}</div>
     </div>
     <div class="col-md-3">
       <bootstrap-button
