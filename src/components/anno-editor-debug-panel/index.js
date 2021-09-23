@@ -1,4 +1,4 @@
-/* -*- tab-width: 2 -*- */
+// -*- coding: utf-8, tab-width: 2 -*-
 'use strict';
 /* eslint-disable global-require */
 
