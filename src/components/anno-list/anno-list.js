@@ -17,6 +17,7 @@
 const eventBus = require('@/event-bus')
 const HelpButton = require('@/components/help-button')
 const bootstrapCompat = require('../../bootstrap-compat');
+const sessionStore = require('../../browserStorage.js').session;
 
 module.exports = {
     mixins: [
@@ -35,8 +36,8 @@ module.exports = {
     mounted() {
 
         // Collapse/Expand all according to setting
-        if (window.sessionStorage.getItem("annolistCollapseAll") !== null) {
-            this.collapsed = window.sessionStorage.getItem("annolistCollapseAll") === 'hide'
+        if (sessionStore.get('collapseAll') !== null) {
+            this.collapsed = sessionStore.get('collapseAll') === 'hide'
         }
         this.$watch(() => this.list, () => this.collapseAll(this.collapsed ? 'hide' : 'show'))
         this.collapseAll(this.collapsed ? 'hide' : 'show')
@@ -84,7 +85,7 @@ module.exports = {
         collapseAll(state) {
             this.collapsed = state === 'hide'
             this.$children.forEach(annoViewer => annoViewer.collapse && annoViewer.collapse(state))
-            window.sessionStorage.setItem('annolistCollapseAll', state)
+            sessionStore.put('collapseAll', state)
         },
     },
 }

@@ -10,6 +10,7 @@ const eventBus = require('../event-bus');
 const editing = require('./module/editing');
 const annotationList = require('./module/annotationList');
 const state = require('./state');
+const sessionStore = require('../browserStorage.js').session;
 
 const fetchToken = require('./fetchers/fetchToken.js');
 const fetchList = require('./fetchers/fetchList.js');
@@ -58,13 +59,13 @@ module.exports = {
         },
 
         SET_TOKEN(state, token) {
-            state.token = token
-            window.sessionStorage.setItem('anno-token', token)
+          state.token = token;
+          sessionStore.put('authToken', token);
         },
 
         DELETE_TOKEN(state, token) {
-            state.token = null
-            window.sessionStorage.removeItem('anno-token')
+          state.token = null;
+          sessionStore.del('authToken');
         },
 
         SET_EDIT_MODE(state, editMode) {

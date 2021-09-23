@@ -3,7 +3,7 @@
 
 const axios = require('axios');
 
-const browserWindow = window; // eslint-disable-line no-undef
+const sessionStore = require('../../browserStorage.js').session;
 
 function orf(x) { return (x || false); }
 function unixTime() { return Math.floor(Date.now() / 1e3); }
@@ -20,7 +20,7 @@ function acceptHttp401(err) {
 async function fetchToken(vuexApi) {
   const { state, commit } = vuexApi;
   if (!state.tokenEndpoint) { return; }
-  const oldToken = browserWindow.sessionStorage.getItem('anno-token');
+  const oldToken = sessionStore.get('authToken');
   if (oldToken) {
     if (isExpired(oldToken)) {
       await commit('DELETE_TOKEN');
