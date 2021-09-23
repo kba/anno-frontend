@@ -1,5 +1,9 @@
+/* -*- tab-width: 2 -*- */
+'use strict';
+
 const {collectIds} = require('@kba/anno-util');
 const jwtDecode = require('jwt-decode');
+const promisify = require('pify');
 
 const apiFactory = require('../api');
 const eventBus = require('../event-bus');
@@ -83,20 +87,19 @@ module.exports = {
       fetchToken,
       fetchList,
 
-        fetchAcl({state, commit, getters}) {
-            return new Promise((resolve, reject) => {
-                // console.log("ACL check")
-                apiFactory(state).aclCheck(getters.allIds, (err, perms) => {
-                    if (err) {
-                        commit('EMPTY_ACL')
-                        reject(err)
-                    } else {
-                        commit('CHANGE_ACL', perms)
-                        resolve()
-                    }
-                })
-            })
-        },
+      async fetchAcl({state, commit, getters}) {
+        if (state.acl['debug:skipFetchAcl']) { return; }
+        const api = apiFactory(state);
+        const chk = promisify(api.aclCheck.bind(api));
+        try {
+          const perms = await chk(getters.allIds);
+          commit('CHANGE_ACL', perms);
+        } catch (aclFetchFailed) {
+          window.aclFetchFailed = aclFetchFailed;
+          console.error({ aclFetchFailed });
+          throw aclFetchFailed;
+        }
+      },
 
         async runInjectedFunc(vuexApi, func) {
           // console.debug('runInjectedFunc', { vuexApi, func });
