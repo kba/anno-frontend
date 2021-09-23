@@ -24,7 +24,11 @@
 
 <div class="topic" data-topic="annot">
   <h3>Annotation</h3>
-  <json-export-import-field class="jsondump-annot" path="editing" />
+  <json-export-import-field class="jsondump-annot" path="editing"
+    :extraButtons="[
+      { c: '🗯', n: 'Validate editor fields', f: validateEditorFields, a: null },
+    ]"
+    />
 </div>
 
 

@@ -34,4 +34,11 @@
     top: auto !important;
     bottom: 100%;
   }
+
+  input.semtag-value ~ .no-source {
+    margin-left: 1em;
+    margin-bottom: 0.5em;
+  }
+  input.semtag-value:valid:not([data-sem-source=""]) ~ .no-source,
+  input.semtag-value:not(:valid) ~ .no-source { display: none; }
 }
