@@ -1,8 +1,9 @@
-const webpack = require('webpack');
-const path = require('path');
-const absPath = require('absdir')(module, '.');
+/* -*- tab-width: 2 -*- */
+'use strict';
 
+const webpack = require('webpack');
 const WebpackShellPlugin = require('webpack-shell-plugin-next');
+const absPath = require('absdir')(module, '.');
 
 const sourceMapOpts = {
 };
@@ -65,7 +66,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      '@': path.join(__dirname, 'src'),
+      '@': absPath('src'),
       // 'vue$': 'vue/dist/vue.esm.js',
       'vue$': 'vuejs-debug-traverse-210506-pmb/vue.esm.js',
       'vuex$': 'vuex/dist/vuex.esm.js',
