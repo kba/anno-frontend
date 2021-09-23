@@ -41,30 +41,38 @@ module.exports = {
 
   data() {
     return {
-      collapsed: 'hide',
+      collapsed: true,
       bootstrapOpts: bootstrapCompat.sharedConfig,
     };
   },
 
+  watch: {
+    // https://v3.vuejs.org/api/instance-methods.html#watch
+    list() {
+      this.collapseAll('apply');
+    },
+  },
+
   mounted() {
-    // Collapse/Expand all according to setting
-    if (sessionStore.get('collapseAll') !== null) {
-      this.collapsed = sessionStore.get('collapseAll') === 'hide';
-    }
-    this.$watch(() => this.list, () => this.collapseAll(this.collapsed ? 'hide' : 'show'));
-    this.collapseAll(this.collapsed ? 'hide' : 'show');
+    const annoList = this;
+
+    (function restoreSessionSetting() {
+      const ca = sessionStore.get('anno-list:collapsed');
+      if (typeof ca === 'boolean') { annoList.collapsed = ca; }
+    }());
+    annoList.collapseAll('apply');
 
     // Sort the list initially and after every fetch
-    this.sort();
-    eventBus.$on('fetched', () => this.sort());
+    annoList.sort();
+    eventBus.$on('fetched', () => annoList.sort());
 
     // When permissions have been updated, force an update.
-    eventBus.$on('updatedPermissions', () => this.$forceUpdate());
+    eventBus.$on('updatedPermissions', () => annoList.$forceUpdate());
 
     // Initially open the list if there was an annotation persistently adressed
-    if (this.purlId && this.purlAnnoInitiallyOpen) {
+    if (annoList.purlId && annoList.purlAnnoInitiallyOpen) {
       eventBus.$once('fetched', () => {
-        setTimeout(() => eventBus.$emit('expand', this.purlId), 1);
+        setTimeout(() => eventBus.$emit('expand', annoList.purlId), 1);
       });
     }
   },
@@ -94,11 +102,21 @@ module.exports = {
     sort(...args) { return this.$store.dispatch('sort', ...args); },
     create() { return eventBus.$emit('create', this.targetSource); },
 
-    collapseAll(state) {
-      this.collapsed = state === 'hide';
-      this.$children.forEach(annoViewer => annoViewer.collapse && annoViewer.collapse(state));
-      sessionStore.put('collapseAll', state);
+    collapseAll(action) {
+      const annoList = this;
+      let st = annoList.collapsed;
+      if (action === 'hide') { st = true; }
+      if (action === 'show') { st = false; }
+      if (action === 'toggle') { st = !st; }
+      annoList.collapsed = st;
+      if (action !== 'apply') { sessionStore.put('anno-list:collapsed', st); }
+
+      const verb = (st ? 'hide' : 'show');
+      annoList.$children.forEach(function maybeCollapse(viewer) {
+        if (viewer.collapse) { viewer.collapse(verb); }
+      });
     },
+
   },
 };
 

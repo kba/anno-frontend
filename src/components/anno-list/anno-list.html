@@ -65,7 +65,7 @@
       </template><!-- not authorized -->
     </template><!-- offerCreateNewAnnotationButton -->
 
-  </div>
+  </div><!-- .anno-list-buttonbar-top.pull-left -->
 
   <div class="btn-group
     anno-list-buttonbar-top
@@ -82,13 +82,14 @@
       >⚙
     </button>
 
-    <button v-if="collapsed && numberOfAnnotations > 0" class="btn btn-default btn-outline-secondary btn-sm" @click="collapseAll('show')">
-      <span class="fa fa-plus"></span>&nbsp;{{ l10n('open_all') }}
-    </button>
-
-    <button v-if="! collapsed && numberOfAnnotations > 0" class="btn btn-default btn-outline-secondary btn-sm" @click="collapseAll('hide')">
-      <span class="fa fa-minus"></span>&nbsp;{{ l10n('close_all') }}
-    </button>
+    <bootstrap-button ref="btnCollapseAll"
+      @click="collapseAll('toggle')"
+      v-if="numberOfAnnotations"
+      btn-class="outline-secondary"
+      :data-state="collapsed ? 'hide' : 'show'"
+      :icon-fa="collapsed ? 'plus' : 'minus'"
+      >{{ collapsed ? l10n('open_all') : l10n('close_all') }}
+    </bootstrap-button>
 
     <button v-if="numberOfAnnotations > 0" class="btn btn-default btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown" @click="collapseAll('hide')">
       <span class="fa fa-sort"></span>&nbsp;{{ l10n('sort') }} <span class="caret"></span>
@@ -131,7 +132,7 @@
       </template><!-- sortProp -->
     </component><!-- dropdownMenu -->
 
-  </div>
+  </div><!-- .anno-list-buttonbar-top.pull-right -->
 
   <div style="clear: both;"></div>
 

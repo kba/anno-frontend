@@ -2,11 +2,17 @@
   .debug-feature { display: none !important; }
 }
 
-.annoeditor-sidebar {
+.annoeditor-global-css {
+  .modal-backdrop {
+    z-index: 99 !important;
+  }
+}
+
+.annoeditor-global-css.annoeditor-sidebar {
 
   &.annoeditor-sidebar-standalone {
     position: fixed;
-    z-index: 1000;
+    z-index: 100; /* one above .modal-backdrop */
     background: white;
     top: 0;
     right: 0;
@@ -61,8 +67,3 @@
     background-color: mistyrose;
   }
 }
-
-.modal-backdrop {
-    z-index: 999 !important;
-}
-
