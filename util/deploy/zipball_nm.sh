@@ -12,7 +12,10 @@ function zipball_nm () {
 
   case " $* " in
     *' PD '* | \
-    *' pack '* ) webpack -d || return $?;;
+    *' pack '* )
+      webpack -d || return $?
+      webpack -p || return $?
+      ;;
   esac
 
   local NM_HTML=(
