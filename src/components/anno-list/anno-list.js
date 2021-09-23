@@ -17,7 +17,6 @@
 const eventBus = require('@/event-bus')
 const HelpButton = require('@/components/help-button')
 const bootstrapCompat = require('../../bootstrap-compat');
-const popoverHelper = require('../../popover-helper.js');
 
 module.exports = {
     mixins: [
@@ -41,9 +40,6 @@ module.exports = {
         }
         this.$watch(() => this.list, () => this.collapseAll(this.collapsed ? 'hide' : 'show'))
         this.collapseAll(this.collapsed ? 'hide' : 'show')
-
-        // enable popovers
-        popoverHelper.install(this.$el);
 
         // Sort the list initially and after every fetch
         this.sort()
