@@ -1,12 +1,14 @@
-*~
-
+﻿
 # compiled files, libs and such
-doc/context.json
-dist/swagger-ui
-node_modules
-*.log
-dist
-rel-vra.json
-extension
-deploy.mk
-.nyc_output
+/doc/context.json
+/dist/swagger-ui
+/node_modules
+/*.log
+/dist
+/rel-vra.json
+/extension
+/deploy.mk
+/.nyc_output
+
+
+# unsorted stuff (this section should be empty):
