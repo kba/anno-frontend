@@ -13,8 +13,8 @@ function zipball_nm () {
   case " $* " in
     *' PD '* | \
     *' pack '* )
-      webpack -d || return $?
-      webpack -p || return $?
+      webpack || return $?
+      WEBPACK_AUDIENCE='prod' webpack || return $?
       ;;
   esac
 
