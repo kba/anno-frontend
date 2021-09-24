@@ -2,12 +2,12 @@
 'use strict';
 /* eslint-disable global-require */
 
+
+const installPopOvers = require('../../popover-helper.js').install;
+
 module.exports = {
 
   template: require('./bootstrap-button.html'),
-  style: [
-    require('./balloon.scss'),
-  ],
 
   props: {
     title:       String,
@@ -21,6 +21,18 @@ module.exports = {
     btnClass:    { type: String, default: 'outline-secondary' },
     elem:        { type: String },
     balloonColorName: { type: String, default: 'secondary' },
+    balloonPopOverOpts: { type: [Object, false, null, undefined] },
+  },
+
+  mounted() {
+    const btn = this;
+    if (btn.$slots.balloon) {
+      installPopOvers(btn.$el, {
+        subSel: null,
+        content: btn.$refs.balloonPopOver,
+        ...btn.balloonPopOverOpts,
+      });
+    }
   },
 
   methods: {
@@ -33,21 +45,9 @@ module.exports = {
       return 'button';
     },
 
-    decideBalloonBoxClasses(pre) {
-      return [].concat(pre, [
-        'bg-white',
-        'bg-body',
-        'border',
-        'border-' + this.balloonColorName,
-      ]).filter(Boolean);
-    },
-
     clicked(ev) {
       const btn = this;
-      console.debug('clicked! ehlo', { ev });
       btn.$emit('click', ev);
-      console.debug('clicked! emit:', { ev });
-      if (btn.$slots.balloon) { btn.$el.classList.toggle('balloon-open'); }
     },
 
   },
