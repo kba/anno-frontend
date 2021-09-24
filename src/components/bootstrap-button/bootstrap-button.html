@@ -1,12 +1,30 @@
-<component :is="(elem || 'button')"
+<component :is="decideButtonTag()"
   role="button"
-  :class="`btn text-nowrap btn-${btnClass} btn-${btnSize}`"
+  :class="[
+    'btn',
+    'btn-default',  // for required for BS3
+    'text-nowrap',
+    'btn-' + btnClass,
+    'btn-' + btnSize,
+  ]"
   :title="title"
-  @click="$emit('click', $event)"
+  @click="clicked"
   >
   <i v-if="iconFa" :class="'fa fa-' + iconFa"></i>
   <i v-if="iconText" class="icon">{{ iconText }}</i>
   <slot name="icon-custom" />
   <img v-if="src" :src="src" :alt="alt" />
   <slot></slot>
+  <div v-if="this.$slots.balloon"
+    class="balloon text-body text-nowrap"
+    @click.stop>
+    <div class="arrow-box">
+      <i :class="decideBalloonBoxClasses('arrow')"></i>
+    </div><!-- .arrow-box -->
+    <div :class="decideBalloonBoxClasses('card panel')">
+      <div class="card-body panel-body">
+        <slot name="balloon" />
+      </div><!-- .card-body -->
+    </div><!-- .card -->
+  </div><!-- .balloon -->
 </component>

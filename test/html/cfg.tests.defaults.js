@@ -11,7 +11,11 @@
       + 'f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png'),
 
     uiDebugMode: true,
-    acl: { '*': { '*': true } },
+    acl: {
+      // '*': { '*': true },
+      'debug:skipFetchAcl': true,
+      'debug:override:isLoggedIn': true,
+    },
 
     events: {},
   };

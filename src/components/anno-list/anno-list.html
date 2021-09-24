@@ -47,17 +47,27 @@
         </template><!-- logged in but no access -->
       </template><!-- authorized -->
       <template v-else><!-- not authorized -->
-        <!--
-        <a class="btn btn-sm
-          btn-danger
-          create-new-annotation-button"
-          :href="requestEndpoint"
-          target="_blank"
+
+        <bootstrap-button ref="btnAclRequestCreate"
+          v-if="requestEndpoint"
+          btn-class="outline-secondary
+            create-new-annotation-button
+            decoy
+            acl-request-create
+          "
+          balloon-color="body"
           >
-          {{ l10n('annoeditor_mode_create') }}:
-          {{ l10n('not_authorized') }}
-        </a>
-        -->
+          {{ l10n('compose_new_annot') }}
+          <template slot="balloon">
+            <p>{{ l10n('not_authorized') }}</p>
+            <a :href="requestEndpoint"
+              target="_blank"
+              class="btn btn-sm
+                btn-default
+                btn-outline-success"
+            >{{ l10n('request_permission_now') }}</a>
+          </template>
+        </bootstrap-button>
         <template v-if="isLoggedIn">
           <!-- not authorized even though we're logged in -->
           <help-button topic="popover-not-authorized" />
