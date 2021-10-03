@@ -17,6 +17,7 @@ const getOwn = require('getown');
 
 const eventBus = require('../../event-bus.js');
 const validateEditorFields = require('./validateEditorFields.js');
+const decideAnnoTarget = require('./decideAnnoTarget.js');
 
 function soon(f) { return setTimeout(f, 1); }
 
@@ -193,32 +194,7 @@ module.exports = {
           commit('SET_EDIT_MODE', 'create')
           commit('RESET_ANNOTATION')
           commit('SET_COLLECTION', this.$store.state.collection)
-          const tgtSels = [];
-          if (state.targetFragment) {
-            tgtSels.push({
-              type: 'FragmentSelector',
-              value: state.targetFragment,
-            });
-          }
-          const tgtSpec = {};
-          if (tgtSels.length) {
-            // Using any selector(s) means our target is must be a
-            // Specific Resource (ch 4):
-            tgtSpec.source = this.targetSource;
-            if (tgtSels.length === 1) {
-              tgtSpec.selector = tgtSels[0];
-            } else {
-              tgtSpec.selector = tgtSels;
-            }
-          } else {
-            // No selector means our target is most likely
-            // an External Web Resources (ch 3.2.1) or Segment
-            // thereof (ch 3.2.3):
-            tgtSpec.id = this.targetSource;
-            // Specifying the type is optional (ch 3.2.2 Classes).
-          }
-
-          commit('ADD_TARGET', tgtSpec);
+          commit('ADD_TARGET', decideAnnoTarget(state));
           eventBus.$emit('open-editor')
         },
 
