@@ -74,11 +74,12 @@ module.exports = {
       const editor = this;
       const { targetImage, zoneEditor } = editor;
       if (targetImage) {
-        const { thumbnail } = editor.$refs.preview.$refs;
         zoneEditor.$on('load-image', () => {
           editor.loadSvg();
         });
         zoneEditor.$on('svg-changed', svg => {
+          const { thumbnail } = editor.$refs.preview.$refs;
+          if (!thumbnail) { return; }
           thumbnail.reset();
           thumbnail.loadSvg(editor.svgTarget.selector.value);
         });
@@ -217,8 +218,19 @@ module.exports = {
             eventBus.$emit('open-editor')
         },
 
-        onSvgChanged(svg) {
-            this.$store.commit('SET_SVG_SELECTOR', {svg, source: this.$store.state.targetImage})
+      updateSvgSelector(svg) {
+        function upd(state) {
+          // Do not preserve any previous selectors because we'd have to
+          // ensure they are conceptually equivalent, and we cannot do that
+          // in software.
+          state.editing.target = {
+            scope: state.targetSource,
+            source: state.targetImage,
+            selector: { type: 'SvgSelector', value: svg },
+          };
         }
+        this.$store.commit('INJECTED_MUTATION', [upd]);
+      },
+
     }
 }
