@@ -89,7 +89,7 @@ module.exports = {
       fetchList,
 
       async fetchAcl({state, commit, getters}) {
-        if (state.acl['debug:skipFetchAcl']) { return; }
+        if ((state.acl || false)['debug:skipFetchAcl']) { return; }
         const api = apiFactory(state);
         const chk = promisify(api.aclCheck.bind(api));
         try {
