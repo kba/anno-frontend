@@ -1,1 +1,2 @@
-module.exports = require('./anno-editor.js')
+'use strict';
+module.exports = require('./anno-editor.js');

@@ -57,15 +57,6 @@ const mutations = {
         textualHtmlBody.first(state).value = v
     },
 
-    SET_SVG_SELECTOR(state, {svg, source}) {
-        if (!svgSelectorResource.first(state)) {
-            add(state, 'target', svgSelectorResource.create({}))
-        }
-        if (source)
-            svgSelectorResource.first(state).source = source
-        svgSelectorResource.first(state).selector.value = svg
-    },
-
     SET_TITLE(state, title) {
         state.title = title
     },
