@@ -15,7 +15,7 @@
     cfg.tokenEndpoint = baseURL + 'token/' + cfg.collection;
     cfg.loginEndpoint = baseURL + 'login' + qsCollFrom;
     cfg.logoutEndpoint = baseURL + 'logout' + qsCollFrom;
-    cfg.requestEndpoint = baseURL + 'request' + qsColl;
+    cfg.permissionsRequestFormUrl = baseURL + 'request' + qsColl;
   }
   window.annoCfgSetUbStyleAuthServer = authSrv;
   authSrv(protoHost + (port ? ':3008/' : '/anno/auth/'));

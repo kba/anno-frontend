@@ -1,12 +1,13 @@
 const {defaultLang, localizations} = require('../../l10n-config.json')
 
 module.exports = {
-  annoEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/anno',
+  annoEndpoint: null,
   tokenEndpoint: null,
-  loginEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/auth/login',
-  registerEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/auth/register',
-  requestEndpoint: 'https://anno.ub.uni-heidelberg.de/anno/auth/request',
+  loginEndpoint: null,
+  registerEndpoint: null,
   logoutEndpoint: null,
+  permissionsRequestFormUrl: null,
+  permissionsRequestAllowGuest: false,
   purlTemplate: null,
   purlId: null,
   purlAnnoInitiallyOpen: true,

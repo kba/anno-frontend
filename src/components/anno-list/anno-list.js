@@ -93,7 +93,6 @@ module.exports = {
     enableRegisterButton() { return this.$store.state.enableRegisterButton; },
     logoutEndpoint() { return this.$store.state.logoutEndpoint; },
     registerEndpoint() { return this.$store.state.registerEndpoint; },
-    requestEndpoint() { return this.$store.state.requestEndpoint; },
     loginEndpoint() { return this.$store.state.loginEndpoint; },
     tokenDecoded() { return this.$store.getters.tokenDecoded; },
   },

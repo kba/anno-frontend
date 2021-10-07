@@ -49,7 +49,8 @@
       <template v-else><!-- not authorized -->
 
         <bootstrap-button ref="btnAclRequestCreate"
-          v-if="requestEndpoint"
+          v-if="$store.state.permissionsRequestFormUrl
+            && ($store.state.permissionsRequestAllowGuest || isLoggedIn)"
           btn-class="outline-secondary
             create-new-annotation-button
             decoy
@@ -61,7 +62,7 @@
           <div slot="balloon"
             class="balloon-padding m-3">
             <p>{{ l10n('not_authorized') }}</p>
-            <a :href="requestEndpoint"
+            <a :href="$store.state.permissionsRequestFormUrl"
               target="_blank"
               class="btn btn-sm
                 btn-default
