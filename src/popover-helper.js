@@ -3,12 +3,15 @@
 
 const getOwn = require('getown');
 
+const topCssMeta = require('./mixin/toplevel-css.js').IMPL;
+
 const browserWindow = window; // eslint-disable-line no-undef
 const { jQuery } = browserWindow;
 
 const EX = {};
 
 const shortEventNames = {
+  // https://getbootstrap.com/docs/4.1/components/popovers/#events
   popup: 'shown.bs.popover',
 };
 
@@ -38,8 +41,11 @@ function install(baseElem, origOpt) {
   const jqBase = jQuery(baseElem);
   let poTriggers = jqBase;
   const opt = {
-    container: '#annoeditor-sidebar',
+    container: (jqBase.closest('.' + topCssMeta.cssNamespaceClass)[0]
+      || browserWindow.document.body),
     subSel: '[data-toggle="popover"]',
+    placement: 'bottom',
+    html: true,
     ...origOpt,
   };
 
@@ -49,10 +55,10 @@ function install(baseElem, origOpt) {
 
   const eventHandlers = (opt.on || false);
   delete opt.on;
-  for (const [origEventName, hndFunc] of Object.entries(eventHandlers)) {
-    let evName = getOwn(shortEventNames, origEventName, origEventName);
+  Object.entries(eventHandlers).forEach(([origEventName, hndFunc]) => {
+    const evName = getOwn(shortEventNames, origEventName, origEventName);
     jqBase.on(evName, (subSel || null), ev => upgradeEvent(ev, hndFunc));
-  }
+  });
 
   poTriggers.popover(opt);
 }
