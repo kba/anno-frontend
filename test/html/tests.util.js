@@ -1,7 +1,7 @@
 // -*- coding: utf-8, tab-width: 2 -*-
 /* eslint-env browser */
 'use strict';
-(function init() {
+(function setupTestUtils() {
   const tu = {};
   const jq = window.jQuery;
 
@@ -121,4 +121,12 @@
     return dump;
   }());
 
+
+
+
+
+
+
+
+  /* scroll */
 }());
