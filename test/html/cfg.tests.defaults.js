@@ -12,9 +12,9 @@
 
     uiDebugMode: true,
     acl: {
-      // '*': { '*': true },
-      'debug:skipFetchAcl': true,
-      'debug:override:isLoggedIn': true,
+      '*': { '*': true },
+      // 'debug:skipFetchAcl': true,
+      // 'debug:override:isLoggedIn': true,
     },
 
     events: {},

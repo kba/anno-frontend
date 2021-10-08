@@ -1,7 +1,7 @@
 {
   "name": "anno-frontend",
   "private": true,
-  "version": "0.4.2108111539",
+  "version": "0.6.2110080116",
   "description": "Frontend for @kba/anno",
   "main": "entry.js",
   "scripts": {

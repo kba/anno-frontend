@@ -9,7 +9,6 @@ const apiFactory = require('../api');
 const eventBus = require('../event-bus');
 const editing = require('./module/editing');
 const annotationList = require('./module/annotationList');
-const state = require('./state');
 const sessionStore = require('../browserStorage.js').session;
 
 const fetchToken = require('./fetchers/fetchToken.js');
@@ -19,7 +18,14 @@ const fetchList = require('./fetchers/fetchList.js');
 
 module.exports = {
     strict: process.env.NODE_ENV != 'production',
-    state,
+    state: {
+      // No settings here! Default config belongs in `../default-config.js`.
+      acl: null,
+      cacheBusterEnabled: false,
+      collection: null,
+      editMode: null,
+      token: null,
+    },
     modules: {
         editing,
         annotationList,
@@ -107,12 +113,9 @@ module.exports = {
           return func(vuexApi);
         },
 
-        logout({state, commit}) {
+        assumeLoggedOut({state, commit}) {
             commit('DELETE_TOKEN')
             commit('EMPTY_ACL')
-            // if (state.logoutEndpoint) {
-            //     window.location.replace(state.logoutEndpoint)
-            // }
         },
 
     },
