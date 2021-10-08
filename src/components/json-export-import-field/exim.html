@@ -1,10 +1,7 @@
 <div :class="baseCls">
   <div class="btn-group toolbar">
     <button
-      v-for="btn in [].concat(extraButtons, [,
-        { c: '✍', n: 'dump', h: 'export', f: redumpJson },
-        { c: '⏎', n: 'load', h: 'import', f: importJson },
-      ]).filter(Boolean)"
+      v-for="btn in decideButtons()"
       :class="[
         'btn btn-sm btn-default',
         'btn-outline-secondary',

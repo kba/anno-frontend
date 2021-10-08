@@ -31,6 +31,18 @@ module.exports = {
       this.$store.commit((btn.a ? 'CHANGE_ACL' : 'EMPTY_ACL'), btn.a);
     },
 
+    dumpAppConfig() {
+      const u = undefined;
+      const cfg = {
+        ...this.$store.state,
+        acl: u,
+        annotationList: u,
+        editing: u,
+        localizations: u,
+      };
+      return cfg;
+    },
+
   },
 
 };

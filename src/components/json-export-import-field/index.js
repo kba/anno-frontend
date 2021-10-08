@@ -6,6 +6,9 @@
 const loGet = require('lodash.get');
 const loSet = require('lodash.set');
 
+// eslint-disable-next-line no-alert,no-undef
+function panic(msg) { window.alert(msg); }
+
 
 function normWsp(tx) {
   return String(tx).replace(/((?:^|\n +)[\{\[])\n +/g, '$1 ') + '\n';
@@ -18,8 +21,10 @@ module.exports = {
   style: require('./exim.scss'),
 
   props: {
-    extraButtons:   { type: [Array, undefined] },
-    path:           { type: String, required: true },
+    extraButtons:   { type: Array },
+    path:           { type: String },
+    dumpFunc:       { type: Function },
+    importFunc:     { type: Function },
   },
 
   data() {
@@ -30,6 +35,17 @@ module.exports = {
   },
 
   methods: {
+
+    decideButtons() {
+      const exim = this;
+      const buttons = [].concat(exim.extraButtons, [
+        ((exim.path || exim.dumpFunc)
+          && { c: '✍', n: 'dump', h: 'export', f: exim.redumpJson }),
+        ((exim.path || exim.importFunc)
+          && { c: '⏎', n: 'load', h: 'import', f: exim.importJson }),
+      ]).filter(Boolean);
+      return buttons;
+    },
 
     extraButtonClicked(btn) {
       console.log('extraButtonClicked', btn);
@@ -42,26 +58,25 @@ module.exports = {
 
     dumpJson() {
       const exim = this;
-      const { path } = exim;
+      const { path, dumpFunc } = exim;
       const { state } = exim.$store;
-      const data = loGet(state, path);
+      const data = (dumpFunc || loGet)(state, path);
       return normWsp(JSON.stringify(data, null, 2));
     },
 
     importJson() {
       const exim = this;
-      const { path } = exim;
-      const { state } = exim.$store;
+      const { path, importFunc } = exim;
       const inputJson = exim.$refs.txa.value;
       function upd(state) {
         try {
           const data = JSON.parse(inputJson);
-          loSet(state, path, data);
-          window.alert('Imported into: ' + path);
+          (importFunc || loSet)(state, path, data);
+          panic('Imported into: ' + path);
         } catch (err) {
           err.inputJson = inputJson;
           console.error('Error while trying to import JSON:', err);
-          window.alert('Error while trying to import JSON:\n' + err);
+          panic('Error while trying to import JSON:\n' + err);
         }
       }
       this.$store.commit('INJECTED_MUTATION', [upd]);
