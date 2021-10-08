@@ -2,6 +2,7 @@
 'use strict';
 /* eslint-env browser */
 
+const mergeOptions = require('merge-options');
 const getOwn = require('getown');
 
 const topCssMeta = require('./mixin/toplevel-css.js').IMPL;
@@ -40,14 +41,13 @@ function upgradeEvent(ev, hndFunc) {
 function install(baseElem, origOpt) {
   const jqBase = jQuery(baseElem);
   let poTriggers = jqBase;
-  const opt = {
     container: (jqBase.closest('.' + topCssMeta.cssNamespaceClass)[0]
       || window.document.body),
+  const opt = mergeOptions({
     subSel: '[data-toggle="popover"]',
     placement: 'bottom',
     html: true,
-    ...origOpt,
-  };
+  }, origOpt);
 
   const { subSel } = opt;
   delete opt.subSel;
