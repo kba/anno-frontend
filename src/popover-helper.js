@@ -43,11 +43,16 @@ function install(baseElem, origOpt) {
   let poTriggers = jqBase;
   const container = (jqBase.closest('.' + topCssMeta.cssNamespaceClass)[0]
       || window.document.body);
+  const modifiers = {
+    keepTogether: { enabled: true },
+    preventOverflow: { enabled: true, boundariesElement: container },
+  };
   const opt = mergeOptions({
     container,
     subSel: '[data-toggle="popover"]',
     placement: 'bottom',
     html: true,
+    modifiers,
   }, origOpt);
 
   const { subSel } = opt;
