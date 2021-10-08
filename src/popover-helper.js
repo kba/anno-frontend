@@ -47,13 +47,14 @@ function install(baseElem, origOpt) {
     keepTogether: { enabled: true },
     preventOverflow: { enabled: true, boundariesElement: container },
   };
-  const opt = mergeOptions({
+  const defaultOpt = {
     container,
     subSel: '[data-toggle="popover"]',
     placement: 'bottom',
     html: true,
     modifiers,
-  }, origOpt);
+  };
+  const opt = mergeOptions(defaultOpt, origOpt);
 
   const { subSel } = opt;
   delete opt.subSel;
