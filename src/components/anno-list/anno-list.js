@@ -88,18 +88,26 @@ module.exports = {
     numberOfAnnotations() { return this.$store.getters.numberOfAnnotations; },
 
     isLoggedIn() { return this.$store.getters.isLoggedIn; },
-    enableLogoutButton() { return this.$store.state.enableLogoutButton; },
-    enableRequestButton() { return this.$store.state.enableRequestButton; },
-    enableRegisterButton() { return this.$store.state.enableRegisterButton; },
-    logoutEndpoint() { return this.$store.state.logoutEndpoint; },
-    registerEndpoint() { return this.$store.state.registerEndpoint; },
-    loginEndpoint() { return this.$store.state.loginEndpoint; },
     tokenDecoded() { return this.$store.getters.tokenDecoded; },
+
+    logoutButtonVisible() {
+      return Boolean(this.isLoggedIn && this.$store.state.logoutPageUrl);
+    },
+
+    logoutButtonUrl() {
+      const ep = this.$store.state.logoutPageUrl;
+      if (ep === 'fake://insecure') { return ''; }
+      return ep;
+    },
+
   },
+
+
   methods: {
-    logout() { return this.$store.dispatch('logout'); },
     sort(...args) { return this.$store.dispatch('sort', ...args); },
     create() { return eventBus.$emit('create', this.targetSource); },
+
+    logoutButtonClicked() { this.$store.dispatch('assumeLoggedOut'); },
 
     collapseAll(action) {
       const annoList = this;

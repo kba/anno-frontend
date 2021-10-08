@@ -49,8 +49,6 @@ const externalRequest = require('./xrq/externalRequest.js')
  * - `tokenEndpoint`: URL of the endpoint providing the JSON Webtoken
  * - `annoEndpoint`: URL of the Open Annotation Protocol server
  *
- * - `loginEndpoint`: Function or URL of the login mask
- * - `logoutEndpoint`: Function or URL that logs the user out
  * - `isLoggedIn`: Function or boolean to designate whether the user is already
  *   logged in. No login button will be shown in that case, token will still be
  *   retrieved unless found
@@ -143,8 +141,7 @@ module.exports = function displayAnnotations(customOptions) {
       'token',
       'collection',
       'isLoggedIn',
-      'loginEndpoint',
-      'logoutEndpoint',
+      'targetSource',
     ]));
 
     //

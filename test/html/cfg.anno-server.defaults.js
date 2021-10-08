@@ -10,12 +10,14 @@
   cfg.annoEndpoint = protoHost + (port ? ':33321/' : '/anno/');
 
   function authSrv(baseURL) {
-    var qsColl = '?c=' + encodeURIComponent(cfg.collection),
-      qsCollFrom = qsColl + '&from=' + encodeURIComponent(location.href);
-    cfg.tokenEndpoint = baseURL + 'token/' + cfg.collection;
-    cfg.loginEndpoint = baseURL + 'login' + qsCollFrom;
-    cfg.logoutEndpoint = baseURL + 'logout' + qsCollFrom;
-    cfg.permissionsRequestFormUrl = baseURL + 'request' + qsColl;
+    var ueColl = encodeURIComponent(cfg.collection),
+      fromUrl = window.location.href,
+      qsCollFrom = ('?c=' + ueColl + '&from=' + encodeURIComponent(fromUrl));
+    cfg.tokenEndpoint = baseURL + 'token/' + ueColl;
+    cfg.loginFormUrl = baseURL + 'login' + qsCollFrom;
+    cfg.logoutPageUrl = baseURL + 'logout' + qsCollFrom;
+    cfg.loginRegistrationFormUrl = baseURL + 'register' + qsCollFrom;
+    cfg.permissionsRequestFormUrl = baseURL + 'request' + qsCollFrom;
   }
   window.annoCfgSetUbStyleAuthServer = authSrv;
   authSrv(protoHost + (port ? ':3008/' : '/anno/auth/'));

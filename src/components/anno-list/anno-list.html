@@ -10,26 +10,30 @@
     hidden-print
     " role="group">
     <template v-if="isLoggedIn">
-      <a v-if="enableLogoutButton"
+      <a v-if="logoutButtonVisible"
+        @click="logoutButtonClicked"
         class="btn btn-sm btn-warning"
-        @click.stop="logout"
-        :href="tokenDecoded.sub"
+        :href="logoutButtonUrl"
         >
         {{ l10n('logout') }}
       </a>
     </template><!-- logged in -->
     <template v-else><!-- guest access -->
-      <a v-if="loginEndpoint"
+      <a v-if="$store.state.loginFormUrl"
         class="btn btn-sm btn-default btn-outline-secondary
           login-button"
-        :href="loginEndpoint"
+        :href="$store.state.loginFormUrl"
         >
         {{ l10n('login') }}
       </a>
-      <help-button
-        :button-label="l10n('register')"
-        topic="popover-not-registered"
-        />
+      <a v-if="$store.state.loginRegistrationFormUrl"
+        class="btn btn-sm btn-default btn-outline-secondary
+          login-button"
+        :href="$store.state.loginRegistrationFormUrl"
+        >
+        {{ l10n('register') }}
+      </a>
+      <help-button topic="popover-not-logged-in" />
     </template><!-- guest access -->
 
     <template v-if="$store.state.offerCreateNewAnnotationButton">
