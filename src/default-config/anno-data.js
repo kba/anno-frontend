@@ -1,6 +1,8 @@
 ﻿/* -*- tab-width: 2 -*- */
 'use strict';
 
+/*  NOT eslint-env browser: We want these files to be loadable in node.js
+    as well, so we can do automated unit tests. */
 // eslint-disable-next-line no-undef
 const win = ((typeof window !== 'undefined') && window);
 

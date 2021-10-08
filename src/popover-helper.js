@@ -1,12 +1,12 @@
 ﻿/* -*- tab-width: 2 -*- */
 'use strict';
+/* eslint-env browser */
 
 const getOwn = require('getown');
 
 const topCssMeta = require('./mixin/toplevel-css.js').IMPL;
 
-const browserWindow = window; // eslint-disable-line no-undef
-const { jQuery } = browserWindow;
+const { jQuery } = window;
 
 const EX = {};
 
@@ -42,7 +42,7 @@ function install(baseElem, origOpt) {
   let poTriggers = jqBase;
   const opt = {
     container: (jqBase.closest('.' + topCssMeta.cssNamespaceClass)[0]
-      || browserWindow.document.body),
+      || window.document.body),
     subSel: '[data-toggle="popover"]',
     placement: 'bottom',
     html: true,

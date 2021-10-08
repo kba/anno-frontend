@@ -1,10 +1,10 @@
 ﻿/* -*- tab-width: 2 -*- */
 'use strict';
+/* eslint-env browser */
 
 const Clipboard = require('clipboard');
 
-const browserWindow = window; // eslint-disable-line no-undef
-const { jQuery } = browserWindow;
+const { jQuery } = window;
 
 const EX = {
 
@@ -22,16 +22,16 @@ const EX = {
   setupOneTrigger(trig, updatedOpts) {
     const oldOpts = trig[EX.optProp];
     const opts = { ...oldOpts, ...updatedOpts };
-    trig[EX.optProp] = opts;
+    trig[EX.optProp] = opts; // eslint-disable-line no-param-reassign
     if (trig[EX.mgrProp]) {
       // console.debug('Clipboard trigger:', trig, 'updated:', opts);
       return;
     }
     const mgr = new Clipboard(trig);
     // console.debug('Clipboard trigger:', trig, 'set up:', opts, { mgr });
-    trig[EX.mgrProp] = mgr;
+    trig[EX.mgrProp] = mgr; // eslint-disable-line no-param-reassign
     const sxsElem = opts.successLabelElem;
-    mgr.on('success', function sxs(evSxs) {
+    mgr.on('success', function sxs(/* evSxs */) {
       // console.debug('Clipboard success!', { evSxs, sxsElem });
       if (sxsElem) {
         const transition = 'fast';
