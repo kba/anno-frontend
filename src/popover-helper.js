@@ -41,9 +41,10 @@ function upgradeEvent(ev, hndFunc) {
 function install(baseElem, origOpt) {
   const jqBase = jQuery(baseElem);
   let poTriggers = jqBase;
-    container: (jqBase.closest('.' + topCssMeta.cssNamespaceClass)[0]
-      || window.document.body),
+  const container = (jqBase.closest('.' + topCssMeta.cssNamespaceClass)[0]
+      || window.document.body);
   const opt = mergeOptions({
+    container,
     subSel: '[data-toggle="popover"]',
     placement: 'bottom',
     html: true,
