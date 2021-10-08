@@ -33,7 +33,11 @@
         >
         {{ l10n('register') }}
       </a>
-      <help-button topic="popover-not-logged-in" />
+      <help-button topic="popover-not-logged-in"
+        v-if="$store.state.loginFormUrl
+          || $store.state.loginRegistrationFormUrl
+          "
+        />
     </template><!-- guest access -->
 
     <template v-if="$store.state.offerCreateNewAnnotationButton">
