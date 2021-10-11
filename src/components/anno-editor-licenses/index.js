@@ -1,5 +1,5 @@
 const licensesInfo = require('../../../license-config.js');
-const popoverHelper = require('../../popover-helper.js');
+const installPopOvers = require('../../popover-helper.js').install;
 
 module.exports = {
 
@@ -16,7 +16,7 @@ module.exports = {
   } },
 
   mounted() {
-    popoverHelper.install(this.$el);
+    installPopOvers(this.$el);
   },
 
 };
