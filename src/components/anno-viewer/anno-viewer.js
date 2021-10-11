@@ -11,7 +11,6 @@ const {
 const bootstrapCompat = require('../../bootstrap-compat.js');
 const eventBus = require('../../event-bus.js');
 const bindDataApi = require('./dataApi.js');
-const popoverHelper = require('../../popover-helper.js');
 const licensesByUrl = require('../../license-helper.js').byUrl;
 const toggleDetailBar = require('./toggleDetailBar.js');
 
