@@ -8,6 +8,9 @@ const installPopOvers = require('../../popover-helper.js').install;
 module.exports = {
 
   template: require('./bootstrap-button.html'),
+  style: [
+    require('./balloon.scss'),
+  ],
 
   props: {
     title:       String,
@@ -46,9 +49,19 @@ module.exports = {
       return 'button';
     },
 
+    balloonBoxClasses(pre) {
+      return [].concat(pre, [
+        'bg-white',
+        'bg-body',
+        'border',
+        'border-' + this.balloonColorName,
+      ]).filter(Boolean);
+    },
+
     clicked(ev) {
       const btn = this;
       btn.$emit('click', ev);
+      if (btn.$slots.balloon) { btn.$el.classList.toggle('balloon-open'); }
     },
 
   },
