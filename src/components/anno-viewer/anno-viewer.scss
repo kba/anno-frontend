@@ -16,11 +16,15 @@
   }
 
   .btn-toolbar {
+    /* Don't! Would interfere with the versions dropdown. [ubhd:228]
     max-width: 100%; overflow: auto;
+    */
 
     .btn-group {
       margin-top: 0.5ex;
+      /* Don't! Would interfere with the versions dropdown. [ubhd:228]
       max-width: 100%; overflow: auto;
+      */
 
       .btn-group {
         margin-top: 0;
@@ -98,6 +102,7 @@
   .dropdown-menu {
     text-align: left;
     color: inherit !important;
+    border-color: darkgray;
     a {
       cursor: pointer;
     }
