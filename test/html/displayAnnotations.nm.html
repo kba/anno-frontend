@@ -18,12 +18,11 @@
   <meta http-equiv="Content-Style-Type" content="text/css">
 </head><body>
 
+<div class="sidebar-container"><div class="popups-boundary-marker">
 <div id="anno-app-sidebar">
   <div id="anno-app-container"></div>
-  <p id="tests-toolbar-bottom">
-    <input type="button" value="Load fixture annotations">
-  </p>
-</div>
+</div><!-- #anno-app-sidebar -->
+</div></div><!-- .sidebar-container -->
 
 <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
 
@@ -67,6 +66,13 @@
 displayAnnotations(Object.assign({}, window.annoServerCfg, window.annoTestCfg, {
   // default: // bootstrap: { version: { major: 4 } },
   // targetImage: null,
+  loginRegistrationFormUrl: null,
+  loginFormUrl: null,
+  // logoutPageUrl: null,
+  acl: {
+    'debug:skipFetchAcl': true,
+    'debug:override:isLoggedIn': true,
+  },
 }));
 </script>
 

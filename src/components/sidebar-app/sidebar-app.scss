@@ -10,6 +10,8 @@
 
 .annoeditor-global-css.annoeditor-sidebar {
 
+  position: relative;
+
   &.annoeditor-sidebar-standalone {
     position: fixed;
     z-index: 100; /* one above .modal-backdrop */

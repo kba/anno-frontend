@@ -15,9 +15,24 @@
   <slot name="icon-custom" />
   <img v-if="src" :src="src" :alt="alt" />
   <slot></slot>
-  <div v-if="this.$slots.balloon" class="balloon-template hidden">
-    <div ref="balloonPopOver" class="balloon">
-      <slot name="balloon" />
-    </div><!-- .balloon -->
-  </div><!-- if balloon -->
+
+  <div v-if="$slots.balloon"
+    class="balloon text-body text-nowrap"
+    @click.stop>
+    <div class="arrow-box">
+      <i :class="balloonBoxClasses('arrow')"></i>
+    </div><!-- .arrow-box -->
+    <div :class="balloonBoxClasses('card panel')">
+      <div class="card-body panel-body">
+        <slot name="balloon" />
+      </div><!-- .card-body -->
+    </div><!-- .card -->
+  </div><!-- .balloon -->
+
+  <div v-if="$slots.popover" class="popover-template hidden">
+    <div ref="popoverContent" class="popover-content">
+      <slot name="popover" />
+    </div><!-- .popover-content -->
+  </div><!-- if popover -->
+
 </component>

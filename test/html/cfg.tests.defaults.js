@@ -25,21 +25,18 @@
 
   cfg.targetThumbnail = cfg.targetImage.replace(/\/1024px-/g, '/200px-');
 
-  function appendFixtureAnnots() {
-    // window.annoApp.$store.commit('CHANGE_ACL', { '*': { '*': true } });
-    var fixt = window.annotations;
-    if (!fixt) { return; }
-    window.annoApp.$store.commit('INJECTED_MUTATION', [function append(state) {
-      var alSt = state.annotationList;
-      alSt.list = alSt.list.concat(fixt);
-    }]);
-  }
-
-  jq('#tests-toolbar-bottom input[type=button]').each(function guessId(i, e) {
-    if (e.id) { return i; }
-    e.id = e.value.toLowerCase().match(/[a-z]+/g).join('-');
+  jq().ready(function registerToolbarButtons() {
+    var btn = window.testUtil.testButtonsToolbar.addBtn,
+      fixt = window.annotations;
+    btn(fixt && 'Load fixture annotations', function appendFixtureAnnots() {
+      // window.annoApp.$store.commit('CHANGE_ACL', { '*': { '*': true } });
+      function append(state) {
+        var alSt = state.annotationList;
+        alSt.list = alSt.list.concat(fixt);
+      }
+      window.annoApp.$store.commit('INJECTED_MUTATION', [append]);
+    });
   });
-  jq('#load-fixture-annotations')[0].onclick = appendFixtureAnnots;
 
   // cfg.onAppReady = function ready() {};
 

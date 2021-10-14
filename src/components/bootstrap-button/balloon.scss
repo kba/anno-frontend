@@ -1,0 +1,43 @@
+.annoeditor-global-css .btn {
+
+  position: relative;
+
+  .balloon {
+
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 1.5em;
+    padding-top: 1px;
+    cursor: default;
+
+    .arrow-box {
+      display: block;
+      position: relative;
+      width: 4em;
+      height: 0.75em;
+      overflow: hidden;
+      z-index: 5;
+      margin-bottom: -1px;
+
+      i {
+        display: block;
+        position: absolute;
+        top: 1px;
+        left: 1.66em;
+        width: 10em;
+        height: 10em;
+        transform-origin: left top 0;
+        transform: rotate(45deg);
+      }
+    }
+
+    .panel {
+      position: relative;
+    }
+
+  }
+
+  &.balloon-open .balloon { display: block; }
+
+}

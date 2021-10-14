@@ -8,6 +8,9 @@ const installPopOvers = require('../../popover-helper.js').install;
 module.exports = {
 
   template: require('./bootstrap-button.html'),
+  style: [
+    require('./balloon.scss'),
+  ],
 
   props: {
     title:       String,
@@ -21,16 +24,16 @@ module.exports = {
     btnClass:    { type: String, default: 'outline-secondary' },
     elem:        { type: String },
     balloonColorName: { type: String, default: 'secondary' },
-    balloonPopOverOpts: { type: [Object, false, null, undefined] },
+    popoverContentOpts: { type: [Object, false, null, undefined] },
   },
 
   mounted() {
     const btn = this;
-    if (btn.$slots.balloon) {
+    if (btn.$slots.popover) {
       installPopOvers(btn.$el, {
         subSel: null,
-        content: btn.$refs.balloonPopOver,
-        ...btn.balloonPopOverOpts,
+        content: btn.$refs.popoverContent,
+        ...btn.popoverContentOpts,
       });
     }
   },
@@ -42,12 +45,23 @@ module.exports = {
       const { elem } = btn.$props;
       if (elem) { return elem; }
       if (btn.$slots.balloon) { return 'div'; }
+      if (btn.$slots.popover) { return 'div'; }
       return 'button';
+    },
+
+    balloonBoxClasses(pre) {
+      return [].concat(pre, [
+        'bg-white',
+        'bg-body',
+        'border',
+        'border-' + this.balloonColorName,
+      ]).filter(Boolean);
     },
 
     clicked(ev) {
       const btn = this;
       btn.$emit('click', ev);
+      if (btn.$slots.balloon) { btn.$el.classList.toggle('balloon-open'); }
     },
 
   },

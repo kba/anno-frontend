@@ -5,6 +5,9 @@
   const tu = {};
   const jq = window.jQuery;
 
+  document.body.dataset.htmlFile = window.location.pathname.split('/'
+  ).slice(-1)[0].replace(/(\.nm|)\.html$/, '');
+
   Object.assign(window, {
     testUtil: tu,
     jc(x) { return JSON.parse(JSON.stringify(x)); },
@@ -68,7 +71,7 @@
     addTestsPanel(title) {
       const chap = jq('<chapter><aside><fieldset><legend>');
       const headline = chap.find('legend');
-      headline.text(title);
+      if (title) { headline.text(title); }
       chap.appendTo('body');
       const inner = chap.find('fieldset');
       Object.assign(inner, {
@@ -124,6 +127,21 @@
 
 
 
+
+
+  tu.testButtonsToolbar = tu.addTestsPanel().addForm(`
+    <div id="tests-toolbar-bottom" class="btn-group">
+    </div>
+  `, function init(form) {
+    form.on('submit', () => false);
+  }).find('.btn-group').first();
+  tu.testButtonsToolbar.addBtn = function addBtn(value, onclick, props) {
+    if (!value) { return false; }
+    const btn = jq('<input type="submit">');
+    Object.assign(btn[0], { ...props, value, onclick });
+    tu.testButtonsToolbar.append(btn);
+    return btn;
+  };
 
 
 

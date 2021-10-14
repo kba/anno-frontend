@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Popover Test</title>
+  <meta http-equiv="Content-Script-Type" content="text/javascript">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+</head><body>
+
+<div class="sidebar-container"><div class="popups-boundary-marker">
+  <div id="anno-sidebar">
+    <p><input type="button" value="Dummy" id="dummy-btn"></p>
+    <div style="display: none;">
+      <div id="dummy-popup">
+        <p class="text-nowrap">Ich bin ein breiter Text mit vielen Worten.</p>
+      </div>
+    </div>
+    <p>Platz-</p>
+    <p>halter</p>
+  </div>
+</div></div><!-- .sidebar-container -->
+
+<script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+
+<style>
+  @import url("../../node_modules/bootstrap/dist/css/bootstrap.min.css");
+  @import url("../../node_modules/font-awesome/css/font-awesome.min.css");
+
+  @import url("tests.defaults.css");
+</style>
+<!-- [2021-04-16] Do not load popper.js separately. It fails with
+  "TypeError: Popper__default.default is not a constructor".
+  Instead, use the bundled version of bootstrap, baked with popper inside.
+  -->
+<script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+(function () {
+  const jq = window.jQuery;
+
+  const container = jq('#anno-sidebar')[0];
+  const modifiers = {
+    keepTogether: {
+      enabled: true,
+    },
+    preventOverflow: {
+      enabled: true,
+      boundariesElement: container,
+    },
+  };
+  const defaultOpt = {
+    container,
+    placement: 'bottom',
+    html: true,
+    modifiers,
+  };
+  const opt = {
+    ...defaultOpt,
+    content: jq('#dummy-popup')[0],
+  };
+  console.debug('popover opt:', opt);
+  const btn = jq('#dummy-btn');
+  btn.popover(opt);
+  btn.popover('show');
+}());
+</script>
+
+</body></html>

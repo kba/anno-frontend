@@ -67,8 +67,7 @@
           balloon-color="body"
           >
           {{ l10n('compose_new_annot') }}
-          <div slot="balloon"
-            class="balloon-padding m-3">
+          <div slot="balloon">
             <p>{{ l10n('not_authorized') }}</p>
             <a :href="$store.state.permissionsRequestFormUrl"
               target="_blank"
