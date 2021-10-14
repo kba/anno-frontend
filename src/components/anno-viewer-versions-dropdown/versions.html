@@ -11,7 +11,9 @@
     <span class="fa fa-history"></span>
     {{ (versionsList.length === 1) ? l10n('versions_dropdown_only')
       : `${l10n('versions_dropdown_more')} (${versionsList.length - 1})` }}
-    <span class="caret"></span>
+    <span class="caret"
+      v-if="bootstrapOpts.version.major === 3"
+      ></span>
   </a>
   <component :is="bootstrapOpts.tags.dropdownMenu"
     role="menu" :class="[
