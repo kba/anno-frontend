@@ -5,6 +5,11 @@
   "description": "Frontend for @kba/anno",
   "main": "entry.js",
   "scripts": {
+    "build": "./build/build.sh \"$@\"",
+    "build-dev": "./build/build.sh dev \"$@\"",
+    "build-prod": "./build/build.sh prod \"$@\"",
+    "pyhttpd": "python3 -m http.server --directory . --bind localhost 33380 \"$@\"",
+    "sh": "\"$@\"",
     "test": "tap -Rspec test/*.test.js"
   },
   "repository": {

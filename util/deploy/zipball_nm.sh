@@ -12,10 +12,7 @@ function zipball_nm () {
 
   case " $* " in
     *' PD '* | \
-    *' pack '* )
-      webpack || return $?
-      WEBPACK_AUDIENCE='prod' webpack || return $?
-      ;;
+    *' pack '* ) npm run build-both || return $?;;
   esac
 
   local NM_HTML=(
