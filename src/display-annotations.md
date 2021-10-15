@@ -24,8 +24,8 @@ Options
 - `targetSource`: The target of the annotation. Defaults to `window.location.href`
 - `targetImage`: The image if any, to annotate on this page
 - `targetThumbnail`: Thumbnail view of the image. Defaults to `options.targetImage`
-- `thumbStrikeColor`: ???
-- `thumbFillColor`: ???
+- `thumbStrikeColor`: SVG color for the outline of highlighted areas in thumbnail.
+- `thumbFillColor`: SVG color for the inner area of highlighted areas in thumbnail.
 - `enableIIIF`: Show IIIF-Image-URL (rectangular section that encloses all SVG zones of an annotation)
 - `iiifUrlTemplate`: Template for the IIIF-Image-URL
 - `annotationList`: Options for the list display
@@ -48,7 +48,8 @@ Options
 - `targetFragmentButtonTitle`: Hover title (not caption) of the Fragment
   Identifier button. Usually, this should be a description of what the
   `targetFragmentButtonClicked` event handler does.
-- `modalTeleportTarget`: ???
+- `modalTeleportTarget`: Reference to, or id of, the DOM element
+  into which to install modal popups. Default: The `body` element.
 - `helpUrlTemplate`: Template for generating help URLs. For details, see
   [this source code](src/components/help-button/help-url.js).
 
