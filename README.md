@@ -10,45 +10,6 @@ UB Heidelberg Annotations Web Frontend
 
 
 
-<!-- BEGIN-MARKDOWN-TOC -->
-* [Demo](#demo)
-* [Usage](#usage)
-	* [`displayAnnotations(options)`](#displayannotationsoptions)
-		* [Options](#options)
-		* [Methods](#methods)
-			* [`startHighlighting(annoId, open)`](#starthighlightingannoid-open)
-			* [`stopHighlighting(annoId)`](#stophighlightingannoid)
-			* [`expand(annoId)`](#expandannoid)
-		* [Events](#events)
-	* [Structure of the application](#structure-of-the-application)
-	* [Integration into serv7](#integration-into-serv7)
-* [Development](#development)
-	* [Prerequisites](#prerequisites)
-	* [Building the development bundle](#building-the-development-bundle)
-	* [Building for deployment](#building-for-deployment)
-* [Javascript API ](#javascript-api-)
-* [Components](#components)
-	* [anno-editor](#anno-editor)
-	* [anno-list](#anno-list)
-		* [Events](#events-1)
-		* [Methods](#methods-1)
-			* [`collapseAll(state)`](#collapseallstate)
-	* [anno-viewer](#anno-viewer)
-		* [Props](#props)
-		* [Events](#events-2)
-	* [bootstrap-button](#bootstrap-button)
-		* [Properties](#properties)
-	* [html-editor](#html-editor)
-	* [semtags-editor](#semtags-editor)
-	* [tags-editor](#tags-editor)
-* [Mixins](#mixins)
-	* [`this.api`](#thisapi)
-	* [`this.$auth(cond, id)`](#thisauthcond-id)
-	* [`this.l10n(text)`](#thisl10ntext)
-	* [`this.prefix`](#thisprefix)
-
-<!-- END-MARKDOWN-TOC -->
-
 Demo
 ----
 
