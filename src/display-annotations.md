@@ -49,7 +49,8 @@ Options
   Identifier button. Usually, this should be a description of what the
   `targetFragmentButtonClicked` event handler does.
 - `modalTeleportTarget`: ???
-- `helpUrlTemplate`: ???
+- `helpUrlTemplate`: Template for generating help URLs. For details, see
+  [this source code](src/components/help-button/help-url.js).
 
 
 

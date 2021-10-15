@@ -8,7 +8,7 @@ const srvCfg = {
 
   helpUrlTemplate: [
     // Explanations here are informational; authoritative documentation
-    // is in src/components/help-button/help-button.js.
+    // is in src/components/help-button/help-url.js.
 
     'https://anno.ub.uni-heidelberg.de/anno/dist/help/digi/',
     '%hl',      // hl = <h>elp <l>anguage

@@ -1,8 +1,7 @@
 ﻿/* -*- tab-width: 2 -*- */
 'use strict';
-/* eslint-disable global-require */
 
-const helpTopicsNamingSchemeVersion = '210701';
+const helpUrl = require('./help-url.js');
 
 module.exports = {
 
@@ -22,18 +21,7 @@ module.exports = {
   },
 
   computed: {
-
-    helpUrl() {
-      const { state } = this.$store;
-      let url = String(state.helpUrlTemplate
-        || this.l10n('help.url.template')
-        || 'about:blank');
-      url = url.replace(/%hl/g, encodeURIComponent(state.language));
-      url = url.replace(/%nv/g, helpTopicsNamingSchemeVersion);
-      url = url.replace(/%ht/g, encodeURIComponent(this.topic));
-      return url;
-    },
-
+    helpUrl,
   },
 
 };
