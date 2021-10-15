@@ -24,6 +24,8 @@ const uiCfg = {
 
   offerCreateNewAnnotationButton: true,
 
+  showVersionsDropdownForSingleVersion: true,
+
   purlAnnoInitiallyOpen: true,
   /* ^-- In case the app was loaded via a persistent URL of an annotation,
       whether that annotation shall be visible initially, potentially by

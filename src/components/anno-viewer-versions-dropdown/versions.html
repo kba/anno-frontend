@@ -3,6 +3,8 @@
     ...bootstrapOpts.tags.dropdownWrapperCls,
   ]"
   :data-n-versions="versionsList.length"
+  v-if="(versionsList.length > 1)
+    || $store.state.showVersionsDropdownForSingleVersion"
   >
   <a data-toggle="dropdown"
     class="
