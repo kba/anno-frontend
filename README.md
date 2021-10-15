@@ -61,82 +61,30 @@ See [`src/display-annotations.md`](src/display-annotations.md).
 
 ### Structure of the application
 
-All assets are bundled into a JS file `ubhd-anno.js`
+All assets are bundled into a JS files in the `dist/` subdirectory:
 
-Loading `ubhd-anno.js` binds a class `UBHDAnnoApp` to `window`.
+* `anno-frontend.dev.js`: Development build, optimized for debugging.
+* `anno-frontend.prod.js`: Production build, optimized for performance.
 
-`UBHDAnnoApp` can be instantiated to an object `app` with a set of [config options](#config-options).
+Both install the application factory function into the property
+`displayAnnotations`
+of the window global.
 
-`app` has a method
+Choose either one and include it as a script tag into the website in which
+the annotations sidebar app shall run.
 
-App is a Vue app, component structure:
+This factory function can then be used to initialize an instance of the
+annotations sidebar app into an existing DOM element.
 
-* `Sidebar`
-  * `AnnoList`
-    * ... `AnnoViewer`
-  * `AnnoEditorModal`
-    * `AnnoEditor`
-      * `HtmlEditor`
-      * `ZoneEditor`
-      * `TagsEditor`
-      * `SemtagsEditor`
-      * `Preview`
+Currently, only one instance of the app can run per browser frame.
+
 
 ### Example
 
-```js
-$(function() {
-    const {annocolor} = app.canvasTheme.colorScheme
-    const {largestResolution} = app
-    const targetImage = largestResolution.url
-    const targetImageWidth = parseInt(largestResolution.width)
-    const targetImageHeight = parseInt(largestResolution.height)
-    const targetThumbnail = `${window.location.protocol}//${window.location.host}/${pathname}/${projectname}/${pagename}/_thumb_image`
+See source code of
+[`test/html/displayAnnotations.nm.html`](test/html/displayAnnotations.nm.html).
 
-    let iiifUrlTemplate = 'http://digi.ub.uni-heidelberg.de/iiif/2/' + projectname + '%3A' + targetImage.replace(/.*\//, '') + '/{{ iiifRegion }}/full/0/default.jpg'
-    let enableIIIF = digiMeta.no_oai != 1
 
-    let activeAnnos = {}
-    
-    window.annoapp = displayAnnotations(Object.assign({}, commonOptions, {
-
-      // Metadata
-      targetImage,
-      targetImageWidth,
-      targetImageHeight,
-      thumbStrokeColor: annocolor,
-      thumbFillColor: annocolor,
-      iiifUrlTemplate,
-      targetThumbnail,
-      enableIIIF,
-
-      events: {
-        fetched(list) {
-          app.drawAllPolygons(list)
-          document.querySelector(".annoNumber").innerHTML = '&nbsp;' + list.length
-          if (list.length > 0) {
-            document.querySelector(".annobutton").classList.add('btn-danger')
-            if (DigiLayout.rightColumnShown === 'initial') {DigiLayout.showRightColumn(true)}
-          }
-          setTimeout(() => DigiEncoding.searchHighlight({context: container}), 100)
-        },
-        setToVersion() {
-          app.drawAllPolygons(null)
-        },
-        mouseenter(id) {
-          activeAnnos[id] = true
-          app.drawAllPolygons(null, Object.keys(activeAnnos))
-        },
-        mouseleave(id) {
-          delete activeAnnos[id]
-          app.drawAllPolygons(null, Object.keys(activeAnnos))
-        },
-        error,
-      }
-
-    }))
-})
-```
 
 ## Development
 
