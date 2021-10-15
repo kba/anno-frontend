@@ -1,8 +1,7 @@
-{
-  "name": "anno-frontend",
+{ "name": "anno-frontend",
   "private": true,
   "version": "0.6.2110080116",
-  "description": "Frontend for @kba/anno",
+  "description": "UB Heidelberg Annotations Web Frontend",
   "main": "entry.js",
   "scripts": {
     "build": "./build/build.sh \"$@\"",

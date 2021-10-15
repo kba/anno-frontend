@@ -1,4 +1,15 @@
-# UB Heidelberg Annotationen Frontend
+﻿
+<!--#echo json="package.json" key="name" underline="=" -->
+anno-frontend
+=============
+<!--/#echo -->
+
+<!--#echo json="package.json" key="description" -->
+UB Heidelberg Annotations Web Frontend
+<!--/#echo -->
+
+
+
 
 [![Known Vulnerabilities](https://snyk.io/test/github/kba/anno-frontend/badge.svg?targetFile=package.json)](https://snyk.io/test/github/kba/anno-frontend?targetFile=package.json)
 
@@ -269,5 +280,11 @@ the string.
 Sets `this.prefix` to the prefix defined globally.
 
 <!-- END-RENDER -->
+&nbsp;
 
 
+License
+-------
+<!--#echo json="package.json" key=".license" -->
+MIT
+<!--/#echo -->
