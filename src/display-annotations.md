@@ -1,16 +1,16 @@
 ﻿
-`displayAnnotations(options)`
-=============================
+`displayAnnotations(config)`
+============================
 
-1) takes the initial state of the Vue store
-2) dispatches a `fetchToken` action to retrieve the token from localStorage
-   or via HTTP GET to `tokenEndpoint` or fail and force login if clicked, not
-   otherwise
-3) dispatches a `fetchList` action to retrieve all anotations that match
-   `{$target:options.targetSource}`
-4) dispatches a `fetchAcl` action to retrieve the resp. permissions
-5) starts a Vue App with a single [`<sidebar-app>`](#sidebar-app)
-6) Returns a reference to the Vue.App which can be stored to use its API.
+1.  Initialize the state of the Vue store based on a `config` object.
+    See chapter "Configuration" below.
+1.  Dispatches a `fetchToken` action to retrieve the token from localStorage
+    or from the `tokenEndpoint`.
+1.  Dispatches a `fetchList` action to retrieve all anotations that match
+    the configured `targetSource`.
+1.  Dispatches a `fetchAcl` action to retrieve the permissions.
+1.  Install the Annotations Sidebar App ("AnnoApp") into the DOM.
+1.  Returns a reference to the AnnoApp, which can be stored to use its API.
 
 
 
