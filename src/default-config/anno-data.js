@@ -8,17 +8,27 @@ const win = ((typeof window !== 'undefined') && window);
 
 const annoDataCfg = {
 
-  targetFragment: null,
-  targetImage: null,
+  targetSource: (win && win.location.href), /*
+    The target of the annotation.
+    In case of a targetImage (below): The URL of the website that
+    displays the annotations about the image.
+  */
+
+  targetImage: null, /*
+    In case of annotations about an image, URL of an image file in
+    default (usually: original) resolution.
+  */
   targetImageHeight: -1,
   targetImageWidth: -1,
-  targetSource: (win && win.location.href),
   targetThumbnail: null,
 
-  iiifUrlTemplate: null, // for `enableIIIF`, see `user-interface.js`
+  targetFragment: null,
 
-  purlTemplate: null,
-  purlId: null,
+  iiifUrlTemplate: null,
+  // ^-- URL template the IIIF image (see `user-interface.js`)
+
+
+
 
 
 };

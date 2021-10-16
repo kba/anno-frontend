@@ -22,7 +22,6 @@ module.exports = {
       // No settings here! Default config belongs in `../default-config.js`.
       acl: null,
       cacheBusterEnabled: false,
-      collection: null,
       editMode: null,
       token: null,
     },

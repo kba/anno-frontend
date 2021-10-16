@@ -7,8 +7,9 @@ const srvCfg = {
   //  requests, see `user-interface.js`.
 
   helpUrlTemplate: [
-    // Explanations here are informational; authoritative documentation
-    // is in src/components/help-button/help-url.js.
+    /* Template for generating help URLs. For details, see
+      `../components/help-button/help-url.js`.
+    */
 
     'https://anno.ub.uni-heidelberg.de/anno/dist/help/digi/',
     '%hl',      // hl = <h>elp <l>anguage
@@ -19,8 +20,19 @@ const srvCfg = {
     '.html',
   ].join(''),
 
-  annoEndpoint: null,
-  tokenEndpoint: null,
+  annoEndpoint: '', // URL of the Open Annotation Protocol server.
+
+  collection: 'default',
+
+  tokenEndpoint: '', /*
+    URL of the endpoint providing a JSON Web Token for login.
+    For discussion of JWT risks, see docs/security/jwt.md.
+  */
+
+  purlTemplate: '', /*
+    A string template for the persistent URL.
+    `{{ slug }}` will be replaced by the slug of the annotation.
+  */
 
 };
 

@@ -17,9 +17,16 @@ function helpUrl() {
   let url = String(state.helpUrlTemplate
     || this.l10n('help.url.template')
     || 'about:blank');
+
+  // %hl = <h>elp <l>anguage
   url = url.replace(/%hl/g, encodeURIComponent(state.language));
+
+  // %nv = topic <n>aming scheme <v>ersion identifier
   url = url.replace(/%nv/g, helpTopicsNamingSchemeVersion);
+
+  // %ht = <h>elp <t>opic
   url = url.replace(/%ht/g, encodeURIComponent(this.topic));
+
   return url;
 }
 
