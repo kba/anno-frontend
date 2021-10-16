@@ -38,7 +38,7 @@
     });
   });
 
-  // cfg.onAppReady = function ready() {};
+  // cfg.events.appReady = function ready() {};
 
   window.annoTestCfg = cfg;
 }());

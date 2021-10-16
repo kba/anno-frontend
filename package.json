@@ -1,6 +1,6 @@
 { "name": "anno-frontend",
   "private": true,
-  "version": "0.6.2110080116",
+  "version": "0.7.2110160321",
   "description": "UB Heidelberg Annotations Web Frontend",
   "main": "entry.js",
   "scripts": {

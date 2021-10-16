@@ -59,10 +59,13 @@ module.exports = function displayAnnotations(customOptions) {
     //
     // Event listeners
     //
+    let onAppReady;
     (function installEvents() {
       const { events } = options;
       delete options.events;
       if (!events) { return; }
+      onAppReady = events.appReady;
+      delete events.appReady;
       Object.entries(events).forEach(function install([evName, evHandler]) {
         eventBus.$on(evName, evHandler);
       });
@@ -130,7 +133,7 @@ module.exports = function displayAnnotations(customOptions) {
     if (options.exportAppAsWindowProp) {
       window[options.exportAppAsWindowProp] = annoapp;
     }
-    if (options.onAppReady) { options.onAppReady(annoapp); }
+    if (onAppReady) { onAppReady(annoapp); }
     annoapp.externalRequest = externalRequest.bind(null, annoapp);
     return annoapp;
 }
