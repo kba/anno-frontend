@@ -21,6 +21,12 @@ const domCfg = {
   */
 
 
+
+  exportAppAsWindowProp: '', /*
+    Set to a non-empty string, to have the AnnoApp reference be stored in
+    a property of the window global, using this string as the property name.
+  */
+
 };
 
 
