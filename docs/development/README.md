@@ -5,7 +5,7 @@ Development
 Setup
 -----
 
-1   Install nodejs v12 and npm v7.
+1.  Install nodejs v12 and npm v7.
 1.  Clone the repo.
 1.  Inside the local repo directory, install the dependencies:
     `npm install .`
