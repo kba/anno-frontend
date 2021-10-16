@@ -23,14 +23,8 @@ Demo
 Usage
 -----
 
-See [`src/display-annotations.md`](src/display-annotations.md).
-
-
-
-Structure of the application
-----------------------------
-
 See [`docs/app_structure.md`](docs/app_structure.md)
+and [`src/display-annotations.md`](src/display-annotations.md).
 
 
 
