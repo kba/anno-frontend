@@ -13,9 +13,6 @@
 <div class="sidebar-container"><div class="popups-boundary-marker">
 <div id="anno-app-sidebar">
   <div id="anno-app-container"></div>
-  <p id="tests-toolbar-bottom">
-    <input type="button" value="Load fixture annotations">
-  </p>
 </div><!-- #anno-app-sidebar -->
 </div></div><!-- .sidebar-container -->
 
@@ -47,6 +44,12 @@
 <script src="../../node_modules/@/anno-common/anno-webpack/dist/anno-common.dev.js"></script>
 <script src="../../dist/anno-frontend.dev.js"> </script>
 <script src="./fixtures.js"></script>
+
+<!--  ATTN: Don't load test code with type="module", as this would make
+            it run deferred, after displayAnnotations(). -->
+<script src="tests.util.js"></script>
+<script src="tests.css-overrides.js"></script>
+
 <script>
 displayAnnotations(Object.assign({}, window.annoServerCfg, window.annoTestCfg, {
   bootstrap: { version: { major: 3 } },
