@@ -13,7 +13,6 @@ UB Heidelberg Annotations Web Frontend
 Demo
 ----
 
-* Standalone [CDN-based online demo](test/html/displayAnnotations.dev.html)
 * Self-hosted offline demo: See HTML comment in
   [`test/html/displayAnnotations.nm.html`](test/html/displayAnnotations.nm.html)
 * Integration in DWork: http://digi.ub.uni-heidelberg.de/diglit/annotationen_test/0002?template=ubhd3
