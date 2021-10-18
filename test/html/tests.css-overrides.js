@@ -11,6 +11,7 @@ window.jQuery().ready(function installLate() {
     '20em',
     '30em',
     '40em',
+    '60em',
     'unset',
   ].map(v => ('<label><input type="radio" name="sidebarMaxWidth" value="'
     + v + '"> ' + v + '</label>')).join(' ');
