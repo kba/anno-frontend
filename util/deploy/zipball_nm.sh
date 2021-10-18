@@ -12,7 +12,7 @@ function zipball_nm () {
 
   case " $* " in
     *' PD '* | \
-    *' pack '* ) npm run build-both || return $?;;
+    *' pack '* ) npm run build || return $?;;
   esac
 
   local NM_HTML=(
