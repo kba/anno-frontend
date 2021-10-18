@@ -2,7 +2,7 @@
 # -*- coding: UTF-8, tab-width: 4 -*-
 ---
 
-image: "node:12"
+image: 'node:16'
 
 stages:
   - test
