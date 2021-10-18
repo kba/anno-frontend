@@ -10,9 +10,7 @@ stages:
 test:
   stage: test
   script:
-    - npm install .
-    - npm run build
-    - npm test
+    - './test/ci.sh'
 
 
 
