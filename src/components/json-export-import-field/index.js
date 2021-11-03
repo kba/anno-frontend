@@ -5,15 +5,10 @@
 
 const loGet = require('lodash.get');
 const loSet = require('lodash.set');
+const sortedJson = require('safe-sortedjson');
 
 // eslint-disable-next-line no-alert,no-undef
 function panic(msg) { window.alert(msg); }
-
-
-function normWsp(tx) {
-  return String(tx).replace(/((?:^|\n +)[\{\[])\n +/g, '$1 ') + '\n';
-}
-
 
 module.exports = {
 
@@ -61,7 +56,7 @@ module.exports = {
       const { path, dumpFunc } = exim;
       const { state } = exim.$store;
       const data = (dumpFunc || loGet)(state, path);
-      return normWsp(JSON.stringify(data, null, 2));
+      return sortedJson(data);
     },
 
     importJson() {

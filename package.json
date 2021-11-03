@@ -42,6 +42,7 @@
     "querystring": "^0.2.0",
     "quill": "^1.3.7",
     "require-mjs-autoprefer-default-export-pmb": "^0.1.0",
+    "safe-sortedjson": "^1.0.4",
     "semtonotes-utils": "^0.2.2",
     "vue2-teleport": "^1.0.1",
     "vuex": "^3.6.2",
