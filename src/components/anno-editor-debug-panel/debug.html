@@ -9,16 +9,9 @@
 
 <div class="topic" data-topic="appcfg">
   <h3>AnnoApp Config</h3>
-  <dl>
-    <template v-for="prop in [
-      'targetFragment',
-      'targetImage',
-      'targetSource',
-    ]">
-    <dt :key="'dt:' + prop">{{ prop }}:</dt>
-    <dd :key="'dd:' + prop">{{ $store.state[prop] }}</dd>
-    </template>
-  </dl>
+  <json-export-import-field class="jsondump-appcfg"
+    :dumpFunc="dumpAppConfig"
+    />
 </div>
 
 
@@ -44,14 +37,6 @@
       { c: '👽', n: 'Force logged-out', f: updateAcl,
         a: { ['debug:override:isLoggedIn']: false } },
     ]"
-    />
-</div>
-
-
-<div class="topic" data-topic="annot">
-  <h3>App Config</h3>
-  <json-export-import-field class="jsondump-appcfg"
-    :dumpFunc="dumpAppConfig"
     />
 </div>
 
