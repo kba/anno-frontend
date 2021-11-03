@@ -15,5 +15,6 @@
   </div>
   <textarea ref="txa"
     :key="baseCls + '@' + redumpedAt + ':' + path"
+    :wrap="wrapTextBox ? 'soft' : 'off'"
     >{{ dumpJson() }}</textarea>
 </div>

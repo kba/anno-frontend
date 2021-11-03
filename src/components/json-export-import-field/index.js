@@ -16,6 +16,7 @@ module.exports = {
   style: require('./exim.scss'),
 
   props: {
+    wrapTextBox:    { type: Boolean, default: false },
     extraButtons:   { type: Array },
     path:           { type: String },
     dumpFunc:       { type: Function },
@@ -34,6 +35,7 @@ module.exports = {
     decideButtons() {
       const exim = this;
       const buttons = [].concat(exim.extraButtons, [
+        { c: '⤦', n: 'wrap', h: 'toggle text wrap', f: exim.toggleTextWrap },
         ((exim.path || exim.dumpFunc)
           && { c: '✍', n: 'dump', h: 'export', f: exim.redumpJson }),
         ((exim.path || exim.importFunc)
@@ -46,6 +48,8 @@ module.exports = {
       console.log('extraButtonClicked', btn);
       return btn.f.call(this, btn);
     },
+
+    toggleTextWrap() { this.wrapTextBox = !this.wrapTextBox; },
 
     redumpJson() {
       this.redumpedAt = Date.now();
