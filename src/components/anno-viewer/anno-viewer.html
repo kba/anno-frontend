@@ -244,18 +244,6 @@
     <!-- navigation -->
 
     <div class="navigation-separator"></div>
-    <transition name="fade">
-      <div v-if="mintDoiError"
-        class="alert alert-danger fade in"
-        @click="mintDoiError = null">
-        <button type="button" class="close btn-outline-secondary" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <strong class="mintdoi-error-intro">{{ l10n('error:')
-          }} {{ l10n('mint_doi') }}:</strong>
-        <span class="mintdoi-errmsg">{{mintDoiError}}</span>
-      </div>
-    </transition>
     <div role="toolbar"
       class="btn-toolbar pull-right"
       >
