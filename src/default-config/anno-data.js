@@ -24,8 +24,17 @@ const annoDataCfg = {
 
   targetFragment: null,
 
-  iiifUrlTemplate: null,
-  // ^-- URL template the IIIF image (see `user-interface.js`)
+  iiifUrlTemplate: '',
+  /* ^-- Empty string, null, false: No IIIF links are shown.
+      Non-empty string: For annotations with SVG zones, a link to the
+      IIIF image¹ is shown. (¹ A rectangule that encloses all zones.)
+      When the IIIF image link is enabled, options
+      `targetImageHeight` and `targetImageWidth` are mandatory.
+      The IIIF image URL is based on this template, which accepts thes
+      placeholders:
+      * `%ir`: the region data.
+      * `{{ iiifRegion }}` (deprecated): compatibility alias for `%ir`.
+  */
 
 
 

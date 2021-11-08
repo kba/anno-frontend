@@ -1,5 +1,4 @@
 const getOwn = require('getown');
-const XrxUtils = require('semtonotes-utils');
 const {
     relationLinkBody,
     textualHtmlBody,
@@ -13,6 +12,7 @@ const eventBus = require('../../event-bus.js');
 const bindDataApi = require('./dataApi.js');
 const licensesByUrl = require('../../license-helper.js').byUrl;
 const toggleDetailBar = require('./toggleDetailBar.js');
+const xrxUtilsUtils = require('./xrxUtilsUtils.js');
 
 
 /**
@@ -65,6 +65,18 @@ module.exports = {
       require('../../mixin/prefix'),
     ],
 
+    data() {
+      return {
+        bootstrapOpts: bootstrapCompat.sharedConfig,
+        cachedIiifLink: '',
+        collapsed: this.collapseInitially,
+        currentVersion: this.initialAnnotation,
+        highlighted: false,
+        mintDoiError: null,
+        showMintDoiError: null,
+      }
+    },
+
     props: {
         annotation: {type: Object, required: true},
         purlTemplate: {type: String, required: false},
@@ -87,8 +99,7 @@ module.exports = {
 
   mounted() {
     const viewer = this;
-
-    viewer.iiifLink = viewer._iiifLink();
+    viewer.$el.vue = () => viewer;
 
     // React to highlighting events startHighlighting / stopHighlighting / toggleHighlighting
     ;['start', 'stop', 'toggle'].forEach(state => {
@@ -228,17 +239,7 @@ module.exports = {
           return ret
         }
     },
-    data() {
-        return {
-            mintDoiError: null,
-            showMintDoiError: null,
-            iiifLink: '',
-            currentVersion: this.initialAnnotation,
-            highlighted: false,
-            collapsed: this.collapseInitially,
-            bootstrapOpts: bootstrapCompat.sharedConfig,
-        }
-    },
+
     methods: {
         toggleDetailBar,
 
@@ -379,34 +380,9 @@ module.exports = {
           return version.created === this.created
         },
 
-        _iiifLink() {
-            if (! this.svgTarget || this.imageHeight <= 0 || this.imageWidth <= 0 || ! this.iiifUrlTemplate) {
-                // console.error("Could not determine width / height of img")
-                return ''
-            }
-            // console.log(this.svgTarget, this.imageHeight,  this.imageWidth, this.iiifUrlTemplate)
-            const svg = this.svgTarget.selector.value
-            let svgWidth
-            svg.replace(/width="(\d+)"/, (_, w) => svgWidth = parseInt(w))
-
-            const $container = $('<div class="annoeditor-iiif-canvas" style="display:none"></div>').appendTo(this.$el).get(0)
-            const drawing = XrxUtils.createDrawing($container, 1, 1)
-            XrxUtils.drawFromSvg(svg, drawing, {
-                absolute: true,
-                grouped: false,
-            })
-            let scale = svgWidth / this.imageWidth
-            // console.log({svgWidth, scale, svg, imageWidth: this.imageWidth, imageHeight: this.imageHeight})
-            let [[x, y], [x2, y2]] = XrxUtils.boundingBox(drawing)
-            $container.remove()
-
-
-            let w = (x2 - x)
-            let h = (y2 - y)
-            ;[x, w] = [x, w].map(_ => _ / this.imageWidth)
-            ;[y, h] = [y, h].map(_ => _ / this.imageHeight)
-            ;[x, y, w, h] = [x, y, w, h].map(_ => _ / scale * 100)
-            return this.iiifUrlTemplate.replace(`{{ iiifRegion }}`, `pct:${x},${y},${w},${h}`)
+        renderIiifLink() {
+          const viewer = this;
+          viewer.cachedIiifLink = xrxUtilsUtils.calcIiifLink(viewer);
         },
 
     },

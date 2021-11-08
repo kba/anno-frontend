@@ -8,6 +8,5 @@ Example config-override file
 (function () {
   'use strict';
   var cfg = window.annoTestCfg;
-
-  cfg.targetSource = 'http://digi.ub.uni-heidelberg.de/diglit/cpg389/0015';
+  cfg.setTarget.ubHdDigLit(1494, 2348, 'cpg389/0055');
 }());
