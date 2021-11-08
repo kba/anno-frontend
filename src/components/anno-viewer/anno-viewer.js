@@ -179,8 +179,6 @@ module.exports = {
           return purl;
         },
 
-        wbrPurl() { return this.purl.replace(/([\/?&]+)/g, '\u200b$1'); },
-
         slug() {
             if (!this.annotation.id) return 'unsaved-annotation-' + Date.now()
             return this.annotation.id.replace(/[^A-Za-z0-9]/g, '')

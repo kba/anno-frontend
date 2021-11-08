@@ -164,7 +164,9 @@
               :cliptext="purl" />
             {{ l10n('purl') }}:
           </dt><dd>
-            <a :href="purl">{{ wbrPurl }}</a>
+            <a :href="purl"
+              class="url-caption-link"
+              >{{ purl }}</a>
           </dd></dl>
 
           <dl class="detailbar-license"><dt>
