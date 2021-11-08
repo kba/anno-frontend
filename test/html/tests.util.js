@@ -101,28 +101,31 @@
     },
 
 
+    jsonDump: (function compile() {
+      const wc = tu.wrappedConvert;
+      function convert(k, v) {
+        const tt = tu.objTypeTag(v);
+        console.debug('convert:', tt, k, v);
+        if (!tt) { return v; }
+        if (tt === 'Set') { return wc('convertSetToSortedArray', v); }
+        if (tt === 'Map') { return wc('convertMapToStringKeyedDict', v); }
+        return v;
+      }
+      function dump(x) {
+        if (x === '') { return '""'; }
+        if (!x) { return String(x); }
+        return JSON.stringify(x, convert, 2);
+      }
+      return dump;
+    }()),
+
+
+
 
 
   });
 
 
-  tu.jsonDump = (function compile() {
-    const wc = tu.wrappedConvert;
-    function convert(k, v) {
-      const tt = tu.objTypeTag(v);
-      console.debug('convert:', tt, k, v);
-      if (!tt) { return v; }
-      if (tt === 'Set') { return wc('convertSetToSortedArray', v); }
-      if (tt === 'Map') { return wc('convertMapToStringKeyedDict', v); }
-      return v;
-    }
-    function dump(x) {
-      if (x === '') { return '""'; }
-      if (!x) { return String(x); }
-      return JSON.stringify(x, convert, 2);
-    }
-    return dump;
-  }());
 
 
 
