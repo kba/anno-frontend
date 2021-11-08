@@ -1,3 +1,4 @@
+/* eslint-env browser */
 'use strict';
 
 window.annotations = [
@@ -10,7 +11,7 @@ window.annotations = [
       { type: 'TextualBody', motivation: 'tagging', value: '#nuffsaid' },
       { motivation: 'linking', label: 'Metavariables', id: 'http://gnd.info/12345' },
     ],
-    target: 'http://foo.bar',
+    target: 'http://foo.test/',
     created:  '2017-03-01T10:00:00Z',
     modified: '2017-03-22T22:05:00Z',
     hasVersion: [
@@ -81,9 +82,17 @@ window.annotations = [
         id: 'http://anno.ub.uni-heidelberg.de/cgi-bin/anno.cgi?id=802168b6-873f-4194-88b2-8e6a29a1493b&target=1&rev=1',
         selector: {
           type: 'SvgSelector',
-          value: '<svg xmlns="http://www.w3.org/2000/svg"> <rect x="0" y="0" width="200" height="200"/> <rect x="200" y="200" width="200" height="200"/> <rect x="400" y="400" width="200" height="200"/> <rect x="600" y="600" width="200" height="200"/> <rect x="800" y="800" width="200" height="200"/> <rect x="800" y="1000" width="224" height="24"/> </svg>',
+          value: ('<svg xmlns="http://www.w3.org/2000/svg">'
+            + '<rect x="0" y="0" width="200" height="200"/>'
+            + '<rect x="200" y="200" width="200" height="200"/>'
+            + '<rect x="400" y="400" width="200" height="200"/>'
+            + '<rect x="600" y="600" width="200" height="200"/>'
+            + '<rect x="800" y="800" width="200" height="200"/>'
+            + '<rect x="800" y="1000" width="224" height="24"/>'
+            + '</svg>'),
         },
-        source: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png',
+        source: ('https://upload.wikimedia.org/wikipedia/commons/thumb/'
+          + 'f/fd/Ghostscript_Tiger.svg/1024px-Ghostscript_Tiger.svg.png'),
       },
     ],
   },
@@ -101,7 +110,7 @@ window.annotations = [
     ],
     target: [
       {
-        source: 'http://foo',
+        source: 'http://foo.test/',
         selector: {
           type: 'SvgSelector',
           value: `<svg xmlns="http://www.w3.org/2000/svg">
@@ -138,7 +147,7 @@ window.annotations = [
         id: 'http://gnd.info/12345',
       },
     ],
-    target: { source: 'http://foo.bar' },
+    target: { source: 'http://foo.test/' },
     modified: '2017-03-22 22:00:00',
     hasVersion: [
       {
