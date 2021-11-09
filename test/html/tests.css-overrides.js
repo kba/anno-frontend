@@ -23,7 +23,7 @@ window.jQuery().ready(function installLate() {
     const { txa } = form.elements;
     function fv(n) { return form.elements[n].value; }
     const dest = txa.nextElementSibling;
-    function upd() {
+    function apply() {
       let css = `
         .sidebar-container { max-width: ${fv('sidebarMaxWidth')}; }
         `;
@@ -36,8 +36,8 @@ window.jQuery().ready(function installLate() {
       css += txa.value;
       dest.innerHTML = css.trim();
     }
-    testUtil.topRightSubmitButton(form, 'apply', upd);
-    form.on('click', 'input[type="checkbox"],input[type="radio"]', upd);
+    testUtil.topRightSubmitButton(form, apply);
+    form.on('click', 'input[type="checkbox"],input[type="radio"]', apply);
     txa.value = `
       `.replace(/^ {6}/mg, '').trim() + '\n';
     txa.rows = (+(txa.value.match(/\n/g) || false).length || 0) + 2;

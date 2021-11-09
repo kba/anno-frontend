@@ -34,6 +34,7 @@ function zipball_nm () {
     "${NM_DEPS[@]}"
     dist/
     "${TEST_DEPS[@]}"
+    test/fixtures/
     util/deploy/
     )
 

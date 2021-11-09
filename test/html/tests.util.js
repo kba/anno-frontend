@@ -15,6 +15,8 @@
 
   Object.assign(tu, {
 
+    alwaysFalse() { return false; },
+
     objTypeTag(x) {
       return (((x && typeof x) === 'object')
         && Object.prototype.toString.call(x).slice(8, -1));
@@ -120,18 +122,25 @@
     }()),
 
 
-    topRightSubmitButton(destForm, caption, hnd) {
+    topRightSubmitButton(destForm, submitBtn, ...extraBtn) {
       const rel = jq('<div class="pull-right" style="position: relative;">');
-      const jqBtn = jq('<input type="submit">');
-      const [btnEl] = jqBtn;
-      btnEl.value = caption;
-      btnEl.className = 'btn btn-default btn-sm btn-outline-secondary';
-      btnEl.style = 'position: absolute; right: 0; bottom: 1em;';
+      const grp = jq('<div class="btn-group">').appendTo(rel);
+      grp[0].style = 'position: absolute; right: 0; bottom: 1em;';
+      destForm.on('submit', tu.alwaysFalse);
+      function addBtn(spec, idx) {
+        const el = document.createElement('input');
+        el.type = (spec.t || (idx && 'button') || 'submit');
+        el.value = (spec.v || (spec.name || '').replace(/_/g, ' ') || spec);
+        el.className = 'btn btn-default btn-sm btn-outline-secondary';
+        const hnd = (spec.f || spec || false);
+        if (hnd.apply) { el.onclick = hnd; }
+        grp.append(el);
+        return el;
+      }
+      const buttons = [].concat(submitBtn, ...extraBtn).map(addBtn);
       destForm.prepend(rel);
-      jqBtn.appendTo(rel);
-      jqBtn.posRelWrapper = rel;
-      if (hnd) { destForm.on('submit', () => { hnd(); return false; }); }
-      return jqBtn;
+      Object.assign(buttons, { rel, grp });
+      return buttons;
     },
 
 
@@ -146,23 +155,5 @@
 
 
 
-
-  tu.testButtonsToolbar = tu.addTestsPanel().addForm(`
-    <div id="tests-toolbar-bottom" class="btn-group">
-    </div>
-  `, function init(form) {
-    form.on('submit', () => false);
-  }).find('.btn-group').first();
-  tu.testButtonsToolbar.addBtn = function addBtn(value, onclick, props) {
-    if (!value) { return false; }
-    const btn = jq('<input type="submit">');
-    Object.assign(btn[0], { ...props, value, onclick });
-    tu.testButtonsToolbar.append(btn);
-    return btn;
-  };
-
-
-
-
-  /* scroll */
+ /* scroll */
 }());

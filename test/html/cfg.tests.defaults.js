@@ -56,19 +56,6 @@
   // cfg.setTarget.ubHdDigLit(1494, 2348, 'cpg389/0015', '002r.jpg');
   cfg.setTarget.ubHdDigLit(1494, 2348, 'cpg389/0055', '022r.jpg');
 
-  jq().ready(function registerToolbarButtons() {
-    var btn = window.testUtil.testButtonsToolbar.addBtn,
-      fixt = window.annotations;
-    btn(fixt && 'Load fixture annotations', function appendFixtureAnnots() {
-      // window.annoApp.$store.commit('CHANGE_ACL', { '*': { '*': true } });
-      function append(state) {
-        var alSt = state.annotationList;
-        alSt.list = alSt.list.concat(fixt);
-      }
-      window.annoApp.$store.commit('INJECTED_MUTATION', [append]);
-    });
-  });
-
   // cfg.events.appReady = function ready() {};
 
   window.annoTestCfg = cfg;

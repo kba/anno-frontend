@@ -26,6 +26,7 @@
     "@ubhd/authorities-client": "^0.7.2",
     "axios": "^0.19.2",
     "bonanza": "^2.1.4",
+    "ceson": "^0.1.5",
     "clipboard": "^1.7.1",
     "dateformat": "^2.2.0",
     "font-awesome": "^4.7.0",
