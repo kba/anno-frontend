@@ -69,8 +69,8 @@
 
 
     addTestsPanel(title) {
-      const chap = jq('<chapter><aside><fieldset><legend>');
-      const headline = chap.find('legend');
+      const chap = jq('<chapter><aside><fieldset><legend><h3>');
+      const headline = chap.find('h3');
       if (title) { headline.text(title); }
       chap.appendTo('body');
       const inner = chap.find('fieldset');
@@ -118,6 +118,21 @@
       }
       return dump;
     }()),
+
+
+    topRightSubmitButton(destForm, caption, hnd) {
+      const rel = jq('<div class="pull-right" style="position: relative;">');
+      const jqBtn = jq('<input type="submit">');
+      const [btnEl] = jqBtn;
+      btnEl.value = caption;
+      btnEl.className = 'btn btn-default btn-sm btn-outline-secondary';
+      btnEl.style = 'position: absolute; right: 0; bottom: 1em;';
+      destForm.prepend(rel);
+      jqBtn.appendTo(rel);
+      jqBtn.posRelWrapper = rel;
+      if (hnd) { destForm.on('submit', () => { hnd(); return false; }); }
+      return jqBtn;
+    },
 
 
 

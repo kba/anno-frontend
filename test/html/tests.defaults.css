@@ -14,7 +14,15 @@ body > chapter aside {
   border: 1px solid grey; padding: 1ex 1em;
 }
 
-body > chapter aside > fieldset > legend:empty { display: none; }
+body > chapter aside > fieldset > legend { font: inherit; }
+body > chapter aside > fieldset > legend > h3:empty { display: none; }
+body > chapter aside > fieldset > legend > h3 { display: inline; }
 body > chapter aside > fieldset { position: relative; }
 body > chapter aside > fieldset label { margin: 0; margin-left: 1ex; }
 body > chapter aside > fieldset p { margin: 0.5em 0; }
+
+fieldset textarea.code {
+  border: 1px solid silver; overflow: scroll; resize: both;
+  font-family: monospace; font-size: 85%;
+}
+
