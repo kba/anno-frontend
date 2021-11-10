@@ -8,8 +8,6 @@ const annoDataApi = autoDefault(require('../../annoDataApi'));
 
 function notImpl() { throw new Error('not implemented'); }
 
-window.ada = annoDataApi;
-
 const EX = function bindDataApi(viewer) {
   return function dataApi(mthd, ...args) {
     try {

@@ -41,16 +41,10 @@ const uiCfg = {
       using these Should be SVG colors. "Stroke" is the outline, "fill" is
       the inside of the area. */
 
-  enableIIIF: true,
-  /* ^-- Whether to show the URL of the IIIF image, a rectangular section
-      that encloses all areas of an image annotation's SVG zones.
-      See also: `iiifUrlTemplate` in `anno-data.js` */
-
   targetFragmentButtonTitle: null, /*
     Hover title (not caption) of the Fragment Identifier button.
     Usually, this should be a description of what the
-    `targetFragmentButtonClicked` event handler does. (see `events.md`)
-  */
+    `targetFragmentButtonClicked` event handler does. (see `events.md`) */
 
 
 

@@ -15,6 +15,8 @@
 
   Object.assign(tu, {
 
+    alwaysFalse() { return false; },
+
     objTypeTag(x) {
       return (((x && typeof x) === 'object')
         && Object.prototype.toString.call(x).slice(8, -1));
@@ -69,8 +71,8 @@
 
 
     addTestsPanel(title) {
-      const chap = jq('<chapter><aside><fieldset><legend>');
-      const headline = chap.find('legend');
+      const chap = jq('<chapter><aside><fieldset><legend><h3>');
+      const headline = chap.find('h3');
       if (title) { headline.text(title); }
       chap.appendTo('body');
       const inner = chap.find('fieldset');
@@ -101,50 +103,57 @@
     },
 
 
+    jsonDump: (function compile() {
+      const wc = tu.wrappedConvert;
+      function convert(k, v) {
+        const tt = tu.objTypeTag(v);
+        console.debug('convert:', tt, k, v);
+        if (!tt) { return v; }
+        if (tt === 'Set') { return wc('convertSetToSortedArray', v); }
+        if (tt === 'Map') { return wc('convertMapToStringKeyedDict', v); }
+        return v;
+      }
+      function dump(x) {
+        if (x === '') { return '""'; }
+        if (!x) { return String(x); }
+        return JSON.stringify(x, convert, 2);
+      }
+      return dump;
+    }()),
+
+
+    topRightSubmitButton(destForm, submitBtn, ...extraBtn) {
+      const rel = jq('<div class="pull-right" style="position: relative;">');
+      const grp = jq('<div class="btn-group">').appendTo(rel);
+      grp[0].style = 'position: absolute; right: 0; bottom: 1em;';
+      destForm.on('submit', tu.alwaysFalse);
+      function addBtn(spec, idx) {
+        const el = document.createElement('input');
+        el.type = (spec.t || (idx && 'button') || 'submit');
+        el.value = (spec.v || (spec.name || '').replace(/_/g, ' ') || spec);
+        el.className = 'btn btn-default btn-sm btn-outline-secondary';
+        const hnd = (spec.f || spec || false);
+        if (hnd.apply) { el.onclick = hnd; }
+        grp.append(el);
+        return el;
+      }
+      const buttons = [].concat(submitBtn, ...extraBtn).map(addBtn);
+      destForm.prepend(rel);
+      Object.assign(buttons, { rel, grp });
+      return buttons;
+    },
+
+
+
 
 
   });
 
 
-  tu.jsonDump = (function compile() {
-    const wc = tu.wrappedConvert;
-    function convert(k, v) {
-      const tt = tu.objTypeTag(v);
-      console.debug('convert:', tt, k, v);
-      if (!tt) { return v; }
-      if (tt === 'Set') { return wc('convertSetToSortedArray', v); }
-      if (tt === 'Map') { return wc('convertMapToStringKeyedDict', v); }
-      return v;
-    }
-    function dump(x) {
-      if (x === '') { return '""'; }
-      if (!x) { return String(x); }
-      return JSON.stringify(x, convert, 2);
-    }
-    return dump;
-  }());
 
 
 
 
 
-
-  tu.testButtonsToolbar = tu.addTestsPanel().addForm(`
-    <div id="tests-toolbar-bottom" class="btn-group">
-    </div>
-  `, function init(form) {
-    form.on('submit', () => false);
-  }).find('.btn-group').first();
-  tu.testButtonsToolbar.addBtn = function addBtn(value, onclick, props) {
-    if (!value) { return false; }
-    const btn = jq('<input type="submit">');
-    Object.assign(btn[0], { ...props, value, onclick });
-    tu.testButtonsToolbar.append(btn);
-    return btn;
-  };
-
-
-
-
-  /* scroll */
+ /* scroll */
 }());

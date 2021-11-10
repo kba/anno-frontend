@@ -10,6 +10,10 @@
   overflow: visible;
   /* ^-- This changed between bootstrap 3.1 and 3.2 for panels */
 
+  .url-caption-link {
+    word-wrap: break-all;
+  }
+
   & > .panel-heading {
     background: #e8e8e8;
     color: black;

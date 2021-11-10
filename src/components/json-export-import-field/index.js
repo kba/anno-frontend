@@ -5,15 +5,10 @@
 
 const loGet = require('lodash.get');
 const loSet = require('lodash.set');
+const sortedJson = require('safe-sortedjson');
 
 // eslint-disable-next-line no-alert,no-undef
 function panic(msg) { window.alert(msg); }
-
-
-function normWsp(tx) {
-  return String(tx).replace(/((?:^|\n +)[\{\[])\n +/g, '$1 ') + '\n';
-}
-
 
 module.exports = {
 
@@ -21,6 +16,7 @@ module.exports = {
   style: require('./exim.scss'),
 
   props: {
+    wrapTextBox:    { type: Boolean, default: false },
     extraButtons:   { type: Array },
     path:           { type: String },
     dumpFunc:       { type: Function },
@@ -39,6 +35,7 @@ module.exports = {
     decideButtons() {
       const exim = this;
       const buttons = [].concat(exim.extraButtons, [
+        { c: '⤦', n: 'wrap', h: 'toggle text wrap', f: exim.toggleTextWrap },
         ((exim.path || exim.dumpFunc)
           && { c: '✍', n: 'dump', h: 'export', f: exim.redumpJson }),
         ((exim.path || exim.importFunc)
@@ -52,6 +49,8 @@ module.exports = {
       return btn.f.call(this, btn);
     },
 
+    toggleTextWrap() { this.wrapTextBox = !this.wrapTextBox; },
+
     redumpJson() {
       this.redumpedAt = Date.now();
     },
@@ -61,7 +60,7 @@ module.exports = {
       const { path, dumpFunc } = exim;
       const { state } = exim.$store;
       const data = (dumpFunc || loGet)(state, path);
-      return normWsp(JSON.stringify(data, null, 2));
+      return sortedJson(data);
     },
 
     importJson() {

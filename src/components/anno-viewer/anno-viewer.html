@@ -164,7 +164,9 @@
               :cliptext="purl" />
             {{ l10n('purl') }}:
           </dt><dd>
-            <a :href="purl">{{ wbrPurl }}</a>
+            <a :href="purl"
+              class="url-caption-link"
+              >{{ purl }}</a>
           </dd></dl>
 
           <dl class="detailbar-license"><dt>
@@ -219,22 +221,20 @@
           </a>
         </div>
 
-        <div v-show="iiifLink && $store.state.enableIIIF" class="annoeditor-iiif-link">
-          <button class="btn btn-sm btn-link"
-            data-toggle="popover"
-            data-html="true"
-            data-placement="left"
-            :title="l10n('iiif_link')"
-            :data-content='`
-            <button data-clipboard-text="${purl}" class="btn btn-default btn-outline-secondary btn-sm">
-              <span class="fa fa-clipboard"></span>
-              <span class="label label-success" style="display: none">${l10n("copied_to_clipboard")}</span>
-            </button>
-            <a href="${iiifLink}">${iiifLink.replace(/([\/,])/g, (_, x) => x + "<wbr>")}</a>
-            `'>
-            <i class="fa fa-link"></i>
-            {{ l10n('iiif_link') }}
-          </button>
+        <div class="annoeditor-iiif-link"
+          v-if="iiifUrlTemplate && svgTarget"
+          ><b>{{ l10n('iiif_link') }}:</b>
+          <a class="render-iiif-link"
+            role="button"
+            v-show="!cachedIiifLink"
+            @click="renderIiifLink"
+            >{{ l10n('calculate_now') }}</a>
+          <span class="cached-iiif-link" v-show="cachedIiifLink">
+            <a :href="cachedIiifLink"
+              target="_blank"
+              class="url-caption-link"
+              >{{ cachedIiifLink }}</a>
+          </span>
         </div>
 
       </div><!-- class="media-body -->
@@ -244,18 +244,6 @@
     <!-- navigation -->
 
     <div class="navigation-separator"></div>
-    <transition name="fade">
-      <div v-if="mintDoiError"
-        class="alert alert-danger fade in"
-        @click="mintDoiError = null">
-        <button type="button" class="close btn-outline-secondary" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <strong class="mintdoi-error-intro">{{ l10n('error:')
-          }} {{ l10n('mint_doi') }}:</strong>
-        <span class="mintdoi-errmsg">{{mintDoiError}}</span>
-      </div>
-    </transition>
     <div role="toolbar"
       class="btn-toolbar pull-right"
       >
