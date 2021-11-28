@@ -73,7 +73,9 @@ module.exports = {
       eventBus.$on('error', function displayError(err) {
         const box = {
           cls: 'error',
-          msg: sidebarApp.l10n('error:') + ' ' + String(err),
+          msgTypePrefix: sidebarApp.l10n('error:'),
+          msg: String(err),
+          hint: err.hint,
           err,
         };
         Object.freeze(box);

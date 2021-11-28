@@ -31,7 +31,16 @@
             icon-fa="close"
             />
         </div>
-        <p class="msg">{{ box.msg }}</p>
+        <p class="msg">
+          <b class="type" v-if="box.msgTypePrefix"
+            >{{ box.msgTypePrefix }}</b>
+          <span class="body">{{ box.msg }}</span>
+        </p>
+        <p class="hint" v-if="box.hint">
+          <b class="type"
+            >{{ l10n('hint:') }}</b>
+          <span class="body">{{ box.hint }}</span>
+        </p>
       </div>
     </div><!-- .msgboxes -->
 

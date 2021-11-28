@@ -10,9 +10,7 @@ function unixTime() { return Math.floor(Date.now() / 1e3); }
 function isExpired(token) { return (unixTime() > token.exp); }
 
 
-function acceptHttp401(err) {
-  const resp = orf(orf(err).response);
-  if (resp.status === 401) { return 401; }
+function acceptHttpErrors(err) {
   throw err;
 }
 
@@ -30,11 +28,35 @@ async function fetchToken(vuexApi) {
     }
   }
 
-  const tokenReply = await (axios.get(state.tokenEndpoint, {
-    // maxRedirects: 0, // does not work in the browser
-    withCredentials: 1, // without it, xhr won't set cookies for CORS
-  }).then(null, acceptHttp401));
-  if (tokenReply === 401) { return; } // Not logged in
+  let tokenReply;
+  try {
+    tokenReply = await axios.get(state.tokenEndpoint, {
+      // maxRedirects: 0, // does not work in the browser
+      withCredentials: 1, // without it, xhr won't set cookies for CORS
+    });
+  } catch (fetchFailed) {
+    if (!fetchFailed) { throw new TypeError('Caught a false-y error'); }
+    const origMsg = fetchFailed.message;
+    fetchFailed.origMsg = origMsg;
+
+    const resp = orf(fetchFailed.response);
+    const { status } = resp;
+    if (status === 401) { return 401; }
+    console.error('fetchToken failed:', { fetchFailed, origMsg, status });
+    const httpStatus = (Number.isFinite(status)
+      && (status >= 100)
+      && (status <= 999)
+      && status);
+    if (origMsg === 'Network Error') {
+      fetchFailed.message += (httpStatus
+        ? ': HTTP ' + httpStatus
+        : ': No response or blocked by CORS');
+    }
+    fetchFailed.hint = state['errHintTokenFetchFailedHttp'
+      + ('Status' + status || 'NoReply')];
+    throw fetchFailed;
+  }
+
   const newToken = tokenReply.data;
   if (!newToken) {
     console.error('Logged in but no token received:', tokenReply);
