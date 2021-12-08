@@ -80,7 +80,7 @@
 
         headline,
 
-        addForm(html, init) {
+        addForm(html, ...inits) {
           const form = jq('<form>');
           form.attr({
             action: 'about+nope://',
@@ -93,7 +93,11 @@
           form.find('[ref]').each((idx, el) => {
             form.refs[el.getAttribute('ref')] = el;
           });
-          if (init) { init(form); }
+          inits.forEach(function initForm(how) {
+            if (!how) { return; }
+            if (how.apply) { return how(form); }
+            form.attr(how);
+          });
           inner.append(form);
           return form;
         },
@@ -155,5 +159,5 @@
 
 
 
- /* scroll */
+  /* scroll */
 }());

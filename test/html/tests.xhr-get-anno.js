@@ -56,8 +56,9 @@ window.jQuery().ready(function installLate() {
     const { txa } = form.elements;
     txa.value = txa.value.replace(/\n +/g, '\n').trim();
     testUtil.topRightSubmitButton(form, [
+      // eslint-disable-next-line camelcase
       function clear_list() { store.commit('REPLACE_LIST', []); },
-      { v: 'import', f() { ldr.fromForm(form) } },
+      { v: 'import', f() { ldr.fromForm(form); } },
     ]);
   });
 });

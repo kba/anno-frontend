@@ -1,13 +1,15 @@
 ﻿@charset "UTF-8";
 /* -*- coding: UTF-8, tab-width: 2 -*- */
 
-.sidebar-container { float: left; margin: 1em; margin-right: 2em;
-  width: 40%; overflow: auto;
-}
+body > main { float: left; width: 40%; margin: 1em; margin-right: 2em; }
+
+.sidebar-container { overflow: auto; }
 .popups-boundary-marker { border: 1em solid skyblue; }
 
 #tests-toolbar-bottom input[type="button"],
 #tests-toolbar-bottom button { color: black; background-color: gainsboro; }
+
+.resizer { resize: both; overflow: scroll; overflow-x: auto; }
 
 body > chapter aside {
   float: right; margin: 2em;
