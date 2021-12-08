@@ -148,6 +148,23 @@
     },
 
 
+    makeRetimer(f, start) {
+      function t(ms) {
+        if (t.t) { clearTimeout(t.t); }
+        t.t = false;
+        if (ms) { t.t = setTimeout(t.f, ms); }
+      }
+      t.f = f;
+      t(start);
+      return t;
+    },
+
+
+    zDateHr(t) {
+      const d = (t ? new Date(t) : new Date());
+      return d.toISOString().replace(/T|\.\d+/g, ' ');
+    },
+
 
 
 
