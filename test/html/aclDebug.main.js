@@ -4,19 +4,21 @@
 
 window.jQuery().ready(function installLate() {
   const { testUtil } = window;
+  const decodeJWT = window.jwt_decode;
+  const { ifr } = window.frames;
   const jq = window.jQuery;
   const cfg = window.annoServerCfg;
   const {
     annoEndpoint,
-    // tokenEndpoint,
+    tokenEndpoint,
   } = cfg;
 
   const loginFormAttrs = {
     method: 'post',
     action: cfg.loginFormUrl.replace(/\&from=[ -%'-~]*/, ''),
-    target: 'ifr',
+    target: ifr.name,
   };
-  window.frames.ifr.location.href = loginFormAttrs.action;
+  ifr.location.href = loginFormAttrs.action;
   const plainAuthPanel = testUtil.addTestsPanel('Insecure plain auth');
   plainAuthPanel.addForm(`
     <p>
@@ -42,6 +44,7 @@ window.jQuery().ready(function installLate() {
       <textarea name="txa" cols="60" rows="10" wrap="off" class="code"
       ></textarea></p>
   `, function setup(form) {
+    const { refs } = form;
     const { txa } = form.elements;
     const aclRequest = {
       method: 'post',
@@ -56,25 +59,46 @@ window.jQuery().ready(function installLate() {
       }, null, 2),
       dataType: 'text', // <-- don't auto-parse response
     };
+    const jwtRequest = {
+      method: 'get',
+      url: tokenEndpoint,
+      xhrFields: { withCredentials: true },
+      dataType: 'text', // <-- don't auto-parse response
+    };
+
+    const autoUpd = jq(`<label class="text-nowrap pt-1 mr-2">
+      <input type="checkbox"> auto&rarr;</label>`).find('input')[0];
 
     async function update() {
-      update.timer(false);
-      let resp = await jq.ajax(aclRequest).then(String, String);
-      form.refs.receivedAt.textContent = testUtil.zDateHr();
-      if (resp.startsWith('{')) {
-        try {
-          resp = JSON.stringify(JSON.parse(resp), null, 2);
-        } finally {
-        }
-      }
-      if (txa.value !== resp) { txa.value = resp; }
-      if (update.autoUpd.checked) { update.timer(2e3); }
-    }
-    update.timer = testUtil.makeRetimer(update, 1e3);
+      autoUpd.timer(false);
 
-    const buttons = testUtil.topRightSubmitButton(aclMonPanel, update);
-    update.autoUpd = jq(`<label class="text-nowrap pt-1 mr-2">
-      <input type="checkbox" checked="checked"> auto&rarr;</label>
-      `).prependTo(buttons.grp).find('input')[0];
+      const jwtResp = await jq.ajax(jwtRequest)
+        .then(decodeJWT)
+        .then(testUtil.prettyPrintJson)
+        .then(String, testUtil.err2str);
+
+      const aclResp = await jq.ajax(aclRequest)
+        .then(testUtil.prettyPrintJson)
+        .then(String, testUtil.err2str);
+
+      refs.receivedAt.textContent = testUtil.zDateHr();
+      const all = [
+        'JWT = ' + jwtResp,
+        'ACL = ' + aclResp,
+      ].join('\n');
+      if (txa.value !== all) { txa.value = all; }
+      if (autoUpd.checked) { autoUpd.timer(2e3); }
+    }
+
+    function maybeAutoUpdate() { if (autoUpd.checked) { update(); } }
+    autoUpd.timer = testUtil.makeRetimer(maybeAutoUpdate);
+    autoUpd.onclick = maybeAutoUpdate;
+    setTimeout(update, 500);
+
+    const buttons = testUtil.topRightSubmitButton(aclMonPanel, [
+      update,
+      { v: '🗝', f() { ifr.location.href = tokenEndpoint; } },
+    ]);
+    buttons.grp.prepend(autoUpd.parentNode);
   });
 });

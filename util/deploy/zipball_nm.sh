@@ -120,6 +120,9 @@ function refine_one_nm_dep () {
     semtonotes-client )
       NM_DEPS+=( "$DEP"/*.min.js );;
 
+    jwt-decode )
+      NM_DEPS+=( "$DEP"/build/*.min.js );;
+
     * ) echo "E: What to pack for $DEP?" >&2; return 8;;
   esac
 }

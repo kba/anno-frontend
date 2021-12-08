@@ -160,9 +160,27 @@
     },
 
 
+    prettyPrintJson(x) {
+      const d = (typeof x === 'string' ? JSON.parse(x) : x);
+      return JSON.stringify(d, null, 2);
+    },
+
+
     zDateHr(t) {
       const d = (t ? new Date(t) : new Date());
       return d.toISOString().replace(/T|\.\d+/g, ' ');
+    },
+
+
+    err2str(err) {
+      if (err === '') { return 'empty string error'; }
+      if (!err) { return 'false-y error: ' + String(err); }
+      const st = String(err);
+      const oo = '[object Object]';
+      if ((st === oo) && err.responseText && err.statusText) {
+        return (err.status + ' ' + err.statusText + '\n' + err.responseText);
+      }
+      return st;
     },
 
 
