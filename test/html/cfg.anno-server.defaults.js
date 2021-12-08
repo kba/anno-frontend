@@ -9,6 +9,14 @@
   cfg.collection = 'default';
   cfg.annoEndpoint = protoHost + (port ? ':33321/' : '/anno/');
 
+  (function compile() {
+    var l = document.createElement('a');
+    cfg.resolveURL = function resolveURL(url) {
+      l.href = url;
+      return l.href;
+    };
+  }());
+
   function authSrv(baseURL) {
     var ueColl = encodeURIComponent(cfg.collection),
       fromUrl = window.location.href,
@@ -21,6 +29,16 @@
   }
   window.annoCfgSetUbStyleAuthServer = authSrv;
   authSrv(protoHost + (port ? ':3008/' : '/anno/auth/'));
+
+  cfg.fixBogusRemoteAnnoEndpoint = function (badEndpointRgx) {
+    if (!badEndpointRgx) { badEndpointRgx = /^\S+?\/anno\//; }
+    var r = cfg.resolveURL;
+    function fix(u) { return u.replace(badEndpointRgx, r(cfg.annoEndpoint)); }
+    cfg.customSaveLegacyPreArgsFactories = {
+      reply: function reply(anno) { return [fix(anno.replyTo)]; },
+      revise: function revise(anno) { return [fix(anno.id)]; },
+    };
+  };
 
   window.annoServerCfg = cfg;
 }());

@@ -2,7 +2,7 @@
 /* -*- tab-width: 2 -*- */
 (function () {
   'use strict';
-  var jq = window.jQuery, cfg = {
+  var cfg = {
 
     exportAppAsWindowProp: 'annoApp',
     // ^- In production, rather save the result of displayAnnotations.

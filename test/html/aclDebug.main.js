@@ -12,6 +12,7 @@ window.jQuery().ready(function installLate() {
     annoEndpoint,
     tokenEndpoint,
   } = cfg;
+  const annoEndpointAbs = cfg.resolveURL(annoEndpoint);
 
   const loginFormAttrs = {
     method: 'post',
@@ -41,20 +42,20 @@ window.jQuery().ready(function installLate() {
   const aclMonPanel = testUtil.addTestsPanel('ACL monitor');
   aclMonPanel.addForm(`
     <p>Received at: <span ref="receivedAt">(soon?)</span><br>
-      <textarea name="txa" cols="60" rows="10" wrap="off" class="code"
+      <textarea name="txa" cols="75" rows="30" wrap="off" class="code"
       ></textarea></p>
   `, function setup(form) {
     const { refs } = form;
     const { txa } = form.elements;
     const aclRequest = {
       method: 'post',
-      url: annoEndpoint + 'anno/acl',
+      url: annoEndpointAbs + 'anno/acl',
       contentType: 'application/json; charset=UTF-8',
       data: JSON.stringify({
         targets: [
           '*',
-          annoEndpoint + 'anno/',
-          annoEndpoint + 'anno/dummy',
+          annoEndpointAbs + 'anno/',
+          annoEndpointAbs + 'anno/dummy',
         ],
       }, null, 2),
       dataType: 'text', // <-- don't auto-parse response

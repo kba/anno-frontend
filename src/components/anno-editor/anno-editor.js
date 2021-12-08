@@ -21,6 +21,13 @@ const decideAnnoTarget = require('./decideAnnoTarget.js');
 
 function soon(f) { return setTimeout(f, 1); }
 
+const defaultSaveLegacyPreArgsFactories = {
+  create() { return []; },
+  reply(anno) { return [anno.replyTo]; },
+  revise(anno) { return [anno.id]; },
+};
+
+
 module.exports = {
     mixins: [
         require('@/mixin/l10n'),
@@ -133,6 +140,9 @@ module.exports = {
               l10n,
             } = editor;
             const anno = $store.state.editing;
+            const {
+              customSaveLegacyPreArgsFactories,
+            } = $store.state;
 
             if (!validateEditorFields(editor)) { return; }
 
@@ -150,15 +160,15 @@ module.exports = {
                 $store.dispatch('fetchList')
             }
 
-            const legacyPreArgs = getOwn({
+            const legacyPreArgsFactory = getOwn({
               // :TODO: Improve API so these are no longer required. [ubgl:136]
-              create: [],
-              reply:  [anno.replyTo],
-              revise: [anno.id],
+              ...defaultSaveLegacyPreArgsFactories,
+              ...customSaveLegacyPreArgsFactories,
             }, editMode);
-            if (!legacyPreArgs) {
+            if (!legacyPreArgsFactory) {
               throw new Error('Unsupported editMode: ' + editMode);
             }
+            const legacyPreArgs = legacyPreArgsFactory(anno);
             api[editMode].call(api, ...legacyPreArgs, anno, whenSaved);
             // ^- .call probably required because the API seems to
             //    really be "this" broken.
