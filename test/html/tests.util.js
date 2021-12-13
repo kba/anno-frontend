@@ -4,6 +4,8 @@
 (function setupTestUtils() {
   const tu = {};
   const jq = window.jQuery;
+  function orf(x) { return x || false; }
+  const annoErrors = orf(window.Anno).Errors;
 
   document.body.dataset.htmlFile = window.location.pathname.split('/'
   ).slice(-1)[0].replace(/(\.nm|)\.html$/, '');
@@ -136,7 +138,7 @@
         el.type = (spec.t || (idx && 'button') || 'submit');
         el.value = (spec.v || (spec.name || '').replace(/_/g, ' ') || spec);
         el.className = 'btn btn-default btn-sm btn-outline-secondary';
-        const hnd = (spec.f || spec || false);
+        const hnd = orf(spec.f || spec);
         if (hnd.apply) { el.onclick = hnd; }
         grp.append(el);
         return el;
@@ -172,18 +174,28 @@
     },
 
 
-    err2str(err) {
-      if (err === '') { return 'empty string error'; }
-      if (!err) { return 'false-y error: ' + String(err); }
-      const st = String(err);
-      const oo = '[object Object]';
-      if ((st === oo) && err.responseText && err.statusText) {
-        return (err.status + ' ' + err.statusText + '\n' + err.responseText);
-      }
-      return st;
+    tapPr(descr, pr) {
+      return pr.then(function tapSuccess(val) {
+        console.debug(descr, 'ok', (val && typeof val), [val]);
+        return val;
+      }, function tapError(err) {
+        console.debug(descr, 'ERR', (err && typeof err), [err]);
+        throw err;
+      });
     },
 
 
+    ajax2str(req, convert) {
+      let pr = jq.ajax(req);
+      if (convert) { convert.forEach(c => { pr = pr.then(c); }); }
+      pr = pr.then(testUtil.prettyPrintJson);
+      pr = pr.then(null, annoErrors.augmentWebbrowserError.rethrow);
+      // ^-- 2021-12-14: We need the rethrow variant because returning
+      //     an error-like Object from an error handler makes Firefox 93
+      //     call the next error handler with the original (previous) error.
+      pr = pr.then(String, String);
+      return pr;
+    },
 
 
   });

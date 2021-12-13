@@ -14,6 +14,7 @@ body > main { float: left; width: 40%; margin: 1em; margin-right: 2em; }
 body > chapter aside {
   float: right; margin: 2em;
   border: 1px solid grey; padding: 1ex 1em;
+  background-color: white;
 }
 
 body > chapter aside > fieldset > legend { font: inherit; }

@@ -38,7 +38,6 @@ window.jQuery().ready(function installLate() {
     </p>
   `, loginFormAttrs);
 
-
   const aclMonPanel = testUtil.addTestsPanel('ACL monitor');
   aclMonPanel.addForm(`
     <p>Received at: <span ref="receivedAt">(soon?)</span><br>
@@ -73,14 +72,10 @@ window.jQuery().ready(function installLate() {
     async function update() {
       autoUpd.timer(false);
 
-      const jwtResp = await jq.ajax(jwtRequest)
-        .then(decodeJWT)
-        .then(testUtil.prettyPrintJson)
-        .then(String, testUtil.err2str);
-
-      const aclResp = await jq.ajax(aclRequest)
-        .then(testUtil.prettyPrintJson)
-        .then(String, testUtil.err2str);
+      // The "*Resp" awaits are intentionally in series, so error messages
+      // logged from one are not cluttered by error messages from the other.
+      const jwtResp = await testUtil.ajax2str(jwtRequest, [decodeJWT]);
+      const aclResp = await testUtil.ajax2str(aclRequest);
 
       refs.receivedAt.textContent = testUtil.zDateHr();
       const all = [
