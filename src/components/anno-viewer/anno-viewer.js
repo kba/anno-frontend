@@ -206,6 +206,7 @@ module.exports = {
             return versions[versions.length - 1]
           }
         },
+
         doiPopup() {
           const {annotation, toplevelDoi, l10n} = this
           let ret = `
@@ -365,7 +366,7 @@ module.exports = {
           viewer.$store.commit('INJECTED_MUTATION', [switchVersionInplace]);
         },
 
-        isOlderVersion()     {
+        isOlderVersion() {
           return this.newestVersion.created !== this.annotation.created
         },
 
