@@ -1,6 +1,10 @@
 <bootstrap-button
-  btn-class="default btn-outline-secondary
-    clipboard-copy-button"
+  :btn-class="[
+    'default',
+    'btn-outline-secondary',
+    'clipboard-copy-button',
+    (defaultCls && 'pull-right'),
+  ]"
   :data-clipboard-text="cliptext"
   icon-fa="clipboard">
   <span ref="successLabel"

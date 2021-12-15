@@ -21,7 +21,7 @@ module.exports = {
     alt:         String,
     clickTarget: { type: Object },
     btnSize:     { type: String, default: 'sm' },
-    btnClass:    { type: String, default: 'outline-secondary' },
+    btnClass:    { type: [String, Array], default: 'outline-secondary' },
     elem:        { type: String },
     balloonColorName: { type: String, default: 'secondary' },
     popoverContentOpts: { type: [Object, false, null, undefined] },
