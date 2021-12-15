@@ -185,16 +185,21 @@
     },
 
 
-    ajax2str(req, convert) {
-      let pr = jq.ajax(req);
-      if (convert) { convert.forEach(c => { pr = pr.then(c); }); }
-      pr = pr.then(testUtil.prettyPrintJson);
-      pr = pr.then(null, annoErrors.augmentWebbrowserError.rethrow);
-      // ^-- 2021-12-14: We need the rethrow variant because returning
-      //     an error-like Object from an error handler makes Firefox 93
-      //     call the next error handler with the original (previous) error.
-      pr = pr.then(String, String);
-      return pr;
+    async ajax2str(req, convert) {
+      try {
+        let resp = await jq.ajax(req);
+        if (convert) {
+          convert.forEach(function apply(c) {
+            const tmp = c(resp);
+            if (tmp !== undefined) { resp = tmp; }
+          });
+        }
+        resp = tu.prettyPrintJson(resp);
+        resp = String(resp);
+        return resp;
+      } catch (err) {
+        return String(annoErrors.augmentWebbrowserError(err));
+      }
     },
 
 

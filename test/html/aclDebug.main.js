@@ -46,7 +46,13 @@ window.jQuery().ready(function installLate() {
   `, function setup(form) {
     const { refs } = form;
     const { txa } = form.elements;
-    const aclRequest = {
+    const jwtRequest = {
+      method: 'get',
+      url: tokenEndpoint,
+      xhrFields: { withCredentials: true },
+      dataType: 'text', // <-- don't auto-parse response
+    };
+    const aclRequestDefaults = {
       method: 'post',
       url: annoEndpointAbs + 'anno/acl',
       contentType: 'application/json; charset=UTF-8',
@@ -59,22 +65,23 @@ window.jQuery().ready(function installLate() {
       }, null, 2),
       dataType: 'text', // <-- don't auto-parse response
     };
-    const jwtRequest = {
-      method: 'get',
-      url: tokenEndpoint,
-      xhrFields: { withCredentials: true },
-      dataType: 'text', // <-- don't auto-parse response
-    };
 
     const autoUpd = jq(`<label class="text-nowrap pt-1 mr-2">
       <input type="checkbox"> auto&rarr;</label>`).find('input')[0];
 
     async function update() {
       autoUpd.timer(false);
+      function rawJwt(t) { rawJwt.t = t; }
+      const jwtResp = await testUtil.ajax2str(jwtRequest, [rawJwt, decodeJWT]);
 
-      // The "*Resp" awaits are intentionally in series, so error messages
-      // logged from one are not cluttered by error messages from the other.
-      const jwtResp = await testUtil.ajax2str(jwtRequest, [decodeJWT]);
+      const aclHeaders = {
+        'X-Anno-Collection': 'default',
+      };
+      if (rawJwt.t) { aclHeaders.Authorization = 'Bearer ' + rawJwt.t; }
+      const aclRequest = {
+        ...aclRequestDefaults,
+        headers: aclHeaders,
+      }
       const aclResp = await testUtil.ajax2str(aclRequest);
 
       refs.receivedAt.textContent = testUtil.zDateHr();
