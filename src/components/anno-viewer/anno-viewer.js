@@ -75,6 +75,9 @@ module.exports = {
         highlighted: false,
         mintDoiError: null,
         showMintDoiError: null,
+        detailBarClipCopyBtnCls: 'pull-right',
+        doiResolverBaseUrl: 'https://doi.org/',
+        latestRevisionDoi: this.$options.propsData.annotation.doi || '',
       }
     },
 
@@ -94,7 +97,6 @@ module.exports = {
     },
 
   beforeCreate() {
-    this.toplevelDoi = this.$options.propsData.annotation.doi;
     this.dataApi = bindDataApi(this);
   },
 
@@ -149,6 +151,8 @@ module.exports = {
           return licInfo = (licensesByUrl.get(licUrl) || false);
           return licInfo;
         },
+
+        currentRevisionDoi() { return this.annotation.doi || ''; },
 
         licenseTitleOrUnknown() {
           return (this.currentLicense.title
@@ -206,39 +210,6 @@ module.exports = {
             return versions[versions.length - 1]
           }
         },
-        doiPopup() {
-          const {annotation, toplevelDoi, l10n} = this
-          let ret = `
-            `
-          ret += l10n('doi.of.annotation')
-          ret += ': <br/>'
-          ret += `
-            <button data-clipboard-text="https://doi.org/${toplevelDoi}" class="btn btn-default btn-outline-secondary btn-sm">
-              <span class="fa fa-clipboard"></span>
-              <span class="label label-success" style="display: none">${l10n("copied_to_clipboard")}</span>
-            </button>
-            <a href="https://doi.org/${toplevelDoi}">
-              https://doi.org/${toplevelDoi}
-            </a>
-          `
-          // console.log(annotation.doi, toplevelDoi)
-          const versionDoi = annotation.doi
-          if (versionDoi) {
-            ret += '<br/>'
-            ret += l10n('doi.of.annotation.revision')
-            ret += ':<br/>'
-            ret += `
-            <button data-clipboard-text="https://doi.org/${versionDoi}" class="btn btn-default btn-outline-secondary btn-sm">
-              <span class="fa fa-clipboard"></span>
-              <span class="label label-success" style="display: none">${l10n("copied_to_clipboard")}</span>
-            </button>
-            <a href="https://doi.org/${versionDoi}">
-              https://doi.org/${versionDoi}
-            </a>
-            `
-          }
-          return ret
-        }
     },
 
     methods: {
@@ -365,7 +336,7 @@ module.exports = {
           viewer.$store.commit('INJECTED_MUTATION', [switchVersionInplace]);
         },
 
-        isOlderVersion()     {
+        isOlderVersion() {
           return this.newestVersion.created !== this.annotation.created
         },
 
@@ -377,6 +348,8 @@ module.exports = {
           const viewer = this;
           viewer.cachedIiifLink = xrxUtilsUtils.calcIiifLink(viewer);
         },
+
+        doi2url(doi) { return this.doiResolverBaseUrl + doi; },
 
     },
 }

@@ -14,6 +14,7 @@ const components = {
     'anno-viewer-versions-dropdown': require('./anno-viewer-versions-dropdown'),
     'anno-viewer-thumbnail-svg': require('./anno-viewer-thumbnail-svg'),
     'clipboard-copy-button': require('./clipboard-copy-button'),
+    'dt-url-caption-link': require('./dt-url-caption-link'),
 
     // editing
     'anno-editor-licenses':       require('./anno-editor-licenses'),

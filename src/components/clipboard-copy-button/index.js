@@ -11,6 +11,7 @@ module.exports = {
 
   props: {
     cliptext:     { type: String, required: true },
+    defaultCls:   { type: Boolean, default: true },
   },
 
   template: require('./ccb.html'),

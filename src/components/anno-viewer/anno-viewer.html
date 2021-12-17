@@ -119,14 +119,13 @@
             </button>
 
             <button class="btn btn-sm btn-secondary"
-              v-if="annotation.doi"
-              data-toggle="popover"
-              data-html="true"
-              data-placement="left"
-              data-focus-dismiss
+              v-if="latestRevisionDoi"
+              @click="toggleDetailBar"
+              data-detailbar="doi"
               :title="l10n('doi')"
-              :data-content="doiPopup">
-              <i class="fa fa-link"></i> DOI
+              >
+              <i class="fa fa-link"></i>
+              {{ l10n('doi') }}
             </button>
 
             <button class="btn btn-sm btn-secondary
@@ -158,16 +157,12 @@
             <dd>{{ dateFmt(annotation.modified) || '&nbsp;' }}</dd>
           </dl>
 
-          <dl class="detailbar-purl"><dt>
-            <clipboard-copy-button
-              class="pull-right"
-              :cliptext="purl" />
-            {{ l10n('purl') }}:
-          </dt><dd>
-            <a :href="purl"
-              class="url-caption-link"
-              >{{ purl }}</a>
-          </dd></dl>
+          <dl class="detailbar-purl">
+            <dt-url-caption-link
+              :caption="l10n('purl')"
+              :url="purl"
+              />
+          </dl>
 
           <dl class="detailbar-license"><dt>
             {{ l10n('License') }}: {{ licenseTitleOrUnknown }}
@@ -175,6 +170,18 @@
             {{ l10n(currentLicense.user_desc) }}
           </dd></dl>
 
+          <dl class="detailbar-doi"
+            v-if="latestRevisionDoi"
+            >
+            <dt-url-caption-link
+              :caption="l10n('doi.of.annotation')"
+              :url="doi2url(latestRevisionDoi)"
+              />
+            <dt-url-caption-link
+              :caption="l10n('doi.of.annotation.revision')"
+              :url="doi2url(currentRevisionDoi)"
+              />
+          </dl>
         </div><!-- .detailbars -->
 
         <div class="well old_version" v-show="isOlderVersion()">
