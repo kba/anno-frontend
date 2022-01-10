@@ -1,6 +1,6 @@
 { "name": "anno-frontend",
   "private": true,
-  "version": "0.7.2112151906",
+  "version": "0.7.2201100441",
   "description": "UB Heidelberg Annotations Web Frontend",
   "main": "entry.js",
   "scripts": {
@@ -28,6 +28,8 @@
     "bootstrap3": "^3.3.5",
     "font-awesome": "^4.7.0",
     "jquery": "^3.6.0",
+    "jwt-decode": "^2.2.0",
+    "lodash.mapvalues": "^4.6.0",
     "quill": "^1.3.7",
     "semtonotes-client": "^0.2.3",
     "semtonotes-utils": "^0.2.2"
@@ -51,9 +53,7 @@
     "file-loader": "^5.0.2",
     "getown": "^1.0.0",
     "html-loader": "^0.5.5",
-    "jwt-decode": "^2.2.0",
     "lodash.get": "^4.4.2",
-    "lodash.mapvalues": "^4.6.0",
     "lodash.pick": "^4.4.0",
     "lodash.set": "^4.3.2",
     "merge-options": "^3.0.4",
