@@ -1,6 +1,7 @@
 ﻿@charset "UTF-8";
 /* -*- coding: UTF-8, tab-width: 2 -*- */
 
+html { font-size: 15px; }
 body > main { float: left; width: 40%; margin: 1em; margin-right: 2em; }
 
 .sidebar-container { overflow: auto; }
