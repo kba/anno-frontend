@@ -15,7 +15,10 @@
     "type": "git",
     "url": "https://github.com/kba/anno-frontend"
   },
-  "author": "kba",
+  "author": "Heidelberg University Library (https://www.ub.uni-heidelberg.de/)",
+  "contributors": [
+    "Konstantin Baierer (https://github.com/kba/)"
+  ],
   "license": "MIT",
   "dependencies": {
     "@kba/xrx-vue": "^0.0.22",
