@@ -28,7 +28,9 @@ const revisionsProps = require('./revisionsProps.js');
  *   colapsing, smaller etc.)
  * - `purlTemplate` A string template for the persistent URL. `{{ slug }}` will
  *   be replaced by the slug of the annotation
- * - `purlId` The URL of the persistently adressed annotation
+ * - `purlId` The URL of the persistently adressed annotation.
+ *   This is the legacy solution for highlighting an annotation when the
+ *   annoApp was loaded from a PURL redirect.
  * - `collapseInitially`: Whether the anntotation should be collapsed after
  *   first render
  * - `imageWidth`: Width of the image this annotation is about, if any

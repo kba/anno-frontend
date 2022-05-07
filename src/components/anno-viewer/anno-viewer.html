@@ -5,7 +5,9 @@
     'panel-default',
     'annoeditor-viewer',
     (this.highlighted && 'annoeditor-highlight'),
-    (this.isPurl && 'annoeditor-purl'),
+    ((this.annotation.id === this.purlId
+      // ^-- A legacy highlighting mechanism. See `anno-viewer.js`.
+      ) && 'annoeditor-purl'),
     (this.asReply && 'annoeditor-reply'),
   ].filter(Boolean)"
   v-on:mouseover.stop="mouseenter"
