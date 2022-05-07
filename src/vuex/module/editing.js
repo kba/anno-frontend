@@ -52,8 +52,9 @@ const mutations = {
 
 
     SET_HTML_BODY_VALUE(state, v) {
-        if (!textualHtmlBody.first(state))
+        if (!textualHtmlBody.first(state)) {
             add(state, 'body', textualHtmlBody.create())
+        }
         textualHtmlBody.first(state).value = v
     },
 
