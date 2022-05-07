@@ -35,7 +35,7 @@ shellPluginEvents.forEach(function registerHook(ev) {
 module.exports = {
   entry: './entry.js',
   mode: (function guessAudience() {
-    let a = (process.env.WEBPACK_AUDIENCE || 'dev');
+    const a = (process.env.WEBPACK_AUDIENCE || 'dev');
     if (a === 'prod') { return 'production'; }
     if (a === 'dev') { return 'development'; }
     return a;
