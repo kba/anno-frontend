@@ -34,7 +34,7 @@
           <a
             @mouseenter="startHighlighting(id)"
             @mouseleave="stopHighlighting(id)"
-            >{{ purl(id) }}</a>
+            >{{ this.annoIdToPermaUrl(id) }}</a>
         </component>
         <component :is="bootstrapOpts.tags.modalHeaderTitle"
           class="modal-title"
@@ -43,7 +43,7 @@
           <a
             @mouseenter="startHighlighting(replyTo)"
             @mouseleave="stopHighlighting(replyTo)"
-            >{{ purl(replyTo) }}</a>
+            >{{ this.annoIdToPermaUrl(replyTo) }}</a>
         </component>
 
         <div class="top-right-buttons ml-auto text-nowrap"

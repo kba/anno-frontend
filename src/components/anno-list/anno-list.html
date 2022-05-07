@@ -159,7 +159,6 @@
     <slot name="annot-list-empty" v-if="!list.length" />
     <anno-viewer v-for="annotation in list" :key="annotation.id"
       :annotation="annotation"
-      :purl-template="purlTemplate"
       :purl-id="purlId"
       :as-reply=false
       :image-width="$store.state.targetImageWidth"

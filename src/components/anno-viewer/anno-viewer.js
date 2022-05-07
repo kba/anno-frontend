@@ -26,8 +26,6 @@ const revisionsProps = require('./revisionsProps.js');
  * - **`annotation`**: The annotation this viewer shows
  * - `asReply`: Whether the annotation should be displayed as a reply (no
  *   colapsing, smaller etc.)
- * - `purlTemplate` A string template for the persistent URL. `{{ slug }}` will
- *   be replaced by the slug of the annotation
  * - `purlId` The URL of the persistently adressed annotation.
  *   This is the legacy solution for highlighting an annotation when the
  *   annoApp was loaded from a PURL redirect.
@@ -61,6 +59,7 @@ module.exports = {
     style:    require('./anno-viewer.scss'),
 
     mixins: [
+      require('../../mixin/annoUrls.js'),
       require('../../mixin/api'),
       require('../../mixin/auth'),
       require('../../mixin/dateFmt'),
@@ -85,7 +84,6 @@ module.exports = {
 
     props: {
         annotation: {type: Object, required: true},
-        purlTemplate: {type: String, required: false},
         purlId: {type: String, required: false},
         // Controls whether comment is collapsible or not
         asReply: {type: Boolean, default: false},
@@ -184,25 +182,12 @@ module.exports = {
         },
 
         purl() {
-          const { id, purlTemplate } = this;
-          if (!id) { return ''; }
-          if (!purlTemplate) { return id; }
-          const slots = {
-            slug: String(id || '').split(/\//).slice(-1)[0],
-            // :TODO: ^- Improved formula for original behavior, but shouldn't
-            //    this actually be this.slug()? [ubhd:148]
-          };
-          function getSlot(m, k) { return getOwn(slots, k, m); }
-          const purl = purlTemplate.replace(/\{{2}\s*(\w+)\s*\}{2}/g, getSlot);
-          return purl;
+          return this.annoIdToPermaUrl(this.annotation.id);
         },
 
         slug() {
             if (!this.annotation.id) return 'unsaved-annotation-' + Date.now()
             return this.annotation.id.replace(/[^A-Za-z0-9]/g, '')
-        },
-        isPurl() {
-            return this.annotation.id === this.purlId
         },
         newestVersion() {
           const versions = this.annotation.hasVersion

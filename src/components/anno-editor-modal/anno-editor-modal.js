@@ -14,6 +14,7 @@ const bootstrapCompat = require('../../bootstrap-compat');
 
 module.exports = {
     mixins: [
+        require('../../mixin/annoUrls.js'),
         require('../../mixin/auth.js'),
         require('../../mixin/l10n.js'),
         require('../../mixin/prefix.js'),
@@ -28,7 +29,6 @@ module.exports = {
     computed: {
         id()           {return this.$store.state.editing.id},
         doi()          {return this.$store.state.editing.doi},
-        purlTemplate() {return this.$store.state.purlTemplate},
         editMode()     {return this.$store.state.editMode},
         replyTo()      {return this.$store.state.editing.replyTo},
         editor()       {return this.$refs['editor']},
@@ -67,11 +67,6 @@ module.exports = {
 
         hide() { this.updateModal('hide'); },
 
-        purl(id) {
-            return (this.purlTemplate && id)
-                ? this.purlTemplate
-                    .replace('{{ slug }}', id.replace(/.*\//, ''))
-                : id ? id : ''
-        },
     },
-}
+
+};

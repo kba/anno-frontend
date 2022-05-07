@@ -20,7 +20,9 @@ const srvCfg = {
     '.html',
   ].join(''),
 
-  annoEndpoint: '', // URL of the Open Annotation Protocol server.
+  annoEndpoint: '', /*
+    URL of the Web Annotation Protocol server. Should end with a slash.
+  */
 
   collection: 'default',
 
@@ -29,10 +31,15 @@ const srvCfg = {
     For discussion of JWT risks, see docs/security/jwt.md.
   */
 
-  purlTemplate: '', /*
-    A string template for the persistent URL.
-    `{{ slug }}` will be replaced by the slug of the annotation.
-  */
+  purlTemplate: [
+    /* Template for generating persistent anno URLs. For details, see
+      `../mixin/annoUrls.js`.
+    */
+
+    '%ep', // annoEndpoint
+    'anno/',
+    '%sl', // slug of the annotation
+  ].join(''),
 
 };
 
