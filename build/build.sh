@@ -11,6 +11,19 @@ function build_cli () {
 }
 
 
+function build_lint () {
+  echo 'Lint…'
+  local LINT_CMD=(
+    eslint
+    --ext='js,mjs'
+    --
+    src/
+    *.js
+    )
+  "${LINT_CMD[@]}" || return $?
+}
+
+
 function build_dev () {
   WEBPACK_AUDIENCE= webpack || return $?
 }
@@ -22,6 +35,7 @@ function build_prod () {
 
 
 function build_all () {
+  build_lint || return $?
   build_dev || return $?
   build_prod || return $?
 }

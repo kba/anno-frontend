@@ -19,6 +19,12 @@
   "contributors": [
     "Konstantin Baierer (https://github.com/kba/)"
   ],
+
+
+  "eslintConfig": {
+    "extends": ["nodejs-pmb", "./eslint.overrides.js"]
+  },
+
   "license": "MIT",
 
 
