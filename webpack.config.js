@@ -22,7 +22,7 @@ const shellPluginEvents = [
   'onAfterDone',
 ];
 shellPluginEvents.forEach(function registerHook(ev) {
-  const hookCmd = ('./util/webpack-hooks.sh '
+  const hookCmd = ('./build/webpack-hooks.sh '
     + ev.replace(/([A-Z])/g, '_$1').toLowerCase());
   shellPluginOpts[ev] = {
     scripts: [hookCmd],
