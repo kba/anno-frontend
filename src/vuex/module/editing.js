@@ -22,12 +22,6 @@ function initialState() {return {
 }}
 
 //
-// initial state
-//
-
-const state = initialState()
-
-//
 // getters
 //
 
@@ -147,7 +141,7 @@ const mutations = {
 }
 
 module.exports = {
-    state,
+    state: initialState(),
     getters,
     mutations,
 }

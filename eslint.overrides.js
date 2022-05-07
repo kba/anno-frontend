@@ -24,7 +24,6 @@ const offs = [
   'no-nested-ternary',
   'no-param-reassign',
   'no-return-assign',
-  'no-shadow',
   'no-undef',
   'no-underscore-dangle',
   'no-unneeded-ternary',
