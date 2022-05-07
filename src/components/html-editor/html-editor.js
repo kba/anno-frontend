@@ -1,4 +1,4 @@
-const quill = require('quill/dist/quill.js')
+const Quill = require('quill/dist/quill.js')
 
 // const { textualHtmlBody } = require('@kba/anno-queries')
 
@@ -23,7 +23,7 @@ module.exports = {
     template: require('./html-editor.html'),
     mounted() {
         const {l10n} = this
-        this.quill = new quill(this.$refs.editor, {
+        this.quill = new Quill(this.$refs.editor, {
             modules: {
                 toolbar: {
                     container: this.$refs.toolbar,
@@ -41,7 +41,7 @@ module.exports = {
                             this.quill.getSelection().index,
                             'image',
                             value,
-                            quill.sources.USER)
+                            Quill.sources.USER)
                         },
                     }
                 }
