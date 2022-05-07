@@ -8,8 +8,9 @@ const checkAuth = require('../mixin/auth.js').methods.$auth;
 const hasOwn = Function.call.bind(Object.prototype.hasOwnProperty);
 
 
-async function composeAnno(vuexApi, param) {
+async function composeAnno(vuexApi, origParam) {
   const { state, commit } = this.vuexApi;
+  const param = { ...origParam };
 
   const authMode = param.authorized;
   /* ^-- How to deal with potentially lacking authorization.
