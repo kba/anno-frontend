@@ -24,7 +24,6 @@ const offs = [
   'no-nested-ternary',
   'no-param-reassign',
   'no-return-assign',
-  'no-undef',
   'no-underscore-dangle',
   'no-unneeded-ternary',
   'no-unreachable',
@@ -44,5 +43,9 @@ const offs = [
 offs.forEach((r) => { rules[r] = 'off'; });
 
 module.exports = {
+  env: {
+    es6: true,
+    browser: true,
+  },
   rules,
 };

@@ -148,7 +148,7 @@ module.exports = {
 
         currentLicense() {
           const licUrl = this.annotation.rights;
-          return licInfo = (licensesByUrl.get(licUrl) || false);
+          const licInfo = (licensesByUrl.get(licUrl) || false);
           return licInfo;
         },
 
@@ -242,7 +242,8 @@ module.exports = {
 
         showMintDoiPopover(event) {
           const vm = this
-          const popoverTrigger = $(event.target)
+          const jq = window.jQuery;
+          const popoverTrigger = jq(event.target);
           // TODO remove the popup init from here
           if (!("mintDoiPopoverCreated" in this) || !this.mintDoiPopoverCreated) {
             console.log("init popover")
@@ -250,9 +251,9 @@ module.exports = {
             popoverTrigger.on('shown.bs.popover', (ev) => {
               const popoverDiv = document.getElementById(popoverTrigger.attr("aria-describedby"))
               Array.from(popoverDiv.querySelectorAll("[data-click]")).forEach(button => {
-                const clickAttr = $(button).data('click')
+                const clickAttr = jq(button).data('click');
                 if (clickAttr == 'mintDoi') {
-                  $(button).on('click', () => {
+                  jq(button).on('click', () => {
                     popoverTrigger.popover('hide')
                     vm.mintDoi().catch( (error) => {
                       vm.mintDoiError = error
@@ -260,7 +261,7 @@ module.exports = {
                   })
                 }
                 else {
-                  $(button).on('click', () => { popoverTrigger.popover('hide') })
+                  jq(button).on('click', () => { popoverTrigger.popover('hide') })
                 }
               })
             })
