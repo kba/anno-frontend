@@ -1,6 +1,3 @@
-// -*- coding: utf-8, tab-width: 2 -*-
-'use strict';
-
 const ada = {
 
   findTargetSelectors(anno, opt) {
