@@ -82,16 +82,13 @@ module.exports = {
   },
   module: {
     rules: [
-      {
-        test: /png$/i,
+      { test: /\.png$/i,
         loader: 'url-loader',
       },
-      {
-        test: /svg$/i,
+      { test: /\.svg$/i,
         loader: 'url-loader',
       },
-      {
-        test: /components\/.*?\.html$/,
+      { test: /\/src\/components\/\S+.html$/,
         use: {
           loader: 'html-loader',
           options: {
@@ -99,32 +96,22 @@ module.exports = {
           },
         },
       },
-      {
-        test: /.*\.js$/,
-        exclude: /node_modules/,
+      { test: /\.js$/,
+        exclude: /\/node_modules\//,
         use: {
           loader: 'babel-loader',
-          options: {
-            cacheDirectory: true,
-          },
+          options: { cacheDirectory: true },
         },
       },
-      {
-        test: /components\/.*?\.s?[ac]ss$/,
+      { test: { or: [
+          /\/node_modules\/quill\/\S+\.css$/,
+          /\/src\/components\/\S+\.(s?css|sass)$/,
+        ] },
         use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true,
-            },
-          },
-          {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: true,
-            },
-          },
+          // Order might be important here!
+          { loader: 'style-loader' },
+          { loader: 'css-loader', options: { sourceMap: true } },
+          { loader: 'sass-loader', options: { sourceMap: true } },
         ],
       },
     ],

@@ -1,5 +1,4 @@
 const quill = require('quill/dist/quill.js')
-require('style-loader!css-loader!quill/dist/quill.snow.css')
 
 // const { textualHtmlBody } = require('@kba/anno-queries')
 
@@ -17,7 +16,10 @@ module.exports = {
         require('@/mixin/l10n'),
         require('@/mixin/prefix'),
     ],
-    style: require('./html-editor.scss'),
+    style: [
+      require('quill/dist/quill.snow.css'),
+      require('./html-editor.scss'),
+    ],
     template: require('./html-editor.html'),
     mounted() {
         const {l10n} = this
