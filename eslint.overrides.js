@@ -26,7 +26,6 @@ const offs = [
   'no-return-assign',
   'no-underscore-dangle',
   'no-unneeded-ternary',
-  'no-unreachable',
   'no-unused-vars',
   'object-curly-spacing',
   'object-property-newline',

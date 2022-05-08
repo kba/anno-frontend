@@ -20,7 +20,9 @@ function build_lint () {
     src/
     *.js
     )
+  SECONDS=0
   "${LINT_CMD[@]}" || return $?
+  echo "Linter had no complaints, took $SECONDS sec."
 }
 
 
