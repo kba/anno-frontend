@@ -59,7 +59,7 @@ module.exports = {
     compress: true,
   },
   externals: {
-    'jquery': '$',
+    'jquery': 'jQuery',
     'quill/dist/quill.js': 'Quill',
     'axios': 'axios',
     '@ubhd/authorities-client': 'AuthoritiesClient',
@@ -73,11 +73,6 @@ module.exports = {
   resolve: {
     alias: {
       '@': absPath('src'),
-      // 'vue$': 'vue/dist/vue.esm.js',
-      'vue$': 'vuejs-debug-traverse-210506-pmb/vue.esm.js',
-      'vuex$': 'vuex/dist/vuex.esm.js',
-      'quill$': 'quill/dist/quill.min.js',
-      // 'axios': 'axios/dist/axios.min.js',
     },
   },
   module: {

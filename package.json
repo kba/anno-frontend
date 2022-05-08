@@ -39,7 +39,6 @@
     "ceson": "^0.1.5",
     "clipboard": "^1.7.1",
     "dateformat": "^2.2.0",
-    "font-awesome": "^4.7.0",
     "getown": "^1.0.0",
     "jquery": "^3.6.0",
     "jwt-decode": "^2.2.0",
@@ -57,6 +56,7 @@
     "vue": "^2.6.12",
     "vue-frag": "^1.3.1",
     "vue2-teleport": "^1.0.1",
+    "vuejs-debug-traverse-210506-pmb": "mk-pmb/vuejs-debug-traverse-210506-pmb-js#master",
     "vuex": "vuejs/vuex#3.x",
     "web-storage-es6": "^1.2.0"
   },
@@ -75,6 +75,7 @@
     "eslint-config-nodejs-pmb": "^0.3.4",
     "eslint-plugin-json-light-pmb": "^1.0.7",
     "eslint-plugin-node": "^11.1.0",
+    "font-awesome": "^4.7.0",
     "html-loader": "^0.5.5",
     "sass": "^1.43.2",
     "sass-loader": "^8.0.2",
@@ -82,7 +83,6 @@
     "style-loader": "^1.3.0",
     "tap": "^14.11.0",
     "url-loader": "^3.0.0",
-    "vuejs-debug-traverse-210506-pmb": "mk-pmb/vuejs-debug-traverse-210506-pmb-js#master",
     "webpack": "^5.53.0",
     "webpack-cli": "^4.8.0",
     "webpack-shell-plugin-next": "^2.2.2"

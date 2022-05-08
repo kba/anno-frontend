@@ -1,9 +1,16 @@
-const Vue = require('vue').default;
-const Vuex = require('vuex').default;
+// const Vue = require('vue/dist/vue.esm.js').default;
+const Vue = require('vuejs-debug-traverse-210506-pmb/vue.esm.js').default;
+const Vuex = require('vuex/dist/vuex.esm.js').default;
+
 const mergeOptions = require('merge-options');
 const pEachSeries = require('p-each-series').default;
 
-Vue.use(Vuex)
+if (process.env.NODE_ENV !== 'production') {
+  Vue.config.devtools = true;
+  console.log('anno-frontend: Enabled Vue devtools.');
+}
+Vue.use(Vuex);
+require('./components/index.js').registerAll(Vue);
 
 const SidebarApp = require('./components/sidebar-app')
 const eventBus = require('./event-bus')

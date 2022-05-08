@@ -1,3 +1,5 @@
+'use strict';
+
 const vue2Teleport = require('vue2-teleport').default;
 
 const components = {
@@ -34,10 +36,10 @@ const components = {
     // apps
     'sidebar-app':       require('./sidebar-app')
 
-}
+};
 
 function registerAll(Vue) {
-  Object.entries(components).forEach(kv => Vue.component(...kv))
+  Object.entries(components).forEach(kv => Vue.component(...kv));
 }
 
-module.exports = registerAll
+module.exports = { registerAll };
