@@ -10,9 +10,13 @@
   overflow: visible;
   /* ^-- This changed between bootstrap 3.1 and 3.2 for panels */
 
+  .annoeditor-iiif-link a,
   .url-caption-link {
     word-wrap: break-all;
   }
+
+  .annoeditor-iiif-link { font-size: smaller; }
+  .annoeditor-iiif-link strong { font-weight: inherit; }
 
   & > .panel-heading {
     background: #e8e8e8;
