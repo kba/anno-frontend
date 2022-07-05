@@ -231,7 +231,7 @@
         </div>
 
         <div class="annoeditor-iiif-link"
-          v-if="iiifUrlTemplate && svgTarget"
+          v-if="$store.state.iiifUrlTemplate && svgTarget"
           ><strong>{{ l10n('iiif_link') }}:</strong>
           <a class="render-iiif-link"
             role="button"
@@ -317,9 +317,6 @@
         as-reply
         :purl-id="purlId"
         :annotation="reply"
-        :image-width="imageWidth"
-        :image-height="imageHeight"
-        :iiif-url-template="iiifUrlTemplate"
         />
 
     </template>

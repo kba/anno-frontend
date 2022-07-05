@@ -31,9 +31,9 @@ module.exports = {
       const appCfg = thumb.$store.state;
       const st = {};
       Object.keys(xrxStyleProps).forEach(function add(propName) {
-        const opt = propName.replace(/^thumb(\w)/,
+        const xrxOptName = propName.replace(/^thumb(\w)/,
           function fmt(m, l) { return (m && l.toLowerCase()); });
-        st[opt] = getOwn(thumb, propName, appCfg[propName]);
+        st[xrxOptName] = getOwn(thumb, propName, appCfg[propName]);
       });
       return st;
     },

@@ -160,12 +160,7 @@
     <anno-viewer v-for="annotation in list" :key="annotation.id"
       :annotation="annotation"
       :purl-id="purlId"
-      :as-reply=false
-      :image-width="$store.state.targetImageWidth"
-      :image-height="$store.state.targetImageHeight"
-      :thumb-stroke-color="$store.state.thumbStrokeColor"
-      :thumb-fill-color="$store.state.thumbStrokeColor"
-      :iiif-url-template="$store.state.iiifUrlTemplate"
+      :as-reply="false"
       >
     </anno-viewer>
   </div>

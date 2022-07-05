@@ -7,8 +7,8 @@ const autoDefault = require('require-mjs-autoprefer-default-export-pmb');
 const parseSimpleSvgMeta = autoDefault(require('parse-simple-svg-meta-pmb'));
 
 const errTrace = 'While calculating IIIF bounds from SVG: ';
-const errMsgSizeRequired = ('When IIIF region support is enabled, viewer'
-  + ' instance options imageWidth and imageHeight must be positive numbers.');
+const errMsgSizeRequired = ('When IIIF region support is enabled,'
+  + ' targetImageWidth and targetImageHeight must be positive numbers.');
 
 
 function bboxAxisToPct(max, start, end) {
@@ -44,6 +44,14 @@ const xuu = {
   },
 
   suggestSvgSelectorViewport(annoViewerInst, svgSel) {
+    const cfg = (annoViewerInst.$store.state || false);
+
+    // Rely on editor config for target image dimensions,
+    // to save us from detecting image size via DOM operations.
+    const timW = (+cfg.targetImageHeight || 0);
+    const timH = (+cfg.targetImageHeight || 0);
+    if ((timW < 1) || (timH < 1)) { throw new RangeError(errMsgSizeRequired); }
+
     const s = parseSimpleSvgMeta(svgSel);
     const {
       widthPx,
@@ -52,12 +60,6 @@ const xuu = {
       heightFrac,
     } = s;
     if (widthPx && heightPx) { return { w: widthPx, h: heightPx, s }; }
-
-    // Rely on editor config for target image dimensions,
-    // to save us from detecting image size via DOM operations.
-    const timW = (+annoViewerInst.imageWidth || 0);
-    const timH = (+annoViewerInst.imageHeight || 0);
-    if ((timW < 1) || (timH < 1)) { throw new RangeError(errMsgSizeRequired); }
 
     if (widthPx) {
       /* Contrive a viewport that preserves aspect ratio.

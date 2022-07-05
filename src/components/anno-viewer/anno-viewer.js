@@ -1,4 +1,5 @@
-const getOwn = require('getown');
+'use strict';
+
 const {
     relationLinkBody,
     textualHtmlBody,
@@ -31,12 +32,6 @@ const revisionsProps = require('./revisionsProps.js');
  *   annoApp was loaded from a PURL redirect.
  * - `collapseInitially`: Whether the anntotation should be collapsed after
  *   first render
- * - `imageWidth`: Width of the image this annotation is about, if any
- * - `imageHeight`: Height of the image this annotation is about, if any
- * - `iiifUrlTemplate`: URL template for the IIIF link if this annotation
- *   contains zones about an image. The string `{{ iiifRegion }}` is replaced
- *   with a IIIF Image API conformant region specification that contains the
- *   bounding box of all zones in this annotation.
  *
  * #### Events
  *
@@ -68,33 +63,31 @@ module.exports = {
     ],
 
     data() {
-      return {
+      const el = this;
+      const anno = (el.annotation || false);
+      const initData = {
         bootstrapOpts: bootstrapCompat.sharedConfig,
         cachedIiifLink: '',
-        collapsed: this.collapseInitially,
-        currentVersion: this.initialAnnotation,
+        collapsed: el.collapseInitially,
+        currentVersion: el.initialAnnotation,
         highlighted: false,
         mintDoiError: null,
         showMintDoiError: null,
         detailBarClipCopyBtnCls: 'pull-right',
         doiResolverBaseUrl: 'https://doi.org/',
-        latestRevisionDoi: this.$options.propsData.annotation.doi || '',
-      }
+        latestRevisionDoi: anno.doi,
+      };
+      return initData;
     },
 
-    props: {
-        annotation: {type: Object, required: true},
-        purlId: {type: String, required: false},
-        // Controls whether comment is collapsible or not
-        asReply: {type: Boolean, default: false},
-        collapseInitially: {type: Boolean, default: false},
-        imageWidth: {type: Number, default: -1},
-        imageHeight: {type: Number, default: -1},
-        iiifUrlTemplate: {type: String, default: null},
-        thumbStrokeColor: {type: String, default: '#090'},
-        thumbFillColor: {type: String, default: '#090'},
-        acceptEmptyAnnoId: { type: Boolean, default: false },
-    },
+  props: {
+    annotation: { type: Object, required: true },
+    purlId: { type: String, required: false },
+    asReply: { type: Boolean, default: false },
+    // ^-- Controls whether comment is collapsible or not
+    collapseInitially: { type: Boolean, default: false },
+    acceptEmptyAnnoId: { type: Boolean, default: false },
+  },
 
   beforeCreate() {
     this.dataApi = bindDataApi(this);
@@ -235,7 +228,7 @@ module.exports = {
           if (!("mintDoiPopoverCreated" in this) || !this.mintDoiPopoverCreated) {
             console.log("init popover")
             popoverTrigger.popover()
-            popoverTrigger.on('shown.bs.popover', (ev) => {
+            popoverTrigger.on('shown.bs.popover', (/* ev */) => {
               const popoverDiv = document.getElementById(popoverTrigger.attr("aria-describedby"))
               Array.from(popoverDiv.querySelectorAll("[data-click]")).forEach(button => {
                 const clickAttr = jq(button).data('click');
