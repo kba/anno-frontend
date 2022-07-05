@@ -48,7 +48,7 @@ const annoList = {
     },
     actions: {
 
-        sort({commit, state}, sortBy) {
+        sort({commit}, sortBy) {
             commit('SORT_LIST', sortBy)
         },
 

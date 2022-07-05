@@ -1,12 +1,7 @@
-const axios = require('axios')
 const bonanza = require('bonanza')
 const authorities = require('@ubhd/authorities-client')
 const authHelpers = authorities.utils.handlebars.helpers;
 const gndClient = authorities.plugin('ubhd/gnd')
-
-const {
-  semanticTagBody,
-} = require('@kba/anno-queries');
 
 /*
  * ### semtags-editor

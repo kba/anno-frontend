@@ -84,7 +84,7 @@ module.exports = {
         zoneEditor.$on('load-image', () => {
           editor.loadSvg();
         });
-        zoneEditor.$on('svg-changed', svg => {
+        zoneEditor.$on('svg-changed', (/* svg */) => {
           const { thumbnail } = editor.$refs.preview.$refs;
           if (!thumbnail) { return; }
           thumbnail.reset();
@@ -150,7 +150,7 @@ module.exports = {
               if (!window.confirm(l10n('confirm_publish'))) { return; }
             }
 
-            function whenSaved(err, newAnno) {
+            function whenSaved(err/* , newAnno */) {
                 if (err) {
                     console.error("Error saving annotation", err)
                     return
@@ -199,7 +199,7 @@ module.exports = {
           });
         },
 
-        create(annotation) {
+        create(/* annotation */) {
           const editor = this;
           const { commit, state } = editor.$store;
           commit('SET_EDIT_MODE', 'create')

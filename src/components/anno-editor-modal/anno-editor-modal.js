@@ -58,7 +58,7 @@ module.exports = {
           $(dialogDomElem).modal(opt);
         },
 
-        show(annotation) {
+        show(/* annotation */) {
           this.updateModal({
             keyboard: false,
             backdrop: 'static',

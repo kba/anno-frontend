@@ -1,5 +1,3 @@
-const bonanza = require('bonanza')
-
 /*
  * ### relationlinks-editor
  *

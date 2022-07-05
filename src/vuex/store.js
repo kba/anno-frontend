@@ -68,7 +68,7 @@ module.exports = {
           sessionStore.put('authToken', token);
         },
 
-        DELETE_TOKEN(state, token) {
+        DELETE_TOKEN(state/* , token */) {
           state.token = null;
           sessionStore.del('authToken');
         },
@@ -112,7 +112,7 @@ module.exports = {
           return func(vuexApi);
         },
 
-        assumeLoggedOut({state, commit}) {
+        assumeLoggedOut({commit}) {
             commit('DELETE_TOKEN')
             commit('EMPTY_ACL')
         },

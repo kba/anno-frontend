@@ -10,11 +10,6 @@ function unixTime() { return Math.floor(Date.now() / 1e3); }
 function isExpired(token) { return (unixTime() > token.exp); }
 
 
-function acceptHttpErrors(err) {
-  throw err;
-}
-
-
 async function fetchToken(vuexApi) {
   const { state, commit } = vuexApi;
   if (!state.tokenEndpoint) { return; }

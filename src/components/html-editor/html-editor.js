@@ -49,7 +49,7 @@ module.exports = {
             placeholder: this.l10n('editor_placeholder'),
             theme: 'snow',
         })
-        this.quill.on('text-change', (delta, oldDelta, source) => {
+        this.quill.on('text-change', (/* delta, oldDelta, source */) => {
             // console.debug('HTML editor text change in:', this.$refs.editor);
             let html = this.$refs.editor.children[0].innerHTML
             if (html === '<p><br></p>') html = ''
