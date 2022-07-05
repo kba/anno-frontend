@@ -27,8 +27,16 @@
           />
         </div>
         <div class="col-md-3">
-          <select class="form-control" @change="onSelectPurpose(bodyIndex, $event)">
-            <option v-for="rel in relations" :value="rel" :selected="body.predicate === rel">{{ l10n(rel) }}</option>
+          <select name="predicate" class="form-control"
+            @change="onSelectPurpose(bodyIndex, $event)">
+            <option value="">{{
+              l10n('dropdown_please_select_an_option')
+              + ' ' + l10n('relationlink_predicate')
+              }}</option>
+            <option v-for="rel in relations"
+              :value="rel"
+              :selected="body.predicate === rel"
+              >{{ l10n(rel) }}</option>
           </select>
         </div>
         <div class="col-md-3">

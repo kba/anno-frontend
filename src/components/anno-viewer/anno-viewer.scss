@@ -18,6 +18,9 @@
   .annoeditor-iiif-link { font-size: smaller; }
   .annoeditor-iiif-link strong { font-weight: inherit; }
 
+  span.relation-predicate { font-size: smaller; }
+  span.relation-predicate:after { content: ":"; }
+
   & > .panel-heading {
     background: #e8e8e8;
     color: black;
