@@ -16,7 +16,7 @@ module.exports = {
     template: require('./relationlink-editor.html'),
     // style:    require('./bonanza.sass'),
     props: {
-      relations:  { type: Array,  default: dfPredicates.allUrls.boundSlice },
+      knownPredicates: { type: Array, default: dfPredicates.allUrls.boundSlice },
     },
     computed: {
         relationLinkBodies() {return this.$store.getters.relationLinkBodies}

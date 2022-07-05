@@ -93,7 +93,7 @@
             "annoeditor_mode_reply": "Antworten auf Annotation",
 
             "generic_list_item_add_short": "Hinzuf.",
-            "dropdown_please_select_an_option": "(Bitte wählen:)",
+            "dropdown_please_select_an_option": "Bitte wählen:",
 
             "add_relationlink":          "Link hinzufügen",
             "delete_relationlink":       "Link löschen",
@@ -228,7 +228,7 @@
             "semtag_no_source_for": "Incomplete semantic tag data, please choose a catalog entry for this tag:",
 
             "generic_list_item_add_short": "Add",
-            "dropdown_please_select_an_option": "(Please select:)",
+            "dropdown_please_select_an_option": "Please select:",
 
             "add_relationlink":          "Add Link",
             "delete_relationlink":       "Delete Link",

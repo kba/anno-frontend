@@ -33,10 +33,11 @@
               l10n('dropdown_please_select_an_option')
               + ' ' + l10n('relationlink_predicate')
               }}</option>
-            <option v-for="rel in relations"
-              :value="rel"
-              :selected="body.predicate === rel"
-              >{{ l10n(rel) }}</option>
+            <option v-for="predi in knownPredicates"
+              :value="predi"
+              :selected="body.predicate === predi"
+              >{{ l10n(predi).replace(/^\w+\:\/*/, '')
+                }}</option>
           </select>
         </div>
         <div class="col-md-3">
