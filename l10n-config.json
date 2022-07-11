@@ -102,6 +102,7 @@
             "relationlink_url":          "Link (URL)",
             "relationlink_title":        "Link-Titel",
             "relationlink_predicate":    "Zusammenhang",
+            "relationlink_predicate#hint": "Nicht 'Link-Typ': Könnte leicht missverstanden werden als auf die URL selbst bezogen, statt auf den damit adressierten Inhalt.",
 
             "add_semtag":          "Schlagwort hinzufügen",
             "delete_semtag":       "Schlagwort löschen",
@@ -237,6 +238,7 @@
             "relationlink_url":          "Link (URL)",
             "relationlink_title":        "Link title",
             "relationlink_predicate":    "Relation type",
+            "relationlink_predicate#hint": "Not 'Link type': Could be misconstrued to be meant about the link itself, rather than the thing it points to.",
 
             "tag":                 "Simple Tag",
             "tags":                "Simple Tags",
