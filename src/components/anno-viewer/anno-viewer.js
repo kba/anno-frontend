@@ -332,5 +332,24 @@ module.exports = {
 
         doi2url(doi) { return this.doiResolverBaseUrl + doi; },
 
+        validateRelationLinkBody(rlb) {
+          const viewer = this;
+          const { l10n } = viewer;
+          const errors = [];
+          const vocMiss = l10n('missing_required_field') + ' ';
+
+          (function requiredFields() {
+            const missing = [
+              'predicate',
+              'purpose',
+            ].filter(k => !rlb[k]);
+            if (!missing.length) { return; }
+            const uiNames = missing.map(k => l10n('relationlink_' + k));
+            errors.push(vocMiss + uiNames.join(', '));
+          }());
+
+          return errors;
+        },
+
     },
 }

@@ -203,18 +203,12 @@
             {{ l10n('relationlinks') }}</h5>
           <ul>
             <li v-for="rlb in relationLinkBodies">
-              <template v-for="missingFields in [[
-                'predicate',
-                'purpose',
-              ].map(k => (rlb[k] ? '' : k)).filter(Boolean).join(', ')]">
-                <span v-if="missingFields" class="
-                  no-relation-predicate
-                  anno-editor-error
-                  anno-error-annotation-problems
-                  danger
-                  ">&#x26A0; {{ l10n('missing_required_field') }}
-                    {{ missingFields }} &#x26A0;</span>
-              </template>
+              <span v-for="err in validateRelationLinkBody(rlb)" class="
+                no-relation-predicate
+                anno-editor-error
+                anno-error-annotation-problems
+                danger
+              ">&#x26A0; {{err}} &#x26A0;</span>
 
               <span class="relation-predicate"
                 ><a class="relation-predicate"
