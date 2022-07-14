@@ -211,10 +211,11 @@ module.exports = {
         },
 
         targetFragmentButtonClicked() {
+          const viewer = this;
           const ev = {
-            ...this.makeEventContext(),
-            fragment: this.targetFragment,
-            button: this.$refs.targetFragmentButton,
+            ...viewer.makeEventContext(),
+            fragment: viewer.targetFragment,
+            button: viewer.$refs.targetFragmentButton,
           };
           // console.debug('emit fragmentButtonClicked:', ev);
           eventBus.$emit('targetFragmentButtonClicked', ev);
