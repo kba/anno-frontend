@@ -175,7 +175,7 @@ module.exports = {
         },
 
         purl() {
-          return this.annoIdToPermaUrl(this.annotation.id);
+          return this.annoIdToPermaUrl((this.annotation || false).id);
         },
 
         slug() {

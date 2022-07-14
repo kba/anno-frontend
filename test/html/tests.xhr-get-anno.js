@@ -50,7 +50,7 @@ window.jQuery().ready(function installLate() {
     <p><textarea name="txa" cols="60" rows="4" wrap="off" class="code">
       # ubhd:54eb5a09-df9f-3f1c-b18e-4676d1046166
       f:cpgRedDress
-      f:old
+      # f:old
     </textarea></p>
   `, function setup(form) {
     const { txa } = form.elements;

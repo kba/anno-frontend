@@ -6,6 +6,7 @@ function annoIdToPermaUrl(id) {
     bookmark and share. Ideally it should tend to be short and also be
     somewhat permanent, even if less strictly than a DOI would be.
   */
+  if (!id) { return ''; }
   const { state } = this.$store;
   let url = state.purlTemplate;
   if (!url) { return '#!missingConfig:purlTemplate!' + id; }
