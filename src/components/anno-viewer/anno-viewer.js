@@ -8,6 +8,8 @@ const {
     svgSelectorResource
 } = require('@kba/anno-queries')
 
+const pify = require('pify');
+
 const bootstrapCompat = require('../../bootstrap-compat.js');
 const eventBus = require('../../event-bus.js');
 const bindDataApi = require('./dataApi.js');
@@ -70,12 +72,11 @@ module.exports = {
         cachedIiifLink: '',
         collapsed: el.collapseInitially,
         currentVersion: el.initialAnnotation,
-        highlighted: false,
-        mintDoiError: null,
-        showMintDoiError: null,
         detailBarClipCopyBtnCls: 'pull-right',
         doiResolverBaseUrl: 'https://doi.org/',
+        highlighted: false,
         latestRevisionDoi: anno.doi,
+        mintDoiMsg: '',
       };
       return initData;
     },
@@ -221,53 +222,38 @@ module.exports = {
           eventBus.$emit('targetFragmentButtonClicked', ev);
         },
 
-        showMintDoiPopover(event) {
-          const vm = this
-          const jq = window.jQuery;
-          const popoverTrigger = jq(event.target);
-          // TODO remove the popup init from here
-          if (!("mintDoiPopoverCreated" in this) || !this.mintDoiPopoverCreated) {
-            console.log("init popover")
-            popoverTrigger.popover()
-            popoverTrigger.on('shown.bs.popover', (/* ev */) => {
-              const popoverDiv = document.getElementById(popoverTrigger.attr("aria-describedby"))
-              Array.from(popoverDiv.querySelectorAll("[data-click]")).forEach(button => {
-                const clickAttr = jq(button).data('click');
-                if (clickAttr == 'mintDoi') {
-                  jq(button).on('click', () => {
-                    popoverTrigger.popover('hide')
-                    vm.mintDoi().catch( (error) => {
-                      vm.mintDoiError = error
-                    })
-                  })
-                }
-                else {
-                  jq(button).on('click', () => { popoverTrigger.popover('hide') })
-                }
-              })
-            })
-            this.mintDoiPopoverCreated = true
-          }
-          popoverTrigger.popover('toggle')
+        setDoiMsg(vocs, ...details) {
+          const viewer = this;
+          viewer.mintDoiMsg = [
+            ('[' + (new Date()).toLocaleTimeString() + ']'),
+            [].concat(vocs).map(viewer.l10n).join(''),
+            ...details,
+          ].join(' ');
         },
 
-        mintDoi() {
-          // TODO It would be much nicer to implement a Vuex store action
-          const api = this.api
-          return new Promise((resolve, reject) => {
-            api.mintDoi(this.id, (err, ...args) => {
-              if (err) {
-                console.log("mintDOI error", {err})
-                reject(err)
-              } else {
-                console.log("mintDOI response", {err, args})
-                // TODO Do not reload the complete list. Only update this annotation.
-                this.$store.dispatch('fetchList')
-                resolve(...args)
-              }
-            })
-          })
+        async askConfirmationToMintDoi() {
+          const viewer = this;
+          const { l10n, setDoiMsg } = viewer;
+          const annoId = (this.annotation || false).id;
+          if (!annoId) {
+            return setDoiMsg(['missing_required_field', ' ', 'annofield_id']);
+          }
+          const askReally = (l10n('confirm_irrevocable_action')
+            + '\n' + l10n('mint_doi'));
+          if (!window.confirm(askReally)) {
+            return setDoiMsg('confirm_flinched');
+          }
+          setDoiMsg('request_sent_waiting');
+          let resp;
+          try {
+            resp = await pify(cb => viewer.api.mintDoi(annoId, cb))();
+          } catch (err) {
+            return setDoiMsg('error:', String(err));
+          }
+          console.debug('mintDOI response for anno ID', annoId, resp);
+          // viewer.$store.dispatch('fetchList');
         },
+
         mouseenter() {
             this.startHighlighting();
             eventBus.$emit('mouseenter', this.makeEventContext());

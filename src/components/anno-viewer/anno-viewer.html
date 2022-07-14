@@ -121,7 +121,7 @@
             </button>
 
             <button class="btn btn-sm btn-secondary"
-              v-if="latestRevisionDoi"
+              v-if="latestRevisionDoi || $auth('mintDoi', id)"
               @click="toggleDetailBar"
               data-detailbar="doi"
               :title="l10n('doi')"
@@ -172,17 +172,33 @@
             {{ l10n(currentLicense.user_desc) }}
           </dd></dl>
 
-          <dl class="detailbar-doi"
-            v-if="latestRevisionDoi"
-            >
-            <dt-url-caption-link
-              :caption="l10n('doi.of.annotation')"
-              :url="doi2url(latestRevisionDoi)"
-              />
-            <dt-url-caption-link
-              :caption="l10n('doi.of.annotation.revision')"
-              :url="doi2url(currentRevisionDoi)"
-              />
+          <dl class="detailbar-doi">
+            <template v-if="latestRevisionDoi">
+              <dt-url-caption-link
+                :caption="l10n('doi.of.annotation')"
+                :url="doi2url(latestRevisionDoi)"
+                />
+              <dt-url-caption-link
+                :caption="l10n('doi.of.annotation.revision')"
+                :url="doi2url(currentRevisionDoi)"
+                />
+            </template>
+            <template v-else><!-- else = we have mintDoi permission,
+              because with neither that nor a DOI, the detailbar would
+              be hidden. -->
+              <dt>
+                <div role="group" class="btn-group btn-group-sm">
+                  <button
+                    class="btn btn-default btn-outline-secondary btn-sm"
+                    @click="askConfirmationToMintDoi"
+                    >
+                    <i class="fa fa-link"></i>
+                    {{ l10n('mint_doi') }}
+                  </button>
+                </div>
+              </dt>
+              <dd>{{ mintDoiMsg }}</dd>
+            </template>
           </dl>
         </div><!-- .detailbars -->
 
@@ -275,23 +291,6 @@
       >
       <div role="group"
         class="btn-group btn-group-sm"
-
-        ><button v-if="!annotation.doi && $auth('mintDoi', id)"
-            class="btn btn-default btn-outline-secondary btn-sm"
-            data-toggle="popover"
-            data-focus-dismiss
-            :data-content= '`
-            <button data-click="mintDoi" class="btn btn-sm btn-success">Yes</button>
-            <button data-click="close" class="btn btn-sm btn-default btn-outline-secondary">No</button>`'
-            data-html="true"
-            data-placement = "auto left"
-            data-trigger = "manual"
-            data-container = "body"
-            @click="showMintDoiPopover"
-            >
-            <i class="fa fa-link"></i>
-            {{ l10n('mint_doi') }}
-        </button
 
         ><bootstrap-button @click="revise"
           btn-class="default btn-outline-secondary"
