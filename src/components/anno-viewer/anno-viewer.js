@@ -48,6 +48,7 @@ const revisionsProps = require('./revisionsProps.js');
  */
 
 function jsonDeepCopy(x) { return JSON.parse(JSON.stringify(x)); }
+function orf(x) { return x || false; }
 
 module.exports = {
     name: 'anno-viewer', // necessary for nesting
@@ -66,7 +67,7 @@ module.exports = {
 
     data() {
       const el = this;
-      const anno = (el.annotation || false);
+      const anno = orf(el.annotation);
       const initData = {
         bootstrapOpts: bootstrapCompat.sharedConfig,
         cachedIiifLink: '',
@@ -142,7 +143,7 @@ module.exports = {
 
         currentLicense() {
           const licUrl = this.annotation.rights;
-          const licInfo = (licensesByUrl.get(licUrl) || false);
+          const licInfo = orf(licensesByUrl.get(licUrl));
           return licInfo;
         },
 
@@ -155,7 +156,7 @@ module.exports = {
 
         problemsWarningText() {
           const viewer = this;
-          const anno = (viewer.annotation || false);
+          const anno = orf(viewer.annotation);
           const { l10n } = viewer;
           const probs = [];
 
