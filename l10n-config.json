@@ -130,8 +130,8 @@
 
             "Preview":             "Vorschau",
 
-            "http://purl.org/dc/terms/isPartOf": "ist Teil von",
-            "http://www.w3.org/2000/01/rdf-schema#seeAlso": "siehe auch",
+            "relationlink_predicate=http://purl.org/dc/terms/isPartOf": "ist Teil von",
+            "relationlink_predicate=http://www.w3.org/2000/01/rdf-schema#seeAlso": "siehe auch",
 
             "fmt_bold":        "Fett",
             "fmt_size":        "Schriftgröße",
@@ -261,8 +261,8 @@
             "discard":             "Discard",
             "annoeditor":          "Annotation editor",
 
-            "http://purl.org/dc/terms/isPartOf": "is part of",
-            "http://www.w3.org/2000/01/rdf-schema#seeAlso": "see also",
+            "relationlink_predicate=http://purl.org/dc/terms/isPartOf": "is part of",
+            "relationlink_predicate=http://www.w3.org/2000/01/rdf-schema#seeAlso": "see also",
 
             "preview":             "Preview",
 
