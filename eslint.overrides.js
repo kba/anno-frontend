@@ -18,7 +18,7 @@ const offs = [
   'indent',
   'max-len',
   'no-alert',
-  'node/no-missing-require',
+  'n/no-missing-require',
   'no-else-return',
   'nonblock-statement-body-position',
   'no-nested-ternary',
