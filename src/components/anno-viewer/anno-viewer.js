@@ -51,6 +51,10 @@ const revisionsProps = require('./revisionsProps.js');
 function jsonDeepCopy(x) { return JSON.parse(JSON.stringify(x)); }
 function orf(x) { return x || false; }
 
+
+let openDoiBarSoonForDoi; // <-- See comments where it's used.
+
+
 module.exports = {
     name: 'anno-viewer', // necessary for nesting
 
@@ -112,7 +116,13 @@ module.exports = {
         if (subjectId !== ourId) { return; }
         viewer[methodName](expand);
       });
-    })
+    });
+
+    const mainDoi = viewer.latestRevisionDoi;
+    if (mainDoi && (mainDoi === openDoiBarSoonForDoi)) {
+      openDoiBarSoonForDoi = null;
+      viewer.toggleDetailBar({ barName: 'doi', barWantOpen: true });
+    }
 
     // Expand this annotation
     eventBus.$on('expand', (id) => {
@@ -267,8 +277,30 @@ module.exports = {
             return setDoiMsg('error:', String(err));
           }
           if (updAnno.doi) {
+            /*
+              The upcoming mutation replaces the history of the annotation as
+              well, and that seems to be necessary in order to distinguish
+              the DOI for the latest version from the one for the currently
+              displayed version.
+
+              Due to the unfortunate update style explained in setToVersion(),
+              we don't even know which version is currently being displayed.
+
+              Since our update affects the anno-list further up in the
+              element tree, the anno-list updates, and in doing so,
+              abandons the old viewer instance and makes a new one.
+              The new one starts out with all detailbars folded.
+              We do not get a reference to the new instance, so we cannot
+              directly command it to open the DOI detailbar.
+
+              Instead, we use `openDoiBarSoonForDoi` as an app-global dead
+              letter box that is obviously prone to race conditions, trusting
+              that no-one will produce DOI updates in rapid succession.
+            */
+            openDoiBarSoonForDoi = updAnno.doi;
+            // ^-- Set before the new viewer instance is being created.
             viewer.$store.commit('INJECTED_MUTATION', [
-              function mutate() { Object.assign(viewer.annotation, updAnno); },
+              function mutate() { Object.assign(viewer.annotation, updAnno); }
             ]);
             return setDoiMsg();
           }
