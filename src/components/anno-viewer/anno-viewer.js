@@ -296,18 +296,28 @@ module.exports = {
               Instead, we use `openDoiBarSoonForDoi` as an app-global dead
               letter box that is obviously prone to race conditions, trusting
               that no-one will produce DOI updates in rapid succession.
+
+              2022-07-18: Re-opening the DOI box works, but the
+              doi.of.annotation.revision field shows the non-revision DOI.
+              Also we currently don't have time to test whether the correct
+              revision will be shown after the mutation. Thus, for now,
+              we have to make our users jump hoops and reload the page.
             */
             openDoiBarSoonForDoi = updAnno.doi;
             // ^-- Set before the new viewer instance is being created.
+            /*
             viewer.$store.commit('INJECTED_MUTATION', [
               function mutate() { Object.assign(viewer.annotation, updAnno); }
             ]);
-            return setDoiMsg();
+            */
+            // viewer.$store.dispatch('fetchList');
+            // ^- We cannot even do that, because automatically reloading
+            //    the list would hide the success message.
+            return setDoiMsg('mint_doi.success');
           }
           console.error('Unexpected mintDOI response', annoId, resp);
           viewer.$el.mintDoiResp = resp;
           return setDoiMsg('unexpected_error');
-          // viewer.$store.dispatch('fetchList');
         },
 
         mouseenter() {
