@@ -1,5 +1,6 @@
-// :TODO: Document sort criterion
-// :TODO: Merge with translations table in order to have meaningful
+// Sort criterion: Numerical ascending for now.
+// We can probably do better after we:
+// :TODO: Merge this with translations table in order to have meaningful
 //        identifiers in the list.
 
 module.exports = `

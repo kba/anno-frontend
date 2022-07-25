@@ -1,13 +1,10 @@
-// :TODO: Document sort criterion
+// Sort criterion: Custom order for diglit.
 
 module.exports = `
 
-references
-isReferencedBy
+references      isReferencedBy
 conformsTo
-replaces
-isReplacedBy
-requires
-isRequiredBy
+replaces        isReplacedBy
+requires        isRequiredBy
 
-`.split(/\s+/).filter(Boolean);
+`.match(/\S+/g);
