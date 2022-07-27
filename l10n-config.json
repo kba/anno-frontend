@@ -129,7 +129,7 @@
             "discard":             "Verwerfen",
             "annoeditor":          "Annotations-Editor",
 
-            "Preview":             "Vorschau",
+            "preview":             "Vorschau",
 
             "relationlink_predicate=http://www.w3.org/2000/01/rdf-schema#seeAlso": "siehe auch",
             "relationlink_predicate=http://purl.org/dc/terms/references": "referenziert",
