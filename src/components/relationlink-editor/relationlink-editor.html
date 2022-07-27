@@ -36,9 +36,7 @@
             <option v-for="predi in knownPredicates"
               :value="predi"
               :selected="body.predicate === predi"
-              >{{ l10n('relationlink_predicate=' + predi, predi
-                  ).replace(/^\w+\:\/*/, '')
-                }}</option>
+              >{{ determinePredicateCaption(predi) }}</option>
           </select>
         </div>
         <div class="col-md-3">

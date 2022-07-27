@@ -11,7 +11,8 @@ const dfPredicates = require('./predi.default.js');
 
 module.exports = {
     mixins: [
-        require('@/mixin/l10n'),
+        require('../../mixin/l10n'),
+        require('./determinePredicateCaption.js'),
     ],
     template: require('./relationlink-editor.html'),
     // style:    require('./bonanza.sass'),
@@ -40,5 +41,5 @@ module.exports = {
               value,
             });
         },
-    }
+    },
 }

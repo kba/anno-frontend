@@ -68,6 +68,7 @@ module.exports = {
       require('../../mixin/dateFmt'),
       require('../../mixin/l10n'),
       require('../../mixin/prefix'),
+      require('../relationlink-editor/determinePredicateCaption.js'),
     ],
 
     data() {
@@ -253,7 +254,7 @@ module.exports = {
           const { l10n, setDoiMsg } = viewer;
           console.debug('askConfirmationToMintDoi: viewer anno:',
             viewer.annotation);
-          window.viewerAnnotation = viewer.annotation;
+          // window.viewerAnnotation = viewer.annotation;
           const annoId = (this.annotation || false).id;
           if (!annoId) {
             return setDoiMsg(['missing_required_field', ' ', 'annofield_id']);

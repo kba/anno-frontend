@@ -240,8 +240,7 @@
                 ><a class="relation-predicate"
                   :href="(rlb.predicate || 'about:blank')"
                   target="_blank"
-                  >{{ l10n(rlb.predicate)
-                    || (/\w+/g.exec(rlb.predicate) || []).slice(-1)[0]
+                  >{{ determinePredicateCaption(rlb.predicate)
                   }}</a></span>
               <a :href="rlb.id || rlb.source">
                 <!-- i class="fa fa-tag"></i -->
