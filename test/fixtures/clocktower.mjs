@@ -1,4 +1,6 @@
-﻿export default { "body": {
+﻿export default {
+  "title": "Uhr",
+  "body": {
     "format": "text/html",
     "type": "TextualBody",
     "value": "<p>hat Zeit.</p>"
@@ -16,5 +18,4 @@
     },
     "source": "https://upload.wikimedia.org/wikipedia/commons/d/da/Universitaet_Heidelberg_%28Karl_Lange%29_1896.jpg"
   },
-  "title": "Uhr"
 };

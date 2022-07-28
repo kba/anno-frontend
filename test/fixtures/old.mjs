@@ -1,6 +1,5 @@
 export default [
 
-
 { "id": "https://anno.ub.uni-heidelberg.de/123",
   "creator": "john",
   "title": "Anno mit Anwo 1",
@@ -252,8 +251,5 @@ export default [
   },
   "type": ["Annotation"],
 },
-
-
-
 
 ];
