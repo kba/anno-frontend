@@ -48,8 +48,12 @@ window.jQuery().ready(function installLate() {
 
   panel.addForm(`
     <p><textarea name="txa" cols="60" rows="4" wrap="off" class="code">
+      f:empty_relation_link_predicate
+      f:tags_and_doi
+      f:heinrich_scheufelen_ein1183_auktion_hahn
       # ubhd:54eb5a09-df9f-3f1c-b18e-4676d1046166
-      f:cpgRedDress
+      # f:clocktower
+      # f:cpg389_red_dress
       # f:old
     </textarea></p>
   `, function setup(form) {
