@@ -86,6 +86,7 @@ module.exports = {
   props: {
     annotation: { type: Object, required: true },
     purlId: { type: String, required: false },
+    showEditPreviewWarnings: { type: Boolean, default: false },
     asReply: { type: Boolean, default: false },
     // ^-- Controls whether comment is collapsible or not
     collapseInitially: { type: Boolean, default: false },

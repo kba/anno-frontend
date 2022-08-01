@@ -231,9 +231,12 @@
                 anno-editor-error
                 anno-error-annotation-problems
                 danger
-              ">&#x26A0; {{err}} &#x26A0;</span>
+              "
+              v-if="showEditPreviewWarnings"
+              >&#x26A0; {{err}} &#x26A0;</span>
 
               <span class="relation-predicate"
+                :data-predicate="rlb.predicate"
                 ><a class="relation-predicate"
                   :href="(rlb.predicate || 'about:blank')"
                   target="_blank"
