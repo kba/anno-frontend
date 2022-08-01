@@ -133,19 +133,41 @@
       const grp = jq('<div class="btn-group">').appendTo(rel);
       grp[0].style = 'position: absolute; right: 0; bottom: 1em;';
       destForm.on('submit', tu.alwaysFalse);
+      const byName = {};
       function addBtn(spec, idx) {
-        const el = document.createElement('input');
+        let el = document.createElement('input');
         el.type = (spec.t || (idx && 'button') || 'submit');
-        el.value = (spec.v || (spec.name || '').replace(/_/g, ' ') || spec);
-        el.className = 'btn btn-default btn-sm btn-outline-secondary';
+        let val = (spec.v || (spec.name || '').replace(/_/g, ' '));
+        if ((!val) && spec.substr) { val = String(spec); }
+        if (val) { el.value = val; }
+        el.name = (spec.name || val);
+        byName[el.name] = el;
+
         const hnd = orf(spec.f || spec);
         if (hnd.apply) { el.onclick = hnd; }
+        let cls = 'btn btn-default btn-sm btn-outline-secondary text-nowrap';
+
+        if (spec.ckb) {
+          const ckb = el;
+          if (spec.ckb === true) { spec.ckb = val; }
+          ckb.name = spec.ckb;
+          ckb.type = 'checkbox';
+          cls += ' ckb';
+          el = document.createElement('label');
+          el.appendChild(ckb);
+          el.appendChild(document.createTextNode(' '));
+          const tx = document.createElement('span');
+          tx.innerText = (spec.tx || val);
+          el.appendChild(tx);
+        }
+
+        el.className = cls;
         grp.append(el);
         return el;
       }
       const buttons = [].concat(submitBtn, ...extraBtn).map(addBtn);
       destForm.prepend(rel);
-      Object.assign(buttons, { rel, grp });
+      Object.assign(buttons, { rel, grp, byName });
       return buttons;
     },
 

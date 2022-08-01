@@ -34,6 +34,13 @@
     </h4>
   </div>
 
+  <div v-if="this.annotation['skos:note']" class="
+    card-body panel-body
+    anno-skos-note
+    ">
+    <p>{{ this.annotation['skos:note'] }}</p>
+  </div>
+
   <div role="tabpanel"
     class="card-body panel-body"
     v-show="!collapsed">

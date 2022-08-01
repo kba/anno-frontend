@@ -18,9 +18,10 @@ const ldr = {
     console.error('Unsupported anno spec:', [s]);
   },
 
-  async fromCeson(input) {
+  async fromCeson(input, opt) {
     try {
-      await window.annoApp.externalRequest('ImportAnnosFromCeson', input);
+      await window.annoApp.externalRequest('ImportAnnosFromCeson',
+        { data: input, ...opt });
     } catch (err) {
       console.error('Failed to import ceson:', { input }, err);
     }
@@ -31,12 +32,20 @@ const ldr = {
     f: ['../fixtures/', '.mjs'],
   },
 
-  async fromURL(url) {
+  async fromURL(url, opt) {
     const [, proto, remainder] = url.split(/^(\w+):/);
     const mapped = ldr.urlMap[proto];
-    if (mapped) { return ldr.fromURL(mapped.join(remainder)); }
+    if (mapped) {
+      const fullUrl = mapped.join(remainder);
+      const hint = 'imported from ' + url;
+      const mOpt = { ...opt };
+      if (ldr.buttons.byName.trace.checked) {
+        mOpt.mergeIntoEach = { 'skos:note': hint };
+      }
+      return ldr.fromURL(fullUrl, mOpt);
+    }
     const data = await window.jQuery.ajax({ url, dataType: 'text' });
-    ldr.fromCeson(data);
+    ldr.fromCeson(data, opt);
   },
 };
 
@@ -59,8 +68,9 @@ window.jQuery().ready(function installLate() {
   `, function setup(form) {
     const { txa } = form.elements;
     txa.value = txa.value.replace(/\n +/g, '\n').trim();
-    testUtil.topRightSubmitButton(form, [
+    ldr.buttons = testUtil.topRightSubmitButton(form, [
       // eslint-disable-next-line camelcase
+      { v: 'trace', ckb: true },
       function clear_list() { store.commit('REPLACE_LIST', []); },
       { v: 'import', f() { ldr.fromForm(form); } },
     ]);
