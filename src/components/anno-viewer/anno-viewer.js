@@ -99,12 +99,19 @@ module.exports = {
   },
 
   beforeCreate() {
-    this.dataApi = bindDataApi(this);
+    const viewer = this;
+    viewer.dataApi = bindDataApi(viewer);
   },
 
   mounted() {
     const viewer = this;
-    viewer.$el.vue = () => viewer;
+    const anno = viewer.annotation;
+    const initialAnnoId = orf(anno).id;
+    Object.assign(viewer.$el, {
+      getVueElem() { return viewer; },
+      initialAnnoId,
+    });
+    // console.debug('viewer mounted:', { initialAnnoId, anno });
 
     // React to highlighting events startHighlighting / stopHighlighting / toggleHighlighting
     ;['start', 'stop', 'toggle'].forEach(state => {
