@@ -42,13 +42,15 @@
 <script src="../../node_modules/semtonotes-utils/dist/xrx-utils.js"></script>
 <script src="../../node_modules/@kba/xrx-vue/dist/xrx-vue.js"></script>
 <script src="../../node_modules/@/anno-common/anno-webpack/dist/anno-common.dev.js"></script>
-<script src="../../dist/anno-frontend.dev.js"> </script>
+<script src="../../dist/anno-frontend.dev.js"></script>
 
 <!--  ATTN: Don't load test code with type="module", as this would make
             it run deferred, after displayAnnotations(). -->
 <script src="tests.util.js"></script>
 <script src="tests.xhr-get-anno.js"></script>
 <script src="tests.css-overrides.js"></script>
+
+<script src="../mock.server/mintdoi.success.excerpt.js"></script>
 
 <script>
 displayAnnotations(Object.assign({}, window.annoServerCfg, window.annoTestCfg, {

@@ -39,6 +39,7 @@
     "ceson": "^0.1.5",
     "clipboard": "^1.7.1",
     "dateformat": "^2.2.0",
+    "delay": "^4.4.1",
     "getown": "^1.0.0",
     "jquery": "^3.6.0",
     "jwt-decode": "^2.2.0",

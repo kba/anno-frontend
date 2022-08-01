@@ -10,6 +10,7 @@
 
         "de": {
             "error:": "Fehler:",
+            "unexpected_error": "Fehler: Sonstiger Fehler. Bitte versuchen Sie es in ein paar Minuten nochmal. Wenn der Fehler weiterbesteht, nehmen Sie bitte Kontakt auf.",
             "hint:": "Hinweis:",
             "doi": "DOI",
             "doi.of.annotation": "DOI der Annotation",
@@ -143,6 +144,7 @@
 
         "en": {
             "error:": "Error:",
+            "unexpected_error": "Error: Unexpected type of failure. Please retry in a few minutes. If the problem persists, please contact us.",
             "hint:": "Hint:",
             "doi": "DOI",
             "doi.of.annotation": "DOI of the annotation",

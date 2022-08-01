@@ -9,6 +9,7 @@ const {
 } = require('@kba/anno-queries')
 
 const pify = require('pify');
+const pDelay = require('delay');
 
 const bootstrapCompat = require('../../bootstrap-compat.js');
 const eventBus = require('../../event-bus.js');
@@ -225,6 +226,10 @@ module.exports = {
 
         setDoiMsg(vocs, ...details) {
           const viewer = this;
+          if (!vocs) {
+            viewer.mintDoiMsg = '';
+            return;
+          }
           viewer.mintDoiMsg = [
             ('[' + (new Date()).toLocaleTimeString() + ']'),
             [].concat(vocs).map(viewer.l10n).join(''),
@@ -235,6 +240,9 @@ module.exports = {
         async askConfirmationToMintDoi() {
           const viewer = this;
           const { l10n, setDoiMsg } = viewer;
+          console.debug('askConfirmationToMintDoi: viewer anno:',
+            viewer.annotation);
+          window.viewerAnnotation = viewer.annotation;
           const annoId = (this.annotation || false).id;
           if (!annoId) {
             return setDoiMsg(['missing_required_field', ' ', 'annofield_id']);
@@ -245,13 +253,27 @@ module.exports = {
             return setDoiMsg('confirm_flinched');
           }
           setDoiMsg('request_sent_waiting');
-          let resp;
+          let resp = viewer.$store.state.debugStubMintDoiResponse;
+          let updAnno;
           try {
-            resp = await pify(cb => viewer.api.mintDoi(annoId, cb))();
+            if (resp) {
+              await pDelay(5e3);
+            } else {
+              resp = await pify(cb => viewer.api.mintDoi(annoId, cb))();
+            }
+            updAnno = orf(orf(resp).minted)[0].minted;
           } catch (err) {
             return setDoiMsg('error:', String(err));
           }
-          console.debug('mintDOI response for anno ID', annoId, resp);
+          if (updAnno.doi) {
+            viewer.$store.commit('INJECTED_MUTATION', [
+              function mutate() { Object.assign(viewer.annotation, updAnno); },
+            ]);
+            return setDoiMsg();
+          }
+          console.error('Unexpected mintDOI response', annoId, resp);
+          viewer.$el.mintDoiResp = resp;
+          return setDoiMsg('unexpected_error');
           // viewer.$store.dispatch('fetchList');
         },
 
