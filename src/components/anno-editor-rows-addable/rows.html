@@ -1,0 +1,16 @@
+<div class="card panel panel-default anno-editor-rows-addable"
+  :data-n-rows="numberOfRows"
+  >
+  <div class="card-body panel-body">
+    <div class="row buttons top-buttons"
+      ><div class="col-md-12 d-flex flex-row">
+      <slot name="buttons" />
+    </div></div><!-- .row.buttons -->
+    <slot />
+    <div class="row buttons buttons-bottom"
+      v-show="this.numberOfRows >= 1"
+      ><div class="col-md-12 d-flex flex-row">
+      <slot name="buttons" />
+    </div></div><!-- .row.buttons -->
+  </div>
+</div>

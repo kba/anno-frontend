@@ -1,0 +1,23 @@
+<div v-if="this.svgTarget" :class="[
+    ('annoeditor-'
+      // ^- For now, we keep the confusing prefix for sake of compatibility.
+      //    Discussion in issue 133 on UB GitLab.
+      + 'thumbnail-wrapper'),
+  ]">
+  <xrx-vue
+    :initial-image="svgTarget.source"
+    :initial-svg="svgTarget.selector.value"
+    ref="thumbnail"
+    :class="[
+      ('annoeditor-'  // cofusing prefix: see above
+        + 'thumbnail'),
+    ]"
+    initial-mode="Disabled"
+    :show-toolbar="false"
+    :enable-thumb="false"
+    :grouped="true"
+    :xrx-style="xrxStyle"
+    :width="this.widthPx || this.sizePx"
+    :height="this.heightPx || this.sizePx"
+    />
+</div>

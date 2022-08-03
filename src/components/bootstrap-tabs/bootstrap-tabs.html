@@ -1,25 +1,35 @@
 <div class="annoeditor-bootstrap-tabs">
-  <ul class="nav nav-tabs">
+  <ul ref="tabs" class="nav nav-tabs">
     <li role="presentation"
-      v-for="tab in tablist"
-      :class="{'active':tab.active}"
+      v-for="tab in tabPanesAsVueElements()"
+      v-show="tab.visible"
+      :class="[
+        'nav-item',
+        tab.tabCls,
+      ].filter(Boolean)"
       >
 
-        <a :href="'#' + tab.name" :aria-controls="tab.name" role="tab" data-toggle="tab" @click='clickHandler'>
+        <a :href="'#' + tab.name"
+          class="nav-link"
+          :aria-controls="tab.name"
+          role="tab"
+          data-toggle="tab"
+          >
           {{tab.title}}
 
-        <help-button v-if="tab.topic"
-          :topic="tab.topic"
-          :title="tab.title"
-          :help-url-template="helpUrlTemplate"
-          :help-url-manual="helpUrlManual"
-          />
+          <help-button v-if="tab.topic"
+            :topic="tab.topic"
+            :title="tab.title"
+            :help-url-template="helpUrlTemplate"
+            :help-url-manual="helpUrlManual"
+            bootstrap-btn-cls=""
+            />
 
         </a>
 
     </li>
   </ul>
-  <div class="tab-content">
+  <div ref="panesContainer" class="tab-content">
     <slot></slot>
   </div>
 </div>

@@ -1,16 +1,16 @@
-<div class="panel panel-default annoeditor-relationlink-editor">
-  <div class="panel-heading">
+<div class="card panel panel-default annoeditor-relationlink-editor">
+  <!-- div class="panel-heading">
     {{ l10n('relationlinks') }}
-  </div>
-  <div class="panel-body">
+  </div -->
+  <div class="card-body panel-body">
       <div class="row" v-for="(body, bodyIndex) in relationLinkBodies">
         <div class="col-md-3">
-          <input 
+          <input
             :data-body-index="bodyIndex"
             required
             autocomplete
             type="url"
-            class="form-control relationlink-source col-md-4"
+            class="form-control relationlink-source"
             v-model="body.source"
             :placeholder="l10n('relationlink_url')"
           />
@@ -27,22 +27,30 @@
           />
         </div>
         <div class="col-md-3">
-          <select class="form-control" @change="onSelectPurpose(bodyIndex, $event)">
-            <option v-for="rel in relations" :value="rel" :selected="body.predicate === rel">{{ l10n(rel) }}</option>
+          <select name="predicate" class="form-control"
+            @change="onSelectPurpose(bodyIndex, $event)">
+            <option value="">{{
+              l10n('dropdown_please_select_an_option')
+              + ' ' + l10n('relationlink_predicate')
+              }}</option>
+            <option v-for="predi in knownPredicates"
+              :value="predi"
+              :selected="body.predicate === predi"
+              >{{ determinePredicateCaption(predi) }}</option>
           </select>
         </div>
         <div class="col-md-3">
           <bootstrap-button
             btn-class="danger"
-            font-awesome="remove"
+            icon-fa="trash-o"
             @click="removeBody(body)">
             {{ l10n('delete_relationlink') }}
           </bootstrap-button>
         </div>
     </div>
-    <bootstrap-button 
+    <bootstrap-button
       btn-class="success"
-      font-awesome="plus"
+      icon-fa="plus"
       @click="addRelationLink"
       >
       {{ l10n('add_relationlink') }}

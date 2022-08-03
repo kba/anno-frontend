@@ -1,0 +1,32 @@
+﻿@charset "UTF-8";
+/* -*- coding: UTF-8, tab-width: 2 -*- */
+
+html { font-size: 15px; }
+body > main { float: left; width: 40%; margin: 1em; margin-right: 2em; }
+
+.sidebar-container { overflow: auto; }
+.popups-boundary-marker { border: 1em solid skyblue; }
+
+#tests-toolbar-bottom input[type="button"],
+#tests-toolbar-bottom button { color: black; background-color: gainsboro; }
+
+.resizer { resize: both; overflow: scroll; overflow-x: auto; }
+
+body > chapter aside {
+  float: right; margin: 2em;
+  border: 1px solid grey; padding: 1ex 1em;
+  background-color: white;
+}
+
+body > chapter aside > fieldset > legend { font: inherit; }
+body > chapter aside > fieldset > legend > h3:empty { display: none; }
+body > chapter aside > fieldset > legend > h3 { display: inline; }
+body > chapter aside > fieldset { position: relative; }
+body > chapter aside > fieldset label { margin: 0; margin-left: 1ex; }
+body > chapter aside > fieldset p { margin: 0.5em 0; }
+
+fieldset textarea.code {
+  border: 1px solid silver; overflow: scroll; resize: both;
+  font-family: monospace; font-size: 85%;
+}
+

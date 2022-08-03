@@ -1,11 +1,5 @@
-const $ = require('jquery')
-const _dateformat = require('dateformat')
-const eventBus = require('@/event-bus')
-const XrxUtils = require('semtonotes-utils')
-const {
-    numberOf,
-    ensureArray,
-} = require('@kba/anno-util')
+'use strict';
+
 const {
     relationLinkBody,
     textualHtmlBody,
@@ -13,6 +7,18 @@ const {
     semanticTagBody,
     svgSelectorResource
 } = require('@kba/anno-queries')
+
+const pify = require('pify');
+const pDelay = require('delay');
+
+const bootstrapCompat = require('../../bootstrap-compat.js');
+const eventBus = require('../../event-bus.js');
+const bindDataApi = require('./dataApi.js');
+const licensesByUrl = require('../../license-helper.js').byUrl;
+const toggleDetailBar = require('./toggleDetailBar.js');
+const xrxUtilsUtils = require('./xrxUtilsUtils.js');
+const revisionsProps = require('./revisionsProps.js');
+
 
 /**
  * ### anno-viewer
@@ -24,17 +30,11 @@ const {
  * - **`annotation`**: The annotation this viewer shows
  * - `asReply`: Whether the annotation should be displayed as a reply (no
  *   colapsing, smaller etc.)
- * - `purlTemplate` A string template for the persistent URL. `{{ slug }}` will
- *   be replaced by the slug of the annotation
- * - `purlId` The URL of the persistently adressed annotation
+ * - `purlId` The URL of the persistently adressed annotation.
+ *   This is the legacy solution for highlighting an annotation when the
+ *   annoApp was loaded from a PURL redirect.
  * - `collapseInitially`: Whether the anntotation should be collapsed after
  *   first render
- * - `imageWidth`: Width of the image this annotation is about, if any
- * - `imageHeight`: Height of the image this annotation is about, if any
- * - `iiifUrlTemplate`: URL template for the IIIF link if this annotation
- *   contains zones about an image. The string `{{ iiifRegion }}` is replaced
- *   with a IIIF Image API conformant region specification that contains the
- *   bounding box of all zones in this annotation.
  *
  * #### Events
  *
@@ -48,104 +48,161 @@ const {
  * - `setToVersion`: Reset the currently edited annotation to the revision passed
  */
 
+function jsonDeepCopy(x) { return JSON.parse(JSON.stringify(x)); }
+function orf(x) { return x || false; }
+
+
+let openDoiBarSoonForDoi; // <-- See comments where it's used.
+
+
 module.exports = {
     name: 'anno-viewer', // necessary for nesting
+
     template: require('./anno-viewer.html'),
     style:    require('./anno-viewer.scss'),
-    mixins: [
-        require('@/mixin/l10n'),
-        require('@/mixin/auth'),
-        require('@/mixin/prefix'),
-        require('@/mixin/api')
-    ],
-    props: {
-        annotation: {type: Object, required: true},
-        purlTemplate: {type: String, required: false},
-        purlId: {type: String, required: false},
-        // Controls whether comment is collapsible or not
-        asReply: {type: Boolean, default: false},
-        collapseInitially: {type: Boolean, default: false},
-        imageWidth: {type: Number, default: -1},
-        imageHeight: {type: Number, default: -1},
-        iiifUrlTemplate: {type: String, default: null},
-        thumbStrokeColor: {type: String, default: '#090'},
-        thumbFillColor: {type: String, default: '#090'},
-    },
-  beforeCreate() {
-    this.toplevelDoi = this.$options.propsData.annotation.doi
-  },
-  mounted() {
-    this.iiifLink = this._iiifLink()
-    // Show popover with persistent URL
-    const Clipboard = require('clipboard')
-    Array.from(this.$el.querySelectorAll('[data-toggle="popover"]')).forEach(popoverTrigger => {
-      $(popoverTrigger).popover({trigger: 'click'})
-      $(popoverTrigger).on('shown.bs.popover', () => {
-        const popoverDiv = document.getElementById(popoverTrigger.getAttribute("aria-describedby"))
-        if (!popoverDiv)
-          return
-        Array.from(popoverDiv.querySelectorAll("[data-clipboard-text]")).forEach(clipboardTrigger => {
-          const clip = new Clipboard(clipboardTrigger)
-          clip.on('success', () => {
-            const $successLabel = $(clipboardTrigger.querySelector(".label-success"))
-            $successLabel.show()
-            setTimeout(() => $successLabel.hide(), 2000)
-          })
-        })
-      })
-    })
 
-    if (!window.annoInstalledPopoverHandler) {
-      // Dismiss all popovers with the 'data-focus-dismiss' attribute whenever user clicks outside of the popup divs
-      $('body').on('click', function (e) {
-        if (
-          !(e.target.getAttribute('data-toggle') === 'popover' || $(e.target).parents('[data-toggle="popover"]').length > 0)
-          && $(e.target).parents('.popover.in').length === 0
-        ) {
-          $('[data-toggle="popover"][data-focus-dismiss]').popover('hide')
-        }
-      })
-      window.annoInstalledPopoverHandler = true
-    }
+    mixins: [
+      require('../../mixin/annoUrls.js'),
+      require('../../mixin/api'),
+      require('../../mixin/auth'),
+      require('../../mixin/dateFmt'),
+      require('../../mixin/l10n'),
+      require('../../mixin/prefix'),
+      require('../relationlink-editor/determinePredicateCaption.js'),
+    ],
+
+    data() {
+      const el = this;
+      const anno = orf(el.annotation);
+      const initData = {
+        bootstrapOpts: bootstrapCompat.sharedConfig,
+        cachedIiifLink: '',
+        collapsed: el.collapseInitially,
+        currentVersion: el.initialAnnotation,
+        detailBarClipCopyBtnCls: 'pull-right',
+        doiResolverBaseUrl: 'https://doi.org/',
+        highlighted: false,
+        latestRevisionDoi: anno.doi,
+        mintDoiMsg: '',
+      };
+      return initData;
+    },
+
+  props: {
+    annotation: { type: Object, required: true },
+    purlId: { type: String, required: false },
+    showEditPreviewWarnings: { type: Boolean, default: false },
+    asReply: { type: Boolean, default: false },
+    // ^-- Controls whether comment is collapsible or not
+    collapseInitially: { type: Boolean, default: false },
+    acceptEmptyAnnoId: { type: Boolean, default: false },
+  },
+
+  beforeCreate() {
+    const viewer = this;
+    viewer.dataApi = bindDataApi(viewer);
+  },
+
+  mounted() {
+    const viewer = this;
+    const anno = viewer.annotation;
+    const initialAnnoId = orf(anno).id;
+    Object.assign(viewer.$el, {
+      getVueElem() { return viewer; },
+      initialAnnoId,
+    });
+    // console.debug('viewer mounted:', { initialAnnoId, anno });
 
     // React to highlighting events startHighlighting / stopHighlighting / toggleHighlighting
     ;['start', 'stop', 'toggle'].forEach(state => {
-      const method = `${state}Highlighting`
-      eventBus.$on(method, (id, expand) => {if (id == this.id) this[method](expand)})
-    })
+      const methodName = `${state}Highlighting`;
+      // console.debug('reg $on', { methodName, ourId: viewer.id, elem: viewer.$el });
+      eventBus.$on(methodName, function manageHighlight(subjectId, expand) {
+        const ourId = viewer.id;
+        // console.debug('$on cb', { methodName, ourId, subjectId });
+        if (!ourId) { return; } // early init
+        if (subjectId !== ourId) { return; }
+        viewer[methodName](expand);
+      });
+    });
+
+    const mainDoi = viewer.latestRevisionDoi;
+    if (mainDoi && (mainDoi === openDoiBarSoonForDoi)) {
+      openDoiBarSoonForDoi = null;
+      viewer.toggleDetailBar({ barName: 'doi', barWantOpen: true });
+    }
 
     // Expand this annotation
     eventBus.$on('expand', (id) => {
-      if (id !== this.id) return
-      this.collapse(false)
-      const rootId = this.id.replace(/[~\.][~\.0-9]+$/, '')
+      if (id !== viewer.id) return
+      viewer.collapse(false)
+      const rootId = viewer.id.replace(/[~\.][~\.0-9]+$/, '')
       if (rootId !== id) eventBus.$emit('expand', rootId)
     })
 
-    this.toplevelCreated = this.annotation.modified
-    this.setToVersion(this.newestVersion)
+    viewer.toplevelCreated = viewer.annotation.modified;
+    viewer.setToVersion(viewer.newestVersion);
   },
+
     computed: {
         id()                 {return this.annotation.id},
-        created()            {return this._created ? this._created : this.annotation.created},
-        creator()            {return this.annotation.creator},
-        modified()           {return this.annotation.modified},
         title()              {return this.annotation.title},
-        rights()             {return this.annotation.rights},
         firstHtmlBody()      {return textualHtmlBody.first(this.annotation)},
         simpleTagBodies()    {return simpleTagBody.all(this.annotation)},
         semanticTagBodies()  {return semanticTagBody.all(this.annotation)},
         relationLinkBodies() {return relationLinkBody.all(this.annotation)},
         svgTarget()          {return svgSelectorResource.first(this.annotation)},
-        purl()               {return this.purlTemplate
-                ? this.purlTemplate.replace('{{ slug }}', this.id.replace(/.*\//, ''))
-                : this.id},
+
+        targetFragment() { return (this.dataApi('findTargetFragment') || ''); },
+
+        creatorsList() {
+          const { creator } = this.annotation;
+          if (!creator) { return []; }
+          return [].concat(creator).filter(Boolean);
+        },
+
+        currentLicense() {
+          const licUrl = this.annotation.rights;
+          const licInfo = orf(licensesByUrl.get(licUrl));
+          return licInfo;
+        },
+
+        currentRevisionDoi() { return this.annotation.doi || ''; },
+
+        licenseTitleOrUnknown() {
+          return (this.currentLicense.title
+            || this.l10n('license_unknown'));
+        },
+
+        problemsWarningText() {
+          const viewer = this;
+          const anno = orf(viewer.annotation);
+          const { l10n } = viewer;
+          const probs = [];
+
+          (function checkExpectedProps() {
+            const expected = [
+              'title',
+              (viewer.acceptEmptyAnnoId ? null : 'id'),
+            ];
+            const miss = l10n('missing_required_field') + ' ';
+            expected.forEach(function check(prop) {
+              if (!prop) { return; }
+              if (anno[prop]) { return; }
+              probs.push(miss + l10n('annofield_' + prop, prop));
+            });
+          }());
+          if (!probs.length) { return ''; }
+          return l10n('error:') + ' ' + probs.join('; ');
+        },
+
+        purl() {
+          return this.annoIdToPermaUrl((this.annotation || false).id);
+        },
+
         slug() {
             if (!this.annotation.id) return 'unsaved-annotation-' + Date.now()
             return this.annotation.id.replace(/[^A-Za-z0-9]/g, '')
-        },
-        isPurl() {
-            return this.annotation.id === this.purlId
         },
         newestVersion() {
           const versions = this.annotation.hasVersion
@@ -155,108 +212,129 @@ module.exports = {
             return versions[versions.length - 1]
           }
         },
-        doiPopup() {
-          const {annotation, toplevelDoi, l10n} = this
-          let ret = `
-            `
-          ret += l10n('doi.of.annotation')
-          ret += ': <br/>'
-          ret += `
-            <button data-clipboard-text="https://doi.org/${toplevelDoi}" class="btn btn-default btn-xs">
-              <span class="fa fa-clipboard"></span>
-              <span class="label label-success" style="display: none">${l10n("copied_to_clipboard")}</span>
-            </button>
-            <a href="https://doi.org/${toplevelDoi}">
-              https://doi.org/${toplevelDoi}
-            </a>
-          `
-          // console.log(annotation.doi, toplevelDoi)
-          const versionDoi = annotation.doi
-          if (versionDoi) {
-            ret += '<br/>'
-            ret += l10n('doi.of.annotation.revision')
-            ret += ':<br/>'
-            ret += `
-            <button data-clipboard-text="https://doi.org/${versionDoi}" class="btn btn-default btn-xs">
-              <span class="fa fa-clipboard"></span>
-              <span class="label label-success" style="display: none">${l10n("copied_to_clipboard")}</span>
-            </button>
-            <a href="https://doi.org/${versionDoi}">
-              https://doi.org/${versionDoi}
-            </a>
-            `
-          }
-          return ret
-        }
     },
-    data() {
-        return {
-            mintDoiError: null,
-            showMintDoiError: null,
-            _created: null,
-            iiifLink: '',
-            currentVersion: this.initialAnnotation,
-            highlighted: false,
-            collapsed: this.collapseInitially,
-            licenseInfo: require('@/../license-config.js'),
-        }
-    },
+
     methods: {
+        toggleDetailBar,
+
         revise()     {return eventBus.$emit('revise', this.annotation)},
         reply()      {return eventBus.$emit('reply',  this.annotation)},
         remove()     {return eventBus.$emit('remove', this.annotation)},
-        showMintDoiPopover(event) {
-          const vm = this
-          const popoverTrigger = $(event.target)
-          // TODO remove the popup init from here
-          if (!("mintDoiPopoverCreated" in this) || !this.mintDoiPopoverCreated) {
-            console.log("init popover")
-            popoverTrigger.popover()
-            popoverTrigger.on('shown.bs.popover', (ev) => {
-              const popoverDiv = document.getElementById(popoverTrigger.attr("aria-describedby"))
-              Array.from(popoverDiv.querySelectorAll("[data-click]")).forEach(button => {
-                const clickAttr = $(button).data('click')
-                if (clickAttr == 'mintDoi') {
-                  $(button).on('click', () => {
-                    popoverTrigger.popover('hide')
-                    vm.mintDoi().catch( (error) => {
-                      vm.mintDoiError = error
-                    })
-                  })
-                }
-                else {
-                  $(button).on('click', () => { popoverTrigger.popover('hide') })
-                }
-              })
-            })
-            this.mintDoiPopoverCreated = true
+
+        makeEventContext() {
+          const viewer = this;
+          return {
+            annoId: viewer.id,
+            domElem: viewer.$el,
+            dataApi: viewer.dataApi,
+            getVueBoundAnno() { return viewer.annotation; },
+            getAnnoJson() { return jsonDeepCopy(viewer.annotation); },
+          };
+        },
+
+        targetFragmentButtonClicked() {
+          const viewer = this;
+          const ev = {
+            ...viewer.makeEventContext(),
+            fragment: viewer.targetFragment,
+            button: viewer.$refs.targetFragmentButton,
+          };
+          // console.debug('emit fragmentButtonClicked:', ev);
+          eventBus.$emit('targetFragmentButtonClicked', ev);
+        },
+
+        setDoiMsg(vocs, ...details) {
+          const viewer = this;
+          if (!vocs) {
+            viewer.mintDoiMsg = '';
+            return;
           }
-          popoverTrigger.popover('toggle')
+          viewer.mintDoiMsg = [
+            ('[' + (new Date()).toLocaleTimeString() + ']'),
+            [].concat(vocs).map(viewer.l10n).join(''),
+            ...details,
+          ].join(' ');
         },
-        mintDoi() {
-          // TODO It would be much nicer to implement a Vuex store action
-          const api = this.api
-          return new Promise((resolve, reject) => {
-            api.mintDoi(this.id, (err, ...args) => {
-              if (err) {
-                console.log("mintDOI error", {err})
-                reject(err)
-              } else {
-                console.log("mintDOI response", {err, args})
-                // TODO Do not reload the complete list. Only update this annotation.
-                this.$store.dispatch('fetchList')
-                resolve(...args)
-              }
-            })
-          })
+
+        async askConfirmationToMintDoi() {
+          const viewer = this;
+          const { l10n, setDoiMsg } = viewer;
+          console.debug('askConfirmationToMintDoi: viewer anno:',
+            viewer.annotation);
+          // window.viewerAnnotation = viewer.annotation;
+          const annoId = (this.annotation || false).id;
+          if (!annoId) {
+            return setDoiMsg(['missing_required_field', ' ', 'annofield_id']);
+          }
+          const askReally = (l10n('confirm_irrevocable_action')
+            + '\n' + l10n('mint_doi'));
+          if (!window.confirm(askReally)) {
+            return setDoiMsg('confirm_flinched');
+          }
+          setDoiMsg('request_sent_waiting');
+          let resp = viewer.$store.state.debugStubMintDoiResponse;
+          let updAnno;
+          try {
+            if (resp) {
+              await pDelay(5e3);
+            } else {
+              resp = await pify(cb => viewer.api.mintDoi(annoId, cb))();
+            }
+            updAnno = orf(orf(resp).minted)[0].minted;
+          } catch (err) {
+            return setDoiMsg('error:', String(err));
+          }
+          if (updAnno.doi) {
+            /*
+              The upcoming mutation replaces the history of the annotation as
+              well, and that seems to be necessary in order to distinguish
+              the DOI for the latest version from the one for the currently
+              displayed version.
+
+              Due to the unfortunate update style explained in setToVersion(),
+              we don't even know which version is currently being displayed.
+
+              Since our update affects the anno-list further up in the
+              element tree, the anno-list updates, and in doing so,
+              abandons the old viewer instance and makes a new one.
+              The new one starts out with all detailbars folded.
+              We do not get a reference to the new instance, so we cannot
+              directly command it to open the DOI detailbar.
+
+              Instead, we use `openDoiBarSoonForDoi` as an app-global dead
+              letter box that is obviously prone to race conditions, trusting
+              that no-one will produce DOI updates in rapid succession.
+
+              2022-07-18: Re-opening the DOI box works, but the
+              doi.of.annotation.revision field shows the non-revision DOI.
+              Also we currently don't have time to test whether the correct
+              revision will be shown after the mutation. Thus, for now,
+              we have to make our users jump hoops and reload the page.
+            */
+            openDoiBarSoonForDoi = updAnno.doi;
+            // ^-- Set before the new viewer instance is being created.
+            /*
+            viewer.$store.commit('INJECTED_MUTATION', [
+              function mutate() { Object.assign(viewer.annotation, updAnno); }
+            ]);
+            */
+            // viewer.$store.dispatch('fetchList');
+            // ^- We cannot even do that, because automatically reloading
+            //    the list would hide the success message.
+            return setDoiMsg('mint_doi.success');
+          }
+          console.error('Unexpected mintDOI response', annoId, resp);
+          viewer.$el.mintDoiResp = resp;
+          return setDoiMsg('unexpected_error');
         },
+
         mouseenter() {
-            this.startHighlighting()
-            eventBus.$emit("mouseenter", this.id)
+            this.startHighlighting();
+            eventBus.$emit('mouseenter', this.makeEventContext());
         },
         mouseleave() {
-            this.stopHighlighting()
-            eventBus.$emit("mouseleave", this.id)
+            this.stopHighlighting();
+            eventBus.$emit('mouseleave', this.makeEventContext());
         },
 
         startHighlighting(expand)  {
@@ -265,66 +343,74 @@ module.exports = {
         },
         stopHighlighting()   {this.highlighted = false},
         toggleHighlighting() {this.highlighted = ! this.highlighted},
-
-        dateformat(date=new Date()) {return date ? _dateformat(date, this.l10n('dateformat')) : ''},
         collapse(collapseState) {
             this.collapsed = collapseState === 'toggle' ? ! this.collapsed : collapseState === 'hide'
         },
-        numberOf(k) {return numberOf(this.annotation, k)},
-        ensureArray(k) {
-          const anno = JSON.parse(JSON.stringify(this.annotation))
-          ensureArray(anno, k)
-          return anno[k]
+
+        setToVersion(updates) {
+          const viewer = this;
+          /*
+            Usually we'd expect the function switchVersionInplace
+            below to have a "state" argument and modify data inside
+            that. Our annotation would be buried deeply somewhere in
+            there in the anno-list, and we'd have to find it by ID
+            or something.
+
+            Except when the viewer is used in the editor preview, of
+            course. So we'd have to track our viewer's pedigree, too.
+
+            The proper way would be to not modify the annotation in
+            place, but rather have a abstraction layer that shows data
+            from the selected version. That would require a major
+            rewrite though, and extensive testing for whether all
+            elements are updated properly.
+
+            Fortunately, in current vuex (v3.6.2), we can ignore the
+            mutation function's arguments and just use our shortcut,
+            because it points to the same object:
+          */
+          const deepStateAnnoShortcut = viewer.annotation;
+          function switchVersionInplace() {
+            revisionsProps.forEach(function updateInplace(key) {
+              deepStateAnnoShortcut[key] = updates[key];
+            });
+          }
+          viewer.$store.commit('INJECTED_MUTATION', [switchVersionInplace]);
         },
-        setToVersion(newState) {
-          ;[
-            'body',
-            'created',
-            'modified',
-            'target',
-            'title',
-            'doi',
-          ].map(prop => {
-            Object.assign(this.annotation, {
-              [prop]: newState[prop]
-            })
-          })
-          // eventBus.$emit('setToVersion', this.annotation)
-        },
-        isOlderVersion()     {
+
+        isOlderVersion() {
           return this.newestVersion.created !== this.annotation.created
         },
+
         versionIsShown(version) {
           return version.created === this.created
         },
-        _iiifLink() {
-            if (! this.svgTarget || this.imageHeight <= 0 || this.imageWidth <= 0 || ! this.iiifUrlTemplate) {
-                // console.error("Could not determine width / height of img")
-                return ''
-            }
-            // console.log(this.svgTarget, this.imageHeight,  this.imageWidth, this.iiifUrlTemplate)
-            const svg = this.svgTarget.selector.value
-            let svgWidth
-            svg.replace(/width="(\d+)"/, (_, w) => svgWidth = parseInt(w))
 
-            const $container = $('<div class="annoeditor-iiif-canvas" style="display:none"></div>').appendTo(this.$el).get(0)
-            const drawing = XrxUtils.createDrawing($container, 1, 1)
-            XrxUtils.drawFromSvg(svg, drawing, {
-                absolute: true,
-                grouped: false,
-            })
-            let scale = svgWidth / this.imageWidth
-            // console.log({svgWidth, scale, svg, imageWidth: this.imageWidth, imageHeight: this.imageHeight})
-            let [[x, y], [x2, y2]] = XrxUtils.boundingBox(drawing)
-            $container.remove()
-
-
-            let w = (x2 - x)
-            let h = (y2 - y)
-            ;[x, w] = [x, w].map(_ => _ / this.imageWidth)
-            ;[y, h] = [y, h].map(_ => _ / this.imageHeight)
-            ;[x, y, w, h] = [x, y, w, h].map(_ => _ / scale * 100)
-            return this.iiifUrlTemplate.replace(`{{ iiifRegion }}`, `pct:${x},${y},${w},${h}`)
+        renderIiifLink() {
+          const viewer = this;
+          viewer.cachedIiifLink = xrxUtilsUtils.calcIiifLink(viewer);
         },
+
+        doi2url(doi) { return this.doiResolverBaseUrl + doi; },
+
+        validateRelationLinkBody(rlb) {
+          const viewer = this;
+          const { l10n } = viewer;
+          const errors = [];
+          const vocMiss = l10n('missing_required_field') + ' ';
+
+          (function requiredFields() {
+            const missing = [
+              'predicate',
+              'purpose',
+            ].filter(k => !rlb[k]);
+            if (!missing.length) { return; }
+            const uiNames = missing.map(k => l10n('relationlink_' + k));
+            errors.push(vocMiss + uiNames.join(', '));
+          }());
+
+          return errors;
+        },
+
     },
 }

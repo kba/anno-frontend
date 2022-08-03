@@ -22,12 +22,6 @@ function initialState() {return {
 }}
 
 //
-// initial state
-//
-
-const state = initialState()
-
-//
 // getters
 //
 
@@ -52,18 +46,10 @@ const mutations = {
 
 
     SET_HTML_BODY_VALUE(state, v) {
-        if (!textualHtmlBody.first(state))
+        if (!textualHtmlBody.first(state)) {
             add(state, 'body', textualHtmlBody.create())
-        textualHtmlBody.first(state).value = v
-    },
-
-    SET_SVG_SELECTOR(state, {svg, source}) {
-        if (!svgSelectorResource.first(state)) {
-            add(state, 'target', svgSelectorResource.create({}))
         }
-        if (source)
-            svgSelectorResource.first(state).source = source
-        svgSelectorResource.first(state).selector.value = svg
+        textualHtmlBody.first(state).value = v
     },
 
     SET_TITLE(state, title) {
@@ -84,7 +70,7 @@ const mutations = {
 
     REPLACE_ANNOTATION(state, newState) {
         Object.keys(state).forEach(k => {
-            if (newState[k]) Vue.set(state,  k, newState[k])
+            if (newState[k]) Vue.set(state, k, newState[k])
             else state[k] = null
         })
     },
@@ -95,8 +81,16 @@ const mutations = {
     },
 
     RESET_ANNOTATION(state) {
-        Object.keys(state).forEach(k => state[k] = null)
-        Object.assign(state, initialState())
+        Object.keys(state).forEach(function reset(key) {
+          state[key] = null;    // trigger potential setter
+          /* don't: delete state[key];
+            It somehow breaks vue bindings on the bodies array,
+            which would disconnect the list of SemTags and Links so
+            they would be displayed as always-empty even though their
+            "add" buttons do indeed still add empty entries.
+          */
+        });
+        Object.assign(state, initialState());
     },
 
     SET_REPLY_TO(state, v) {
@@ -123,7 +117,7 @@ const mutations = {
         ensureArray(addTo, prop)
         addTo[prop].splice(0, addTo[prop].length)
         value.forEach(v => {
-            console.log(addTo)
+            // console.debug('SET_RELATIONLINK_PROP: addTo:', addTo)
             add(addTo, prop, v)
         })
     },
@@ -139,7 +133,7 @@ const mutations = {
         ensureArray(addTo, prop)
         addTo[prop].splice(0, addTo[prop].length)
         value.forEach(v => {
-            console.log(addTo)
+            // console.debug('SET_SEMTAG_PROP: addTo:', addTo)
             add(addTo, prop, v)
         })
     },
@@ -147,7 +141,7 @@ const mutations = {
 }
 
 module.exports = {
-    state,
+    state: initialState(),
     getters,
     mutations,
 }

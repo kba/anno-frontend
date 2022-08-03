@@ -1,27 +1,31 @@
 .annoeditor-list {
-  .panel-group {
-    margin-bottom: 0;
-    & > .panel {
-      margin-top: 0 !important;
+
+  margin-bottom: 10em;
+
+  .anno-list-buttonbar-top {
+    position: relative;
+    margin-top: 5px;
+    z-index: 300;
+    &.pull-left { z-index: 310; }
+
+    .panel-group {
+      margin-bottom: 0;
+      & > .panel {
+        margin-top: 0 !important;
+      }
     }
-  }
-  .sort-menu {
-    & > li {
-      display: block;
-      text-align: left;
+
+    .sort-menu {
+      & > li {
+        display: block;
+        text-align: left;
+      }
     }
+
   }
 
-  .btn-group>.btn:first-child {
-    border-top-right-radius: 4px !important;
+  .annot-list {
+    margin: 1em 0;
   }
-  
-  .annoeditor-info-button {
-    border-radius: 50%;
-    margin-left: 5px;
-    height: 16px;
-    line-height: 1;
-    width: 16px;
-    padding-top: 1px;
-  }
+
 }

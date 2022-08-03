@@ -1,1 +1,2 @@
-module.exports = new(require('vue').default)()
+const Vue = require('vue').default;
+module.exports = new Vue();

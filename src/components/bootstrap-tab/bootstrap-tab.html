@@ -1,3 +1,9 @@
-<div role="tabpanel" class="tab-pane" :class="{'active':active}" :id="name">
-    <slot></slot>
+<div :id="name" role="tabpanel"
+  :class="[
+    'tab-pane',
+    paneCls,
+  ].filter(Boolean)"
+  v-show="visible"
+  >
+  <slot></slot>
 </div>

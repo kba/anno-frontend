@@ -1,0 +1,37 @@
+<div class="row licences">
+  <div class="col-sm-1">
+    <label class="license-label" for="annoeditor-license-select"
+      >{{ l10n('License') }}</label>
+  </div>
+  <div class="license-selection-col col-md-11">
+    <div id="annoeditor-license-select"
+      class="btn-group"
+      data-toggle="buttons"
+      >
+      <label
+        data-toggle="popover"
+        data-trigger="hover"
+        data-placement="top"
+        v-for="(licInfo, licKey) in this.licensesInfo"
+        :key="licKey"
+        :title="l10n(licInfo.title)"
+        :data-content="l10n(licInfo.author_desc)"
+        @click="$store.commit('SET_RIGHTS', licInfo.url)"
+        :class="[
+          'btn',
+          'btn-default',
+          'btn-outline-secondary',
+          (($store.state.editing.rights === licInfo.url) && 'active'),
+        ].filter(Boolean)"
+        :data-license-id="licKey"
+        :data-license-details="JSON.stringify(licInfo, null, 2)"
+        >
+        <img :src="licInfo.img_88x31"/>
+        <del>
+          <input type="radio" name="dummy-radio-button"><!--
+            Our legacy code doesn't care, but BS4 expects this. -->
+        </del>
+      </label>
+    </div><!-- .btn-group -->
+  </div><!-- .licInfo-selection-col -->
+</div>

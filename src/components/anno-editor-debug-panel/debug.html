@@ -1,0 +1,44 @@
+<section class="debug-panel">
+
+<!--
+  Vue seems to not know HTML 5:
+  [Vue warn]: Unknown custom element: <chapter> - did you register the
+    component correctly? For recursive components, make sure to provide
+    the "name" option.
+-->
+
+<div class="topic" data-topic="appcfg">
+  <h3>AnnoApp Config</h3>
+  <json-export-import-field class="jsondump-appcfg"
+    :dumpFunc="dumpAppConfig"
+    />
+</div>
+
+
+<div class="topic" data-topic="annot">
+  <h3>Annotation</h3>
+  <json-export-import-field class="jsondump-annot" path="editing"
+    :extraButtons="[
+      { c: '🗯', n: 'Validate editor fields', f: validateEditorFields, a: null },
+    ]"
+    />
+</div>
+
+
+<div class="topic" data-topic="annot">
+  <h3>ACL / Login override</h3>
+  <json-export-import-field class="jsondump-acl" path="acl"
+    :extraButtons="[
+      { c: '🚫', n: 'Clear ACL', f: updateAcl, a: null },
+      { c: '✨', n: 'Grant all', f: updateAcl,
+        a: { '*': { '*': true } } },
+      { c: '📛', n: 'Force logged-in', f: updateAcl,
+        a: { ['debug:override:isLoggedIn']: true } },
+      { c: '👽', n: 'Force logged-out', f: updateAcl,
+        a: { ['debug:override:isLoggedIn']: false } },
+    ]"
+    />
+</div>
+
+
+</section>

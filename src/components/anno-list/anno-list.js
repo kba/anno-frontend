@@ -1,3 +1,4 @@
+// -*- coding: utf-8, tab-width: 2 -*-
 /*
  * ### anno-list
  *
@@ -14,80 +15,115 @@
  * - `@param {String} state` Either `show` or `hide`
  *
  */
-const eventBus = require('@/event-bus')
-const HelpButton = require('@/components/help-button')
-const $ = require('jquery')
+'use strict';
 
+const eventBus = require('../../event-bus.js');
+const HelpButton = require('../help-button');
+const bootstrapCompat = require('../../bootstrap-compat.js');
+const sessionStore = require('../../browserStorage.js').session;
+
+/* eslint-disable global-require */
 module.exports = {
-    mixins: [
-        require('@/mixin/l10n'),
-        require('@/mixin/auth'),
-        require('@/mixin/api'),
-        require('@/mixin/prefix'),
-    ],
-    components: {HelpButton},
-    data() {return {
-        collapsed: 'hide'
-    }},
-    template: require('./anno-list.html'),
-    style: require('./anno-list.scss'),
-    mounted() {
 
-        // Collapse/Expand all according to setting
-        if (window.sessionStorage.getItem("annolistCollapseAll") !== null) {
-            this.collapsed = window.sessionStorage.getItem("annolistCollapseAll") === 'hide'
-        }
-        this.$watch(() => this.list, () => this.collapseAll(this.collapsed ? 'hide' : 'show'))
-        this.collapseAll(this.collapsed ? 'hide' : 'show')
+  template: require('./anno-list.html'),
+  style: require('./anno-list.scss'),
 
-        // enable popovers
-        $('[data-toggle="popover"]', this.$el).popover()
+  mixins: [
+    require('../../mixin/l10n.js'),
+    require('../../mixin/auth.js'),
+    require('../../mixin/api.js'),
+    require('../../mixin/prefix.js'),
+  ],
 
-        // Sort the list initially and after every fetch
-        this.sort()
-        eventBus.$on('fetched', () => this.sort())
+  components: {
+    HelpButton,
+  },
 
-        // When permissions have been updated, force an update.
-        eventBus.$on('updatedPermissions', () => this.$forceUpdate())
+  data() {
+    return {
+      collapsed: true,
+      bootstrapOpts: bootstrapCompat.sharedConfig,
+    };
+  },
 
-        // Initially open the list if there was an annotation persistently adressed
-        if (this.purlId && this.purlAnnoInitiallyOpen) {
-            eventBus.$once('fetched', () => {
-                setTimeout(() => eventBus.$emit('expand', this.purlId), 1)
-            })
-        }
+  watch: {
+    // https://v3.vuejs.org/api/instance-methods.html#watch
+    list() {
+      this.collapseAll('apply');
     },
-    computed: {
-        sortedBy() {return this.$store.state.annotationList.sortedBy},
-        list() {return this.$store.state.annotationList.list},
+  },
 
-        targetSource() {return this.$store.state.targetSource},
-        token() {return this.$store.state.token},
-        purlTemplate() {return this.$store.state.purlTemplate},
-        purlId() {return this.$store.state.purlId},
-        purlAnnoInitiallyOpen() {return this.$store.state.purlAnnoInitiallyOpen},
-        numberOfAnnotations() {return this.$store.getters.numberOfAnnotations},
+  mounted() {
+    const annoList = this;
 
-        isLoggedIn() {return this.$store.getters.isLoggedIn},
-        enableLogoutButton() {return this.$store.state.enableLogoutButton},
-        enableRequestButton() {return this.$store.state.enableRequestButton},
-        enableRegisterButton() {return this.$store.state.enableRegisterButton},
-        logoutEndpoint() {return this.$store.state.logoutEndpoint},
-        registerEndpoint() {return this.$store.state.registerEndpoint},
-        requestEndpoint() {return this.$store.state.requestEndpoint},
-        loginEndpoint() {return this.$store.state.loginEndpoint},
-        tokenDecoded() {return this.$store.getters.tokenDecoded},
+    (function restoreSessionSetting() {
+      const ca = sessionStore.get('anno-list:collapsed');
+      if (typeof ca === 'boolean') { annoList.collapsed = ca; }
+    }());
+    annoList.collapseAll('apply');
+
+    // Sort the list initially and after every fetch
+    annoList.sort();
+    eventBus.$on('fetched', () => annoList.sort());
+
+    // When permissions have been updated, force an update.
+    eventBus.$on('updatedPermissions', () => annoList.$forceUpdate());
+
+    // Initially open the list if there was an annotation persistently adressed
+    if (annoList.purlId && annoList.purlAnnoInitiallyOpen) {
+      eventBus.$once('fetched', () => {
+        setTimeout(() => eventBus.$emit('expand', annoList.purlId), 1);
+      });
+    }
+  },
+  computed: {
+    sortedBy() { return this.$store.state.annotationList.sortedBy; },
+    list() { return this.$store.state.annotationList.list; },
+
+    targetSource() { return this.$store.state.targetSource; },
+    token() { return this.$store.state.token; },
+    purlTemplate() { return this.$store.state.purlTemplate; },
+    purlId() { return this.$store.state.purlId; },
+    purlAnnoInitiallyOpen() { return this.$store.state.purlAnnoInitiallyOpen; },
+    numberOfAnnotations() { return this.$store.getters.numberOfAnnotations; },
+
+    isLoggedIn() { return this.$store.getters.isLoggedIn; },
+    tokenDecoded() { return this.$store.getters.tokenDecoded; },
+
+    logoutButtonVisible() {
+      return Boolean(this.isLoggedIn && this.$store.state.logoutPageUrl);
     },
-    methods: {
-        logout() {return this.$store.dispatch('logout')},
-        sort(...args) {return this.$store.dispatch('sort', ...args)},
-        create() {return eventBus.$emit('create', this.targetSource)},
 
-        collapseAll(state) {
-            this.collapsed = state === 'hide'
-            this.$children.forEach(annoViewer => annoViewer.collapse && annoViewer.collapse(state))
-            window.sessionStorage.setItem('annolistCollapseAll', state)
-        },
+    logoutButtonUrl() {
+      const ep = this.$store.state.logoutPageUrl;
+      if (ep === 'fake://insecure') { return ''; }
+      return ep;
     },
-}
+
+  },
+
+
+  methods: {
+    sort(...args) { return this.$store.dispatch('sort', ...args); },
+    create() { return eventBus.$emit('create', this.targetSource); },
+
+    logoutButtonClicked() { this.$store.dispatch('assumeLoggedOut'); },
+
+    collapseAll(action) {
+      const annoList = this;
+      let st = annoList.collapsed;
+      if (action === 'hide') { st = true; }
+      if (action === 'show') { st = false; }
+      if (action === 'toggle') { st = !st; }
+      annoList.collapsed = st;
+      if (action !== 'apply') { sessionStore.put('anno-list:collapsed', st); }
+
+      const verb = (st ? 'hide' : 'show');
+      annoList.$children.forEach(function maybeCollapse(viewer) {
+        if (viewer.collapse) { viewer.collapse(verb); }
+      });
+    },
+
+  },
+};
 

@@ -1,9 +1,9 @@
-<div class="panel panel-default annoeditor-tags-editor">
+<div class="card panel panel-default annoeditor-tags-editor">
   <div class="panel-heading">
     {{ l10n('tags') }}
     <bootstrap-button @click="addSimpleTag">{{ l10n('add_tag') }}</bootstrap-button>
   </div>
-  <div class="panel-body">
+  <div class="card-body panel-body">
     <div class="row" v-for="body in simpleTagBodies">
       <div class="col-md-3">
         <input class="form-control" v-model="body.value"/>

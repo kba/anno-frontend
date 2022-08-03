@@ -1,7 +1,20 @@
-.annoeditor-sidebar {
+.annoeditor-global-css:not(.ui-debug-mode-on) {
+  .debug-feature { display: none !important; }
+}
+
+.annoeditor-global-css {
+  .modal-backdrop {
+    z-index: 99 !important;
+  }
+}
+
+.annoeditor-global-css.annoeditor-sidebar {
+
+  position: relative;
+
   &.annoeditor-sidebar-standalone {
     position: fixed;
-    z-index: 1000;
+    z-index: 100; /* one above .modal-backdrop */
     background: white;
     top: 0;
     right: 0;
@@ -26,17 +39,33 @@
     }
   }
 
-  .annoeditor-sidebar-no-annotations {
-    background: #fee;
-    & > div {
-      width: 50%;
-      margin: 0 auto;
-      padding: 1em 0;
+  .annoeditor-sidebar-body {
+
+    .msgbox {
+      margin: 1em 0;
+      background-color: linen;
+      border: 1px solid wheat;
+
+      & p {
+        margin: 1ex;
+      }
+
+      &.error {
+        background-color: mistyrose;
+        border-color: tomato;
+      }
+
+      &.empty > .msg {
+        margin-left: 20%;
+        margin-right: 20%;
+      }
     }
+
+  }
+
+  .anno-editor-error {
+    color: red;
+    border-color: red;
+    background-color: mistyrose;
   }
 }
-
-.modal-backdrop {
-    z-index: 999 !important;
-}
-

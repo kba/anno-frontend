@@ -1,105 +1,173 @@
-<div class="annoeditor-list">
-  <div class="btn-group pull-left hidden-print" role="group">
-    <a v-if="isLoggedIn && enableLogoutButton"
-      class="btn btn-xs btn-warning"
-      @click.stop="logout"
-      :href="tokenDecoded.sub"
-      >
-      {{ l10n('logout') }}
-    </a>
+<div :class="[
+  'annoeditor-list',
+  `access-${isLoggedIn ? 'logged-in' : 'guest'}`,
+  ]"
+  :data-number-of-annots="list.length"
+  >
+  <div class="btn-group
+    anno-list-buttonbar-top
+    pull-left
+    hidden-print
+    " role="group">
+    <template v-if="isLoggedIn">
+      <a v-if="logoutButtonVisible"
+        @click="logoutButtonClicked"
+        class="btn btn-sm btn-warning"
+        :href="logoutButtonUrl"
+        >
+        {{ l10n('logout') }}
+      </a>
+    </template><!-- logged in -->
+    <template v-else><!-- guest access -->
+      <a v-if="$store.state.loginFormUrl"
+        class="btn btn-sm btn-default btn-outline-secondary
+          login-button"
+        :href="$store.state.loginFormUrl"
+        >
+        {{ l10n('login') }}
+      </a>
+      <a v-if="$store.state.loginRegistrationFormUrl"
+        class="btn btn-sm btn-default btn-outline-secondary
+          login-button"
+        :href="$store.state.loginRegistrationFormUrl"
+        >
+        {{ l10n('register') }}
+      </a>
+      <help-button topic="popover-not-logged-in"
+        v-if="$store.state.loginFormUrl
+          || $store.state.loginRegistrationFormUrl
+          "
+        />
+    </template><!-- guest access -->
 
-    <a v-if="!isLoggedIn && loginEndpoint"
-      class="btn btn-xs btn-default dropdown-toggle"
-      :href="loginEndpoint"
-      >
-      {{ l10n('login') }}
-    </a>
+    <template v-if="$store.state.offerCreateNewAnnotationButton">
+      <template v-if="$auth('create', targetSource)">
+        <button class="btn btn-sm
+          btn-success
+          create-new-annotation-button"
+          @click="create"
+          >
+          {{ l10n('compose_new_annot') }}
+        </button>
+        <template v-if="isLoggedIn">
+          <!-- authorized AND logged in -->
+          <help-button topic="popover-logged-in" />
+        </template><!-- logged in but no access -->
+      </template><!-- authorized -->
+      <template v-else><!-- not authorized -->
 
-    <help-button v-if="!isLoggedIn"
-      :help-url-template="l10n('help.url.template')"
-      :button-label="l10n('register')"
-      :title="l10n('register')"
-      topic="popover-not-registered"
-      />
+        <bootstrap-button ref="btnAclRequestCreate"
+          v-if="$store.state.permissionsRequestFormUrl
+            && ($store.state.permissionsRequestAllowGuest || isLoggedIn)"
+          btn-class="outline-secondary
+            create-new-annotation-button
+            decoy
+            acl-request-create
+          "
+          balloon-color="body"
+          >
+          {{ l10n('compose_new_annot') }}
+          <div slot="balloon">
+            <p>{{ l10n('not_authorized') }}</p>
+            <a :href="$store.state.permissionsRequestFormUrl"
+              target="_blank"
+              class="btn btn-sm
+                btn-default
+                btn-outline-success"
+            >{{ l10n('request_permission_now') }}</a>
+          </div>
+        </bootstrap-button>
+        <template v-if="isLoggedIn">
+          <!-- not authorized even though we're logged in -->
+          <help-button topic="popover-not-authorized" />
+        </template><!-- logged in but no access -->
+      </template><!-- not authorized -->
+    </template><!-- offerCreateNewAnnotationButton -->
 
-    <button v-if="$auth('create', targetSource)"
-      class="btn btn-xs btn-success"
+  </div><!-- .anno-list-buttonbar-top.pull-left -->
+
+  <div class="btn-group
+    anno-list-buttonbar-top
+    pull-right
+    hidden-print
+    " role="group">
+
+    <button class="btn btn-sm
+      pull-right
+      debug-feature
+      debug-button-force-compose
+      "
       @click="create"
-      >
-      {{ l10n('new') }}
+      >⚙
     </button>
 
-    <a class="btn btn-xs btn-danger"
-      :href="requestEndpoint"
-      v-if="isLoggedIn && ! $auth('create', targetSource)"
-      >
-      {{ l10n('not_enough_rights') }}
-    </a>
+    <bootstrap-button ref="btnCollapseAll"
+      @click="collapseAll('toggle')"
+      v-if="numberOfAnnotations"
+      btn-class="outline-secondary"
+      :data-state="collapsed ? 'hide' : 'show'"
+      :icon-fa="collapsed ? 'plus' : 'minus'"
+      >{{ collapsed ? l10n('open_all') : l10n('close_all') }}
+    </bootstrap-button>
 
-  <help-button v-show="isLoggedIn && ! $auth('create', targetSource)"
-    :help-url-template="l10n('help.url.template')"
-    :title="l10n('popover-not-authorized')"
-    topic="popover-not-authorized"
-    />
-
-  <help-button v-show="isLoggedIn && $auth('create', targetSource)"
-    :help-url-template="l10n('help.url.template')"
-    :title="l10n('popover-logged-in')"
-    topic="popover-logged-in"
-    />
-
-  </div>
-
-  <div class="btn-group btn-group-vertical pull-right hidden-print" role="group">
-
-    <button v-if="collapsed && numberOfAnnotations > 0" class="btn btn-default btn-xs" @click="collapseAll('show')">
-      <span class="fa fa-plus"></span>&nbsp;{{ l10n('open_all') }}
-    </button>
-
-    <button v-if="! collapsed && numberOfAnnotations > 0" class="btn btn-default btn-xs" @click="collapseAll('hide')">
-      <span class="fa fa-minus"></span>&nbsp;{{ l10n('close_all') }}
-    </button>
-
-    <button v-if="numberOfAnnotations > 0" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" @click="collapseAll('hide')">
+    <button v-if="numberOfAnnotations > 0" class="btn btn-default btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown" @click="collapseAll('hide')">
       <span class="fa fa-sort"></span>&nbsp;{{ l10n('sort') }} <span class="caret"></span>
     </button>
 
     <!-- {{ sortedBy }} -->
-    <ul class="dropdown-menu dropdown-menu-small small sort-menu" role="menu">
+    <component :is="bootstrapOpts.tags.dropdownMenu"
+      role="menu" class="sort-criterion-dropdown-menu
+        dropdown-menu
+        dropdown-menu-small
+        dropdown-menu-right
+        small
+        sort-menu
+        ">
+      <template v-for="sortProp in [
+        'created',
+        'modified',
+        'title',
+        'creator',
+      ]">
+      <component :is="bootstrapOpts.tags.dropdownMenuItem"
+        v-for="sortOrder in ['az', 'za']"
+        :key="`sort_${sortProp}_${sortOrder}`"
+        :class="[
+          'criterion',
+          bootstrapOpts.tags.snowflakes.annoListSortMenu.clsAll,
+          'text-nowrap',
+          ((sortedBy === `${sortProp}_${sortOrder}`) &&
+            bootstrapOpts.tags.snowflakes.annoListSortMenu.clsChosen),
+          'sort-prop-' + sortProp,
+          'sort-order-' + sortOrder,
+        ].filter(Boolean)"
+        @click="sort(`${sortProp}_${sortOrder}`)"
+        :data-sort-prop="sortProp"
+        :data-sort-order="sortOrder"
+        >{{ l10n(`sort_prop_${sortProp}`) }}
+          <span :title="l10n(`sort_order_word_${sortOrder}`)"
+            >{{ l10n(`sort_order_symbol_${sortOrder}`) }}</span>
+          </component><!-- sortOrder -->
+      </template><!-- sortProp -->
+    </component><!-- dropdownMenu -->
 
-      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'created_az'}"  @click="sort('created_az')"  > {{ l10n('sort_created_az')  }}</li >
-      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'created_za'}"  @click="sort('created_za')"  > {{ l10n('sort_created_za')  }}</li >
-      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'modified_az'}" @click="sort('modified_az')" > {{ l10n('sort_modified_az') }}</li >
-      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'modified_za'}" @click="sort('modified_za')" > {{ l10n('sort_modified_za') }}</li >
-      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'title_az'}"    @click="sort('title_az')"    > {{ l10n('sort_title_az')    }}</li >
-      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'title_za'}"    @click="sort('title_za')"    > {{ l10n('sort_title_za')    }}</li >
-      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'creator_az'}"  @click="sort('creator_az')"  > {{ l10n('sort_creator_az')  }}</li >
-      <li :class="{btn: true, 'btn-xs': true, 'btn-primary': sortedBy == 'creator_za'}"  @click="sort('creator_za')"  > {{ l10n('sort_creator_za')  }}</li >
+  </div><!-- .anno-list-buttonbar-top.pull-right -->
 
-    </ul>
+  <div style="clear: both;"></div>
 
+  <div class="panel-group annot-list">
+    <slot name="annot-list-empty" v-if="!list.length" />
+    <anno-viewer v-for="annotation in list" :key="annotation.id"
+      :annotation="annotation"
+      :purl-id="purlId"
+      :as-reply="false"
+      >
+    </anno-viewer>
   </div>
 
-    <div style="clear: both;"></div>
-
-
-    <div style="text-align: left; margin: 5px; margin-top: 0;">
-
-      <div class="panel-group">
-        <anno-viewer v-for="annotation in list" :key="annotation.id"
-          :annotation="annotation"
-          :purl-template="purlTemplate"
-          :purl-id="purlId"
-          :as-reply=false
-          :image-width="$store.state.targetImageWidth"
-          :image-height="$store.state.targetImageHeight"
-          :thumb-stroke-color="$store.state.thumbStrokeColor"
-          :thumb-fill-color="$store.state.thumbStrokeColor"
-          :iiif-url-template="$store.state.iiifUrlTemplate"
-          >
-        </anno-viewer>
-      </div>
-    </div>
-
-    <anno-editor-modal ref='modal-editor' :editor-id="`${prefix}-modal-editor`" />
+  <div class="anno-editor-modal-wrapper">
+    <anno-editor-modal ref="modalEditor"
+      :editor-id="`${prefix}-modal-editor`"
+      />
+  </div>
 </div>

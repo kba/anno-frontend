@@ -1,1 +1,3 @@
-module.exports = require('./anno-viewer.js')
+'use strict';
+
+module.exports = require('./anno-viewer.js');

@@ -30,18 +30,25 @@ const sorters = {
     creator_za: _sortAlpha('creator', -1),
 }
 
-module.exports = {
+
+const ERR_NO_FETCH_ATTEMPT = ('Fetching has not been triggered'
+  + ', probably because some earlier initialization failed.');
+
+
+const annoList = {
     state: {
         list: [],
         sortedBy: 'created_az',
         allCollaped: 'false',
+        fetching: false,
+        fetchFailed: new Error(ERR_NO_FETCH_ATTEMPT),
     },
     getters: {
         numberOfAnnotations(state) {return state.list.length},
     },
     actions: {
 
-        sort({commit, state}, sortBy) {
+        sort({commit}, sortBy) {
             commit('SORT_LIST', sortBy)
         },
 
@@ -69,8 +76,15 @@ module.exports = {
         //     })
         // },
 
+        ANNOLIST_UPDATE_STATE(state, upd) {
+          // console.debug('ANNOLIST_UPDATE_STATE():', upd, state);
+          Object.assign(state, upd);
+        },
+
         REPLACE_LIST(state, list) {
-            state.list = list
+            state.fetching = false;
+            state.fetchFailed = false;
+            state.list = list;
         },
 
         ADD_TO_LIST(state, v) {
@@ -78,3 +92,6 @@ module.exports = {
         },
     }
 }
+
+module.exports = annoList;
+// ^-- also found as annoApp.$store.state.annotationList

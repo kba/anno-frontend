@@ -1,0 +1,24 @@
+%YAML 1.1
+# ^-- ATTN: [2019-12-31] If you use a later version, Github will fail
+#     with a bogus error message "You have an error in your yaml syntax".
+# -*- coding: UTF-8, tab-width: 4 -*-
+---
+
+on:
+    push:
+        branches:
+            -   '*'
+
+jobs:
+    job_ci_test:
+        runs-on: ubuntu-latest
+        name: 'CI tests'
+        steps:
+            - run: 'git config --global init.defaultBranch master'
+            - uses: actions/setup-node@v2
+              with:
+                node-version: 16
+            - uses: actions/checkout@v2
+            - run: './test/ci.sh'
+
+...

@@ -1,0 +1,43 @@
+.annoeditor-global-css {
+
+
+  .hidden { display: none; }
+
+  a.btn-danger:link,
+  a.btn-danger:visited,
+  a.btn-danger {
+    color: mistyrose;
+  }
+
+  .btn-outline-danger, .btn-danger { z-index: 8; }
+
+  .btn-toolbar.pull-right {
+    justify-content: flex-end;
+
+    &, & .btn-group {
+      float: right; /* <-- required for the .btn-group in BS3 */
+      display: inline-block;
+      text-align: right;
+    }
+
+  }
+
+  .btn.btn-abused-for-infotext {
+    &:not(:disabled):not(.disabled),
+    & {
+      cursor: text;
+      -webkit-user-select: text;
+      -moz-user-select: text;
+      -ms-user-select: text;
+      user-select: text;
+    }
+    &:focus, &:active {
+      box-shadow: none;
+    }
+  }
+
+
+
+
+
+}

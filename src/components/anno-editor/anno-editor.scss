@@ -30,3 +30,59 @@
 #anno_annotations h4 {
   font-size: 13px;
 }
+
+
+.annoeditor-html-editor > .panel-body {
+  overflow-y: auto; /* Workaround for overly-tall HTML editor */
+}
+
+.annoeditor-svg-zones-editor {
+
+  .xrx-toolbar {
+    background-color: whitesmoke;
+    border: 1px solid silver;
+    margin: -1px; margin-bottom: 2px;
+
+    .input-group {
+      padding: 0 5px;
+      border: inherit;
+      border-top-width: 0;
+      border-left-width: 0;
+      border-bottom-width: 0;
+      height: auto;
+
+      span.input-group-addon { display: none; }
+
+      button {
+        border-radius: 0; /* <-- help debug exact bounding boxes */
+        padding: 0 !important; /* Issue ubhd:168: With any padding here,
+          Firefox 88 will somehow insist to fantasize some space above and
+          below the img child. That space seems to be neither a margin nor
+          a padding. As a replacement for this padding, we use a transparent
+          border: */
+        border: 5px solid transparent;
+      }
+
+      & > button {
+        height: auto !important; /* <-- ATTN: [ubhd:168] Setting auto height
+          would be too small for the `.dropdown button` in Waterfox 56.5.
+          Thus the restriction to direct children. */
+      }
+
+      .dropdown button {
+        border-width: 0; /* Required for alignment in Firefox 88. [ubhd:168] */
+      }
+
+      img {
+        display: block; /* <-- Required to make the parent button element
+          fit tightly. (https://stackoverflow.com/a/31444891)
+          Without this, depending on other CSS, Firefox 88 will show stubborn
+          whitespace above or below the image, or [ubhd:168] ignore some of
+          the lower pixels for toolbar height calculation. */
+      }
+
+    }
+
+  }
+
+}

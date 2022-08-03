@@ -7,20 +7,86 @@
     opacity: 0;
   }
 
-  // This changed between bootstrap 3.1 and 3.2 for panels
   overflow: visible;
+  /* ^-- This changed between bootstrap 3.1 and 3.2 for panels */
 
-  &.annoeditor-purl {
-    & > .panel-heading,
-    &.annoeditor-reply > .panel-body > .media > div > div:nth-child(1) {
-      background-color: #365187;
-      color: white;
+  .annoeditor-iiif-link a,
+  .url-caption-link {
+    word-wrap: break-all;
+  }
 
-      & > .btn {
-        background-color: #7793cc;
+  .annoeditor-iiif-link { font-size: smaller; }
+  .annoeditor-iiif-link strong { font-weight: inherit; }
+
+  span.relation-predicate { font-size: smaller; }
+  span.relation-predicate:after { content: ":"; }
+
+  & > .panel-heading {
+    background: #e8e8e8;
+    color: black;
+  }
+
+  .btn-toolbar {
+    /* Don't! Would interfere with the versions dropdown. [ubhd:228]
+    max-width: 100%; overflow: auto;
+    */
+
+    .btn-group {
+      margin-top: 0.5ex;
+      /* Don't! Would interfere with the versions dropdown. [ubhd:228]
+      max-width: 100%; overflow: auto;
+      */
+
+      .btn-group {
+        margin-top: 0;
+      }
+
+      .btn {
+        margin-bottom: 0.5ex;
       }
     }
   }
+
+  .anno-editor-anno-body-buttonbar-top {
+
+    .btn {
+      &.btn-secondary:not(.active) {
+        background-color: #f0f0f0;
+        color: black;
+      }
+
+      &.anno-creators {
+        border-right-width: 0 !important;
+        padding-right: 0.5ex !important;
+
+        & > :last-child .list-sep { display: none; }
+      }
+
+      /*
+      &.anno-creation-time {
+        border-left-width: 0 !important;
+        padding-left: 0 !important;
+      }
+      */
+
+      .button-caption {
+        /*
+          [2021-09-17] Try to limit text to one line. From all the
+          approaches listed on https://css-tricks.com/line-clampin/ ,
+          this one seems to be the least bad one.
+        */
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+
+    }
+
+  }
+
+
 
   &.annoeditor-highlight {
     & > .panel-heading {
@@ -47,6 +113,7 @@
   .dropdown-menu {
     text-align: left;
     color: inherit !important;
+    border-color: darkgray;
     a {
       cursor: pointer;
     }
@@ -57,6 +124,7 @@
     padding: 2px 0;
 
     .panel-title {
+      margin: 0;
       font-size: 1em;
       flex-grow: 1;
 
@@ -82,12 +150,8 @@
 
     & .media-body {
 
+      max-width: 100%; overflow: auto;
       padding: 5px;
-
-      // The header containing name, date, purl, iiif
-      & > div:nth-child(1) {
-        min-height: 22px;
-      }
 
       & > h4 {
         margin-top: 3px;
@@ -106,4 +170,61 @@
       background-color: #ddf;
     }
   }
+
+  .license-icon {
+    --size: 16px;   /*
+      The 64x64 pixels image will be scaled down, so ideally size should
+      be chosen such that 64 is an integer multiple of size. */
+    width: var(--size); height: var(--size);
+  }
+
+  .detailbars {
+
+    dl {
+      display: none;
+      &.active { display: block; }
+
+      border-bottom: 1px solid silver;
+    }
+
+    dt, dd {
+      margin: 0;
+      padding: 0;
+    }
+
+    dt {
+      font-weight: bold;
+    }
+
+    .detailbar-creation-date dt {
+      float: left;
+      margin-right: 0.5em;
+      min-width: 6em;
+    }
+  }
+
+  .anno-editor-anno-body-buttonbar-bottom {
+
+    & > .btn-group {
+      margin-top: 10px;
+    }
+
+  }
+
+
+  .anno-skos-note p {
+    margin-top: 0;
+    margin-bottom: 0;
+    position: relative;
+    font-size: smaller;
+  }
+  .anno-skos-note p:before { content: "⬑ "; }
+
+}
+
+.annoeditor-viewer {
+
+  .comment-separator { margin-bottom: 1ex; }
+  .navigation-separator { clear: both; margin-bottom: 2px; }
+
 }

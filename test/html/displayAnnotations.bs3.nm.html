@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>BS3 Display Annotations Test</title>
+  <!--
+    Bootstrap3 variant of displayAnnotations.nm.html – quod vide for docs.
+  -->
+  <meta http-equiv="Content-Script-Type" content="text/javascript">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+</head><body>
+
+<main class="sidebar-container"><div class="popups-boundary-marker">
+<div id="anno-app-sidebar">
+  <div id="anno-app-container"></div>
+</div><!-- #anno-app-sidebar -->
+</div></main><!-- .sidebar-container -->
+
+<script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+
+<script src="cfg.anno-server.defaults.js"></script>
+<script src="cfg.tests.defaults.js"></script>
+<script src="../../.git/@/config-override/cfg.anno-server.js"></script>
+<script src="../../.git/@/config-override/cfg.tests.js"></script>
+<script src="../../../anno-local/config-override/cfg.anno-server.js"></script>
+<script src="../../../anno-local/config-override/cfg.tests.js"></script>
+
+<style>
+  @import url("../../node_modules/bootstrap3/dist/css/bootstrap.min.css");
+  @import url("../../node_modules/font-awesome/css/font-awesome.min.css");
+
+  @import url("tests.defaults.css");
+  @import url("../../.git/@/config-override/tests.css");
+  @import url("../../../anno-local/config-override/tests.css");
+</style>
+
+<script src="../../node_modules/bootstrap3/dist/js/bootstrap.min.js"></script>
+<script src="../../node_modules/quill/dist/quill.js"></script>
+<script src="../../node_modules/axios/dist/axios.js"></script>
+<script src="../../node_modules/semtonotes-client/xrx.api.drawing.min.js"></script>
+<script src="../../node_modules/@ubhd/authorities-client/dist/authorities-client.js"></script>
+<script src="../../node_modules/semtonotes-utils/dist/xrx-utils.js"></script>
+<script src="../../node_modules/@kba/xrx-vue/dist/xrx-vue.js"></script>
+<script src="../../node_modules/@/anno-common/anno-webpack/dist/anno-common.dev.js"></script>
+<script src="../../dist/anno-frontend.dev.js"></script>
+
+<!--  ATTN: Don't load test code with type="module", as this would make
+            it run deferred, after displayAnnotations(). -->
+<script src="tests.util.js"></script>
+<script src="tests.xhr-get-anno.js"></script>
+<script src="tests.css-overrides.js"></script>
+
+<script src="../mock.server/mintdoi.success.excerpt.js"></script>
+
+<script>
+displayAnnotations(Object.assign({}, window.annoServerCfg, window.annoTestCfg, {
+  bootstrap: { version: { major: 3 } },
+}));
+</script>
+</body></html>

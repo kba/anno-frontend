@@ -1,15 +1,38 @@
-<a v-if="elem === 'a'"
+<component :is="decideButtonTag()"
   role="button"
-  :class="`btn btn-${btnClass} btn-${btnSize}`" :title="title" @click="$emit('click', $event)">
-  <span v-if="glyphicon" :class="'glyphicon glyphicon-'+glyphicon"></span>
-  <span v-else-if="fontAwesome" :class="'fa fa-'+fontAwesome"></span>
+  :class="[
+    'btn',
+    'btn-default',  // for required for BS3
+    'text-nowrap',
+    'btn-' + [].concat(btnClass).filter(Boolean).join(' '),
+    'btn-' + btnSize,
+  ]"
+  :title="title"
+  @click="clicked"
+  >
+  <i v-if="iconFa" :class="'fa fa-' + iconFa"></i>
+  <i v-if="iconText" class="icon">{{ iconText }}</i>
+  <slot name="icon-custom" />
   <img v-if="src" :src="src" :alt="alt" />
   <slot></slot>
-</a>
-<button  v-else
-  :class="`btn btn-${btnClass} btn-${btnSize}`" :title="title" @click="$emit('click', $event)">
-  <span v-if="glyphicon" :class="'glyphicon glyphicon-'+glyphicon"></span>
-  <span v-else-if="fontAwesome" :class="'fa fa-'+fontAwesome"></span>
-  <img v-if="src" :src="src" :alt="alt" />
-  <slot></slot>
-</button>
+
+  <div v-if="$slots.balloon"
+    class="balloon text-body text-nowrap"
+    @click.stop>
+    <div class="arrow-box">
+      <i :class="balloonBoxClasses('arrow')"></i>
+    </div><!-- .arrow-box -->
+    <div :class="balloonBoxClasses('card panel')">
+      <div class="card-body panel-body">
+        <slot name="balloon" />
+      </div><!-- .card-body -->
+    </div><!-- .card -->
+  </div><!-- .balloon -->
+
+  <div v-if="$slots.popover" class="popover-template hidden">
+    <div ref="popoverContent" class="popover-content">
+      <slot name="popover" />
+    </div><!-- .popover-content -->
+  </div><!-- if popover -->
+
+</component>

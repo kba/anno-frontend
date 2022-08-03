@@ -1,0 +1,20 @@
+<div :class="baseCls">
+  <div class="btn-group toolbar">
+    <button
+      v-for="btn in decideButtons()"
+      :class="[
+        'btn btn-sm btn-default',
+        'btn-outline-secondary',
+        btn.n
+      ]" :value="btn.c"
+      :title="btn.n + (btn.h ? ' (' + btn.h + ')' : '')"
+      @click="extraButtonClicked(btn)">
+      <i v-if="btn.i" :class="'fa fa-' + btn.i" />
+      {{ btn.c || '' }}
+    </button>
+  </div>
+  <textarea ref="txa"
+    :key="baseCls + '@' + redumpedAt + ':' + path"
+    :wrap="wrapTextBox ? 'soft' : 'off'"
+    >{{ dumpJson() }}</textarea>
+</div>

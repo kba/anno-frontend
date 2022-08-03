@@ -1,13 +1,38 @@
-const {langcode, defaultlang} = require('../../l10n-config.json')
+// -*- coding: utf-8, tab-width: 2 -*-
+'use strict';
 
-function l10n(lang, text, localizations) {
-    lang = langcode[lang] ? langcode[lang] : defaultlang
-    return localizations[lang][text] !== undefined
-        ? localizations[lang][text]
-        : localizations[defaultlang][text] !== undefined
-            ? localizations[defaultlang][text]
-            : text
+const getOwn = require('getown');
+
+const l10nCfg = require('../../l10n-config.json');
+
+const langCodesMap = l10nCfg.langcode;
+const dfLangCode = l10nCfg.defaultlang;
+
+
+function l10n(cfg, vocKey, fallback) {
+  const { localizations } = cfg;
+  const bestLang = cfg.language;
+  const normalizedBestLangCode = getOwn(langCodesMap, bestLang);
+
+  const localOverride = getOwn(cfg.l10nOverrides, vocKey);
+  if (localOverride) {
+    const voc = getOwn(localOverride, bestLang, localOverride['*']);
+    if (voc !== undefined) {
+      return voc;
+    }
+  }
+
+  const bestLangDict = getOwn(localizations, normalizedBestLangCode);
+  const bestVoc = getOwn(bestLangDict, vocKey);
+  if (bestVoc) { return bestVoc; }
+
+  const dfLangDict = getOwn(localizations, dfLangCode);
+  const dfLangVoc = getOwn(dfLangDict, vocKey);
+  if (dfLangVoc) { return dfLangVoc; }
+  if (fallback !== undefined) { return fallback; }
+  return vocKey;
 }
+
 
 /**
  * ### `this.l10n(text)`
@@ -38,13 +63,7 @@ function l10n(lang, text, localizations) {
  */
 
 module.exports = {
-
-    methods: {
-        l10n(text) {return l10n(
-          this.$store.state.language,
-          text,
-          this.$store.state.localizations,
-        )}
-    },
-    _l10n: l10n,
-}
+  methods: {
+    l10n(...args) { return l10n(this.$store.state, ...args); },
+  },
+};

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>ACL Debugger</title>
+  <meta http-equiv="Content-Script-Type" content="text/javascript">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+</head><body>
+
+<main><iframe name="ifr" width="800" height="600" src="about:blank"
+  ></iframe></main>
+
+<script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+<script src="../../node_modules/jwt-decode/build/jwt-decode.min.js"></script>
+
+<script src="cfg.anno-server.defaults.js"></script>
+<script src="cfg.tests.defaults.js"></script>
+<script src="../../.git/@/config-override/cfg.anno-server.js"></script>
+<script src="../../.git/@/config-override/cfg.tests.js"></script>
+<script src="../../../anno-local/config-override/cfg.anno-server.js"></script>
+<script src="../../../anno-local/config-override/cfg.tests.js"></script>
+
+<style>
+  @import url("../../node_modules/bootstrap/dist/css/bootstrap.min.css");
+  @import url("../../node_modules/font-awesome/css/font-awesome.min.css");
+
+  @import url("tests.defaults.css");
+  @import url("../../.git/@/config-override/tests.css");
+  @import url("../../../anno-local/config-override/tests.css");
+</style>
+<script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../../node_modules/@/anno-common/anno-webpack/dist/anno-common.dev.js"></script>
+<script src="tests.util.js"></script>
+<script src="aclDebug.main.js"></script>
+
+</body></html>

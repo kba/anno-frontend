@@ -1,60 +1,96 @@
-<div class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg draggable" role="document">
-    <div class="modal-content">
+<teleport :to="$store.state.modalTeleportTarget || 'body'">
+<div role="dialog"
+  :class="[
+    'modal fade',
+    ...decideTopLevelCssClasses(),
+    'anno-editor-modal-dialog',
+  ]"
+  ref="annoEditorDialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div id="anno-editor-modal-content" class="modal-content">
+
       <div class="modal-header">
 
-        <button type="button" class="close" aria-label="Close" @click="discard"><span aria-hidden="true">&times;</span></button>
+        <div class="top-right-buttons pull-right"
+          v-if="bootstrapOpts.version.major < 4">
+          <bootstrap-button @click="discard"
+            btn-class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+            icon-fa="close"
+            />
+        </div>
 
         <!-- <h4>{{ l10n('annoeditor') }}</h4> -->
-        <h4 v-if="editMode === 'create'">
+        <component :is="bootstrapOpts.tags.modalHeaderTitle"
+          class="modal-title"
+          v-if="editMode === 'create'">
           {{ l10n(`annoeditor_mode_create`) }}
-        </h4>
-        <h4 v-if="editMode === 'revise'">
+        </component>
+        <component :is="bootstrapOpts.tags.modalHeaderTitle"
+          class="modal-title"
+          v-if="editMode === 'revise'">
           {{ l10n(`annoeditor_mode_revise`) }}
           <a
             @mouseenter="startHighlighting(id)"
             @mouseleave="stopHighlighting(id)"
-            >{{ purl(id) }}</a>
-        </h4>
-        <h4 v-if="editMode === 'reply'">
+            >{{ this.annoIdToPermaUrl(id) }}</a>
+        </component>
+        <component :is="bootstrapOpts.tags.modalHeaderTitle"
+          class="modal-title"
+          v-if="editMode === 'reply'">
           {{ l10n(`annoeditor_mode_reply`) }}
           <a
             @mouseenter="startHighlighting(replyTo)"
             @mouseleave="stopHighlighting(replyTo)"
-            >{{ purl(replyTo) }}</a>
-        </h4>
+            >{{ this.annoIdToPermaUrl(replyTo) }}</a>
+        </component>
 
-        <div class="pull-right">
-          <bootstrap-button btn-class="primary" @click="save">
-            {{ l10n('save') }}
-          </bootstrap-button>
+        <div class="top-right-buttons ml-auto text-nowrap"
+          v-if="bootstrapOpts.version.major >= 4">
+          <bootstrap-button @click="discard"
+            btn-class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+            icon-fa="close"
+            />
         </div>
 
         <div style="clear: both;"></div>
 
-      </div>
+      </div><!-- .modal-header -->
+
       <div class="modal-body">
-
         <anno-editor ref='editor'/>
+      </div><!-- .modal-body -->
 
-      </div>
       <div class="modal-footer">
 
         <div class="pull-left">
-          <bootstrap-button btn-class="danger" @click="remove" v-if="$auth('remove', id) && editMode === 'revise'">
+          <bootstrap-button @click="remove"
+            btn-class="outline-danger"
+            icon-fa="trash-o"
+            v-if="$auth('remove', id) && editMode === 'revise'">
             {{ l10n('delete_anno') }}
           </bootstrap-button>
         </div>
 
-        <bootstrap-button data-dismiss="modal" @click="discard">
+        <bootstrap-button @click="discard"
+          btn-class="close btn-outline-secondary"
+          data-dismiss="modal"
+          aria-label="Close"
+          icon-fa="close">
           {{ l10n('discard') }}
         </bootstrap-button>
 
-        <bootstrap-button btn-class="primary" @click="save">
-          {{ l10n('save') }}
+        <bootstrap-button btn-class="primary" @click="save"
+          icon-fa="paper-plane">
+          {{ l10n('publish') }}
         </bootstrap-button>
 
-      </div>
-    </div>
-  </div>
-</div>
+      </div><!-- .modal-footer -->
+
+    </div><!-- #anno-editor-modal-content .modal-content -->
+  </div><!-- role="document" -->
+</div><!-- role="dialog" -->
+</teleport>

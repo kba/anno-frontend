@@ -1,0 +1,54 @@
+<div :class="[
+    'version-history-dropdown-trigger',
+    ...bootstrapOpts.tags.dropdownWrapperCls,
+  ]"
+  :data-n-versions="versionsList.length"
+  v-if="(versionsList.length > 1)
+    || $store.state.showVersionsDropdownForSingleVersion"
+  >
+  <a data-toggle="dropdown"
+    class="
+      btn
+      btn-default
+      btn-outline-secondary
+      btn-sm
+      dropdown-toggle
+      "
+    aria-haspopup="true" aria-expanded="false">
+    <span class="fa fa-history"></span>
+    {{ (versionsList.length === 1) ? l10n('versions_dropdown_only')
+      : `${l10n('versions_dropdown_more')} (${versionsList.length - 1})` }}
+    <span class="caret"
+      v-if="bootstrapOpts.version.major === 3"
+      ></span>
+  </a>
+  <component :is="bootstrapOpts.tags.dropdownMenu"
+    role="menu" :class="[
+      'version-history-dropdown-menu',
+      'dropdown-menu',
+      'dropdown-menu-right',
+      'small',
+      ]">
+    <component :is="bootstrapOpts.tags.dropdownMenuItem"
+      v-for="version in versionsList"
+      :key="version.id"
+      :class="[
+        ((version.created === anno.created) && 'active'),
+        'text-nowrap',
+        'small',
+        'btn-outline-secondary',
+        bootstrapOpts.tags.dropdownMenuItemCls,
+      ].filter(Boolean)"
+      @click="onSelectVersion(version)"
+    >
+      <component :is="bootstrapOpts.tags.dropdownMenuItemPad"
+        class="bs3-compat-dummy">
+        <i class="fa fa-calendar"></i>
+        &nbsp;
+        {{ dateFmt(version.created) }}
+        <template v-if="version.created === anno.created"
+          >&nbsp; ({{ l10n("active_version") }})</template>
+      </component><!-- dropdownMenuItemPad -->
+    </component><!-- dropdownMenuItem -->
+  </component><!-- version-history-dropdown-menu -->
+</div><!-- version-history-dropdown-trigger -->

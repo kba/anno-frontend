@@ -1,37 +1,55 @@
-<bootstrap-tabs class="panel-body annoeditor-editor" ref='tablist'
+<bootstrap-tabs
+  class="card-body panel-body annoeditor-editor"
+  ref='tablist'
   :help-url-template="l10n('help.url.template')"
   :help-url-manual="l10n('help.url.manual')"
 >
 
-  <bootstrap-tab :name="`${prefix}-${editorId}-tab-comment`" :title="l10n('comment_tab')" :active="true"
-    topic='html'
+  <bootstrap-tab :name="`${prefix}-${editorId}-tab-comment`"
+    :title="l10n('comment_tab')"
+    topic='comment_text'
+    ref="commentTextTab"
     >
     <html-editor
-      editor-id="${prefix}-${editorId}-html-editor"
-      />
+      :editor-id="`${prefix}-${editorId}-html-editor`"
+      >
+      <template slot="extra-bodyparts-top">
+        <input
+          :placeholder="l10n('annofield_title')
+            + (titleRequired ? ` (${l10n('required_field')})` : '')"
+          v-model="title"
+          class="form-control"
+          type="text"
+          :required="titleRequired"
+          >
+        <anno-editor-licenses />
+      </template>
+      <template slot="extra-bodyparts-bottom">
+      </template>
+    </html-editor>
   </bootstrap-tab>
 
   <bootstrap-tab
     :name="`${prefix}-${editorId}-tab-zones`"
     :title="l10n('zones')"
-    v-if="targetImage"
+    :visible="Boolean(targetImage)"
     topic='zones'
     >
     <xrx-vue
       ref='zoneEditor'
-      class="panel panel-default"
+      class="card panel panel-default annoeditor-svg-zones-editor"
       :target-thumbnail="$store.state.targetThumbnail"
       :grouped="false"
-
+      initial-image=""
       :show-toolbar-file="false"
-      @svg-changed="onSvgChanged"
+      @svg-changed="updateSvgSelector"
       />
   </bootstrap-tab>
 
   <bootstrap-tab
     :name="`${prefix}-${editorId}-tab-tags`"
     :title="l10n('tags')"
-    v-if="enableTabTags"
+    :visible="Boolean(enableTabTags)"
     topic="tags"
     >
     <tags-editor/>
@@ -59,15 +77,28 @@
 
   <bootstrap-tab
     :name="`${prefix}-${editorId}-tab-preview`"
-    :title="l10n('Preview')"
+    :title="l10n('preview')"
     topic="preview"
     >
     <anno-viewer
       ref="preview"
-      :annotation="$store.state.editing"
+      :annotation="stubbedAnnotationForPreview"
       :thumb-stroke-color="$store.state.thumbStrokeColor"
       :thumb-fill-color="$store.state.thumbStrokeColor"
-      purl="https://purl/foo/3000"
+      purl="http://example.net/purl/dummy"
+      :accept-empty-anno-id="true"
+      :show-edit-preview-warnings="true"
+      />
+  </bootstrap-tab>
+
+  <bootstrap-tab
+    :name="`${prefix}-${editorId}-tab-debug`"
+    :title="'⚙'"
+    tab-cls="ml-auto debug-feature debug-panel-tab"
+    >
+    <anno-editor-debug-panel
+      ref="debugPanel"
+      :annot="$store.state.editing"
       />
   </bootstrap-tab>
 

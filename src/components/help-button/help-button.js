@@ -1,95 +1,27 @@
-function replaceTemplates(str, ctx) {
-  return str.replace(/(?:[\(\{]{2})\s*([a-z]+)\s*(?:[\)\}]{2})/g, (_, name) => {
-    return ctx[name]
-  })
-}
+﻿/* -*- tab-width: 2 -*- */
+'use strict';
+
+const helpUrl = require('./help-url.js');
+
 module.exports = {
+
+  mixins: [
+    /* eslint-disable global-require */
+    require('../../mixin/l10n'),
+  ],
 
   template: require('./help-button.html'),
   style: require('./help-button.scss'),
 
-  computed: {
-    url() {return replaceTemplates(this.helpUrlTemplate, this)},
-    topicTitle() {return this.title ? this.title : this.topic},
-    manualUrl() {return replaceTemplates(this.helpUrlManual, this)},
-    divClasses() {
-      return {
-        'panel': true,
-        'panel-primary': true,
-        'slide-out': ! this.visible,
-        'slide-in': this.visible,
-      }
-    },
-    btnClasses() {
-      return {
-        'btn': true,
-        'btn-primary': true,
-        'help-button': true,
-        [`btn-${this.size}`]: true
-      }
-    },
-  },
-
-  data() {return {
-    visible: false,
-    content: null,
-  }},
-
   props: {
-    language:        {type: String, required: false, default: 'de'},
-    topic:           {type: String, required: true},
-    title:           {type: String, required: false},
-    buttonLabel:     {type: String, default: ''},
-    helpUrlTemplate: {type: String, required: true},
-    helpUrlManual:   {type: String, required: false},
-    size:            {type: String, required: false, default: 'xs'},
+    topic:        { type: String, required: true },
+    title:        { type: String, default: '' },
+    buttonLabel:  { type: String, default: '' },
+    bootstrapBtnCls:  { type: [String, null], default: 'outline-secondary' },
   },
 
-  methods: {
-
-    dismiss() {
-      this.visible = false
-      window.helpPopoverModal = null
-    },
-
-    fetchContent() {
-      return new Promise((resolve, reject) => {
-          if (this.content) {
-            return resolve(this.content)
-          } else {
-            fetch(this.url)
-              .then(resp => resp.text())
-              .then(data => resolve(this.content = data))
-              .catch(reject)
-          }
-      })
-    },
-
-    togglePopover() {
-      const content = this.$el.querySelector('div.panel-body')
-      if (!this.visible) {
-        this.fetchContent()
-          .then(() => {
-            content.innerHTML = this.content
-          })
-          .catch(err => {
-            content.innerHTML = "loading failed :'("
-          })
-        if (window.helpPopoverModal)
-          window.helpPopoverModal.dismiss()
-        window.helpPopoverModal = this
-        const modal = document.querySelector(".modal-dialog")
-        if (modal && modal.getClientRects()[0]) {
-          const xOffset = modal.getClientRects()[0].x
-          this.$el.querySelector('.panel').style.marginLeft = `-${xOffset}px`
-        }
-        this.visible = true
-      } else {
-        this.dismiss()
-        this.visible = false
-      }
-    }
-
+  computed: {
+    helpUrl,
   },
 
-}
+};

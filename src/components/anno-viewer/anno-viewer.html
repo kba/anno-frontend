@@ -1,263 +1,349 @@
 <div :id="`${prefix}-${slug}`"
-  :class="`panel panel-default annoeditor-viewer
-     ${highlighted ? 'annoeditor-highlight' : ''}
-     ${isPurl ? 'annoeditor-purl' : ''}
-     ${asReply ? 'annoeditor-reply' : ''}
-     `"
-  v-on:mouseover.prevent="mouseenter"
-  v-on:mouseleave.prevent="mouseleave">
+  :class="[
+    'card',
+    'panel',
+    'panel-default',
+    'annoeditor-viewer',
+    (this.highlighted && 'annoeditor-highlight'),
+    ((this.annotation.id === this.purlId
+      // ^-- A legacy highlighting mechanism. See `anno-viewer.js`.
+      ) && 'annoeditor-purl'),
+    (this.asReply && 'annoeditor-reply'),
+  ].filter(Boolean)"
+  v-on:mouseover.stop="mouseenter"
+  v-on:mouseleave.stop="mouseleave"
+  :data-target-fragment="targetFragment"
+  >
 
-  <div v-if="!asReply"
-    class="panel-heading"
-    @click="collapse('toggle')"
-    >
-    <h4 class="panel-title">
+  <div v-if="!asReply" class="panel-heading">
+    <h4 class="panel-title" @click="collapse('toggle')">
+      <anno-viewer-thumbnail-svg
+        :svgTarget="this.svgTarget"
+        class="pull-right"
+        />
       <a role="button">
         <span class="fa fa-caret-right" v-show="collapsed"></span>
         <span class="fa fa-caret-down" v-show="!collapsed"></span>
+        <span v-show="Boolean(this.problemsWarningText)" class="
+          anno-editor-error
+          anno-error-annotation-problems
+          danger
+          ">&#x26A0; {{ this.problemsWarningText }} &#x26A0;</span>
         {{ title }}
       </a>
     </h4>
-    <div v-if="svgTarget" class="annoeditor-thumbnail-wrapper">
-      <xrx-vue
-        ref="thumbnail"
-        class="annoeditor-thumbnail"
-        initial-mode="Disabled"
-        :show-toolbar="false"
-        :enable-thumb="false"
-        :initial-image="svgTarget.source"
-        :grouped="true"
-        :initial-svg="svgTarget.selector.value"
-        :xrx-style="{strokeColor: thumbStrokeColor, fillColor: thumbFillColor}"
-        :width="36"
-        :height="36"
-        />
-    </div>
   </div>
-  <!-- <div v-else -->
-  <!--   class="panel-heading" -->
-  <!--   aria-expanded="true" -->
-  <!--   @click="collapse('toggle')" -->
-  <!--   > -->
-  <!--   [> <span class="small">{{ title }}</span> <] -->
-  <!--   [> <h5 class="panel-title"> {{ title }} </h5> <] -->
-  <!-- </div> -->
 
-  <div class="panel-body" role="tabpanel" v-show="!collapsed">
+  <div v-if="this.annotation['skos:note']" class="
+    card-body panel-body
+    anno-skos-note
+    ">
+    <p>{{ this.annotation['skos:note'] }}</p>
+  </div>
 
+  <div role="tabpanel"
+    class="card-body panel-body"
+    v-show="!collapsed">
     <div class="media" style="height: auto;">
 
       <div class="media-body">
+        <div role="toolbar"
+          class="btn-toolbar
+            anno-editor-anno-body-buttonbar-top
+          "
+          >
+          <div role="group"
+            class="btn-group btn-group-sm">
 
-        <div>
-          <button class="btn btn-xs" v-for="aCreator of ensureArray('creator')">
-            <template v-if="aCreator.icon">
-              <img class="media-object" style="display: inline" :src="aCreator.icon" alt="Logo" width="15px" height="15px">
-            </template>
-            <template v-else>
-              <span class="glyphicon glyphicon-user"></span>
-            </template>
-            <template v-if="aCreator.displayName">
-              {{ aCreator.displayName }}
-            </template>
-            <template v-else>
-              {{ aCreator }}
-            </template>
-          </button>
-          <button
-            class="annoeditor-date btn btn-xs"
-            :title="`${l10n('Created')}: ${created}\n${l10n('Modified')}: ${modified}`">
-            {{ dateformat(created) }}
-          </button>
-
-          <button class="btn btn-xs"
-            data-toggle="popover"
-            data-html="true"
-            data-placement="left"
-            data-focus-dismiss
-            :title="l10n('purl')"
-            :data-content='`
-            <button data-clipboard-text="${purl}" class="btn btn-default btn-xs">
-              <span class="fa fa-clipboard"></span>
-              <span class="label label-success" style="display: none">${l10n("copied_to_clipboard")}</span>
+            <button class="btn btn-sm btn-secondary
+              anno-creators
+              "
+              @click="toggleDetailBar"
+              data-detailbar="creators"
+              ><span class="button-caption" ref="creatorsList">
+              <template v-for="aCreator of creatorsList">
+                <span class="anno-creator">
+                  <template v-if="aCreator.icon">
+                    <img class="media-object" style="display: inline"
+                      :src="aCreator.icon" alt="Logo" width="15px" height="15px">
+                  </template>
+                  <template v-else>
+                    <i class="fa fa-user"></i>
+                  </template>
+                  <span class="name">{{
+                    aCreator.displayName || aCreator
+                  }}</span><span class="list-sep">,</span>
+                </span>
+              </template>
+              <template v-if="!creatorsList.length">
+                <span class="no-creator">
+                  <i class="fa fa-user-secret"></i>
+                  {{ l10n('creator_none') }}
+                </span>
+              </template>
+              </span><!-- .button-caption -->
             </button>
-            <a href="${purl}">${purl.replace(/\//g, "/<wbr>")}</a>
-            `'>
-            <span class="glyphicon glyphicon-link"></span>
-          </button>
+            <!-- 2021-08-20, Waterfox: Time must be its own button because
+              title=… on a <time> tag inside a <button> tag had no effect. -->
+            <button class="btn btn-sm btn-secondary
+              anno-creation-time
+              "
+              :title="[
+                (l10n('Created') + ': ' + dateFmt(annotation.created)),
+                (l10n('Modified') + ': ' + dateFmt(annotation.modified)),
+              ].join('\n')"
+              @click="toggleDetailBar"
+              data-detailbar="creation-date"
+              ><span class="button-caption">
+              <i class="fa fa-calendar"></i>
+              <time class="created-at"
+                :datetime="annotation.created"
+                >{{
+                  dateFmt(annotation.created)
+                    || l10n('date_time_unknown')
+                  }}</time>
+              </span><!-- .button-caption -->
+            </button>
 
-          <button class="btn btn-xs"
-            v-if="rights"
-            data-toggle="popover"
-            data-html="false"
-            data-focus-dismiss
-            data-placement="left"
-            :title="l10n('License')"
-            :data-content='
-            rights === licenseInfo.cc_zero.url ? l10n(licenseInfo.cc_zero.user_desc)
-            : rights === licenseInfo.cc_by.url ? l10n(licenseInfo.cc_by.user_desc)
-            : rights'>
-            <template v-if="rights === licenseInfo.cc_zero.url">
-              <img style="width: 14px; height: 14px;" :src="licenseInfo.cc_zero.img_64x64"/>
-            </template>
-            <template v-else-if="rights === licenseInfo.cc_by.url">
-              <img style="width: 14px; height: 14px;" :src="licenseInfo.cc_by.img_64x64"/>
-            </template>
-            <template v-else>§</template>
-          </button>
-          <button class="btn btn-xs"
-            v-if="annotation.doi"
-            data-toggle="popover"
-            data-html="true"
-            data-placement="left"
-            data-focus-dismiss
-            :title="l10n('doi')"
-            :data-content="doiPopup">
-            <span class="glyphicon glyphicon-link"></span> DOI
-          </button>
+            <button class="btn btn-sm btn-secondary"
+              @click="toggleDetailBar"
+              data-detailbar="purl"
+              :title="l10n('purl')"
+              >
+              <i class="fa fa-link"></i>
+            </button>
 
-        </div>
+            <button class="btn btn-sm btn-secondary"
+              @click="toggleDetailBar"
+              data-detailbar="license"
+              :title="l10n('License') + ': ' + licenseTitleOrUnknown"
+              >
+              <template v-if="currentLicense.img_64x64">
+                <img class="license-icon"
+                  :src="currentLicense.img_64x64"
+                  :alt="licenseTitleOrUnknown"
+                  >
+              </template>
+              <template v-else>?§?</template>
+            </button>
+
+            <button class="btn btn-sm btn-secondary"
+              v-if="latestRevisionDoi || $auth('mintDoi', id)"
+              @click="toggleDetailBar"
+              data-detailbar="doi"
+              :title="l10n('doi')"
+              >
+              <i class="fa fa-link"></i>
+              {{ l10n('doi') }}
+            </button>
+
+            <button class="btn btn-sm btn-secondary
+              frag-sel-btn
+              "
+              v-if="targetFragment"
+              :title="this.$store.state.targetFragmentButtonTitle"
+              ref="targetFragmentButton"
+              @click.stop="targetFragmentButtonClicked"
+              >
+              <i class="fa fa-indent"></i>
+              {{ targetFragment }}
+            </button>
+
+          </div><!-- .btn-group -->
+        </div><!-- role="toolbar" -->
+
+        <div ref="detailbars" class="detailbars">
+
+          <dl class="detailbar-creators"><dt>
+            {{ l10n('anno_created_by') }}:
+          </dt><dd html-src-ref="creatorsList">
+          </dd></dl>
+
+          <dl class="detailbar-creation-date">
+            <dt>{{ l10n('Created') }}:</dt>
+            <dd>{{ dateFmt(annotation.created) || '&nbsp;' }}</dd>
+            <dt>{{ l10n('Modified') }}:</dt>
+            <dd>{{ dateFmt(annotation.modified) || '&nbsp;' }}</dd>
+          </dl>
+
+          <dl class="detailbar-purl">
+            <dt-url-caption-link
+              :caption="l10n('purl')"
+              :url="purl"
+              />
+          </dl>
+
+          <dl class="detailbar-license"><dt>
+            {{ l10n('License') }}: {{ licenseTitleOrUnknown }}
+          </dt><dd>
+            {{ l10n(currentLicense.user_desc) }}
+          </dd></dl>
+
+          <dl class="detailbar-doi">
+            <template v-if="latestRevisionDoi">
+              <dt-url-caption-link
+                :caption="l10n('doi.of.annotation')"
+                :url="doi2url(latestRevisionDoi)"
+                />
+              <dt-url-caption-link
+                :caption="l10n('doi.of.annotation.revision')"
+                :url="doi2url(currentRevisionDoi)"
+                />
+            </template>
+            <template v-else><!-- else = we have mintDoi permission,
+              because with neither that nor a DOI, the detailbar would
+              be hidden. -->
+              <dt>
+                <div role="group" class="btn-group btn-group-sm">
+                  <button
+                    class="btn btn-default btn-outline-secondary btn-sm"
+                    @click="askConfirmationToMintDoi"
+                    >
+                    <i class="fa fa-link"></i>
+                    {{ l10n('mint_doi') }}
+                  </button>
+                </div>
+              </dt>
+              <dd>{{ mintDoiMsg }}</dd>
+            </template>
+          </dl>
+        </div><!-- .detailbars -->
 
         <div class="well old_version" v-show="isOlderVersion()">
-          {{ l10n('version_from') }} {{ dateformat(created) }}
+          {{ l10n('version_from') }} {{ dateFmt(annotation.created) }}
           <br/>
           <a @click="setToVersion(newestVersion)">{{ l10n('newer_version') }}</a>
         </div>
 
         <h4 class="media-heading" v-if="asReply">{{ title }}</h4>
 
-        <div v-if="firstHtmlBody" v-html="firstHtmlBody.value"></div>
+        <div v-if="firstHtmlBody"
+          class="first-html-body"
+          v-html="firstHtmlBody.value"></div>
 
-        <template v-if="relationLinkBodies && relationLinkBodies.length > 0">
-          <h5><span class="fa fa-link">&nbsp;</span>{{ l10n('relationlinks') }}</h5>
+        <template v-if="(relationLinkBodies || false).length > 0">
+          <h5><span class="fa fa-link"></span>
+            {{ l10n('relationlinks') }}</h5>
           <ul>
-            <li v-for="relationlinkBody in relationLinkBodies">
-              <a :href="relationlinkBody.id || relationlinkBody.source">
-                <!-- <span class="glyphicon glyphicon-tag"></span> -->
-                {{ relationlinkBody.value || relationlinkBody.label }}
+            <li v-for="rlb in relationLinkBodies">
+              <span v-for="err in validateRelationLinkBody(rlb)" class="
+                no-relation-predicate
+                anno-editor-error
+                anno-error-annotation-problems
+                danger
+              "
+              v-if="showEditPreviewWarnings"
+              >&#x26A0; {{err}} &#x26A0;</span>
+
+              <span class="relation-predicate"
+                :data-predicate="rlb.predicate"
+                ><a class="relation-predicate"
+                  :href="(rlb.predicate || 'about:blank')"
+                  target="_blank"
+                  >{{ determinePredicateCaption(rlb.predicate)
+                  }}</a></span>
+              <a :href="rlb.id || rlb.source">
+                <!-- i class="fa fa-tag"></i -->
+                {{
+                  rlb.value
+                  || rlb.label
+                  || rlb.source
+                  || ('\u26A0 ' + l10n('missing_required_field')
+                    + ' ' + l10n('relationlink_url') + ' \u26A0')
+                }}
               </a>
             </li>
           </ul>
         </template>
 
-        <div class="annoeditor-tags">
-          <span class="annoeditor-tag label label-default" v-for="tagBody in simpleTagBodies">
-            <span class="glyphicon glyphicon-tag"></span> {{ tagBody.value || tagBody.label }}
+        <div class="annoeditor-tags simple-tags">
+          <span class="annoeditor-tag label label-default badge badge-secondary" v-for="tagBody in simpleTagBodies">
+            <i class="fa fa-tag"></i>
+            {{ tagBody.value || tagBody.label }}
           </span>
         </div>
 
-        <div class="annoeditor-tags">
+        <div class="annoeditor-tags semantic-tags">
           <a :href="semtagBody.id || semtagBody.source" v-for="semtagBody in semanticTagBodies">
             <span class="annoeditor-tag label label-primary">
-              <span class="glyphicon glyphicon-tag"></span> {{ semtagBody.value || semtagBody.label }}
+              <i class="fa fa-tag"></i>
+              {{ semtagBody.value || semtagBody.label }}
             </span>
           </a>
         </div>
 
-        <div v-show="iiifLink && $store.state.enableIIIF" class="annoeditor-iiif-link">
-          <button class="btn btn-xs"
-            data-toggle="popover"
-            data-html="true"
-            data-placement="left"
-            :title="l10n('iiif_link')"
-            :data-content='`
-            <button data-clipboard-text="${purl}" class="btn btn-default btn-xs">
-              <span class="fa fa-clipboard"></span>
-              <span class="label label-success" style="display: none">${l10n("copied_to_clipboard")}</span>
-            </button>
-            <a href="${iiifLink}">${iiifLink.replace(/([\/,])/g, (_, x) => x + "<wbr>")}</a>
-            `'>
-            <span class="glyphicon glyphicon-link"></span>
-            {{ l10n('iiif_link') }}
-          </button>
+        <div class="annoeditor-iiif-link"
+          v-if="$store.state.iiifUrlTemplate && svgTarget"
+          ><strong>{{ l10n('iiif_link') }}:</strong>
+          <a class="render-iiif-link"
+            role="button"
+            v-show="!cachedIiifLink"
+            @click="renderIiifLink"
+            >{{ l10n('calculate_now') }}</a>
+          <span class="cached-iiif-link" v-show="cachedIiifLink">
+            <a :href="cachedIiifLink"
+              target="_blank"
+              class="url-caption-link"
+              >{{ cachedIiifLink }}</a>
+          </span>
         </div>
 
-      </div>
+      </div><!-- class="media-body -->
 
     </div>
 
     <!-- navigation -->
 
-    <div style="clear: both; margin-bottom: 2px;"></div>
-    <transition name="fade">
-      <div class="alert alert-danger fade" :class="{in: mintDoiError}" v-if="mintDoiError" @click="mintDoiError = null">
-      <button type="button" class="close" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <strong>{{ l10n('mint_doi') }} Error:</strong> {{mintDoiError}}
-      </div>
-    </transition>
-    <div class="btn-toolbar pull-right" role="toolbar" style="margin-top: 10px;">
-      <div class="btn-group btn-group-xs pull-right" role="group">
-        <button v-if="!annotation.doi && $auth('mintDoi', id)"
-            class="btn btn-default btn-xs"
-            data-toggle="popover"
-            data-focus-dismiss
-            :data-content= '`
-            <button data-click="mintDoi" class="btn btn-xs btn-success">Yes</button>
-            <button data-click="close" class="btn btn-xs btn-default">No</button>`'
-            data-html="true"
-            data-placement = "auto left"
-            data-trigger = "manual"
-            data-container = "body"
-            @click="showMintDoiPopover"
-            >
-            <span class="glyphicon glyphicon-link"></span>
-            {{ l10n('mint_doi') }}
-        </button>
-        <bootstrap-button btn-class="default" @click="revise" font-awesome="pencil" v-if="$auth('revise', id)">
+    <div class="navigation-separator"></div>
+    <div role="toolbar"
+      class="btn-toolbar pull-right"
+      >
+      <div role="group"
+        class="btn-group btn-group-sm"
+
+        ><bootstrap-button @click="revise"
+          btn-class="default btn-outline-secondary"
+          icon-fa="pencil"
+          v-if="$auth('revise', id)">
           {{ l10n('edit') }}
-        </bootstrap-button>
-        <bootstrap-button btn-class="default" @click="reply" font-awesome="reply" v-if="$auth('create', id)">
+        </bootstrap-button
+
+        ><bootstrap-button
+          @click="reply"
+          btn-class="default btn-outline-secondary"
+          icon-fa="reply"
+          v-if="$auth('create', id)">
           {{ l10n('comment') }}
-        </bootstrap-button>
-        <bootstrap-button btn-class="danger" @click="remove" font-awesome="trash-o" v-if="$auth('remove', id)"
-         :title="l10n('delete_anno')"/>
+        </bootstrap-button
 
-        <br>
-        <div v-if="numberOf('hasVersion') > 1" class="dropdown btn-group-xs annoeditor-versions">
-          <a class="btn btn-default dropdown-toggle"
-            data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="true">
-            <span class="fa fa-history"></span>
-            {{ l10n('previous_version') }}
-            <span class="caret"></span>
-          </a>
-          <ul role="menu" class="dropdown-menu dropdown-menu-right annoeditor-versions">
-            <li v-for="version in annotation.hasVersion"
-              :key="version.id"
-              :class="{'active': versionIsShown(version)}"
-              >
-              <a class="small" @click="setToVersion(version)">
-                <span class="glyphicon glyphicon-time"></span>
-                &nbsp;
-                {{ dateformat(version.created) }}
-                &nbsp;
-                <template v-if="versionIsShown(version)">({{ l10n("active_version") }})</template>
-              </a>
-            </li>
-          </ul>
-        </div>
+        ><bootstrap-button
+          @click="remove"
+          v-if="$auth('remove', id)"
+          :title="l10n('delete_anno')"
+          btn-class="outline-danger"
+          icon-fa="trash-o">
+        </bootstrap-button
 
-      </div>
-    </div>
+        ><anno-viewer-versions-dropdown
+          :anno="annotation"
+          :on-select-version="this.setToVersion.bind(this)"
+          />
 
-    <div style="clear: both; margin-bottom: 2px;"></div>
+      </div><!-- .btn-group -->
 
-    <template v-if="numberOf('hasReply') > 0">
+    </div><!-- role="toolbar" -->
+    <div class="toolbar-end-clear" style="clear: both;"></div>
 
+    <template v-if="(annotation.hasReply || false).length">
+      <div class="comment-separator"></div>
       <anno-viewer
         v-for="reply in annotation.hasReply"
         :key="reply.id"
         as-reply
         :purl-id="purlId"
-        :purl-template="purlTemplate"
         :annotation="reply"
-        :image-width="imageWidth"
-        :image-height="imageHeight"
-        :iiif-url-template="iiifUrlTemplate"
         />
 
-      </template>
-    </div>
+    </template>
+  </div><!-- /role="tabpanel" -->
 </div>

@@ -1,5 +1,17 @@
-.draggable {
-    .modal-header {
-        cursor: move
+#anno-editor-modal-content {
+
+  .panel-body {
+    padding: 0.5em;
+
+    .row {
+      margin: 0.25em 0;
+
+      & > [class^="col-md-"]:first-child { padding-left: 0; }
+      & > [class^="col-md-"]:last-child { padding-right: 0; }
     }
+  }
+
+  .modal-footer {
+    z-index: 5;
+  }
 }

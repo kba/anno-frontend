@@ -1,0 +1,14 @@
+<bootstrap-button
+  :btn-class="[
+    'default',
+    'btn-outline-secondary',
+    'clipboard-copy-button',
+    (defaultCls && 'pull-right'),
+  ]"
+  :data-clipboard-text="cliptext"
+  icon-fa="clipboard">
+  <span ref="successLabel"
+    class="label label-success"
+    style="display: none;"
+    >{{ l10n('copied_to_clipboard') }}</span>
+</bootstrap-button>

@@ -1,0 +1,44 @@
+.annoeditor-semtags-editor {
+  --bonanza-list-height: 20em;
+
+  .bz-container {
+    max-height: var(--bonanza-list-height);
+  }
+
+  .bonanza-dropdown-spacer {
+    /* Ensure we have space to unfold the semtags suggestion list without
+       changing the root document's height. On small screens, we cannot
+       easily save users from having to scroll down the first time they
+       want to see the bottom-most suggestion. However, we can at least
+       save their effort the next time they open the list: By ensuring
+       that the root document always is high enough to preserve their
+       scroll position in the root window's vertical scrollbar.
+    */
+    position: relative;
+    s {
+      position: absolute;
+      left: -200%; /* don't block any UI elements */
+      height: var(--bonanza-list-height); /* dropdown space */
+      top: 1em; /* additional safety margin */
+    }
+
+    &.debug s {
+      left: -10em;
+      width: 2em;
+      background-color: yellow;
+      border: 1px dashed orange;
+    }
+  }
+
+  .row.bonanza-open-atop .bz-container {
+    top: auto !important;
+    bottom: 100%;
+  }
+
+  input.semtag-value ~ .no-source {
+    margin-left: 1em;
+    margin-bottom: 0.5em;
+  }
+  input.semtag-value:valid:not([data-sem-source=""]) ~ .no-source,
+  input.semtag-value:not(:valid) ~ .no-source { display: none; }
+}

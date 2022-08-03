@@ -1,6 +1,4 @@
-const $ = require('jquery')
-const quill = require('quill/dist/quill.js')
-require('style-loader!css-loader!quill/dist/quill.snow.css')
+const Quill = require('quill/dist/quill.js')
 
 // const { textualHtmlBody } = require('@kba/anno-queries')
 
@@ -18,17 +16,14 @@ module.exports = {
         require('@/mixin/l10n'),
         require('@/mixin/prefix'),
     ],
-    data() {return {
-      licenseInfo: require('@/../license-config')
-    }},
-    style: require('./html-editor.scss'),
+    style: [
+      require('quill/dist/quill.snow.css'),
+      require('./html-editor.scss'),
+    ],
     template: require('./html-editor.html'),
     mounted() {
-        $('[data-toggle="popover"]', this.$el).popover({
-            container: '#license-select'
-        })
         const {l10n} = this
-        this.quill = new quill(this.$refs.editor, {
+        this.quill = new Quill(this.$refs.editor, {
             modules: {
                 toolbar: {
                     container: this.$refs.toolbar,
@@ -46,7 +41,7 @@ module.exports = {
                             this.quill.getSelection().index,
                             'image',
                             value,
-                            quill.sources.USER)
+                            Quill.sources.USER)
                         },
                     }
                 }
@@ -54,8 +49,8 @@ module.exports = {
             placeholder: this.l10n('editor_placeholder'),
             theme: 'snow',
         })
-        this.quill.on('text-change', (delta, oldDelta, source) => {
-            console.log(this.$refs.editor)
+        this.quill.on('text-change', (/* delta, oldDelta, source */) => {
+            // console.debug('HTML editor text change in:', this.$refs.editor);
             let html = this.$refs.editor.children[0].innerHTML
             if (html === '<p><br></p>') html = ''
             this.value = html
@@ -72,13 +67,6 @@ module.exports = {
                 return firstHtmlBody && firstHtmlBody.value ? firstHtmlBody.value : ''
             },
             set (content) {this.$store.commit('SET_HTML_BODY_VALUE', content)},
-        },
-        title: {
-            get () {return this.$store.state.editing.title},
-            set (value) {this.$store.commit('SET_TITLE', value)}
-        },
-        titleRequired() {
-            return ! this.$store.state.editing.replyTo
         },
     },
 

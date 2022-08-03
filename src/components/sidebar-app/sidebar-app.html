@@ -1,26 +1,61 @@
-<div :class="{
-  'annoeditor-sidebar': true,
-  'annoeditor-sidebar-standalone': standalone,
-  'annoeditor-sidebar-collapsed': collapsed,
-  'annoeditor-sidebar-open': ! collapsed,
-  }">
+<div id="annoeditor-sidebar"
+  :class="[
+    ...decideTopLevelCssClasses(),
+    'annoeditor-sidebar',
+    (standalone && 'annoeditor-sidebar-standalone'),
+    `annoeditor-sidebar-${collapsed ? 'collapsed' : 'open'}`,
+    ].filter(Boolean)"
+  :data-number-of-annotations="numberOfAnnotations"
+  >
   <div class="annoeditor-sidebar-toggle" @click="toggle" v-if="standalone">
     <span class="fa fa-toggle-on" v-show="!collapsed"></span>
     <span class="fa fa-toggle-off" v-show="collapsed"></span>
     <span class="fa fa-comments" v-show="true || collapsed"></span>
     <span v-show="true || collapsed">{{ numberOfAnnotations }}</span>
   </div>
-  <div class="annoeditor-sidebar-body" v-show="!standalone || !collapsed">
+  <div class="annoeditor-sidebar-body"
+    v-show="!standalone || !collapsed">
     <!-- <span class="fa fa-comments"></span> -->
     <!-- <span class="fa fa-toggle-off" v-show="collapsed" @click="toggle"></span> -->
-    <!-- {{ l10n('Annotations') }} -->
-    <anno-list
-      ref="annoList"
-      />
-    <div class="annoeditor-sidebar-no-annotations" v-if="numberOfAnnotations === 0">
-      <div>
-        {{ l10n('no_annotations_yet') }}
+
+    <div v-if="msgBoxes.length" class="msgboxes">
+      <div v-for="box in msgBoxes"
+        :class="[
+          'msgbox',
+        ].concat(box.cls).filter(Boolean)"
+        >
+        <div class="btn-group pull-right hidden-print" role="group">
+          <bootstrap-button @click="discardMsgBox(box)"
+            btn-class="close"
+            aria-label="Close"
+            icon-fa="close"
+            />
+        </div>
+        <p class="msg">
+          <b class="type" v-if="box.msgTypePrefix"
+            >{{ box.msgTypePrefix }}</b>
+          <span class="body">{{ box.msg }}</span>
+        </p>
+        <p class="hint" v-if="box.hint">
+          <b class="type"
+            >{{ l10n('hint:') }}</b>
+          <span class="body">{{ box.hint }}</span>
+        </p>
       </div>
-    </div>
+    </div><!-- .msgboxes -->
+
+    <anno-list ref="annoList">
+      <div v-if="noAnnotsReason"
+        slot="annot-list-empty"
+        :class="[
+          'msgbox',
+          'no-annots',
+          'reason-' + noAnnotsReason.code,
+          ((noAnnotsReason.code === 'loadfail') && 'error'),
+        ].filter(Boolean)"
+        :data-reason="noAnnotsReason.code">
+        <p class="msg">{{ noAnnotsReason.msg }}</p>
+      </div>
+    </anno-list>
   </div>
 </div>
