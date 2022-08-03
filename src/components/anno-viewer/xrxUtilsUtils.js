@@ -79,11 +79,13 @@ const xuu = {
     const svgSel = svgTarget.selector.value;
     const viewport = xuu.suggestSvgSelectorViewport(annoViewerInst, svgSel);
 
+    const cfg = (annoViewerInst.$store.state || false);
+
     let bounds;
     try {
       // temporary DOM element for xrx:
       const tmpEl = window.document.createElement('div');
-      if (xuu.debugBbox) {
+      if (cfg.debugIiifBounds) {
         tmpEl.className = 'annoeditor-iiif-canvas';
         tmpEl.style.display = 'none';
         annoViewerInst.$el.appendChild(tmpEl);
@@ -112,7 +114,7 @@ const xuu = {
           bottom,
         },
       };
-      if (tmpEl.parentNode && (!xuu.debugBbox)) {
+      if (tmpEl.parentNode && (!cfg.debugIiifBounds)) {
         tmpEl.parentNode.removeChild(tmpEl);
       }
     } catch (boundsErr) {

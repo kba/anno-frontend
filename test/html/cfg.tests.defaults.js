@@ -9,6 +9,7 @@
 
     iiifUrlTemplate: ('http://iiif.anno.test/someProjectName'
       + ':_image/%ir/full/0/default.jpeg'),
+    debugIiifBounds: true,
 
     uiDebugMode: true,
     acl: {
