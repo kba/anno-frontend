@@ -48,7 +48,7 @@ const xuu = {
 
     // Rely on editor config for target image dimensions,
     // to save us from detecting image size via DOM operations.
-    const timW = (+cfg.targetImageHeight || 0);
+    const timW = (+cfg.targetImageWidth || 0);
     const timH = (+cfg.targetImageHeight || 0);
     if ((timW < 1) || (timH < 1)) { throw new RangeError(errMsgSizeRequired); }
 
