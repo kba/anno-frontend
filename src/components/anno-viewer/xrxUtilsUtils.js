@@ -59,14 +59,23 @@ const xuu = {
       heightPx,
       heightFrac,
     } = s;
-    if (widthPx && heightPx) { return { w: widthPx, h: heightPx, s }; }
 
-    if (widthPx) {
-      /* Contrive a viewport that preserves aspect ratio.
+    if (widthPx >= 1) {
+      if (heightPx >= 1) {
+        return { w: widthPx, h: heightPx, contrived: false, s };
+      }
+
+      /* Height fallback:
+        Contrive a viewport that preserves aspect ratio.
         This might be non-standard; discussion about this can be found in
         issue [ubhd:235] and https://github.com/w3c/web-annotation/issues/445
       */
-      return { w: widthPx, h: (heightFrac * widthPx * timH) / timW, s };
+      return {
+        w: widthPx,
+        h: (heightFrac * widthPx * timH) / timW,
+        contrived: 'h',
+        s,
+      };
     }
 
     throw new Error('SvgSelectors without positive absolute width'
@@ -114,6 +123,7 @@ const xuu = {
           bottom,
         },
       };
+      if (cfg.debugIiifBounds) { console.debug('debugIiifBounds:', bounds); }
       if (tmpEl.parentNode && (!cfg.debugIiifBounds)) {
         tmpEl.parentNode.removeChild(tmpEl);
       }
@@ -123,7 +133,6 @@ const xuu = {
       throw err;
     }
     if (!bounds) { throw new Error(errTrace + 'Exotic control flow failure'); }
-    // console.debug('xuu bounds', bounds);
     return bounds;
   },
 

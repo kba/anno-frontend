@@ -24,6 +24,8 @@
   cfg.targetSource = ('http://anno.test/' + location.pathname.replace(/^\S+\//,
     '').replace(/\.\S+$/, ''));
 
+  cfg.diglitBaseUrl = 'https://digi.ub.uni-heidelberg.de/diglit/';
+
   cfg.setTarget = {
 
     wikiCommons: function (w, h, imgSubUrl) {
@@ -39,8 +41,8 @@
         'd/da/Universitaet_Heidelberg_%28Karl_Lange%29_1896.jpg');
     },
 
-    ubHdDigLit: function (w, h, subUrl, origFileName) {
-      var src = 'https://digi.ub.uni-heidelberg.de/diglit/' + subUrl;
+    ubHdDigLit: function (w, h, subUrl, origFileName, baseUrl) {
+      var src = (baseUrl || cfg.diglitBaseUrl) + subUrl;
       cfg.targetSource = src;
       cfg.targetImage = src + '/_image';
       cfg.targetImageWidth = w;

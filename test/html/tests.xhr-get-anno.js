@@ -2,6 +2,8 @@
 /* eslint-env browser */
 'use strict';
 
+const jq = window.jQuery;
+
 const ldr = {
 
   fromForm(form) {
@@ -44,30 +46,29 @@ const ldr = {
       }
       return ldr.fromURL(fullUrl, mOpt);
     }
-    const data = await window.jQuery.ajax({ url, dataType: 'text' });
+    const data = await jq.ajax({ url, dataType: 'text' });
     ldr.fromCeson(data, opt);
   },
 };
 
 
-window.jQuery().ready(function installLate() {
+jq().ready(function installLate() {
   const { testUtil } = window;
   const panel = testUtil.addTestsPanel('Import annotations');
   const store = window.annoApp.$store;
 
+  const defaultImportSpecs = (function findAndClean() {
+    let dis = jq('meta#test-xhr-get-anno-default-imports').attr('value');
+    dis = dis.replace(/\n +/g, '\n');
+    dis = dis.trim();
+    return dis;
+  }());
+
   panel.addForm(`
-    <p><textarea name="txa" cols="60" rows="4" wrap="off" class="code">
-      f:empty_relation_link_predicate
-      f:tags_and_doi
-      f:heinrich_scheufelen_ein1183_auktion_hahn
-      # ubhd:54eb5a09-df9f-3f1c-b18e-4676d1046166
-      # f:clocktower
-      # f:cpg389_red_dress
-      # f:old
-    </textarea></p>
+    <p><textarea name="txa" cols="60" rows="4" wrap="off" class="code"
+    ></textarea></p>
   `, function setup(form) {
-    const { txa } = form.elements;
-    txa.value = txa.value.replace(/\n +/g, '\n').trim();
+    form.elements.txa.value = defaultImportSpecs;
     ldr.buttons = testUtil.topRightSubmitButton(form, [
       // eslint-disable-next-line camelcase
       { v: 'trace', ckb: true },
