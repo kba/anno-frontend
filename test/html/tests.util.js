@@ -15,6 +15,8 @@
     jc(x) { return JSON.parse(JSON.stringify(x)); },
   });
 
+  function ifUndef(x, u) { return (x === undefined ? u : x); }
+
   Object.assign(tu, {
 
     alwaysFalse() { return false; },
@@ -246,6 +248,26 @@
         return String(annoErrors.augmentWebbrowserError(err));
       }
     },
+
+
+    mapValues(o, f, d) {
+      const r = (d || {});
+      Object.keys(o).forEach(function e(k, i) { r[k] = f(o[k], k, i, o); });
+      return r;
+    },
+
+
+    makeSlotTplFunc(tpl) {
+      return function t(...slots) {
+        let i = 0;
+        return tpl.replace(/¤/g, function () {
+          const v = slots[i];
+          i += 1;
+          return ifUndef(v, '');
+        });
+      };
+    },
+    makeSlotTplFuncs(s) { return tu.mapValues(s, tu.makeSlotTplFunc); },
 
 
   });
