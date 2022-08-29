@@ -135,11 +135,28 @@
       destForm.on('submit', tu.alwaysFalse);
       const byName = {};
       function addBtn(spec, idx) {
-        let el = document.createElement('input');
-        el.type = (spec.t || (idx && 'button') || 'submit');
         let val = (spec.v || (spec.name || '').replace(/_/g, ' '));
         if ((!val) && spec.substr) { val = String(spec); }
-        if (val) { el.value = val; }
+
+        let el;
+        (function basics() {
+          if (spec.href) {
+            el = document.createElement('a');
+            el.href = spec.href;
+            (function setTarget(tgt) {
+              if (tgt === null) { return; }
+              if (tgt === '') { return; }
+              el.target = (tgt === undefined ? '_blank' : tgt);
+            }(spec.target));
+            el.innerText = val;
+            return el;
+          }
+
+          el = document.createElement('input');
+          el.type = (spec.t || (idx && 'button') || 'submit');
+          if (val) { el.value = val; }
+          return el;
+        }());
         el.name = (spec.name || val);
         byName[el.name] = el;
 
