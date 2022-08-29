@@ -196,6 +196,12 @@
     },
 
 
+    localTimeHr(t) {
+      const d = (t ? new Date(t) : new Date());
+      return d.toTimeString().split(/\s/)[0];
+    },
+
+
     tapPr(descr, pr) {
       return pr.then(function tapSuccess(val) {
         console.debug(descr, 'ok', (val && typeof val), [val]);
