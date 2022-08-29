@@ -72,6 +72,7 @@ jq().ready(function installLate() {
     ldr.buttons = testUtil.topRightSubmitButton(form, [
       // eslint-disable-next-line camelcase
       { v: 'trace', ckb: true },
+      // eslint-disable-next-line camelcase
       function clear_list() { store.commit('REPLACE_LIST', []); },
       { v: 'import', f() { ldr.fromForm(form); } },
     ]);
