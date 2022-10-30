@@ -18,8 +18,8 @@ window.jQuery().ready(function installLate() {
   panel.addForm(`
     ${tpl.txf('Endpoint sub URL', 'subUrl', 'anno/')}
     ${tpl.txf('Content-Type', 'cType', 'application/json; charset=UTF-8')}
-    ${tpl.txa('Raw body text to be sent:', 'bodyTxa')}
-    ${tpl.txa("Server's response:", 'rspTxa')}
+    ${tpl.txa('Raw body text to be sent', 'bodyTxa')}
+    ${tpl.txa("Server's response", 'rspTxa')}
   `, function setup(form) {
     const { bodyTxa, rspTxa, cType } = form.elements;
 
