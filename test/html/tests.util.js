@@ -21,6 +21,13 @@
 
     alwaysFalse() { return false; },
 
+    camelCase(s) {
+      let c = String(s).toLowerCase();
+      c = c.replace(/^\W+/, '');
+      c = c.replace(/\W+(\w)/g, (m, w) => (m && w.toUpperCase()));
+      return c;
+    },
+
     objTypeTag(x) {
       return (((x && typeof x) === 'object')
         && Object.prototype.toString.call(x).slice(8, -1));
@@ -268,6 +275,14 @@
       };
     },
     makeSlotTplFuncs(s) { return tu.mapValues(s, tu.makeSlotTplFunc); },
+
+
+    makeCkbLabel(c) {
+      const n = tu.camelCase(c);
+      return ('<label class="ckb-label" data-ckb-name="' + n + '">'
+        + '<input type="checkbox" name="' + n + '"> '
+        + c + '</label>');
+    },
 
 
   });
